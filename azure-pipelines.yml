@@ -18,5 +18,3 @@ steps:
   displayName: 'Checking behaviour of the turtle'
 
 # Possibly some db migration via webpack?
-
-# Possibly some building? Can you build node apps? I guess not?? 
