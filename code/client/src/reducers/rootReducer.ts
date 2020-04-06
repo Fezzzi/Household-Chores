@@ -1,10 +1,10 @@
-import { createReducer } from "reduxsauce";
+import { createReducer } from 'reduxsauce';
 
 
 const initialState = {
-    debug: true,
+  debug: true,
 };
 
 export const rootReducer = createReducer(initialState, {
-   // mapping of actions to reducers
+  // mapping of actions to reducers
 });

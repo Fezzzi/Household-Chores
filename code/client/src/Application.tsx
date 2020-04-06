@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import createSagaMiddleware from "redux-saga";
+import createSagaMiddleware from 'redux-saga';
 import { Provider } from 'react-redux';
-import { applyMiddleware, compose, createStore } from "redux";
+import { applyMiddleware, compose, createStore } from 'redux';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
-import { rootReducer } from "./reducers/rootReducer";
-import { rootSaga } from "./sagas/rootSaga";
+import { rootReducer } from './reducers/rootReducer';
+import { rootSaga } from './sagas/rootSaga';
 import { Root } from './components/Root';
 
 export default class Application extends Component {
@@ -33,9 +33,9 @@ export default class Application extends Component {
     const sagaMiddleware = createSagaMiddleware();
 
     const store = createStore(rootReducer,
-        compose(applyMiddleware(sagaMiddleware), (window as any)['__REDUX_DEVTOOLS_EXTENSION__']
-            ? (window as any)['__REDUX_DEVTOOLS_EXTENSION__']()
-            : (v: any) => v));
+      compose(applyMiddleware(sagaMiddleware), (window as any).__REDUX_DEVTOOLS_EXTENSION__
+        ? (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+        : (v: any) => v));
 
     sagaMiddleware.run(rootSaga);
 
@@ -43,11 +43,11 @@ export default class Application extends Component {
       <Provider store={store}>
         <Router>
           <Switch>
-            <Route path='/login'>
+            <Route path="/login">
               <Root />
             </Route>
             <Route>
-              <Redirect to='/login'/>
+              <Redirect to="/login" />
             </Route>
           </Switch>
         </Router>
