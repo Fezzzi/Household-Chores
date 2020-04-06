@@ -1,4 +1,4 @@
-# Ides
+# IDEs
 .idea
 
 # Logs
@@ -11,8 +11,9 @@ yarn-error.log*
 # Dependency directories
 node_modules/
 
-# TypeScript cache
+# Cache
 *.tsbuildinfo
+.eslintcache
 
 # dotenv environment variables file
 .env
