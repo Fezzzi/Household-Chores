@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "es6",
     "jsx": "react",
     "sourceMap": true,
     "experimentalDecorators": true,
@@ -17,10 +16,15 @@
     "strictNullChecks": true,
     "moduleResolution": "node",
     "lib": [
+      "es6",
       "dom",
       "dom.iterable",
       "esnext"
     ],
+    "paths": {
+      "clientSrc/*": [ "code/client/src/*" ],
+      "serverSrc/*": [ "code/server/src/*" ]
+    },
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

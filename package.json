@@ -6,6 +6,7 @@
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-react": "^7.9.4",
+    "@types/chai": "^4.2.11",
     "@types/classnames": "^2.2.10",
     "@types/express": "^4.17.4",
     "@types/lodash": "^4.14.149",
@@ -19,6 +20,7 @@
     "@typescript-eslint/parser": "^2.26.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
+    "chai": "^4.2.0",
     "classnames": "^2.2.6",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
@@ -45,7 +47,6 @@
     "source-map-loader": "^0.2.4",
     "styled-components": "^5.0.1",
     "ts-loader": "^6.2.2",
-    "ts-mocha": "^7.0.0",
     "ts-node": "^8.8.1",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
@@ -53,6 +54,7 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
+    "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "i18n": "^0.8.6",
@@ -62,12 +64,12 @@
   },
   "scripts": {
     "start-front": "webpack-dev-server --config config/webpack.config.js --open --mode development",
-    "start-back": "node code/server",
+    "start-back": "node code/server/src",
     "build": "webpack --config config/webpack.config.js --mode production",
     "test": "npm run lint && npm run mocha",
     "lint": "eslint --cache -c ./config/eslintrc.js . --ext .js,.ts,.tsx",
     "lint-fix": "eslint --fix --cache -c ./config/eslintrc.js . --ext .js,.ts,.tsx",
-    "mocha": "mocha --require ./config/mocha.babel.js \"src/**/*.spec.ts\""
+    "mocha": "cross-env TS_NODE_COMPILER_OPTIONS='{\\\"module\\\":\\\"commonjs\\\"}' mocha --require ts-node/register \"tests/**/*.spec.ts\""
   },
   "browserslist": {
     "production": [
