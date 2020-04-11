@@ -11,6 +11,7 @@
     "@types/express": "^4.17.4",
     "@types/lodash": "^4.14.149",
     "@types/mocha": "^7.0.2",
+    "@types/morgan": "^1.9.0",
     "@types/node": "^13.11.0",
     "@types/react": "^16.9.32",
     "@types/react-dom": "^16.9.6",
@@ -48,6 +49,7 @@
     "styled-components": "^5.0.1",
     "ts-loader": "^6.2.2",
     "ts-node": "^8.8.1",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
@@ -64,12 +66,13 @@
   },
   "scripts": {
     "start-front": "webpack-dev-server --config config/webpack.config.js --open --mode development",
-    "start-back": "node code/server/src",
+    "start-back": "ts-node -r tsconfig-paths/register code/server/src",
     "build": "webpack --config config/webpack.config.js --mode production",
     "test": "npm run lint && npm run mocha",
     "lint": "eslint --cache -c ./config/eslintrc.js . --ext .js,.ts,.tsx",
     "lint-fix": "eslint --fix --cache -c ./config/eslintrc.js . --ext .js,.ts,.tsx",
-    "mocha": "cross-env TS_NODE_COMPILER_OPTIONS='{\\\"module\\\":\\\"commonjs\\\"}' mocha --require ts-node/register \"tests/**/*.spec.ts\""
+    "mocha": "cross-env TS_NODE_COMPILER_OPTIONS='{\\\"module\\\":\\\"commonjs\\\"}' mocha -r ts-node/register -r tsconfig-paths/register \"tests/**/*.spec.ts\"",
+    "migrate": "ts-node -r tsconfig-paths/register config/migration.ts"
   },
   "browserslist": {
     "production": [

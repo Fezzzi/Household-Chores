@@ -48,6 +48,7 @@ module.exports = {
       exports: 'always-multiline',
       functions: 'ignore',
     }],
+    'arrow-parens': [2, 'as-needed'],
     'operator-linebreak': [2, 'before'],
     'max-len': [2, { code: 160, tabWidth: 2 }],
     'quote-props': [2, 'consistent-as-needed'],

@@ -1,10 +1,14 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "paths": {
+      "clientSrc/*": [ "code/client/src/*" ],
+      "serverSrc/*": [ "code/server/src/*" ]
+    },
     "jsx": "react",
+    "target": "es6",
     "sourceMap": true,
     "experimentalDecorators": true,
-    "module": "esnext",
     "types": [
       "node",
       "mocha"
@@ -14,17 +18,12 @@
     ],
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "moduleResolution": "node",
     "lib": [
       "es6",
       "dom",
       "dom.iterable",
       "esnext"
     ],
-    "paths": {
-      "clientSrc/*": [ "code/client/src/*" ],
-      "serverSrc/*": [ "code/server/src/*" ]
-    },
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

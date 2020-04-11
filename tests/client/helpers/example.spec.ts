@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { formatTime, formatDateTime, formatDate } from '../../../code/client/src/helpers/example';
+import { formatTime, formatDateTime, formatDate } from 'clientSrc/helpers/example';
 
 describe('Helpers > example', () => {
   describe('date formatters', () => {
