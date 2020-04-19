@@ -1,9 +1,11 @@
 import { connection } from './connection';
+import dbLogger from './dbLogger';
 
 const query = connection.query;
 const database = connection;
+
 database.query = (sql, values, cb) => {
-  console.log(`Trying to read from db with query ${sql}, value ${values} and cb ${cb}`);
+  dbLogger(sql);
   query(sql, values, cb);
 };
 

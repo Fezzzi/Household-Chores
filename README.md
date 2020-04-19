@@ -16,10 +16,15 @@ App for household managing
     - start the mysql service
     - login as root with `mysql -u root -p` (default password is usually `mysql`)
     - create `household` database with `CREATE DATABASE household;`
+    - **for mysql < 8**
     - create `household` user and assign it to the new database with `GRANT ALL PRIVILEGES ON household.* to household@localhost IDENTIFIED BY '[YOUR PASSWORD]';`
+    - **for mysql 8+**
+    - create `household` user with `CREATE USER household@localhost IDENTIFIED BY '[YOUR PASSWORD]';`
+    - assign user the new database with `GRANT ALL PRIVILEGES ON household.* TO household@localhost WITH GRANT OPTION;`
 3. copy `.env.example` to `.env` and set up DB connection
-4. run `npm migrate up` from the project root
-5. run `npm run start-back` and `npm run start-front`
+4. create `logs` directories under both `code\server` and `code\client`.
+5. run `npm migrate up` from the project root
+6. run `npm run start-back` and `npm run start-front`
 
 
 ## Examples

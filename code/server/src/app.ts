@@ -8,7 +8,7 @@ import router from './actions/router';
 const app = express();
 
 // Setup logging
-app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'));
+app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url" :status :response-time ms'));
 
 // Serve static assets
 app.use(express.static(path.resolve(__dirname, '..', 'build')));
