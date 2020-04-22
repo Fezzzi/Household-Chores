@@ -1,15 +1,13 @@
 import express from 'express';
 
-import database from 'serverSrc/models/database';
+import { database } from 'serverSrc/models/database';
 
 export default () => {
   const router = express.Router();
-  router.get('/login', (_req, res) => {
+  router.get('/test', (_req, res) => {
     database.query('SHOW SCHEMAS', (error, results) => {
       if (error) {
-        console.error('db reading error');
-        res.status(500).send('Lul');
-        
+        res.status(500).send('Something went left');
         return;
       }
       res.status(200).send(results);

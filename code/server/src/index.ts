@@ -1,6 +1,5 @@
 import app from './app';
 
-// Declare default port
 const PORT: string|number = process.env.PORT || 9000;
 
 // Start the server
