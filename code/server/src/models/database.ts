@@ -1,13 +1,13 @@
-import {FieldInfo, MysqlError, queryCallback} from "mysql";
+import { FieldInfo, MysqlError, queryCallback } from 'mysql';
 
 import { connection } from './connection';
-import logger from '../helpers/logger';
-import { DB_LOG } from "../constants/logs";
+import { Logger } from '../helpers/logger';
+import { DB_LOG } from '../constants/logs';
 
 export const database = {
   query: (sql: string, cb: queryCallback) => {
     connection.query(sql, (err: MysqlError | null, results?: any, fields?: FieldInfo[]) => {
-      logger(DB_LOG, `${sql}; - ${(err && err.message) || 'QUERY OK'}`, "\n");
+      Logger(DB_LOG, `${sql}; (${(err && err.message) || 'OK'})\n`);
       cb(err, results, fields);
     });
   },
