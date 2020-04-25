@@ -24,6 +24,7 @@
     "babel-loader": "^8.1.0",
     "chai": "^4.2.0",
     "classnames": "^2.2.6",
+    "cross-env-file": "^1.0.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-import-resolver-webpack": "^0.12.1",
@@ -57,7 +58,6 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
-    "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "i18n": "^0.8.6",
@@ -73,7 +73,7 @@
     "test": "npm run lint && npm run mocha",
     "lint": "eslint --cache -c ./config/eslintrc.js . --ext .js,.ts,.tsx",
     "lint-fix": "eslint --fix --cache -c ./config/eslintrc.js . --ext .js,.ts,.tsx",
-    "mocha": "cross-env TS_NODE_COMPILER_OPTIONS='{\\\"module\\\":\\\"commonjs\\\"}' mocha -r ts-node/register -r tsconfig-paths/register \"tests/**/*.spec.ts\"",
+    "mocha": "cross-env-file -p ./config/mocha-env.json mocha -r ts-node/register -r tsconfig-paths/register \"tests/**/*.spec.ts\"",
     "migrate": "ts-node -r tsconfig-paths/register config/migration.ts"
   },
   "browserslist": {
