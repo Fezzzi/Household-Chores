@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Exit immediately in case of successful linting
+set -e
+
+# Lint it!
+npm run lint

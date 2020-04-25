@@ -74,7 +74,8 @@
     "lint": "eslint --cache -c ./config/eslintrc.js . --ext .js,.ts,.tsx",
     "lint-fix": "eslint --fix --cache -c ./config/eslintrc.js . --ext .js,.ts,.tsx",
     "mocha": "cross-env TS_NODE_COMPILER_OPTIONS='{\\\"module\\\":\\\"commonjs\\\"}' mocha -r ts-node/register -r tsconfig-paths/register \"tests/**/*.spec.ts\"",
-    "migrate": "ts-node -r tsconfig-paths/register config/migration.ts"
+    "migrate": "ts-node -r tsconfig-paths/register config/migration.ts",
+    "configure": "cp ./config/git-hooks/pre-push ./.git/hooks/pre-push"
   },
   "browserslist": {
     "production": [
