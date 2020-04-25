@@ -2,7 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import path from 'path';
 
-import errorHandler from "./helpers/errorHandler";
+import errorHandler from './helpers/errorHandler';
 import router from './actions/router';
 import { Logger } from './helpers/logger';
 import { ACCESS_LOG } from './constants/logs';
