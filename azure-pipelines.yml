@@ -11,7 +11,7 @@ steps:
 - script: npm install
   displayName: 'Lining up turtle friends'
 
-- script: npm run lint
+- script: eslint --fix --cache -c ./config/eslintrc.js . --ext .js,.ts,.tsx
   displayName: 'Checking appearance of the turtle'
 
 - script: npm run test
