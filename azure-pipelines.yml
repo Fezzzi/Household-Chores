@@ -11,10 +11,13 @@ steps:
 - script: npm install
   displayName: 'Lining up turtle friends'
 
-- script: node ./node_modules/eslint/bin/eslint.js --cache -c ./config/eslintrc.js . --ext .js,.ts,.tsx
+- script: npm run lint
   displayName: 'Checking appearance of the turtle'
 
-- script: mocha --require ./config/mocha.babel.js "src/**/*.spec.{ts}"
+- script: npm run test
   displayName: 'Checking behaviour of the turtle'
+
+- script: npm run build
+  displayName: 'Checking health of the turtle'
 
 # Possibly some db migration via webpack?
