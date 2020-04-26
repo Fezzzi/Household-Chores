@@ -1,25 +1,32 @@
+# Disable pipeline running automatically on any commit
+trigger: none
+
+# Re-enable pipeline running on PR targeting given branches
 pr:
 - master
 - development
 
-pool:
-  vmImage: 'ubuntu-latest'
+jobs:
+- job: 'Testing_Pipeline'
+  pool:
+    vmImage: 'ubuntu-latest'
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '14.x'
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '14.x'
 
-- script: npm install
-  displayName: 'Lining up turtle friends'
+  - script: npm install
+    displayName: 'Lining up turtle friends'
 
-- script: npm run lint
-  displayName: 'Checking appearance of the turtle'
+    # Eslint
+  - script: npm run lint
+    displayName: 'Checking appearance of the turtle'
 
-- script: npm run test
-  displayName: 'Checking behaviour of the turtle'
+    # Mocha
+  - script: npm run test
+    displayName: 'Checking behaviour of the turtle'
 
-- script: npm run build
-  displayName: 'Checking health of the turtle'
-
-# Possibly some db migration via webpack?
+    # Webpack build
+  - script: npm run build
+    displayName: 'Checking health of the turtle'
