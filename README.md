@@ -11,7 +11,7 @@ App for household managing
 
 
 ## How to set up and run
-1. run `npm install` from the project root
+1. run `npm install` and `npm configure` from the project root
 2. install [mysql server](https://dev.mysql.com/downloads/installer/) if needed
     - start the mysql service
     - login as root with `mysql -u root -p` (default password is usually `mysql`)
