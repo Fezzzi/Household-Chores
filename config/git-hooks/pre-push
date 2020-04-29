@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Exit immediately in case of successful linting
+# Exit immediately in case of unsuccessful linting
 set -e
 
 # Lint it!
