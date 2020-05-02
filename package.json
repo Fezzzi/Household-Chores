@@ -66,7 +66,7 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "start": "npm run start-back",
+    "start": "npm install --production && npm run start-back",
     "start-front": "webpack-dev-server --config config/webpack.config.js --open --mode development",
     "start-back": "ts-node -r tsconfig-paths/register code/server/src",
     "build": "webpack --config config/webpack.config.js --mode production",

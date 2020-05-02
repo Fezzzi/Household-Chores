@@ -19,16 +19,11 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ env.NODE_VERSION }}
-    - name: 'npm install, build, and test'
+    - name: 'npm install, build and clean'
       run: |
         npm install
-        # npm run migrate up # allow after db set-up
         npm run build
         rm -rf ./node_modules
-        npm install --production
-        echo "Test test"
-        echo ""/home/site/wwwroot/node_modules/ts-node/dist/bin.js"" > ./node_modules/.bin/ts-node
-        echo "bla" > ./test.txt
 
     - name: 'Deploy to Azure Beta WebApp'
       uses: azure/webapps-deploy@v2
