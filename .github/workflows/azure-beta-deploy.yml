@@ -23,7 +23,7 @@ jobs:
       run: |
         npm install
         npm run build
-        rm -rf ./node_modules/*
+        rm -rfv ./node_modules/*
         mkdir -m 777 ./node_modules/.bin
 
     - name: 'Deploy to Azure Beta WebApp'
