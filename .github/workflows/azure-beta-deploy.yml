@@ -26,7 +26,8 @@ jobs:
         npm run build
         rm -rf ./node_modules
         npm install --production
-        echo "/home/site/wwwroot/node_modules/ts-node/dist/bin.js" > ./node_modules/.bin/ts-node
+        echo ""/home/site/wwwroot/node_modules/ts-node/dist/bin.js"" > ./node_modules/.bin/ts-node
+        echo "bla" > ./test.txt
 
     - name: 'Deploy to Azure Beta WebApp'
       uses: azure/webapps-deploy@v2
