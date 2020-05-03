@@ -24,8 +24,9 @@ jobs:
         npm install
         npm run build
         rm -rf ./node_modules/*
-        rm -rfv ./node_modules/.bin
+        rm -rf ./node_modules/.bin
         mkdir -m 777 ./node_modules/.bin
+        npm install --production
 
     - name: 'Deploy to Azure Beta WebApp'
       uses: azure/webapps-deploy@v2
