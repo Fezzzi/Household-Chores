@@ -1,6 +1,6 @@
 on:
   push:
-    branches: deployment-fix # Change to development after fix
+    branches: development
 
 env:
   AZURE_WEBAPP_NAME: household-chores-beta

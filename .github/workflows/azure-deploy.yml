@@ -12,14 +12,23 @@ jobs:
     name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: 'Checkout Branch'
+      uses: actions/checkout@v2
+
     - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ env.NODE_VERSION }}
-    - name: npm install
-      run: npm install
-    - name: 'Deploy to Azure WebApp'
+    - name: 'npm install, build and clean'
+      run: |
+        npm install
+        npm run build
+        rm -rf ./node_modules/*
+        npm install --production
+        rm -rf ./node_modules/.bin
+        cp -r ./config/deploy/.bin ./node_modules/.bin
+
+    - name: 'Deploy to Azure Beta WebApp'
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
