@@ -20,6 +20,7 @@ App for household managing
     - create `household` user and assign it to the new database with `GRANT ALL PRIVILEGES ON household.* to household@localhost IDENTIFIED BY '[YOUR PASSWORD]';`
     - **for mysql 8+**
     - create `household` user with `CREATE USER household@localhost IDENTIFIED BY '[YOUR PASSWORD]';`
+    - fix it with `ALTER USER household@localhost IDENTIFIED WITH mysql_native_password BY '[YOUR PASSWORD]';`
     - assign user the new database with `GRANT ALL PRIVILEGES ON household.* TO household@localhost WITH GRANT OPTION;`
 3. create a copy of `.env.example`, rename it to`.env` and set up DB connection
 5. run `npm run migrate up` from the project root
