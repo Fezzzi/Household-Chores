@@ -1,4 +1,4 @@
-import mysql from 'mysql';
+import mysql, { MysqlError } from 'mysql';
 import dotenv from 'dotenv';
 
 import { Logger } from '../helpers/logger';
@@ -14,18 +14,20 @@ const config: object = {
   database: process.env.DB_DATABASE,
 };
 
+export const handleConnectionError = (err: MysqlError | null, type: string) => {
+  if (err && err.fatal) {
+    Logger(DB_LOG, `FATAL ERROR (${type}) [${err.message}] - Resetting connection...\n`);
+    Connection.reset();
+  }
+}
+
 export class Connection {
   private static __connection: mysql.Connection|null = null;
 
   private static __createConnection = () => {
-    const connection = mysql.createConnection(config);
-    connection.on('error', err => {
-      if (err && err.fatal) {
-        Logger(DB_LOG, `FATAL ERROR (Connection) [${err.message}] - Resetting connection...\n`);
-        Connection.reset();
-      }
-    });
-    return connection;
+    return mysql
+      .createConnection(config)
+      .on('error', err => handleConnectionError(err, 'Connection'));
   };
 
   static get() {
