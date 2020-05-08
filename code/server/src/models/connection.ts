@@ -1,6 +1,9 @@
 import mysql from 'mysql';
 import dotenv from 'dotenv';
 
+import { Logger } from '../helpers/logger';
+import { DB_LOG } from '../constants/logs';
+
 dotenv.config();
 
 const config: object = {
@@ -11,6 +14,34 @@ const config: object = {
   database: process.env.DB_DATABASE,
 };
 
-export const connection = mysql.createConnection(config);
+export class Connection {
+  private static __connection: mysql.Connection|null = null;
+
+  private static __createConnection = () => {
+    const connection = mysql.createConnection(config);
+    connection.on('error', err => {
+      if (err && err.fatal) {
+        Logger(DB_LOG, `FATAL ERROR (Connection) [${err.message}] - Resetting connection...\n`);
+        Connection.reset();
+      }
+    });
+    return connection;
+  };
+
+  static get() {
+    if (this.__connection === null) {
+      this.__connection = this.__createConnection();
+    }
+    return this.__connection;
+  }
+
+  static reset() {
+    if (this.__connection === null) {
+      return;
+    }
+    this.__connection.destroy();
+    this.__connection = this.__createConnection();
+  }
+}
 
 export const pool = mysql.createPool(config);
