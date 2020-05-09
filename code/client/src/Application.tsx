@@ -9,25 +9,6 @@ import { rootSaga } from './sagas/rootSaga';
 import { Root } from './components/Root';
 
 export default class Application extends Component {
-  componentDidMount() {
-    // EXAMPLE FETCH REQUEST
-
-    // const URL = 'http://localhost:9000/example'
-    // const options = { method: 'GET' }
-
-    // fetch(URL, options)
-    // .then(response => {
-    //   if (response.status === 200) {
-    //     return response.json()
-    //   } else {
-    //     throw new Error(response.statusText);
-    //   }
-    // })
-    // .then(data => {
-    //   // Do something with the data
-    // })
-    // .catch(error => alert(error))
-  }
 
   render() {
     const sagaMiddleware = createSagaMiddleware();
