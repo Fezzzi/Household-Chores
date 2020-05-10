@@ -1,6 +1,4 @@
-import { createActions } from "reduxsauce";
+import { createAction } from "@reduxjs/toolkit";
 
-export const TestActions = createActions({
-    getData: [],
-    dataLoaded: ['data'],
-});
+export const getData: any = createAction('GET_DATA');
+export const dataLoaded: any = createAction('DATA_LOADED');

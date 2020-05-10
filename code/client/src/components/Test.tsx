@@ -1,7 +1,7 @@
 import  React from 'react';
 import { connect } from 'react-redux';
-import { TestActions } from 'clientSrc/actions/testActions';
-import {Dispatch} from "redux";
+import * as TestActions from 'clientSrc/actions/testActions';
+import { Dispatch } from "redux";
 
 const buttonStyle = {
     color: 'cyan',
@@ -13,7 +13,7 @@ const TestComponent = ( prop:{getData : any}) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-    getData: () => dispatch(TestActions.Creators.getData()),
+    getData: () => dispatch(TestActions.getData()),
 });
 
 export const Test = connect(mapDispatchToProps)(TestComponent);
