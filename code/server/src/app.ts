@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
 
@@ -16,6 +17,9 @@ app.use(morgan(':remote-addr - :remote-user ":method :url" :status :response-tim
     write: (str: string) => Logger(ACCESS_LOG, str),
   },
 }));
+
+// Setup CORS policy
+app.use(cors());
 
 // Serve static assets
 app.use(express.static(path.resolve(__dirname, '..', '..', '..', 'dist')));

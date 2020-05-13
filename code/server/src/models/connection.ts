@@ -19,16 +19,14 @@ export const handleConnectionError = (err: MysqlError | null, type: string) => {
     Logger(DB_LOG, `FATAL ERROR (${type}) [${err.message}] - Resetting connection...\n`);
     Connection.reset();
   }
-}
+};
 
 export class Connection {
   private static __connection: mysql.Connection|null = null;
 
-  private static __createConnection = () => {
-    return mysql
-      .createConnection(config)
-      .on('error', err => handleConnectionError(err, 'Connection'));
-  };
+  private static __createConnection = () => mysql
+    .createConnection(config)
+    .on('error', err => handleConnectionError(err, 'Connection'));
 
   static get() {
     if (this.__connection === null) {

@@ -1,10 +1,14 @@
-import { createReducer } from 'reduxsauce';
+import { createReducer, combineReducers } from '@reduxjs/toolkit';
 
+import testReducer from './testReducer';
 
 const initialState = {
   debug: true,
 };
 
-export const rootReducer = createReducer(initialState, {
-  // mapping of actions to reducers
+const rootReducer = createReducer(initialState, {});
+
+export default combineReducers({
+  ...rootReducer,
+  test: testReducer,
 });
