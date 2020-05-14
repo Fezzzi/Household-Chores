@@ -1,8 +1,8 @@
-export const formatDate = (date: Date, delim = '.'): string =>
+export const formatDate = (date, delim = '.') =>
   date.getDay() + delim + date.getMonth() + delim + date.getFullYear();
 
-export const formatTime = (date: Date, delim = ':'): string =>
+export const formatTime = (date, delim = ':') =>
   date.getHours() + delim + date.getMinutes() + delim + date.getSeconds();
 
-export const formatDateTime = (date: Date, dateDelim = '.', timeDelim = ':'): string =>
+export const formatDateTime = (date, dateDelim = '.', timeDelim = ':') =>
   `${formatDate(date, dateDelim)} ${formatTime(date, timeDelim)}`;

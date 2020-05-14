@@ -14,18 +14,12 @@ module.exports = {
     filename: 'main.js',
     path: path.resolve(__dirname, '../dist'),
   },
+  entry: {
+    js: ['babel-polyfill', 'clientSrc/index.jsx'],
+  },
 
   module: {
     rules: [
-      {
-        test: /\.ts(x?)$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'ts-loader',
-          },
-        ],
-      },
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,

@@ -123,14 +123,14 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['*.ts', '*.tsx', '*.d.ts'],
+      files: ['*.ts', '*.d.ts'],
       parser: '@typescript-eslint/parser',
       plugins: ['@typescript-eslint'],
       rules: {
         ...tsRules,
       },
     }, {
-      files: ['*.js'],
+      files: ['*.js', '*.jsx'],
       parser: 'babel-eslint',
     },
   ],
