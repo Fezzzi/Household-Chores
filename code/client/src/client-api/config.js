@@ -1,4 +1,4 @@
-const port = process.env.PORT ? `:${process.env.PORT}` : '';
+const port = (process.env && process.env.PORT) ? `:${process.env.PORT}` : '';
 
 export const config = {
   baseURL: `${window.location.protocol}//${window.location.hostname}${port}`,
