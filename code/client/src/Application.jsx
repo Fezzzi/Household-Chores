@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 
 import rootReducer from './reducers/rootReducer';
 import { rootSaga } from './sagas/rootSaga';
+import { Footer } from './components/Footer';
 import { Auth } from './components/Auth';
 
 export default () => {
@@ -20,13 +21,11 @@ export default () => {
 
   return (
     <Provider store={store}>
+      <Auth />
       <Router>
         <Switch>
           <Route path="/login">
             <Auth />
-          </Route>
-          <Route>
-            <Redirect to="/login" />
           </Route>
         </Switch>
       </Router>
