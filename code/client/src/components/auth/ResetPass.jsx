@@ -6,7 +6,7 @@ import { Input } from './Input';
 
 export const ResetPass = () => (
   <>
-    <div></div>
+    <div />
     <Input name="email" label="Email" type={InputTypes.EMAIL} />
   </>
 );

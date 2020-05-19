@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import * as TYPES from 'clientSrc/constants/inputTypes';
@@ -21,11 +21,15 @@ const miniInputStyle = ({
 });
 
 export class Input extends Component {
-  state = {
-    inputTextLength: 0,
-    showPassword: false,
-    inputActive: false,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      inputTextLength: 0,
+      showPassword: false,
+      inputActive: false,
+    };
+  }
 
   render() {
     const { name, label, type } = this.props;
@@ -36,18 +40,20 @@ export class Input extends Component {
         <InputWrapper style={inputActive ? activeInputStyle : {}}>
           <InputBox htmlFor={name}>
             <InputLabel style={inputTextLength === 0 ? {} : miniLabelStyle}>{label}</InputLabel>
-            <InputField name={this.name}
-                        type={type === TYPES.PASSWORD && showPassword ? TYPES.TEXT : type}
-                        onChange={e => this.setState({ inputTextLength: e.target.value.length})}
-                        onFocus={() => this.setState({ inputActive: true })}
-                        onBlur={() => this.setState({ inputActive: false })}
-                        style={inputTextLength === 0 ? {} : miniInputStyle}/>
+            <InputField
+              name={this.name}
+              type={type === TYPES.PASSWORD && showPassword ? TYPES.TEXT : type}
+              onChange={e => this.setState({ inputTextLength: e.target.value.length })}
+              onFocus={() => this.setState({ inputActive: true })}
+              onBlur={() => this.setState({ inputActive: false })}
+              style={inputTextLength === 0 ? {} : miniInputStyle}
+            />
           </InputBox>
           <InputSider>
             {type === TYPES.PASSWORD && inputTextLength > 0
               ? (
                 <ShowPassWrapper>
-                  <ShowPassButton onClick={() => this.setState({ showPassword: !showPassword})}>
+                  <ShowPassButton onClick={() => this.setState({ showPassword: !showPassword })}>
                     {showPassword ? 'Hide' : 'Show'}
                   </ShowPassButton>
                 </ShowPassWrapper>
