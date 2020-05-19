@@ -27,6 +27,10 @@ module.exports = {
           loader: 'babel-loader',
         },
       },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
       {
         enforce: 'pre',
@@ -40,7 +44,7 @@ module.exports = {
       template: path.resolve(__dirname, '../code/client/src/index.html'),
     }),
     new webpack.DefinePlugin({
-      'process.env': dotenv.parsed,
+      'process.env.port': dotenv.parsed.port,
     }),
   ],
 };

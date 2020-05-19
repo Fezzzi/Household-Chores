@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 
 import rootReducer from './reducers/rootReducer';
 import { rootSaga } from './sagas/rootSaga';
-import { Root } from './components/Root';
+import { Auth } from './components/Auth';
 
 export default () => {
   const sagaMiddleware = createSagaMiddleware();
@@ -23,7 +23,7 @@ export default () => {
       <Router>
         <Switch>
           <Route path="/login">
-            <Root />
+            <Auth />
           </Route>
           <Route>
             <Redirect to="/login" />
