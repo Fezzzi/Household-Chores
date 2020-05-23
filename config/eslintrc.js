@@ -1,9 +1,4 @@
 const tsRules = {
-  'no-useless-constructor': 0,
-  'no-unused-vars': 0,
-  'react/prop-types': 0,
-  'react/jsx-filename-extension': 0,
-
   '@typescript-eslint/adjacent-overload-signatures': 1,
   '@typescript-eslint/ban-ts-ignore': 1,
   '@typescript-eslint/ban-types': 1,
@@ -104,6 +99,10 @@ module.exports = {
     'react/require-default-props': 0,
     'react/destructuring-assignment': 0,
     'react/jsx-one-expression-per-line': 0,
+    'no-useless-constructor': 0,
+    'react/jsx-filename-extension': 0,
+    'react/jsx-no-bind': 0,
+    'react/jsx-props-no-spreading': 0,
   },
   plugins: [
     '@typescript-eslint',

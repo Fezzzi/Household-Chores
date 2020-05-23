@@ -17,6 +17,9 @@ module.exports = {
   entry: {
     js: ['babel-polyfill', 'clientSrc/index.jsx'],
   },
+  devServer: {
+    historyApiFallback: true,
+  },
 
   module: {
     rules: [
@@ -30,6 +33,12 @@ module.exports = {
       {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          'file-loader',
+        ],
       },
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
       {

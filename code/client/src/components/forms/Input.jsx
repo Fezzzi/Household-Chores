@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import * as TYPES from 'clientSrc/constants/inputTypes';
+import { isInputValid } from 'clientSrc/helpers/validations';
 import {
   InputRow, InputField, InputWrapper, InputBox, InputLabel,
-  InputSider, ShowPassWrapper, ShowPassButton,
+  InputSider, ShowPassWrapper, ShowPassButton, ErrorSpan,
 } from 'clientSrc/styles/blocks/auth';
 
 const activeInputStyle = ({
@@ -31,8 +32,17 @@ export class Input extends Component {
     };
   }
 
+  handleInputChange = e => {
+    this.setState({
+      inputTextLength: e.target.value.length,
+    });
+
+    const { type, updateInput } = this.props;
+    updateInput(isInputValid(type, e.target.value), e.target.value);
+  }
+
   render() {
-    const { name, label, type } = this.props;
+    const { name, label, type, hasError } = this.props;
     const { inputTextLength, showPassword, inputActive } = this.state;
 
     return (
@@ -43,17 +53,23 @@ export class Input extends Component {
             <InputField
               name={this.name}
               type={type === TYPES.PASSWORD && showPassword ? TYPES.TEXT : type}
-              onChange={e => this.setState({ inputTextLength: e.target.value.length })}
+              onChange={this.handleInputChange}
               onFocus={() => this.setState({ inputActive: true })}
               onBlur={() => this.setState({ inputActive: false })}
               style={inputTextLength === 0 ? {} : miniInputStyle}
+              noValidate
             />
           </InputBox>
           <InputSider>
+            {hasError ? <ErrorSpan /> : ''}
             {type === TYPES.PASSWORD && inputTextLength > 0
               ? (
                 <ShowPassWrapper>
-                  <ShowPassButton onClick={() => this.setState({ showPassword: !showPassword })}>
+                  <ShowPassButton onClick={e => {
+                    e.preventDefault();
+                    this.setState({ showPassword: !showPassword });
+                  }}
+                  >
                     {showPassword ? 'Hide' : 'Show'}
                   </ShowPassButton>
                 </ShowPassWrapper>
@@ -67,7 +83,9 @@ export class Input extends Component {
 }
 
 Input.propTypes = {
-  name: PropTypes.string,
-  label: PropTypes.string,
-  type: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  hasError: PropTypes.bool.isRequired,
+  updateInput: PropTypes.func,
 };

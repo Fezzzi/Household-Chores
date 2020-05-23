@@ -1,12 +1,70 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { PropTypes } from 'prop-types';
 
 import * as InputTypes from 'clientSrc/constants/inputTypes';
+import * as AuthActions from 'clientSrc/actions/authActions';
+import { MessageBlock, LinkRow } from 'clientSrc/styles/blocks/auth';
+import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
 
-import { Input } from './Input';
+import { Separator } from './Separator';
+import { Input, PrimaryButton } from '../forms';
 
-export const ResetPass = () => (
-  <>
-    <div />
-    <Input name="email" label="Email" type={InputTypes.EMAIL} />
-  </>
-);
+const inputsConfig = [
+  { name: 'email', label: 'Email', type: InputTypes.EMAIL },
+];
+
+export class ResetPassComponent extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isFormValid: false,
+      inputs: Object.fromEntries(inputsConfig.map(input =>
+        [input.name, { valid: false, value: '' }]
+      )),
+      errors: {},
+    };
+  }
+
+  render() {
+    const { switchTab, resetPass } = this.props;
+    const { isFormValid, errors, inputs } = this.state;
+
+    return (
+      <form method="post">
+        <MessageBlock bigFont>
+          Enter your email address and we&apos;ll send you a link to reset your password.
+        </MessageBlock>
+        {inputsConfig.map(input => (
+          <Input
+            name={input.name}
+            key={input.name}
+            label={input.label}
+            type={input.type}
+            hasError={!!errors[input.name]}
+            updateInput={updateInput(this, input.name)}
+          />
+        ))}
+        <PrimaryButton enabled={isFormValid} clickHandler={handlerWrapper(resetPass, inputs)}>
+          Send Reset Link
+        </PrimaryButton>
+        <Separator text="or" />
+        <LinkRow onClick={switchTab}>
+          Create New Account
+        </LinkRow>
+      </form>
+    );
+  }
+}
+
+ResetPassComponent.propTypes = ({
+  switchTab: PropTypes.func,
+  resetPass: PropTypes.func,
+});
+
+const mapDispatchToProps = dispatch => ({
+  resetPass: values => dispatch(AuthActions.resetPass(values)),
+});
+
+export const ResetPass = connect(null, mapDispatchToProps)(ResetPassComponent);
