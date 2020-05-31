@@ -8,6 +8,8 @@ import {
   InputSider, ShowPassWrapper, ShowPassButton, ErrorSpan,
 } from 'clientSrc/styles/blocks/auth';
 
+import InputErrorIcon from '~/static/icons/input-error-icon.svgr';
+
 const activeInputStyle = ({
   borderColor: '#a8a8a8',
 });
@@ -61,7 +63,13 @@ export class Input extends Component {
             />
           </InputBox>
           <InputSider>
-            {hasError ? <ErrorSpan /> : ''}
+            {hasError 
+              ? (
+                <ErrorSpan>
+                  <InputErrorIcon />
+                </ErrorSpan>
+              )
+              : ''}
             {type === TYPES.PASSWORD && inputTextLength > 0
               ? (
                 <ShowPassWrapper>

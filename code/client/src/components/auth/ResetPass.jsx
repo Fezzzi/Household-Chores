@@ -18,8 +18,11 @@ export class ResetPassComponent extends Component {
   constructor(props) {
     super(props);
 
+    this.timer = null;
     this.state = {
+      submitText: 'Send Reset Link',
       isFormValid: false,
+      isFormSending: false,
       inputs: Object.fromEntries(inputsConfig.map(input =>
         [input.name, { valid: false, value: '' }]
       )),
@@ -27,9 +30,21 @@ export class ResetPassComponent extends Component {
     };
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
+
+  handleClick = handlerWrapper(() => {
+    this.props.resetPass(this.state.inputs);
+    this.setState({ isFormSending: true, submitText: 'Sending' });
+    this.timer = setTimeout(
+      () => this.setState({ isFormSending: false, submitText: 'Send Reset Link' }), 2500
+    );
+  });
+
   render() {
-    const { switchTab, resetPass } = this.props;
-    const { isFormValid, errors, inputs } = this.state;
+    const { switchTab } = this.props;
+    const { submitText, isFormValid, isFormSending, errors } = this.state;
 
     return (
       <form method="post">
@@ -46,8 +61,8 @@ export class ResetPassComponent extends Component {
             updateInput={updateInput(this, input.name)}
           />
         ))}
-        <PrimaryButton enabled={isFormValid} clickHandler={handlerWrapper(resetPass, inputs)}>
-          Send Reset Link
+        <PrimaryButton disabled={!isFormValid || isFormSending} clickHandler={this.handleClick}>
+          {submitText}
         </PrimaryButton>
         <Separator text="or" />
         <LinkRow onClick={switchTab}>

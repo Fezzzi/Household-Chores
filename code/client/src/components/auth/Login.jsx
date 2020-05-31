@@ -4,10 +4,13 @@ import { PropTypes } from 'prop-types';
 
 import * as InputTypes from 'clientSrc/constants/inputTypes';
 import * as AuthActions from 'clientSrc/actions/authActions';
-import { FacebookIconSpan, LinkRow } from 'clientSrc/styles/blocks/auth';
+import * as RootActions from 'clientSrc/actions/rootActions';
+import { LinkRow } from 'clientSrc/styles/blocks/auth';
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
 
 import { Separator } from './Separator';
+import { FacebookLoginButton } from './FacebookLoginButton';
+import { GoogleLoginButton } from './GoogleLoginButton';
 import { Input, PrimaryButton } from '../forms';
 
 const inputsConfig = [
@@ -19,8 +22,11 @@ export class LoginComponent extends Component {
   constructor(props) {
     super(props);
 
+    this.timer = null;
     this.state = {
+      submitText: 'Log In',
       isFormValid: false,
+      isFormSending: false,
       inputs: Object.fromEntries(inputsConfig.map(input =>
         [input.name, { valid: false, value: '' }]
       )),
@@ -28,9 +34,23 @@ export class LoginComponent extends Component {
     };
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
+
+  handleError = error => this.props.addNotification('errors', error.message);
+
+  handleClick = handlerWrapper(() => {
+    this.props.logIn(this.state.inputs);
+    this.setState({ isFormSending: true, submitText: 'Sending' });
+    this.timer = setTimeout(
+      () => this && this.setState({ isFormSending: false, submitText: 'Log In' }), 2500
+    );
+  });
+
   render() {
-    const { switchTab, logIn } = this.props;
-    const { isFormValid, errors, inputs } = this.state;
+    const { switchTab } = this.props;
+    const { submitText, isFormValid, isFormSending, errors } = this.state;
 
     return (
       <form method="post">
@@ -44,19 +64,12 @@ export class LoginComponent extends Component {
             updateInput={updateInput(this, input.name)}
           />
         ))}
-        <PrimaryButton enabled={isFormValid} clickHandler={handlerWrapper(logIn, inputs)}>
-          Log In
+        <PrimaryButton disabled={!isFormValid || isFormSending} clickHandler={this.handleClick}>
+          {submitText}
         </PrimaryButton>
         <Separator text="or" />
-        <PrimaryButton>
-          <>
-            <FacebookIconSpan />
-            Log in with Facebook
-          </>
-        </PrimaryButton>
-        <PrimaryButton background="#ea4335">
-          Log in with Google
-        </PrimaryButton>
+        <FacebookLoginButton handleError={this.handleError} />
+        <GoogleLoginButton handleError={this.handleError} />
         <LinkRow onClick={switchTab}>
           Forgot Your Password?
         </LinkRow>
@@ -68,10 +81,14 @@ export class LoginComponent extends Component {
 LoginComponent.propTypes = ({
   switchTab: PropTypes.func,
   logIn: PropTypes.func,
+  addNotification: PropTypes.func,
 });
 
 const mapDispatchToProps = dispatch => ({
   logIn: values => dispatch(AuthActions.logIn(values)),
+  addNotification: (type, message) => dispatch(RootActions.addNotifications({
+    [type]: [message],
+  })),
 });
 
 export const Login = connect(null, mapDispatchToProps)(LoginComponent);

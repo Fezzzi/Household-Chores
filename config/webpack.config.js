@@ -36,8 +36,19 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
+        use: ['file-loader'],
+      },
+      // Enables inputing svg files (.svgr) as components to further style them
+      // without blocking standard way of .svg files importing
+      {
+        test: /\.svgr$/,
         use: [
-          'file-loader',
+          {
+            loader: '@svgr/webpack',
+            options: {
+              svgo: false,
+            },
+          },
         ],
       },
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.

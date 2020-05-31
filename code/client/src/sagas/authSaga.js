@@ -1,5 +1,6 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 import * as AuthActions from 'clientSrc/actions/authActions';
+import * as RootActions from 'clientSrc/actions/rootActions';
 import { signUp, logIn, resetPass } from 'clientSrc/effects/authEffects';
 
 function* signUpSaga(action) {
@@ -11,8 +12,8 @@ function* signUpSaga(action) {
       yield put(AuthActions.signUpError(response.data.errors));
     }
   } catch (error) {
-    yield put(AuthActions.signUpError({
-      0: 'Connection error, please try again later.',
+    yield put(RootActions.addNotifications({
+      errors: ['Connection error, please try again later.']
     }));
   }
 }
@@ -26,9 +27,52 @@ function* logInSaga(action) {
       yield put(AuthActions.logInError(response.data.errors));
     }
   } catch (error) {
-    yield put(AuthActions.logInError({
-      0: 'Connection error, please try again later.',
+    yield put(RootActions.addNotifications({
+      errors: ['Connection error, please try again later.'],
     }));
+  }
+}
+
+function* logInFacebookSaga(action) {
+  const { payload: { profile: { first_name, email, id }, tokenDetail }} = action;
+  if (!(first_name || email || id || tokenDetail)) {
+    const payload = action.type === AuthActions.logInFacebook.toString()
+      ? { errors: ['Log in failed, missing one or more required fields.']}
+      : { errors: ['Sign up failed, missing one or more required fields.']};
+    yield put(RootActions.addNotifications(payload));
+  } else {nbb                                             
+    yield put(
+      (action.type === AuthActions.logInFacebook.toString()
+        ? AuthActions.logIn
+        : AuthActions.signUp
+      )({
+        nickname: first_name,
+        email,
+        image: `https://graph.facebook.com/${id}/picture`,
+        facebook: tokenDetail,
+      }));
+  }
+}
+
+function* logInGoogleSaga(action) {
+  const { payload: { profileObj: { name, email, imageUrl, googleId }, tokenObj }} = action;
+  console.log(action.payload);
+  if (!(name || email || googleId || tokenObj)) {
+    const payload = action.type === AuthActions.logInGoogle.toString()
+      ? { errors: ['Log in failed, missing one or more required fields.']}
+      : { errors: ['Sign up failed, missing one or more required fields.']};
+    yield put(RootActions.addNotifications(payload));
+  } else {
+    yield put(
+      (action.type === AuthActions.logInGoogle.toString()
+        ? AuthActions.logIn
+        : AuthActions.signUp
+      )({
+        nickname: name,
+        email,
+        image: imageUrl,
+        google: tokenObj,
+      }));
   }
 }
 
@@ -41,8 +85,8 @@ function* resetPassSaga(action) {
       yield put(AuthActions.resetPassError(response.data.errors));
     }
   } catch (error) {
-    yield put(AuthActions.resetPassError({
-      0: 'Connection error, please try again later.',
+    yield put(RootActions.addNotifications({
+      errors: ['Connection error, please try again later.'],
     }));
   }
 }
@@ -50,5 +94,13 @@ function* resetPassSaga(action) {
 export function* authSaga() {
   yield takeEvery(AuthActions.signUp.toString(), signUpSaga);
   yield takeEvery(AuthActions.logIn.toString(), logInSaga);
+  yield takeEvery([
+    AuthActions.logInFacebook.toString(),
+    AuthActions.signUpFacebook.toString(),
+  ], logInFacebookSaga);
+  yield takeEvery([
+    AuthActions.logInGoogle.toString(),
+    AuthActions.signUpGoogle.toString(),
+  ], logInGoogleSaga);
   yield takeEvery(AuthActions.resetPass.toString(), resetPassSaga);
 }

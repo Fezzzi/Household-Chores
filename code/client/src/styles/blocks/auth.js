@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
-import FacebookIcon from '~/static/facebook-icon-white.png';
+import FacebookIcon from '~/static/social/facebook-icon-white.png';
+import GoogleIcon from '~/static/social/google-icon.svg';
 import LogoTop from '~/static/logo-top.svg';
-import InputError from '~/static/input-error.svg';
 
 export const AuthContent = styled.div`
   color: #262626;
@@ -138,7 +138,7 @@ export const FormButtonWrapper = styled.div`
 `;
 
 export const FormButton = styled.button`
-  border: 1px solid transparent;
+  border: ${props => props.border ? '1px solid #dbdbdb' : 'none'};
   background-color: ${props => props.background};
   border-radius: 4px;
   color: ${props => props.color};
@@ -151,6 +151,7 @@ export const FormButton = styled.button`
   text-align: center;
   user-select: none;
   width: 100%;
+  height: 32px;
 
   &:active {
     opacity: .7;
@@ -163,7 +164,12 @@ export const FormButton = styled.button`
   ${props => props.disabled
     ? css`opacity: .4; pointer-events: none;`
     : ''
-};
+  };
+`;
+
+export const FormButtonContentWrapper = styled.span`
+  position: relative;
+  top: -2px;
 `;
 
 export const SeparatorWrapper = styled.div`
@@ -190,15 +196,23 @@ export const SeparatorText = styled.div`
   text-transform: uppercase;
 `;
 
-export const FacebookIconSpan = styled.span`
-  height: 16px;
-  width: 16px;
+const IconSpan = styled.span`
+  height: 18px;
+  width: 18px;
   display: inline-block;
   margin-right: 8px;
   position: relative;
   top: 3px;
+`;
+
+export const FacebookIconSpan = styled(IconSpan)`
   background: url(${FacebookIcon});
 `;
+
+export const GoogleIconSpan = styled(IconSpan)`
+  background: url(${GoogleIcon});
+`;
+
 export const FacebookTextSpan = styled.span`
   color: #385185;
 `;
@@ -263,7 +277,7 @@ export const MessageBlockLink = styled.a`
 `;
 
 export const ErrorSpan = styled.span`
-  background-image: url(${InputError});
+  stroke: var(--cError);
   height: 22px;
   width: 22px;
   margin-left: 8px;

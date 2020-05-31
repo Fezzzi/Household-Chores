@@ -9,6 +9,7 @@ import { PageWrapper, PageContent } from 'clientSrc/styles/blocks';
 
 import rootReducer from './reducers/rootReducer';
 import { rootSaga } from './sagas/rootSaga';
+import { Notifications } from './components/notifications';
 import { Auth } from './components/Auth';
 import { Footer } from './components/Footer';
 
@@ -24,8 +25,9 @@ export default () => {
 
   return (
     <Provider store={store}>
-      <PageWrapper>
+      <PageWrapper className="light">
         <PageContent>
+          <Notifications />
           <Router>
             <Switch>
               <Route

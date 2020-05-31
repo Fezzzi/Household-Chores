@@ -15,7 +15,7 @@ export const updateInput = (ctx, input) => (isValid, value) => {
   });
 };
 
-export const handlerWrapper = (func, ...params) => e => {
+export const handlerWrapper = handlerFunc => e => {
   e.preventDefault();
-  func(...params);
+  handlerFunc();
 };
