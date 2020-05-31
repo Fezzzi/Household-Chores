@@ -13,7 +13,7 @@ function* signUpSaga(action) {
     }
   } catch (error) {
     yield put(RootActions.addNotifications({
-      errors: ['Connection error, please try again later.']
+      errors: ['Connection error, please try again later.'],
     }));
   }
 }
@@ -34,19 +34,19 @@ function* logInSaga(action) {
 }
 
 function* logInFacebookSaga(action) {
-  const { payload: { profile: { first_name, email, id }, tokenDetail }} = action;
-  if (!(first_name || email || id || tokenDetail)) {
+  const { payload: { profile: { first_name: nickname, email, id }, tokenDetail } } = action;
+  if (!(nickname || email || id || tokenDetail)) {
     const payload = action.type === AuthActions.logInFacebook.toString()
-      ? { errors: ['Log in failed, missing one or more required fields.']}
-      : { errors: ['Sign up failed, missing one or more required fields.']};
+      ? { errors: ['Log in failed, missing one or more required fields.'] }
+      : { errors: ['Sign up failed, missing one or more required fields.'] };
     yield put(RootActions.addNotifications(payload));
-  } else {nbb                                             
+  } else {
     yield put(
       (action.type === AuthActions.logInFacebook.toString()
         ? AuthActions.logIn
         : AuthActions.signUp
       )({
-        nickname: first_name,
+        nickname,
         email,
         image: `https://graph.facebook.com/${id}/picture`,
         facebook: tokenDetail,
@@ -55,12 +55,11 @@ function* logInFacebookSaga(action) {
 }
 
 function* logInGoogleSaga(action) {
-  const { payload: { profileObj: { name, email, imageUrl, googleId }, tokenObj }} = action;
-  console.log(action.payload);
+  const { payload: { profileObj: { name, email, imageUrl, googleId }, tokenObj } } = action;
   if (!(name || email || googleId || tokenObj)) {
     const payload = action.type === AuthActions.logInGoogle.toString()
-      ? { errors: ['Log in failed, missing one or more required fields.']}
-      : { errors: ['Sign up failed, missing one or more required fields.']};
+      ? { errors: ['Log in failed, missing one or more required fields.'] }
+      : { errors: ['Sign up failed, missing one or more required fields.'] };
     yield put(RootActions.addNotifications(payload));
   } else {
     yield put(

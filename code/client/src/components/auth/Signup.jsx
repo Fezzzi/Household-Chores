@@ -22,7 +22,7 @@ const inputsConfig = [
 export class SignupComponent extends Component {
   constructor(props) {
     super(props);
-    
+
     this.timer = null;
     this.state = {
       submitText: 'Sign Up',
@@ -30,10 +30,10 @@ export class SignupComponent extends Component {
       isFormSending: false,
       inputs: Object.fromEntries(inputsConfig.map(input =>
         [input.name, { valid: false, value: '' }]
-        )),
-        errors: {},
-      };
-    }
+      )),
+      errors: {},
+    };
+  }
 
   componentWillUnmount() {
     clearTimeout(this.timer);
@@ -68,7 +68,7 @@ export class SignupComponent extends Component {
           />
         ))}
         <PrimaryButton disabled={!isFormValid || isFormSending} clickHandler={this.handleClick}>
-         {submitText}
+          {submitText}
         </PrimaryButton>
         <MessageBlock>
           By signing up, you agree to our &nbsp;

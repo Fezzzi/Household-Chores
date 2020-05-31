@@ -164,7 +164,7 @@ export const FormButton = styled.button`
   ${props => props.disabled
     ? css`opacity: .4; pointer-events: none;`
     : ''
-  };
+};
 `;
 
 export const FormButtonContentWrapper = styled.span`

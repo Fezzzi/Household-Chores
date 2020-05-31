@@ -20,8 +20,13 @@ class GoogleButtonComponent extends Component {
       <GoogleLogin
         clientId="239994956143-jija8teo4gj7ao5iq3bht5eivu1ib4t8.apps.googleusercontent.com"
         render={({ onClick, disabled }) => (
-          <PrimaryButton clickHandler={onClick} background="#fafafa" color="#262626" 
-            disabled={disabled} border={true}>
+          <PrimaryButton
+            clickHandler={onClick}
+            background="#fafafa"
+            color="#262626"
+            disabled={disabled}
+            border
+          >
             <FormButtonContentWrapper>
               <GoogleIconSpan />
               Log in with Google
@@ -31,7 +36,7 @@ class GoogleButtonComponent extends Component {
         buttonText="Log in with Google"
         onSuccess={this.handleResponse}
         onFailure={handleError}
-        cookiePolicy={'single_host_origin'}
+        cookiePolicy="single_host_origin"
       />
     );
   }

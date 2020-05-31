@@ -63,7 +63,7 @@ export class Input extends Component {
             />
           </InputBox>
           <InputSider>
-            {hasError 
+            {hasError
               ? (
                 <ErrorSpan>
                   <InputErrorIcon />

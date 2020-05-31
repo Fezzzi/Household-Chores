@@ -13,7 +13,7 @@ const initialState = {
   },
 };
 
-const addNotifications = ({ notifications: {errors, messages, warnings, successes }}, { payload }) => ({
+const addNotifications = ({ notifications: { errors, messages, warnings, successes } }, { payload }) => ({
   notifications: {
     errors: [...errors, ...(payload.errors || [])],
     messages: [...messages, ...(payload.messages || [])],
@@ -22,12 +22,12 @@ const addNotifications = ({ notifications: {errors, messages, warnings, successe
   },
 });
 
-const removeNotification = (state, { payload: { key, id }}) => ({
+const removeNotification = (state, { payload: { key, id } }) => ({
   notifications: {
     ...state.notifications,
     [key]: state.notifications[key].filter((_notification, index) => index !== id),
   },
-})
+});
 
 const rootReducer = createReducer(initialState, {
   [RootActions.addNotifications.toString()]: addNotifications,

@@ -10,8 +10,8 @@ import { PrimaryButton } from '../forms';
 
 class FacebookButtonComponent extends Component {
   handleResponse = data => this.props.isLogIn
-  ? this.props.logInFacebook(data)
-  : this.props.signUpFacebook(data);
+    ? this.props.logInFacebook(data)
+    : this.props.signUpFacebook(data);
 
   render() {
     const { handleError } = this.props;

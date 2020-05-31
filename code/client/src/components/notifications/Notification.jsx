@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { PropTypes } from 'prop-types';
 
 import * as NotificationTypes from 'clientSrc/constants/notificationTypes';
@@ -9,48 +9,36 @@ import {
 
 import CloseIcon from '~/static/icons/notification-close-icon.svgr';
 import ErrorIcon from '~/static/icons/notification-error-icon.svgr';
-import MessageIcon from '~/static/icons/notification-error-icon.svgr';
-import SuccessIcon from '~/static/icons/notification-error-icon.svgr';
+import SuccessIcon from '~/static/icons/notification-success-icon.svgr';
 
-const getNotificationIcon = type => {
-  switch (type) {
-    case NotificationTypes.MESSAGE: return <MessageIcon />;
-    case NotificationTypes.SUCCESS: return <SuccessIcon />;
-    case NotificationTypes.WARNING: return <ErrorIcon />;
-    default: return <ErrorIcon />
-  }
-}
+export const Notification = ({ type, message, close }) => {
+  setTimeout(close, 4000);
 
-export class Notification extends Component {  
-  render() {
-    const { type, message, close } = this.props;
-    setTimeout(close, 4000)
-    
-    return (
-      <NotificationWrapper>
-        <NotificationIconBlock>
-          <NotificationIconWrapper iconColor={type}>
-            {getNotificationIcon(type)}
-          </NotificationIconWrapper>
-        </NotificationIconBlock>
-        <NotificationContent>
-          <NotificationMessage>
-            <span>
-              {message}
-            </span>
-          </NotificationMessage>
-        </NotificationContent>
-        <NotificationClose onClick={close}>
-          <CloseIcon />
-        </NotificationClose>
-      </NotificationWrapper>
-    );
-  }
-}
+  return (
+    <NotificationWrapper>
+      <NotificationIconBlock>
+        <NotificationIconWrapper iconColor={type}>
+          {type === NotificationTypes.SUCCESS
+            ? <SuccessIcon />
+            : <ErrorIcon />}
+        </NotificationIconWrapper>
+      </NotificationIconBlock>
+      <NotificationContent>
+        <NotificationMessage>
+          <span>
+            {message}
+          </span>
+        </NotificationMessage>
+      </NotificationContent>
+      <NotificationClose onClick={close}>
+        <CloseIcon />
+      </NotificationClose>
+    </NotificationWrapper>
+  );
+};
 
 Notification.propTypes = ({
   type: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
-  hidden: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
 });
