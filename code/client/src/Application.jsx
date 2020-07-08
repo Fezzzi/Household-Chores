@@ -2,11 +2,16 @@ import React from 'react';
 import createSagaMiddleware from 'redux-saga';
 import { Provider } from 'react-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+import * as TABS from 'clientSrc/constants/authTabs';
+import { PageWrapper, PageContent } from 'clientSrc/styles/blocks';
 
 import rootReducer from './reducers/rootReducer';
 import { rootSaga } from './sagas/rootSaga';
-import { Root } from './components/Root';
+import { Notifications } from './components/notifications';
+import { Auth } from './components/Auth';
+import { Footer } from './components/Footer';
 
 export default () => {
   const sagaMiddleware = createSagaMiddleware();
@@ -20,16 +25,29 @@ export default () => {
 
   return (
     <Provider store={store}>
-      <Router>
-        <Switch>
-          <Route path="/login">
-            <Root />
-          </Route>
-          <Route>
-            <Redirect to="/login" />
-          </Route>
-        </Switch>
-      </Router>
+      <PageWrapper className="light">
+        <PageContent>
+          <Notifications />
+          <Router>
+            <Switch>
+              <Route
+                path={`/${TABS.LOGIN_TAB}`}
+                render={props => <Auth {...props} tab={TABS.LOGIN_TAB} />}
+              />
+              <Route
+                path={`/${TABS.SIGNUP_TAB}`}
+                render={props => <Auth {...props} tab={TABS.SIGNUP_TAB} />}
+              />
+              <Route
+                path={`/${TABS.RESET_TAB}`}
+                render={props => <Auth {...props} tab={TABS.RESET_TAB} />}
+              />
+              <Route path="/" render={props => <Auth {...props} tab={TABS.LOGIN_TAB} />} />
+            </Switch>
+          </Router>
+        </PageContent>
+        <Footer />
+      </PageWrapper>
     </Provider>
   );
 };
