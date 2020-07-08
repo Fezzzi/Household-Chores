@@ -1,7 +1,10 @@
 import express from 'express';
 import path from 'path';
 
+import { AUTH_PREFIX } from 'shared/constants/api';
+
 import TestRouter from './test';
+import AuthRouter from './auth';
 
 export default () => {
   const router = express.Router();
@@ -17,6 +20,7 @@ export default () => {
   });
 
   router.all('/test', TestRouter());
+  router.use(`/${AUTH_PREFIX}`, AuthRouter());
 
   router.all(/.*/, (_req, res) => {
     res.status(404).send('Not Found');

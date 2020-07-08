@@ -1,4 +1,4 @@
-import * as InputTypes from 'clientSrc/constants/inputTypes';
+import * as InputTypes from 'shared/constants/inputTypes';
 
 const isEmailValid = value => {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

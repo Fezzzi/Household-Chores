@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { database } from 'serverSrc/models/database';
+import { database } from 'serverSrc/database';
 
 export default () => {
   const router = express.Router();

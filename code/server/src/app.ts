@@ -1,4 +1,5 @@
 import express from 'express';
+import bodyParser  from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
@@ -10,6 +11,10 @@ import { ACCESS_LOG } from './constants/logs';
 
 // Initialize the server
 const app = express();
+
+// Get data from raw HTTP requests and json bodies to request object
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Setup access logging
 app.use(morgan(':remote-addr - :remote-user ":method :url" :status :response-time ms', {

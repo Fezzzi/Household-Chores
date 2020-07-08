@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
-import * as InputTypes from 'clientSrc/constants/inputTypes';
+import * as InputTypes from 'shared/constants/inputTypes';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import * as RootActions from 'clientSrc/actions/rootActions';
 import { LinkRow } from 'clientSrc/styles/blocks/auth';

@@ -64,7 +64,7 @@ module.exports = {
       template: path.resolve(__dirname, '../code/client/src/index.html'),
     }),
     new webpack.DefinePlugin({
-      'process.env.port': dotenv.parsed.port,
+      'process.env.PORT': dotenv.parsed.PORT,
     }),
   ],
 };
