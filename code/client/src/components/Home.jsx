@@ -1,9 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-export default () => {
-
-  return (
-    <div>Home</div>
-  )
-}
+export default () => (
+  <div>Home</div>
+);

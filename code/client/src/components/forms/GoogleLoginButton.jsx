@@ -6,7 +6,7 @@ import { PropTypes } from 'prop-types';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import { GoogleIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/blocks/auth';
 
-import { PrimaryButton } from '../forms';
+import { PrimaryButton } from './PrimaryButton';
 
 class GoogleButtonComponent extends Component {
   handleResponse = data => this.props.isLogIn
@@ -35,7 +35,7 @@ class GoogleButtonComponent extends Component {
         )}
         buttonText="Log in with Google"
         onSuccess={this.handleResponse}
-        onFailure={(error) => handleError({ message: error.message || `Google API initialization error: ${error.error}`})}
+        onFailure={error => handleError({ message: error.message || `Google API initialization error: ${error.error}` })}
         cookiePolicy="single_host_origin"
       />
     );

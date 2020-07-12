@@ -16,7 +16,7 @@ const logInUser = state => ({
   loggedUser: true,
 });
 
-const stateLoaded = (state, { payload: { debug, loggedUser }}) => ({
+const stateLoaded = (state, { payload: { debug, loggedUser } }) => ({
   ...state,
   debug,
   loggedUser,

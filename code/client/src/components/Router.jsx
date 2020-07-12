@@ -1,12 +1,12 @@
-import React from "react";
-import { connect } from "react-redux";
-import { PropTypes } from "prop-types";
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import React from 'react';
+import { connect } from 'react-redux';
+import { PropTypes } from 'prop-types';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
-import * as TABS from "clientSrc/constants/authTabs";
+import * as TABS from 'clientSrc/constants/authTabs';
 
-import Auth from "./Auth";
-import Home from "./Home";
+import Auth from './Auth';
+import Home from './Home';
 
 const RouterComponent = ({ loggedUser }) => (
   <Router>
@@ -35,11 +35,10 @@ const RouterComponent = ({ loggedUser }) => (
           <>
             <Route exact path="/" component={Home} />
             <Route path="/*">
-              <Redirect to={{ pathname: "/" }} />
+              <Redirect to={{ pathname: '/' }} />
             </Route>
           </>
-        )
-      }
+        )}
     </Switch>
   </Router>
 );

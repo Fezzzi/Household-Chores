@@ -4,8 +4,8 @@ import { AUTH_LOG_IN, AUTH_SIGN_UP, AUTH_RESET } from 'shared/constants/api';
 import { RESET_PASSWORD } from 'serverSrc/constants/mails';
 import { sendEmails } from 'serverSrc/helpers/mailer';
 
+import { logInUser } from 'serverSrc/database/models/users';
 import { validateLoginData, validateResetData, validateSignupData } from './validation';
-import { logInUser } from "serverSrc/database/models/users";
 
 const handleAction = async (
   data: object,
@@ -29,7 +29,7 @@ const getResetPassFunc = (body: any) => async () => {
   return {
     errors: emailSent ? [] : ['An error occurred while send the link, please try again later.'],
     successes: emailSent ? ['A reset link has been sent to your email address'] : [],
-  }
+  };
 };
 
 const getLogInFunc = (req: any, res: any, { email, password }: any) => async () => {
@@ -46,7 +46,7 @@ const getLogInFunc = (req: any, res: any, { email, password }: any) => async () 
 
   return {
     errors: loggedIn ? [] : ['An error occurred during logging in, please try again later.'],
-  }
+  };
 };
 
 export default () => {

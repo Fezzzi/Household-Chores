@@ -1,5 +1,5 @@
 import express from 'express';
-import bodyParser  from 'body-parser';
+import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import cors from 'cors';
@@ -18,7 +18,7 @@ const config = dotenv.config();
 const app = express();
 
 // Get data from raw HTTP requests and json bodies to request object
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Initialize cookie-parser to allow us access the cookies stored in the browser.
@@ -26,12 +26,12 @@ app.use(cookieParser());
 
 app.use(session({
   name: 'user_sid',
-  secret: config.parsed && config.parsed.SESSION_SECRET || 'test',
+  secret: (config.parsed && config.parsed.SESSION_SECRET) || 'test',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 600000
-  }
+    maxAge: 600000,
+  },
 }));
 
 // Setup access logging
@@ -47,7 +47,7 @@ app.use(cors(
     ? {
       origin: 'http://localhost:8081',
       credentials: true,
-      optionsSuccessStatus: 200
+      optionsSuccessStatus: 200,
     }
     : {}
 ));

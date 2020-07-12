@@ -1,7 +1,7 @@
-import express, {NextFunction, Request, Response} from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import path from 'path';
 
-import {AUTH_PREFIX, LOAD_PREFIX} from 'shared/constants/api';
+import { AUTH_PREFIX, LOAD_PREFIX } from 'shared/constants/api';
 
 import TestRouter from './test';
 import LoadRouter from './load';

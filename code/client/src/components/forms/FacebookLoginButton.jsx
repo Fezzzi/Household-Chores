@@ -6,7 +6,7 @@ import { PropTypes } from 'prop-types';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import { FacebookIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/blocks/auth';
 
-import { PrimaryButton } from '../forms';
+import { PrimaryButton } from './PrimaryButton';
 
 class FacebookButtonComponent extends Component {
   handleResponse = data => this.props.isLogIn

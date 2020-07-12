@@ -10,7 +10,7 @@ function* signUpSaga(action) {
       yield put(AuthActions.signUpSuccess(response.data));
     } else {
       yield put(NotificationActions.addNotifications({
-        errors: response.data.errors
+        errors: response.data.errors,
       }));
     }
   } catch (error) {
@@ -27,7 +27,7 @@ function* logInSaga(action) {
       yield put(AuthActions.logInSuccess());
     } else {
       yield put(NotificationActions.addNotifications({
-        errors: response.data.errors
+        errors: response.data.errors,
       }));
     }
   } catch (error) {

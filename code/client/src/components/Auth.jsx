@@ -9,14 +9,7 @@ import { Signup } from './auth/Signup';
 import { ResetPass } from './auth/ResetPass';
 import { BottomBlock } from './forms';
 
-export default class extends Component {
-  static propTypes = ({
-    tab: PropTypes.string.isRequired,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
-  });
-
+export default class Auth extends Component {
   constructor(props) {
     super(props);
 
@@ -81,3 +74,10 @@ export default class extends Component {
     );
   }
 }
+
+Auth.propTypes = ({
+  tab: PropTypes.string.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+});
