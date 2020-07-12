@@ -7,7 +7,7 @@ import { DB_LOG } from '../constants/logs';
 export const database = {
   query: (sql: string, cb: queryCallback) => {
     Connection.get().query(sql, (err: MysqlError | null, results?: any, fields?: FieldInfo[]) => {
-      Logger(DB_LOG, `${sql}; (${(err && err.message) || 'OK'})\n`);
+      Logger(DB_LOG, `${sql}; (${(err && err.message) || 'OK'})`);
       handleConnectionError(err, 'Query');
       cb(err, results, fields);
     });
