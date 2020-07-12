@@ -35,7 +35,7 @@ class GoogleButtonComponent extends Component {
         )}
         buttonText="Log in with Google"
         onSuccess={this.handleResponse}
-        onFailure={handleError}
+        onFailure={(error) => handleError({ message: error.message || `Google API initialization error: ${error.error}`})}
         cookiePolicy="single_host_origin"
       />
     );

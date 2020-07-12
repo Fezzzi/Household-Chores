@@ -8,10 +8,7 @@ import * as RootActions from 'clientSrc/actions/rootActions';
 import { LinkRow } from 'clientSrc/styles/blocks/auth';
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
 
-import { Separator } from './Separator';
-import { FacebookLoginButton } from './FacebookLoginButton';
-import { GoogleLoginButton } from './GoogleLoginButton';
-import { Input, PrimaryButton } from '../forms';
+import { Input, Separator, PrimaryButton, FacebookLoginButton, GoogleLoginButton } from '../forms';
 
 const inputsConfig = [
   { name: 'email', label: 'Email', type: InputTypes.EMAIL },
