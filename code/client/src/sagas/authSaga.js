@@ -23,8 +23,8 @@ function* signUpSaga(action) {
 function* logInSaga(action) {
   try {
     const response = yield call(logIn, action.payload);
-    if (!response.data.errors) {
-      yield put(AuthActions.logInSuccess(response.data));
+    if (!response.data.errors.length) {
+      yield put(AuthActions.logInSuccess());
     } else {
       yield put(NotificationActions.addNotifications({
         errors: response.data.errors

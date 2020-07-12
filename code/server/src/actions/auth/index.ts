@@ -36,7 +36,7 @@ const getLogInFunc = (req: any, res: any, { email, password }: any) => async () 
   const loggedIn = await logInUser(email.value, password.value);
   if (loggedIn) {
     // This way we either log in new user or log out logged user.
-    // FE shouldn't let logged user access the login page until explicit logout action, thus the condition should never be met
+    // FE shouldn't let logged user access the /login url until explicit logout action, thus the condition should never be met
     if (req.session.user && req.session.user !== email.value && req.cookies.user_sid) {
       res.clearCookie('user_sid');
     } else {
