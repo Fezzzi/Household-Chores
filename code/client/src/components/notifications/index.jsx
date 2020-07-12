@@ -4,7 +4,7 @@ import { PropTypes } from 'prop-types';
 
 import { NotificationsBlock } from 'clientSrc/styles/blocks/notifications';
 import * as NotificationTypes from 'clientSrc/constants/notificationTypes';
-import * as RootActions from 'clientSrc/actions/rootActions';
+import * as NotificationActions from 'clientSrc/actions/notificationActions';
 
 import { Notification } from './Notification';
 
@@ -38,10 +38,10 @@ NotificationsComponent.propTypes = ({
   removeNotification: PropTypes.func,
 });
 
-const mapStateToProps = ({ app: { notifications } }) => notifications;
+const mapStateToProps = ({ notifications }) => notifications;
 
 const mapDispatchToProps = dispatch => ({
-  removeNotification: notification => dispatch(RootActions.removeNotification(notification)),
+  removeNotification: notification => dispatch(NotificationActions.removeNotification(notification)),
 });
 
 export const Notifications = connect(mapStateToProps, mapDispatchToProps)(NotificationsComponent);

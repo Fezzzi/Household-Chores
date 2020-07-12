@@ -1,6 +1,6 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 import * as AuthActions from 'clientSrc/actions/authActions';
-import * as RootActions from 'clientSrc/actions/rootActions';
+import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { signUp, logIn, resetPass } from 'clientSrc/effects/authEffects';
 
 function* signUpSaga(action) {
@@ -9,12 +9,12 @@ function* signUpSaga(action) {
     if (!response.data.errors) {
       yield put(AuthActions.signUpSuccess(response.data));
     } else {
-      yield put(RootActions.addNotifications({
+      yield put(NotificationActions.addNotifications({
         errors: response.data.errors
       }));
     }
   } catch (error) {
-    yield put(RootActions.addNotifications({
+    yield put(NotificationActions.addNotifications({
       errors: ['Connection error, please try again later.'],
     }));
   }
@@ -26,12 +26,12 @@ function* logInSaga(action) {
     if (!response.data.errors) {
       yield put(AuthActions.logInSuccess(response.data));
     } else {
-      yield put(RootActions.addNotifications({
+      yield put(NotificationActions.addNotifications({
         errors: response.data.errors
       }));
     }
   } catch (error) {
-    yield put(RootActions.addNotifications({
+    yield put(NotificationActions.addNotifications({
       errors: ['Connection error, please try again later.'],
     }));
   }
@@ -43,7 +43,7 @@ function* logInFacebookSaga(action) {
     const payload = action.type === AuthActions.logInFacebook.toString()
       ? { errors: ['Log in failed, missing one or more required fields.'] }
       : { errors: ['Sign up failed, missing one or more required fields.'] };
-    yield put(RootActions.addNotifications(payload));
+    yield put(NotificationActions.addNotifications(payload));
   } else {
     yield put(
       (action.type === AuthActions.logInFacebook.toString()
@@ -64,7 +64,7 @@ function* logInGoogleSaga(action) {
     const payload = action.type === AuthActions.logInGoogle.toString()
       ? { errors: ['Log in failed, missing one or more required fields.'] }
       : { errors: ['Sign up failed, missing one or more required fields.'] };
-    yield put(RootActions.addNotifications(payload));
+    yield put(NotificationActions.addNotifications(payload));
   } else {
     yield put(
       (action.type === AuthActions.logInGoogle.toString()
@@ -82,9 +82,9 @@ function* logInGoogleSaga(action) {
 function* resetPassSaga(action) {
   try {
     const response = yield call(resetPass, action.payload);
-    yield put(RootActions.addNotifications(response.data));
+    yield put(NotificationActions.addNotifications(response.data));
   } catch (error) {
-    yield put(RootActions.addNotifications({
+    yield put(NotificationActions.addNotifications({
       errors: ['Connection error, please try again later.'],
     }));
   }

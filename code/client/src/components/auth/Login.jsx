@@ -4,7 +4,7 @@ import { PropTypes } from 'prop-types';
 
 import * as InputTypes from 'shared/constants/inputTypes';
 import * as AuthActions from 'clientSrc/actions/authActions';
-import * as RootActions from 'clientSrc/actions/rootActions';
+import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { LinkRow } from 'clientSrc/styles/blocks/auth';
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
 
@@ -83,7 +83,7 @@ LoginComponent.propTypes = ({
 
 const mapDispatchToProps = dispatch => ({
   logIn: values => dispatch(AuthActions.logIn(values)),
-  addNotification: (type, message) => dispatch(RootActions.addNotifications({
+  addNotification: (type, message) => dispatch(NotificationActions.addNotifications({
     [type]: [message],
   })),
 });
