@@ -6,10 +6,12 @@ import { signUp, logIn, resetPass } from 'clientSrc/effects/authEffects';
 function* signUpSaga(action) {
   try {
     const response = yield call(signUp, action.payload);
-    if (response.data.errors) {
+    if (!response.data.errors) {
       yield put(AuthActions.signUpSuccess(response.data));
     } else {
-      yield put(AuthActions.signUpError(response.data.errors));
+      yield put(RootActions.addNotifications({
+        errors: response.data.errors
+      }));
     }
   } catch (error) {
     yield put(RootActions.addNotifications({
@@ -21,10 +23,12 @@ function* signUpSaga(action) {
 function* logInSaga(action) {
   try {
     const response = yield call(logIn, action.payload);
-    if (response.data.errors) {
+    if (!response.data.errors) {
       yield put(AuthActions.logInSuccess(response.data));
     } else {
-      yield put(AuthActions.logInError(response.data.errors));
+      yield put(RootActions.addNotifications({
+        errors: response.data.errors
+      }));
     }
   } catch (error) {
     yield put(RootActions.addNotifications({
@@ -78,11 +82,7 @@ function* logInGoogleSaga(action) {
 function* resetPassSaga(action) {
   try {
     const response = yield call(resetPass, action.payload);
-    if (response.data.errors) {
-      yield put(AuthActions.resetPassSuccess(response.data));
-    } else {
-      yield put(AuthActions.resetPassError(response.data.errors));
-    }
+    yield put(RootActions.addNotifications(response.data));
   } catch (error) {
     yield put(RootActions.addNotifications({
       errors: ['Connection error, please try again later.'],

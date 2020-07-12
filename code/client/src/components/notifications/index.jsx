@@ -11,7 +11,7 @@ import { Notification } from './Notification';
 export const NotificationsComponent = props => {
   const { errors, warnings, messages, successes, removeNotification } = props;
 
-  const mapNotifications = (notifications, type, key) => notifications.map((msg, id) => (
+  const mapNotifications = (notifications, type, key) => notifications && notifications.map((msg, id) => (
     <Notification
       type={type}
       message={msg}
