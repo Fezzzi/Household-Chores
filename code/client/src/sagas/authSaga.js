@@ -3,27 +3,11 @@ import * as AuthActions from 'clientSrc/actions/authActions';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { signUp, logIn, resetPass } from 'clientSrc/effects/authEffects';
 
-function* signUpSaga(action) {
+const getAuthenticationSaga = effect => function* authenticationSaga({ payload }) {
   try {
-    const response = yield call(signUp, action.payload);
-    if (!response.data.errors) {
-      yield put(AuthActions.signUpSuccess(response.data));
-    } else {
-      yield put(NotificationActions.addNotifications({
-        errors: response.data.errors,
-      }));
-    }
-  } catch (error) {
-    yield put(NotificationActions.addNotifications({
-      errors: ['Connection error, please try again later.'],
-    }));
-  }
-}
-
-function* logInSaga(action) {
-  try {
-    const response = yield call(logIn, action.payload);
+    const response = yield call(effect, payload);
     if (!response.data.errors.length) {
+      // We login user after both signUp and LogIn
       yield put(AuthActions.logInSuccess());
     } else {
       yield put(NotificationActions.addNotifications({
@@ -35,7 +19,7 @@ function* logInSaga(action) {
       errors: ['Connection error, please try again later.'],
     }));
   }
-}
+};
 
 function* logInFacebookSaga(action) {
   const { payload: { profile: { first_name: nickname, email, id }, tokenDetail } } = action;
@@ -50,32 +34,29 @@ function* logInFacebookSaga(action) {
         ? AuthActions.logIn
         : AuthActions.signUp
       )({
-        nickname,
-        email,
-        image: `https://graph.facebook.com/${id}/picture`,
+        nickname: { value: nickname, valid: true },
+        email: { value: email, valid: true },
+        photo: `https://graph.facebook.com/${id}/picture`,
         facebook: tokenDetail,
-      }));
+      })
+    );
   }
 }
 
 function* logInGoogleSaga(action) {
-  const { payload: { profileObj: { name, email, imageUrl, googleId }, tokenObj } } = action;
-  if (!(name || email || googleId || tokenObj)) {
-    const payload = action.type === AuthActions.logInGoogle.toString()
-      ? { errors: ['Log in failed, missing one or more required fields.'] }
-      : { errors: ['Sign up failed, missing one or more required fields.'] };
+  const { payload: { profileObj: { name, email, imageUrl, googleId }, tokenObj: { id_token: googleToken } } } = action;
+  if (!(name || email || googleId || googleToken)) {
+    const payload = {
+      errors: ['Log in failed, missing one or more required fields.'],
+    };
     yield put(NotificationActions.addNotifications(payload));
   } else {
-    yield put(
-      (action.type === AuthActions.logInGoogle.toString()
-        ? AuthActions.logIn
-        : AuthActions.signUp
-      )({
-        nickname: name,
-        email,
-        image: imageUrl,
-        google: tokenObj,
-      }));
+    yield put(AuthActions.signUp({
+      nickname: { value: name, valid: true },
+      email: { value: email, valid: true },
+      photo: imageUrl,
+      googleToken,
+    }));
   }
 }
 
@@ -91,15 +72,12 @@ function* resetPassSaga(action) {
 }
 
 export function* authSaga() {
-  yield takeEvery(AuthActions.signUp.toString(), signUpSaga);
-  yield takeEvery(AuthActions.logIn.toString(), logInSaga);
+  yield takeEvery(AuthActions.signUp.toString(), getAuthenticationSaga(signUp));
+  yield takeEvery(AuthActions.logIn.toString(), getAuthenticationSaga(logIn));
   yield takeEvery([
     AuthActions.logInFacebook.toString(),
     AuthActions.signUpFacebook.toString(),
   ], logInFacebookSaga);
-  yield takeEvery([
-    AuthActions.logInGoogle.toString(),
-    AuthActions.signUpGoogle.toString(),
-  ], logInGoogleSaga);
+  yield takeEvery(AuthActions.logInGoogle.toString(), logInGoogleSaga);
   yield takeEvery(AuthActions.resetPass.toString(), resetPassSaga);
 }

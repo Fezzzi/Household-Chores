@@ -3,28 +3,17 @@ import express from 'express';
 import { AUTH_LOG_IN, AUTH_SIGN_UP, AUTH_RESET } from 'shared/constants/api';
 import { RESET_PASSWORD } from 'serverSrc/constants/mails';
 import { sendEmails } from 'serverSrc/helpers/mailer';
+import { logInUser, SignUpUser, findUser, findGoogleUser } from 'serverSrc/database/models/users';
+import { handleAction, setUserCookie } from 'serverSrc/helpers/auth';
 
-import { logInUser } from 'serverSrc/database/models/users';
 import { validateLoginData, validateResetData, validateSignupData } from './validation';
+import { getGoogleUserId } from './providers';
 
-const handleAction = async (
-  data: object,
-  validationFunc: (data: object) => boolean,
-  handlerFunc: (data: any) => any,
-  res: any
-) => {
-  if (validationFunc(data)) {
-    const response = await handlerFunc(data);
-    res.status(200).send(response);
-    return;
-  }
-  res.status(404).send('Invalid data!');
-};
 
-const getResetPassFunc = (body: any) => async () => {
+const getResetPassFunc = ({ email: { value: email } }: any) => async () => {
   const emailSent = await sendEmails(RESET_PASSWORD, {
     resetLink: 'resetLink',
-  }, [body.email.value]);
+  }, [email]);
 
   return {
     errors: emailSent ? [] : ['An error occurred while send the link, please try again later.'],
@@ -32,20 +21,42 @@ const getResetPassFunc = (body: any) => async () => {
   };
 };
 
-const getLogInFunc = (req: any, res: any, { email, password }: any) => async () => {
-  const loggedIn = await logInUser(email.value, password.value);
+const getLogInFunc = (req: any, res: any, { email: { value: email }, password: { value: password } }: any) => async () => {
+  const loggedIn = await logInUser(email, password);
   if (loggedIn) {
-    // This way we either log in new user or log out logged user.
-    // FE shouldn't let logged user access the /login url until explicit logout action, thus the condition should never be met
-    if (req.session.user && req.session.user !== email.value && req.cookies.user_sid) {
-      res.clearCookie('user_sid');
-    } else {
-      req.session.user = email.value;
-    }
+    setUserCookie(req, res, loggedIn);
   }
 
   return {
     errors: loggedIn ? [] : ['An error occurred during logging in, please try again later.'],
+  };
+};
+
+const getSignUpFunc = (req: any, res: any, body: any) => async () => {
+  const { email: { value: email }, googleToken } = body;
+  const googleId = googleToken && await getGoogleUserId(googleToken);
+  if (googleId === -1) {
+    return ['Invalid Google data!'];
+  }
+
+  if (googleToken) {
+    const userId = await findGoogleUser(googleId);
+    if (userId !== -1) {
+      setUserCookie(req, res, userId);
+    }
+  } else {
+    const userId = await findUser(email);
+    if (userId !== -1) {
+      return getLogInFunc(req, res, body)();
+    }
+  }
+
+  const signedUp = await SignUpUser(body, googleId);
+  if (signedUp) {
+    setUserCookie(req, res, signedUp);
+  }
+  return {
+    errors: signedUp ? [] : ['An error occurred during signing up, please try again later.'],
   };
 };
 
@@ -55,15 +66,14 @@ export default () => {
     const { params: { action }, body } = req;
     switch (action) {
       case AUTH_LOG_IN:
-        handleAction(body, validateLoginData, getLogInFunc(req, res, body), res);
-        return;
+        return handleAction(body, validateLoginData, getLogInFunc(req, res, body), res);
       case AUTH_SIGN_UP:
-        handleAction(body, validateSignupData, () => {}, res);
-        return;
+        return handleAction(body, validateSignupData, getSignUpFunc(req, req, body), res);
       case AUTH_RESET:
-        handleAction(body, validateResetData, getResetPassFunc(body), res);
-        return;
-      default: res.status(404).send('Not Found');
+        return handleAction(body, validateResetData, getResetPassFunc(body), res);
+      default:
+        res.status(404).send('Not Found');
+        return false;
     }
   });
 

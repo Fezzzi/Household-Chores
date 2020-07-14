@@ -54,6 +54,7 @@ module.exports = {
     'no-plusplus': 0,
     'no-else-return': 0,
     'global-require': 0,
+    'no-return-assign': 0,
     'no-nested-ternary': 0,
     'no-empty-function': 0,
     'no-confusing-arrow': 0,

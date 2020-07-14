@@ -1,7 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 
 export const signUp = createAction('SIGN_UP');
-export const signUpGoogle = createAction('SIGN_UP_GOOGLE');
 export const signUpFacebook = createAction('SIGN_UP_FACEBOOK');
 export const signUpSuccess = createAction('SIGN_UP_SUCCESS');
 export const signUpError = createAction('SIGN_UP_ERROR');

@@ -2,6 +2,7 @@ export default {
   name: 'users',
   columns: {
     id: 'id',
+    google_id: 'google_id',
     email: 'email',
     nickname: 'nickname',
     password: 'password',

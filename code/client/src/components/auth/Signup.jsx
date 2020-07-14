@@ -52,7 +52,7 @@ export class SignupComponent extends Component {
     return (
       <form method="post">
         <FacebookLoginButton isLogIn={false} handleError={this.handleError} />
-        <GoogleLoginButton isLogIn={false} handleError={this.handleError} />
+        <GoogleLoginButton handleError={this.handleError} />
         <Separator text="or" />
         {inputsConfig.map(input => (
           <Input
