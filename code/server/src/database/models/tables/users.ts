@@ -3,6 +3,7 @@ export default {
   columns: {
     id: 'id',
     google_id: 'google_id',
+    facebook_id: 'facebook_id',
     email: 'email',
     nickname: 'nickname',
     password: 'password',

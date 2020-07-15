@@ -22,23 +22,22 @@ const getAuthenticationSaga = effect => function* authenticationSaga({ payload }
 };
 
 function* logInFacebookSaga(action) {
-  const { payload: { profile: { first_name: nickname, email, id }, tokenDetail } } = action;
-  if (!(nickname || email || id || tokenDetail)) {
-    const payload = action.type === AuthActions.logInFacebook.toString()
-      ? { errors: ['Log in failed, missing one or more required fields.'] }
-      : { errors: ['Sign up failed, missing one or more required fields.'] };
+  const { payload: { profile: { first_name: nickname, email, id }, tokenDetail: { userID, signedRequest } } } = action;
+  if (!(nickname || email || id || userID || signedRequest)) {
+    const payload = {
+      errors: ['Log in failed, missing one or more required fields.'],
+    };
     yield put(NotificationActions.addNotifications(payload));
   } else {
-    yield put(
-      (action.type === AuthActions.logInFacebook.toString()
-        ? AuthActions.logIn
-        : AuthActions.signUp
-      )({
-        nickname: { value: nickname, valid: true },
-        email: { value: email, valid: true },
-        photo: `https://graph.facebook.com/${id}/picture`,
-        facebook: tokenDetail,
-      })
+    yield put(AuthActions.signUp({
+      nickname: { value: nickname, valid: true },
+      email: { value: email, valid: true },
+      photo: `https://graph.facebook.com/${id}/picture`,
+      facebook: {
+        userID,
+        signedRequest,
+      },
+    })
     );
   }
 }
@@ -74,10 +73,7 @@ function* resetPassSaga(action) {
 export function* authSaga() {
   yield takeEvery(AuthActions.signUp.toString(), getAuthenticationSaga(signUp));
   yield takeEvery(AuthActions.logIn.toString(), getAuthenticationSaga(logIn));
-  yield takeEvery([
-    AuthActions.logInFacebook.toString(),
-    AuthActions.signUpFacebook.toString(),
-  ], logInFacebookSaga);
+  yield takeEvery(AuthActions.logInFacebook.toString(), logInFacebookSaga);
   yield takeEvery(AuthActions.logInGoogle.toString(), logInGoogleSaga);
   yield takeEvery(AuthActions.resetPass.toString(), resetPassSaga);
 }

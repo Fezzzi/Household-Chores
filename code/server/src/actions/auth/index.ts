@@ -3,11 +3,11 @@ import express from 'express';
 import { AUTH_LOG_IN, AUTH_SIGN_UP, AUTH_RESET } from 'shared/constants/api';
 import { RESET_PASSWORD } from 'serverSrc/constants/mails';
 import { sendEmails } from 'serverSrc/helpers/mailer';
-import { logInUser, SignUpUser, findUser, findGoogleUser } from 'serverSrc/database/models/users';
+import { logInUser, SignUpUser, findUser, findGoogleUser, findFacebookUser } from 'serverSrc/database/models/users';
 import { handleAction, setUserCookie } from 'serverSrc/helpers/auth';
 
 import { validateLoginData, validateResetData, validateSignupData } from './validation';
-import { getGoogleUserId } from './providers';
+import { getFacebookUserId, getGoogleUserId } from './providers';
 
 
 const getResetPassFunc = ({ email: { value: email } }: any) => async () => {
@@ -33,14 +33,24 @@ const getLogInFunc = (req: any, res: any, { email: { value: email }, password: {
 };
 
 const getSignUpFunc = (req: any, res: any, body: any) => async () => {
-  const { email: { value: email }, googleToken } = body;
+  const { email: { value: email }, googleToken, facebook } = body;
   const googleId = googleToken && await getGoogleUserId(googleToken);
   if (googleId === -1) {
     return ['Invalid Google data!'];
   }
 
+  const facebookId = facebook && facebook.signedRequest && getFacebookUserId(facebook);
+  if (facebookId === -1) {
+    return ['Invalid Facebook data!'];
+  }
+
   if (googleToken) {
     const userId = await findGoogleUser(googleId);
+    if (userId !== -1) {
+      setUserCookie(req, res, userId);
+    }
+  } else if (facebook && facebook.signedRequest) {
+    const userId = await findFacebookUser(facebookId);
     if (userId !== -1) {
       setUserCookie(req, res, userId);
     }
@@ -51,7 +61,7 @@ const getSignUpFunc = (req: any, res: any, body: any) => async () => {
     }
   }
 
-  const signedUp = await SignUpUser(body, googleId);
+  const signedUp = await SignUpUser(body, googleId, facebookId);
   if (signedUp) {
     setUserCookie(req, res, signedUp);
   }

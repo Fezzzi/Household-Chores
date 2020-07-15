@@ -10,7 +10,7 @@ import { PrimaryButton } from './PrimaryButton';
 
 const GoogleButtonComponent = ({ handleError, logInGoogle }) => (
   <GoogleLogin
-    clientId="239994956143-jija8teo4gj7ao5iq3bht5eivu1ib4t8.apps.googleusercontent.com"
+    clientId={process.env.GCID}
     render={({ onClick, disabled }) => (
       <PrimaryButton
         clickHandler={onClick}

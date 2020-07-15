@@ -1,14 +1,16 @@
 import USERS_TABLE from 'serverSrc/database/models/tables/users';
 
 const { columns: {
-  id, google_id, email, nickname, password, photo, confirmed, date_last_active, date_registered,
+  id, google_id, facebook_id, email, nickname, password,
+  photo, confirmed, date_last_active, date_registered,
 } } = USERS_TABLE;
 
 module.exports = {
   up: (conn, cb) => {
     conn.query(`CREATE TABLE ${USERS_TABLE.name} (
             ${id} INT AUTO_INCREMENT PRIMARY KEY,
-            ${google_id} INT AUTO_INCREMENT KEY DEFAULT 0,
+            ${google_id} INT UNIQUE KEY DEFAULT NULL,
+            ${facebook_id} INT UNIQUE KEY DEFAULT NULL,
             ${email} VARCHAR(255) NOT NULL,
             ${nickname} VARCHAR(255) NOT NULL,
             ${password} CHAR(60) NOT NULL,

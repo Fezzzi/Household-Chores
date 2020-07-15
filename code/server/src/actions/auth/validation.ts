@@ -3,8 +3,6 @@ import * as InputTypes from 'shared/constants/inputTypes';
 
 import { findUser } from 'serverSrc/database/models/users';
 
-const isFacebookValid = (facebook: any): boolean => true;
-
 export const validateResetData = async ({ email: { valid, value } }: any): Promise<boolean> =>
   valid && isInputValid(InputTypes.EMAIL, value) && (await findUser(value) !== -1);
 
@@ -21,5 +19,5 @@ export const validateSignupData = async ({ email, nickname, password, googleToke
   && (
     (password && password.valid && isInputValid(InputTypes.PASSWORD, password.value))
     || googleToken
-    || isFacebookValid(facebook)
+    || (facebook.userID && facebook.signedRequest)
   );

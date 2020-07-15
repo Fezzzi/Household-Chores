@@ -65,6 +65,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env.PORT': dotenv.parsed.PORT,
+      'process.env.GCID': JSON.stringify(dotenv.parsed.GCID),
     }),
   ],
 };
