@@ -1,15 +1,18 @@
 export const handleAction = async (
   data: object,
-  validationFunc: (data: object) => Promise<boolean>,
+  validationFunc: (data: object) => Promise<boolean|number>,
   handlerFunc: (data: any) => any,
   res: any
 ): Promise<boolean> => {
-  if (await validationFunc(data)) {
+  const valid = await validationFunc(data);
+  if (valid === false || valid === null) {
+    res.status(200).send({ errors: ['Invalid data!'] });
+  } else if (valid === -1) {
+    res.status(200).send({ errors: ['No account with this email found!'] });
+  } else {
     const response = await handlerFunc(data);
     res.status(200).send(response);
-    return false;
   }
-  res.status(404).send('Invalid data!');
   return true;
 };
 

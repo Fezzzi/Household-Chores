@@ -3,14 +3,15 @@ import * as InputTypes from 'shared/constants/inputTypes';
 
 import { findUser } from 'serverSrc/database/models/users';
 
-export const validateResetData = async ({ email: { valid, value } }: any): Promise<boolean> =>
-  valid && isInputValid(InputTypes.EMAIL, value) && (await findUser(value) !== -1);
+export const validateResetData = async ({ email: { valid, value } }: any): Promise<boolean|number> =>
+  valid && isInputValid(InputTypes.EMAIL, value)
+  && findUser(value);
 
-export const validateLoginData = async ({ email, password }: any): Promise<boolean> =>
+export const validateLoginData = async ({ email, password }: any): Promise<boolean|number> =>
   email.valid && password.valid
   && isInputValid(InputTypes.EMAIL, email.value)
   && isInputValid(InputTypes.PASSWORD, password.value)
-  && (await findUser(email.value) !== -1);
+  && findUser(email.value);
 
 export const validateSignupData = async ({ email, nickname, password, googleToken, facebook }: any): Promise<boolean> =>
   email.valid && nickname.valid

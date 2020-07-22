@@ -8,7 +8,7 @@ const config = dotenv.config();
 export default () => {
   const router = express.Router();
   router.get('/:action', (req, res) => {
-    const { params: { action }, body } = req;
+    const { params: { action } } = req;
     switch (action) {
       case LOAD_STATE:
         res.status(200).send({

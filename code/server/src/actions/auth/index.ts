@@ -22,18 +22,19 @@ const getResetPassFunc = ({ email: { value: email } }: any) => async () => {
 };
 
 const getLogInFunc = (req: any, res: any, { email: { value: email }, password: { value: password } }: any) => async () => {
-  const loggedIn = await logInUser(email, password);
-  if (loggedIn) {
-    setUserCookie(req, res, loggedIn);
+  const loggedUserId = await logInUser(email, password);
+  if (loggedUserId === -1) {
+    return { errors: ['Incorrect password'] };
+  } else if (loggedUserId === 0) {
+    return { errors: ['An error occurred during logging in, please try again later.'] };
   }
 
-  return {
-    errors: loggedIn ? [] : ['An error occurred during logging in, please try again later.'],
-  };
+  setUserCookie(req, res, loggedUserId);
+  return { errors: [] };
 };
 
 const getSignUpFunc = (req: any, res: any, body: any) => async () => {
-  const { email: { value: email }, googleToken, facebook } = body;
+  const { email: { value: email }, nickname: { value: nickname }, password, photo, googleToken, facebook } = body;
   const googleId = googleToken && await getGoogleUserId(googleToken);
   if (googleId === -1) {
     return ['Invalid Google data!'];
@@ -61,7 +62,13 @@ const getSignUpFunc = (req: any, res: any, body: any) => async () => {
     }
   }
 
-  const signedUp = await SignUpUser(body, googleId, facebookId);
+  const signedUp = await SignUpUser(
+    email, nickname,
+    (password && password.value) || null,
+    photo || null,
+    googleId || null,
+    facebookId || null
+  );
   if (signedUp) {
     setUserCookie(req, res, signedUp);
   }

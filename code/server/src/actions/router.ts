@@ -3,7 +3,6 @@ import path from 'path';
 
 import { AUTH_PREFIX, LOAD_PREFIX } from 'shared/constants/api';
 
-import TestRouter from './test';
 import LoadRouter from './load';
 import AuthRouter from './auth';
 
@@ -32,7 +31,6 @@ export default () => {
     }
   });
 
-  router.all('/test', TestRouter());
   router.use(`/${LOAD_PREFIX}`, LoadRouter());
   router.use(`/${AUTH_PREFIX}`, sessionChecker /* todo: remove after login is tested */, AuthRouter());
 

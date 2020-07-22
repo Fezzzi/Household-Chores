@@ -1,17 +1,25 @@
-import { FieldInfo, MysqlError, queryCallback } from 'mysql';
+import util from 'util';
 
 import { Connection, handleConnectionError } from './connection';
 import { Logger } from '../helpers/logger';
-import { DB_LOG } from '../constants/logs';
+import { DB_LOG, ERROR_LOG } from '../constants/logs';
+
+const toLine = (sql: string) => sql.replace('\n', '');
 
 export const database = {
-  query: (sql: string, cb: queryCallback) => {
-    Connection.get().query(sql, (err: MysqlError | null, results?: any, fields?: FieldInfo[]) => {
-      Logger(DB_LOG, `${sql}; (${(err && err.message) || 'OK'})`);
-      handleConnectionError(err, 'Query');
-      cb(err, results, fields);
-    });
-  },
+  query: (sql: string, logSQL = true): any =>
+    util.promisify(Connection.get().query)
+      .call(Connection.get(), sql)
+      .then(value => {
+        Logger(DB_LOG, `${toLine(`${logSQL ? sql : '-'}; OK`)}`);
+        return value;
+      }, reason => {
+        const message = `${toLine(`${logSQL ? sql : '-'}; (${reason.message})`)}`;
+        Logger(DB_LOG, message);
+        Logger(ERROR_LOG, message);
+        handleConnectionError(reason, 'Query');
+        return null;
+      }),
   beginTransaction: Connection.get().beginTransaction,
   commit: Connection.get().commit,
   rollback: Connection.get().rollback,
