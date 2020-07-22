@@ -64,8 +64,8 @@ module.exports = {
       template: path.resolve(__dirname, '../code/client/src/index.html'),
     }),
     new webpack.DefinePlugin({
-      'process.env.PORT': dotenv.parsed.PORT,
-      'process.env.GCID': JSON.stringify(dotenv.parsed.GCID),
+      'process.env.PORT': (dotenv.parsed && dotenv.parsed.PORT) || 9000,
+      'process.env.GCID': (dotenv.parsed && JSON.stringify(dotenv.parsed.GCID)) || 'test1234',
     }),
   ],
 };

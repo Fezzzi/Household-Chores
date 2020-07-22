@@ -45,7 +45,7 @@ app.use(morgan(':remote-addr - :remote-user ":method :url" :status :response-tim
 app.use(cors(
   config.parsed && config.parsed.DEBUG
     ? {
-      origin: 'http://localhost:8081',
+      origin: `http://localhost:${config.parsed.PORT || 9000}`,
       credentials: true,
       optionsSuccessStatus: 200,
     }
