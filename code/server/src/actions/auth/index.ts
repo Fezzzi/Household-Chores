@@ -3,11 +3,11 @@ import express from 'express';
 import { AUTH_LOG_IN, AUTH_SIGN_UP, AUTH_RESET } from 'shared/constants/api';
 import { RESET_PASSWORD } from 'serverSrc/constants/mails';
 import { sendEmails } from 'serverSrc/helpers/mailer';
-import { logInUser, SignUpUser, findUser, findGoogleUser, findFacebookUser } from 'serverSrc/database/models/users';
+import { logInUser, SignUpUser, findUser } from 'serverSrc/database/models/users';
 import { handleAction, setUserCookie } from 'serverSrc/helpers/auth';
 
 import { validateLoginData, validateResetData, validateSignupData } from './validation';
-import { getFacebookUserId, getGoogleUserId } from './providers';
+import { getProvidersUserId, handleProvidersLogIn, logInWithIds } from './providers';
 
 
 const getResetPassFunc = ({ email: { value: email } }: any) => async () => {
@@ -30,44 +30,34 @@ const getLogInFunc = (req: any, res: any, { email: { value: email }, password: {
   }
 
   setUserCookie(req, res, loggedUserId);
-  return { errors: [] };
+  return {};
 };
 
 const getSignUpFunc = (req: any, res: any, body: any) => async () => {
   const { email: { value: email }, nickname: { value: nickname }, password, photo, googleToken, facebook } = body;
-  const googleId = googleToken && await getGoogleUserId(googleToken);
-  if (googleId === -1) {
-    return ['Invalid Google data!'];
+  const { googleId, facebookId } = await getProvidersUserId(googleToken, facebook);
+  const result = await handleProvidersLogIn(req, res, googleId, facebookId, googleToken, facebook);
+  if (result !== false) {
+    return result;
   }
 
-  const facebookId = facebook && facebook.signedRequest && getFacebookUserId(facebook);
-  if (facebookId === -1) {
-    return ['Invalid Facebook data!'];
-  }
-
-  if (googleToken) {
-    const userId = await findGoogleUser(googleId);
-    if (userId !== -1) {
-      setUserCookie(req, res, userId);
+  const userId = await findUser(email);
+  if (userId !== -1) {
+    if (googleId || facebookId) {
+      if (await logInWithIds(req, res, userId, googleId, facebookId)) {
+        return {};
+      } else {
+        return { errors: ['Something broke, please try to log in with different method.'] };
+      }
     }
-  } else if (facebook && facebook.signedRequest) {
-    const userId = await findFacebookUser(facebookId);
-    if (userId !== -1) {
-      setUserCookie(req, res, userId);
-    }
-  } else {
-    const userId = await findUser(email);
-    if (userId !== -1) {
-      return getLogInFunc(req, res, body)();
-    }
+    return getLogInFunc(req, res, body)();
   }
 
   const signedUp = await SignUpUser(
     email, nickname,
     (password && password.value) || null,
     photo || null,
-    googleId || null,
-    facebookId || null
+    googleId, facebookId,
   );
   if (signedUp) {
     setUserCookie(req, res, signedUp);

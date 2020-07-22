@@ -6,7 +6,7 @@ import { signUp, logIn, resetPass } from 'clientSrc/effects/authEffects';
 const getAuthenticationSaga = effect => function* authenticationSaga({ payload }) {
   try {
     const response = yield call(effect, payload);
-    if (!response.data.errors.length) {
+    if (!response.data.errors || !response.data.errors.length) {
       // We login user after both signUp and LogIn
       yield put(AuthActions.logInSuccess());
     } else {

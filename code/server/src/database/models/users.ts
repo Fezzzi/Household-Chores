@@ -1,64 +1,87 @@
 import { database } from 'serverSrc/database';
 
-import { encryptPass, checkPass } from 'serverSrc/helpers/passwords';
+import { encryptPass, checkPass, generatePass } from 'serverSrc/helpers/passwords';
 import TABLE from './tables/users';
+
+const {
+  name: tName,
+  columns: {
+    id: tabID, email: tabEmail, nickname: tabNickname, password: tabPassword, photo: tabPhoto,
+    google_id: tabGoogleID, facebook_id: tabFacebookID,
+    date_registered: tabDateRegistered, date_last_active: tabDateLastActive,
+  },
+} = TABLE;
 
 export const findUser = async (email: string): Promise<number> => {
   const result = await database.query(
-    `SELECT ${TABLE.columns.id} FROM ${TABLE.name} WHERE ${TABLE.columns.email} = '${email}'`
+    `SELECT ${tabID} FROM ${tName} WHERE ${tabEmail} = '${email}'`
   );
 
   return result && result.length
-    ? result[0][TABLE.columns.id]
+    ? result[0][tabID]
     : -1;
 };
 
-export const findGoogleUser = async (googleId: number|string): Promise<number> => {
+export const findGoogleUser = async (googleId: string): Promise<number> => {
   const result = await database.query(
-    `SELECT ${TABLE.columns.id} FROM ${TABLE.name} WHERE ${TABLE.columns.google_id} = '${googleId}'`
+    `SELECT ${tabID} FROM ${tName} WHERE ${tabGoogleID} = '${googleId}'`
   );
 
   return result && result.length
-    ? result[0][TABLE.columns.id]
+    ? result[0][tabID]
     : -1;
 };
 
-export const findFacebookUser = async (facebookId: number|string): Promise<number> => {
+export const findFacebookUser = async (facebookId: string): Promise<number> => {
   const result = await database.query(
-    `SELECT ${TABLE.columns.id} FROM ${TABLE.name} WHERE ${TABLE.columns.facebook_id} = '${facebookId}'`
+    `SELECT ${tabID} FROM ${tName} WHERE ${tabFacebookID} = '${facebookId}'`
   );
 
   return result && result.length
-    ? result[0][TABLE.columns.id]
+    ? result[0][tabID]
     : -1;
 };
 
 export const logInUser = async (email: string, password: string): Promise<number> => {
   const result = await database.query(
-    `SELECT ${TABLE.columns.password}, ${TABLE.columns.id} FROM ${TABLE.name} WHERE ${TABLE.columns.email} = '${email}'`
+    `SELECT ${tabPassword}, ${tabID} FROM ${tName} WHERE ${tabEmail} = '${email}'`
   );
 
-  const validPass = result && result.length && await checkPass(password, result[0][TABLE.columns.password]);
+  const validPass = result && result.length && await checkPass(password, result[0][tabPassword]);
   if (!validPass) {
     return -1;
   }
 
-  const userId = result[0][TABLE.columns.id];
-  database.query(`UPDATE ${TABLE.name} SET ${TABLE.columns.date_last_active}=NOW() WHERE ${TABLE.columns.id}=${userId}`);
+  const userId = result[0][tabID];
+  updateLoginTime(userId);
   return userId;
 };
+
+export const updateLoginTime = (userId: number) =>
+  database.query(`UPDATE ${tName} SET ${tabDateLastActive}=NOW() WHERE ${tabID}=${userId}`);
 
 export const SignUpUser = async (
   email: string,
   nickname: string,
   password: string|null,
   photo: string|null,
-  googleId: string|number|null,
-  facebookId: string|number|null,
-): Promise<number> => database.query(
-  `INSERT INTO ${TABLE.name}
-    (${TABLE.columns.email}, ${TABLE.columns.nickname}, ${TABLE.columns.password}, ${TABLE.columns.photo},
-    ${TABLE.columns.google_id}, ${TABLE.columns.facebook_id}, ${TABLE.columns.date_registered}, ${TABLE.columns.date_last_active})
-    VALUES ('${email}', '${nickname}', ${password ? `'${await encryptPass(password)}'` : password},
-    ${photo ? `'${photo}'` : photo}, ${googleId}, ${facebookId}, NOW(), NOW())`,
-  false);
+  googleId: string,
+  facebookId: string,
+): Promise<number> => {
+  const pass = await encryptPass(password || generatePass());
+
+  return database.query(`
+    INSERT INTO ${tName} (
+      ${tabEmail}, ${tabNickname}, ${tabPassword}, ${tabPhoto}, ${tabGoogleID}, ${tabFacebookID}, ${tabDateRegistered}, ${tabDateLastActive}
+    ) VALUES ('${email}', '${nickname}', '${pass}', ${photo ? `'${photo}'` : photo}, ${googleId}, ${facebookId}, NOW(), NOW())
+  `, false);
+};
+
+export const assignUserProvider = async (userId: number, googleId: string, facebookId: string): Promise<boolean> => {
+  if (googleId !== null) {
+    return !!database.query(`UPDATE ${tName} SET ${tabGoogleID}='${googleId}' WHERE ${tabID}=${userId}`);
+  } else if (facebookId !== null) {
+    return !!database.query(`UPDATE ${tName} SET ${tabFacebookID}='${facebookId}' WHERE ${tabID}=${userId}`);
+  }
+  return false;
+};
