@@ -2,15 +2,13 @@ import React from 'react';
 import createSagaMiddleware from 'redux-saga';
 import { Provider } from 'react-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import * as TABS from 'clientSrc/constants/authTabs';
 import { PageWrapper, PageContent } from 'clientSrc/styles/blocks';
 
 import rootReducer from './reducers/rootReducer';
 import { rootSaga } from './sagas/rootSaga';
 import { Notifications } from './components/notifications';
-import { Auth } from './components/Auth';
+import Router from './components/Router';
 import { Footer } from './components/Footer';
 
 export default () => {
@@ -28,23 +26,7 @@ export default () => {
       <PageWrapper className="light">
         <PageContent>
           <Notifications />
-          <Router>
-            <Switch>
-              <Route
-                path={`/${TABS.LOGIN_TAB}`}
-                render={props => <Auth {...props} tab={TABS.LOGIN_TAB} />}
-              />
-              <Route
-                path={`/${TABS.SIGNUP_TAB}`}
-                render={props => <Auth {...props} tab={TABS.SIGNUP_TAB} />}
-              />
-              <Route
-                path={`/${TABS.RESET_TAB}`}
-                render={props => <Auth {...props} tab={TABS.RESET_TAB} />}
-              />
-              <Route path="/" render={props => <Auth {...props} tab={TABS.LOGIN_TAB} />} />
-            </Switch>
-          </Router>
+          <Router />
         </PageContent>
         <Footer />
       </PageWrapper>

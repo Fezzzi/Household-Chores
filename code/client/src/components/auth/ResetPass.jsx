@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
-import * as InputTypes from 'clientSrc/constants/inputTypes';
+import * as InputTypes from 'shared/constants/inputTypes';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import { MessageBlock, LinkRow } from 'clientSrc/styles/blocks/auth';
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
 
-import { Separator } from './Separator';
-import { Input, PrimaryButton } from '../forms';
+import { Separator, Input, PrimaryButton } from '../forms';
 
 const inputsConfig = [
   { name: 'email', label: 'Email', type: InputTypes.EMAIL },

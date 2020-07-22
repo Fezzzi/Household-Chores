@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import * as TYPES from 'clientSrc/constants/inputTypes';
-import { isInputValid } from 'clientSrc/helpers/validations';
+import * as TYPES from 'shared/constants/inputTypes';
+import { isInputValid } from 'shared/helpers/validation';
 import {
   InputRow, InputField, InputWrapper, InputBox, InputLabel,
   InputSider, ShowPassWrapper, ShowPassButton, ErrorSpan,

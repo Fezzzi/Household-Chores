@@ -2,16 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
-import * as InputTypes from 'clientSrc/constants/inputTypes';
+import * as InputTypes from 'shared/constants/inputTypes';
 import * as AuthActions from 'clientSrc/actions/authActions';
-import * as RootActions from 'clientSrc/actions/rootActions';
+import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { MessageBlock, MessageBlockLink } from 'clientSrc/styles/blocks/auth';
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
 
-import { Separator } from './Separator';
-import { FacebookLoginButton } from './FacebookLoginButton';
-import { GoogleLoginButton } from './GoogleLoginButton';
-import { Input, PrimaryButton } from '../forms';
+import { Input, Separator, FacebookLoginButton, GoogleLoginButton, PrimaryButton } from '../forms';
 
 const inputsConfig = [
   { name: 'email', label: 'Email', type: InputTypes.EMAIL },
@@ -54,8 +51,8 @@ export class SignupComponent extends Component {
 
     return (
       <form method="post">
-        <FacebookLoginButton isLogIn={false} handleError={this.handleError} />
-        <GoogleLoginButton isLogIn={false} handleError={this.handleError} />
+        <FacebookLoginButton handleError={this.handleError} />
+        <GoogleLoginButton handleError={this.handleError} />
         <Separator text="or" />
         {inputsConfig.map(input => (
           <Input
@@ -87,7 +84,7 @@ SignupComponent.propTypes = ({
 
 const mapDispatchToProps = dispatch => ({
   signUp: values => dispatch(AuthActions.signUp(values)),
-  addNotification: (type, message) => dispatch(RootActions.addNotifications({
+  addNotification: (type, message) => dispatch(NotificationActions.addNotifications({
     [type]: [message],
   })),
 });

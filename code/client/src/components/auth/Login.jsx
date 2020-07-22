@@ -2,16 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
-import * as InputTypes from 'clientSrc/constants/inputTypes';
+import * as InputTypes from 'shared/constants/inputTypes';
 import * as AuthActions from 'clientSrc/actions/authActions';
-import * as RootActions from 'clientSrc/actions/rootActions';
+import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { LinkRow } from 'clientSrc/styles/blocks/auth';
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
 
-import { Separator } from './Separator';
-import { FacebookLoginButton } from './FacebookLoginButton';
-import { GoogleLoginButton } from './GoogleLoginButton';
-import { Input, PrimaryButton } from '../forms';
+import { Input, Separator, PrimaryButton, FacebookLoginButton, GoogleLoginButton } from '../forms';
 
 const inputsConfig = [
   { name: 'email', label: 'Email', type: InputTypes.EMAIL },
@@ -86,7 +83,7 @@ LoginComponent.propTypes = ({
 
 const mapDispatchToProps = dispatch => ({
   logIn: values => dispatch(AuthActions.logIn(values)),
-  addNotification: (type, message) => dispatch(RootActions.addNotifications({
+  addNotification: (type, message) => dispatch(NotificationActions.addNotifications({
     [type]: [message],
   })),
 });

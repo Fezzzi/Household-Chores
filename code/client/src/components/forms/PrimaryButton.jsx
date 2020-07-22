@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  FormButtonWrapper, FormButton,
-} from 'clientSrc/styles/blocks/auth';
+import { FormButtonWrapper, FormButton } from 'clientSrc/styles/blocks/auth';
 
 export const PrimaryButton = ({ background, color, border, disabled, children, clickHandler }) => (
   <FormButtonWrapper>
