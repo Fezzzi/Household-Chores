@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const PageFooter = styled.footer`
   order: 5;
   padding: 0 20px;
-  background-color: #fafafa;
+  background-color: var(--cThemeBack);
 `;
 
 export const FooterWrapper = styled.div`
@@ -18,5 +18,5 @@ export const FooterWrapper = styled.div`
 `;
 
 export const CopyrightRow = styled.span`
-  color: #8e8e8e;
+  color: var(--cGreyPrimary);
 `;

@@ -10,7 +10,7 @@ import {
 import InputSider from './InputSider';
 
 const activeInputStyle = ({
-  borderColor: '#a8a8a8',
+  borderColor: 'var(--cBorderActive)',
 });
 
 const miniLabelStyle = ({

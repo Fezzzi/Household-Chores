@@ -5,7 +5,7 @@ import GoogleIcon from '~/static/social/google-icon.svg';
 import LogoTop from '~/static/logo-top.svg';
 
 export const AuthContent = styled.div`
-  color: #262626;
+  color: var(--cFont);
   justify-content: flex-start;
   margin: 12px auto 0 auto;
   max-width: 350px;
@@ -36,8 +36,8 @@ export const LogoTopBlock = styled.div`
 `;
 
 export const InputsBlock = styled.div`
-  background-color: #fff;
-  border: 1px solid #dbdbdb;
+  background-color: var(--cThemeFront);
+  border: 1px solid var(--cBorder);
   border-radius: 1px;
   margin: 10px 0;
   padding: ${props => props.extraPadding ? 25 : 10}px 0;
@@ -48,12 +48,12 @@ export const InputRow = styled.div`
 `;
 
 export const InputWrapper = styled.div`
-  background: #fafafa;
+  background: var(--cThemeBack);
   align-items: center;
-  border: 1px solid #dbdbdb;
+  border: 1px solid var(--cBorder);
   border-radius: 3px;
   box-sizing: border-box;
-  color: #262626;
+  color: var(--cFont);
   font-size: 14px;
   position: relative;
   width: 100%;
@@ -72,7 +72,7 @@ export const InputBox = styled.label`
 `;
 
 export const InputLabel = styled.span`
-  color: #8e8e8e;
+  color: var(--cGreyPrimary);
   font-size: 12px;
   height: 36px;
   left: 8px;
@@ -87,7 +87,8 @@ export const InputLabel = styled.span`
 `;
 
 export const InputField = styled.input`
-  background: #fafafa;
+  background: var(--cThemeBack);
+  color: var(--cFont);
   overflow: hidden;
   padding: 9px 0 7px 8px;
   text-overflow: ellipsis;
@@ -117,7 +118,7 @@ export const ShowPassButton = styled.button`
   outline: 0;
   border: 0;
   background-color: transparent;
-  color: #262626;
+  color: var(--cFont);
   display: inline;
   padding: 0;
   position: relative;
@@ -138,7 +139,7 @@ export const FormButtonWrapper = styled.div`
 `;
 
 export const FormButton = styled.button`
-  border: ${props => props.border ? '1px solid #dbdbdb' : 'none'};
+  border: ${props => props.border ? '1px solid var(--cBorder)' : 'none'};
   background-color: ${props => props.background};
   border-radius: 4px;
   color: ${props => props.color};
@@ -179,7 +180,7 @@ export const SeparatorWrapper = styled.div`
 `;
 
 export const SeparatorLine = styled.div`
-  background-color: #dbdbdb;
+  background-color: var(--cBorder);
   height: 1px;
   position: relative;
   top: .45em;
@@ -188,7 +189,7 @@ export const SeparatorLine = styled.div`
 `;
 
 export const SeparatorText = styled.div`
-  color: #8e8e8e;
+  color: var(--cGreyPrimary);
   font-size: 13px;
   font-weight: 600;
   line-height: 15px;
@@ -213,16 +214,8 @@ export const GoogleIconSpan = styled(IconSpan)`
   background: url(${GoogleIcon});
 `;
 
-export const FacebookTextSpan = styled.span`
-  color: #385185;
-`;
-
-export const GoogleTextSpan = styled.span`
-  color: #ea4335;
-`;
-
 export const LinkRow = styled.a`
-  color: #00376b;
+  color: var(--cBlueSecondary);
   font-size: 12px;
   line-height: 14px;
   margin-top: 12px;
@@ -238,7 +231,7 @@ export const LinkRow = styled.a`
 
 export const BottomMessageWrapper = styled.div`
   display: block;
-  color: #8e8e8e;
+  color: var(--cGreyPrimary);
   font-weight: 300;
   font-size: 14px;
   line-height: 18px;
@@ -246,14 +239,14 @@ export const BottomMessageWrapper = styled.div`
 `;
 
 export const BottomMessageBlock = styled.p`
-  color: #262626;
+  color: var(--cFont);
   font-size: 14px;
   margin: 15px;
   text-align: center;
 `;
 
 export const BottomMessageLink = styled.a`
-  color: #0095f6;
+  color: var(--cBluePrimary);
   text-decoration: none;
   cursor: pointer;
 
@@ -263,7 +256,7 @@ export const BottomMessageLink = styled.a`
 `;
 
 export const MessageBlock = styled.p`
-  color: #8e8e8e;
+  color: var(--cGreyPrimary);
   font-size: ${props => props.bigFont ? 14 : 12}px;
   margin: 10px 40px;
   line-height: ${props => props.bigFont ? 18 : 16}px;
@@ -271,7 +264,7 @@ export const MessageBlock = styled.p`
 `;
 
 export const MessageBlockLink = styled.a`
-  color: #8e8e8e;
+  color: var(--cGreyPrimary);
   font-weight: 600;
   text-decoration: none;
 `;

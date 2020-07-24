@@ -15,7 +15,12 @@ const FacebookButtonComponent = ({ handleError, logInFacebook }) => (
       onResponse={data => logInFacebook(data)}
       onError={handleError}
       render={({ isLoading, isWorking, onClick }) => (
-        <PrimaryButton clickHandler={onClick} disabled={isLoading || isWorking}>
+        <PrimaryButton
+          clickHandler={onClick}
+          background="#3B4998"
+          color="#FAFAFA"
+          disabled={isLoading || isWorking}
+        >
           <FormButtonContentWrapper>
             <FacebookIconSpan />
             {isLoading || isWorking ? 'Loading...' : 'Log in with Facebook'}

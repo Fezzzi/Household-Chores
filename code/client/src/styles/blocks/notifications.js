@@ -18,9 +18,9 @@ export const NotificationWrapper = styled.li`
   min-height: 60px;
   margin-bottom: 14px;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 3px 0px;
-  color: #262626;
+  color: var(--cFont);
   z-index: 10;
-  background: #fff;
+  background: var(--cThemeFront);
   border-radius: 2px;
   transition: all 0.5s ease 0s;
   overflow: hidden;
@@ -73,10 +73,10 @@ export const NotificationClose = styled.div`
   display: flex;
   width: 20px;
   font-size: 14px;
-  fill: #adadad;
+  fill: var(--cBorder);
   transition: opacity 0.1s ease 0s;
 
   &:hover {
-    fill: #8e8e8e;
+    fill: var(--cBorderActive);
   }
 `;

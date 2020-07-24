@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 export const PageWrapper = styled.section`
+  background-color: var(--cThemeBack);
+  color: var(--cFont);
   min-height: 100%;
   overflow: auto;
   display: flex;
@@ -8,7 +10,6 @@ export const PageWrapper = styled.section`
 `;
 
 export const PageContent = styled.main`
-  background-color: #fafafa;
   order: 4;
   display: flex;
   flex-grow: 1;
