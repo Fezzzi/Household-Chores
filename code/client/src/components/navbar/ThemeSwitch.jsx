@@ -1,5 +1,6 @@
 import React from 'react';
-import { connect } from "react-redux";
+import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
 import Zoom from '@material-ui/core/Zoom';
 import { Brightness3, Brightness7 } from '@material-ui/icons';
 
@@ -9,16 +10,21 @@ import { IconButton } from 'clientSrc/styles/blocks/navbar';
 
 const ThemeSwitchComponent = ({ theme, switchTheme }) => (
   <IconButton onClick={() => switchTheme(theme)}>
-    <Zoom in={theme === THEMES.DARK_THEME} style={{ position: 'absolute' }}>
+    <Zoom in={theme === THEMES.DARK_THEME} timeout={300} style={{ position: 'absolute' }}>
       <Brightness3 />
     </Zoom>
-    <Zoom in={theme !== THEMES.DARK_THEME} >
+    <Zoom in={theme !== THEMES.DARK_THEME} timeout={300}>
       <Brightness7 />
     </Zoom>
   </IconButton>
 );
 
-const mapStateToProps = ({ theme: { theme }}) => ({
+ThemeSwitchComponent.propTypes = ({
+  theme: PropTypes.string,
+  switchTheme: PropTypes.func,
+});
+
+const mapStateToProps = ({ theme: { theme } }) => ({
   theme,
 });
 

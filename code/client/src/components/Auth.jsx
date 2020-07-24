@@ -57,8 +57,7 @@ export default class Auth extends Component {
   };
 
   getRoofStroke = () => {
-    const day = new Date().getDay() - 1;
-    console.log(day);
+    const day = new Date().getDay();
     switch (day) {
       case 1:
       case 4:
