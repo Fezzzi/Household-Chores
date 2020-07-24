@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components';
 
 import FacebookIcon from '~/static/social/facebook-icon-white.png';
 import GoogleIcon from '~/static/social/google-icon.svg';
-import LogoTop from '~/static/logo-top.svg';
 
 export const AuthContent = styled.div`
   color: var(--cFont);
@@ -32,7 +31,10 @@ export const LogoTopBlock = styled.div`
   width: 100%;
   position: relative;
   top: 3px;
-  background: url(${LogoTop});
+  
+  & line {
+    stroke: ${props => props.stroke};
+  }
 `;
 
 export const InputsBlock = styled.div`
