@@ -4,7 +4,8 @@
     "paths": {
       "clientSrc/*": [ "code/client/src/*" ],
       "serverSrc/*": [ "code/server/src/*" ],
-      "shared/*": [ "code/shared/*" ]
+      "shared/*": [ "code/shared/*" ],
+      "~/*": ["./*"]
     },
     "jsx": "react",
     "target": "es6",
