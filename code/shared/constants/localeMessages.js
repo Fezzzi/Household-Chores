@@ -27,6 +27,8 @@ export const ERROR = {
   GOOGLE_API_INIT_ERROR: 'error.googleAPIInitError',
   INCORRECT_PASS: 'error.incorrectPass',
   INVALID_DATA: 'error.invalidData',
+  INVALID_FACEBOOK_DATA: 'error.invalidFacebookData',
+  INVALID_GOOGLE_DATA: 'error.invalidGoogleData',
   LOG_IN_ERROR: 'error.logInError',
   LOG_IN_MISSING_FIELDS: 'error.logInMissingFields',
   NO_ACCOUNT: 'error.noAccount',
