@@ -1,8 +1,8 @@
 import { createReducer } from '@reduxjs/toolkit';
 
 import { AVAILABLE_LOCALES, DEFAULT_LOCALE } from 'clientSrc/constants/locale';
-import applicationTexts from '~/code/client/locales';
 import * as LocaleActions from 'clientSrc/actions/localeActions';
+import applicationTexts from '~/code/client/locales';
 
 const storageLocale = localStorage.getItem('locale');
 
