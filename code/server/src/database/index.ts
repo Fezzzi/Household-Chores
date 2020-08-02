@@ -1,9 +1,9 @@
 import util from 'util';
+import { queryCallback } from 'mysql';
 
 import { Connection, handleConnectionError } from './connection';
 import { Logger } from '../helpers/logger';
 import { DB_LOG, ERROR_LOG } from '../constants/logs';
-import {queryCallback} from "~/node_modules/@types/mysql";
 
 const toLine = (sql: string) => sql.replace('\n', '');
 
@@ -11,7 +11,7 @@ const getQueryPromise = (): ((options: string, values: any, callback?: queryCall
   util.promisify(Connection.get().query);
 
 export const database = {
-  query: (sql: string, params: any = [], logSQL: boolean = true): any =>
+  query: (sql: string, params: any = [], logSQL = true): any =>
     getQueryPromise()
       .call(Connection.get(), sql, params)
       .then(value => {
@@ -24,6 +24,18 @@ export const database = {
         handleConnectionError(reason, 'Query');
         return null;
       }),
+  withTransaction: async (func: () => Promise<void>): Promise<void> => {
+    try {
+      Logger(DB_LOG, 'Beggining transaction...');
+      Connection.get().beginTransaction();
+      await func();
+      Connection.get().commit();
+      Logger(DB_LOG, '...transaction finished.');
+    } catch (err) {
+      Logger(DB_LOG, '...transaction failed, rolling back!');
+      Connection.get().rollback();
+    }
+  },
   beginTransaction: Connection.get().beginTransaction,
   commit: Connection.get().commit,
   rollback: Connection.get().rollback,
