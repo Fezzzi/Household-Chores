@@ -2,19 +2,24 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import Zoom from '@material-ui/core/Zoom';
-import { Brightness3, Brightness7 } from '@material-ui/icons';
+import { Brightness6 } from '@material-ui/icons';
 
 import * as ThemeActions from 'clientSrc/actions/themeActions';
 import * as THEMES from 'clientSrc/constants/themeTypes';
 import { IconButton } from 'clientSrc/styles/blocks/navbar';
 
+const reverseColorStyle = {
+  position: 'absolute',
+  stroke: 'var(--cThemeFront)',
+};
+
 const ThemeSwitchComponent = ({ theme, switchTheme }) => (
   <IconButton onClick={() => switchTheme(theme)}>
-    <Zoom in={theme === THEMES.DARK_THEME} timeout={300} style={{ position: 'absolute' }}>
-      <Brightness3 />
+    <Zoom in={theme === THEMES.DARK_THEME} timeout={300} style={reverseColorStyle}>
+      <Brightness6 />
     </Zoom>
     <Zoom in={theme !== THEMES.DARK_THEME} timeout={300}>
-      <Brightness7 />
+      <Brightness6 />
     </Zoom>
   </IconButton>
 );
