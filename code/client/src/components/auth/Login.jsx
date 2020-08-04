@@ -7,10 +7,11 @@ import * as AuthActions from 'clientSrc/actions/authActions';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { LinkRow } from 'clientSrc/styles/blocks/auth';
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
+import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 
 import { Input, Separator, PrimaryButton, FacebookLoginButton, GoogleLoginButton } from '../forms';
 
-const inputsConfig = [
+const inputConfig = [
   { name: 'email', label: 'Email', type: InputTypes.EMAIL },
   { name: 'password', label: 'Password', type: InputTypes.PASSWORD },
 ];
@@ -24,7 +25,7 @@ export class LoginComponent extends Component {
       submitText: 'Log In',
       isFormValid: false,
       isFormSending: false,
-      inputs: Object.fromEntries(inputsConfig.map(input =>
+      inputs: Object.fromEntries(inputConfig.map(input =>
         [input.name, { valid: false, value: '' }]
       )),
       errors: {},
@@ -41,7 +42,7 @@ export class LoginComponent extends Component {
     this.props.logIn(this.state.inputs);
     this.setState({ isFormSending: true, submitText: 'Sending' });
     this.timer = setTimeout(
-      () => this && this.setState({ isFormSending: false, submitText: 'Log In' }), 2500
+      () => this && this.setState({ isFormSending: false, submitText: 'Log In' }), SUBMIT_TIMEOUT
     );
   });
 
@@ -51,7 +52,7 @@ export class LoginComponent extends Component {
 
     return (
       <form method="post">
-        {inputsConfig.map(input => (
+        {inputConfig.map(input => (
           <Input
             name={input.name}
             key={input.name}

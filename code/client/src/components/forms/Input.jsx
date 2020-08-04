@@ -5,10 +5,9 @@ import * as TYPES from 'shared/constants/inputTypes';
 import { isInputValid } from 'shared/helpers/validation';
 import {
   InputRow, InputField, InputWrapper, InputBox, InputLabel,
-  InputSider, ShowPassWrapper, ShowPassButton, ErrorSpan,
 } from 'clientSrc/styles/blocks/auth';
 
-import InputErrorIcon from '~/static/icons/input-error-icon.svgr';
+import InputSider from './InputSider';
 
 const activeInputStyle = ({
   borderColor: '#a8a8a8',
@@ -62,28 +61,13 @@ export class Input extends Component {
               noValidate
             />
           </InputBox>
-          <InputSider>
-            {hasError
-              ? (
-                <ErrorSpan>
-                  <InputErrorIcon />
-                </ErrorSpan>
-              )
-              : ''}
-            {type === TYPES.PASSWORD && inputTextLength > 0
-              ? (
-                <ShowPassWrapper>
-                  <ShowPassButton onClick={e => {
-                    e.preventDefault();
-                    this.setState({ showPassword: !showPassword });
-                  }}
-                  >
-                    {showPassword ? 'Hide' : 'Show'}
-                  </ShowPassButton>
-                </ShowPassWrapper>
-              )
-              : ''}
-          </InputSider>
+          <InputSider
+            inputTextLength={inputTextLength}
+            type={type}
+            hasError={hasError}
+            updateInputState={this.setState.bind(this)}
+            showPassword={showPassword}
+          />
         </InputWrapper>
       </InputRow>
     );

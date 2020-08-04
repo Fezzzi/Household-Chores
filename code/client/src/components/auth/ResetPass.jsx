@@ -6,10 +6,11 @@ import * as InputTypes from 'shared/constants/inputTypes';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import { MessageBlock, LinkRow } from 'clientSrc/styles/blocks/auth';
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
+import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 
 import { Separator, Input, PrimaryButton } from '../forms';
 
-const inputsConfig = [
+const inputConfig = [
   { name: 'email', label: 'Email', type: InputTypes.EMAIL },
 ];
 
@@ -22,7 +23,7 @@ export class ResetPassComponent extends Component {
       submitText: 'Send Reset Link',
       isFormValid: false,
       isFormSending: false,
-      inputs: Object.fromEntries(inputsConfig.map(input =>
+      inputs: Object.fromEntries(inputConfig.map(input =>
         [input.name, { valid: false, value: '' }]
       )),
       errors: {},
@@ -37,7 +38,7 @@ export class ResetPassComponent extends Component {
     this.props.resetPass(this.state.inputs);
     this.setState({ isFormSending: true, submitText: 'Sending' });
     this.timer = setTimeout(
-      () => this.setState({ isFormSending: false, submitText: 'Send Reset Link' }), 2500
+      () => this.setState({ isFormSending: false, submitText: 'Send Reset Link' }), SUBMIT_TIMEOUT
     );
   });
 
@@ -50,7 +51,7 @@ export class ResetPassComponent extends Component {
         <MessageBlock bigFont>
           Enter your email address and we&apos;ll send you a link to reset your password.
         </MessageBlock>
-        {inputsConfig.map(input => (
+        {inputConfig.map(input => (
           <Input
             name={input.name}
             key={input.name}

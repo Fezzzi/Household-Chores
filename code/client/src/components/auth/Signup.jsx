@@ -7,10 +7,11 @@ import * as AuthActions from 'clientSrc/actions/authActions';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { MessageBlock, MessageBlockLink } from 'clientSrc/styles/blocks/auth';
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
+import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 
 import { Input, Separator, FacebookLoginButton, GoogleLoginButton, PrimaryButton } from '../forms';
 
-const inputsConfig = [
+const inputConfig = [
   { name: 'email', label: 'Email', type: InputTypes.EMAIL },
   { name: 'nickname', label: 'Nickname', type: InputTypes.TEXT },
   { name: 'password', label: 'Password', type: InputTypes.PASSWORD },
@@ -25,7 +26,7 @@ export class SignupComponent extends Component {
       submitText: 'Sign Up',
       isFormValid: false,
       isFormSending: false,
-      inputs: Object.fromEntries(inputsConfig.map(input =>
+      inputs: Object.fromEntries(inputConfig.map(input =>
         [input.name, { valid: false, value: '' }]
       )),
       errors: {},
@@ -42,7 +43,7 @@ export class SignupComponent extends Component {
     this.props.signUp(this.state.inputs);
     this.setState({ isFormSending: true, submitText: 'Sending' });
     this.timer = setTimeout(
-      () => this.setState({ isFormSending: false, submitText: 'Sign Up' }), 2500
+      () => this.setState({ isFormSending: false, submitText: 'Sign Up' }), SUBMIT_TIMEOUT
     );
   });
 
@@ -54,7 +55,7 @@ export class SignupComponent extends Component {
         <FacebookLoginButton handleError={this.handleError} />
         <GoogleLoginButton handleError={this.handleError} />
         <Separator text="or" />
-        {inputsConfig.map(input => (
+        {inputConfig.map(input => (
           <Input
             name={input.name}
             key={input.name}
