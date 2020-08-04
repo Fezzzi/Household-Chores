@@ -1,0 +1,30 @@
+.light {
+  --cTheme: #fafafa;
+  --cFont: #262626;
+
+  --cError: #ee2d3e;
+  --cMessage: #0095f6;
+  --cWarning: #f6a716;
+  --cSuccess: #aae770;
+}
+
+.dark {
+  --cTheme: #262626;
+  --cFont: #fafafa;
+
+  --cError: #ee2d3e;
+  --cMessage: #0095f6;
+  --cWarning: #f6a716;
+  --cSuccess: #aae770;
+}
+
+.light,
+.dark {
+  background-color: var(--cTheme);
+}
+
+.theme-transition,
+.theme-transition * {
+  transition: all 500ms;
+  transition-delay: 0;
+}
