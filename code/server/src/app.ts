@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
+import createStore from 'express-mysql-session';
 import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
@@ -11,8 +12,9 @@ import errorHandler from './helpers/errorHandler';
 import router from './actions/router';
 import { Logger } from './helpers/logger';
 import { ACCESS_LOG } from './constants/logs';
+import { Connection } from './database/connection';
 
-const config = dotenv.config();
+dotenv.config();
 
 // Initialize the server
 const app = express();
@@ -24,13 +26,24 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Initialize cookie-parser to allow us access the cookies stored in the browser.
 app.use(cookieParser());
 
+// Initialize session store and session middleware
+// @ts-ignore: Property 'default' is missing in type (some bug in types config of express-mysql-session)
+const MySQLStore = createStore(session);
+const sessionStore = new MySQLStore({}, Connection.get());
+const YEAR_MILLISECONDS = 31540000000;
 app.use(session({
+  store: sessionStore,
   name: 'user_sid',
-  secret: (config.parsed && config.parsed.SESSION_SECRET) || 'test',
+  secret: process.env.SESSION_SECRET || 'test',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 600000,
+    maxAge: YEAR_MILLISECONDS,
+    expires: (() => {
+      const date = new Date();
+      date.setTime(date.getTime() + YEAR_MILLISECONDS);
+      return date;
+    })(),
   },
 }));
 
@@ -43,7 +56,7 @@ app.use(morgan(':remote-addr - :remote-user ":method :url" :status :response-tim
 
 // Setup CORS policy
 app.use(cors(
-  config.parsed && config.parsed.DEBUG
+  process.env.DEBUG
     ? {
       origin: 'http://localhost:8081',
       credentials: true,

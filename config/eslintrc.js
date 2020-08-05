@@ -1,7 +1,6 @@
 const tsRules = {
   '@typescript-eslint/ban-types': 1,
   '@typescript-eslint/no-namespace': 1,
-  '@typescript-eslint/ban-ts-ignore': 1,
   '@typescript-eslint/no-this-alias': 1,
   '@typescript-eslint/no-misused-new': 1,
   '@typescript-eslint/no-unused-vars': 1,
@@ -19,6 +18,7 @@ const tsRules = {
   '@typescript-eslint/prefer-namespace-keyword': 1,
   '@typescript-eslint/consistent-type-assertions': 1,
   '@typescript-eslint/adjacent-overload-signatures': 1,
+  '@typescript-eslint/ban-ts-ignore': 0,
   '@typescript-eslint/no-var-requires': 0,
   '@typescript-eslint/no-use-before-define': 0,
 };
