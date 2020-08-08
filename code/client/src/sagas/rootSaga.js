@@ -1,5 +1,4 @@
 import { all, call, fork, put } from 'redux-saga/effects';
-import { testSaga } from 'clientSrc/sagas/testSaga';
 import { authSaga } from 'clientSrc/sagas/authSaga';
 import { themeSaga } from 'clientSrc/sagas/themeSaga';
 import { localeSaga } from 'clientSrc/sagas/localeSaga';
@@ -10,7 +9,6 @@ export function* rootSaga() {
   yield all([
     fork(themeSaga),
     fork(localeSaga),
-    fork(testSaga),
     fork(authSaga),
   ]);
 
