@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 
-import { DEFAULT_LOCALE, AVAILABLE_LOCALES } from 'clientSrc/constants/locale';
+import { DEFAULT_LOCALE, AVAILABLE_LOCALES } from 'shared/constants/locale';
 import applicationTexts from '~/code/client/locales';
 
 describe('Locales > integrity', () => {

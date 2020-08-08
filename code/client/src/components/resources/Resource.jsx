@@ -4,7 +4,7 @@ import { PropTypes } from 'prop-types';
 
 import { loadResource } from 'clientSrc/effects/resourceEffects';
 
-class Resource extends Component{
+class Resource extends Component {
   constructor(props) {
     super(props);
     const { match: { params: { resourceId } } } = this.props;
@@ -23,7 +23,7 @@ class Resource extends Component{
       resourceId,
       localeData: { locale },
     }).then(({ data }) => this.setState({ data })
-    ).catch(err => this.setState({
+    ).catch(() => this.setState({
       data: {
         headline: 'Error',
         body: 'Error loading data, please try refreshing the page.',
@@ -39,7 +39,7 @@ class Resource extends Component{
   }
 
   componentDidUpdate(prevProps) {
-    const { match: { params: { resourceId: prevResourceId }}, locale: prevLocale } = prevProps;
+    const { match: { params: { resourceId: prevResourceId } }, locale: prevLocale } = prevProps;
     const { locale } = this.props;
     const { resourceId } = this.state;
 
@@ -49,14 +49,14 @@ class Resource extends Component{
   }
 
   render() {
-    const { data: { headline, icon, banner, body} } = this.state;
+    const { data: { headline, icon, banner, body } } = this.state;
 
     return (
       <div>
         <h1>{headline}</h1>
         <div dangerouslySetInnerHTML={{ __html: body }} />
       </div>
-    )
+    );
   }
 }
 

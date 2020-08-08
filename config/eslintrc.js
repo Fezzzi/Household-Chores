@@ -94,6 +94,7 @@ module.exports = {
     }],
     'react/no-access-state-in-setstate': 2,
     'react/no-multi-comp': 1,
+    'react/no-danger': 0,
     'react/sort-comp': 0,
     'react/jsx-no-bind': 0,
     'react/button-has-type': 0,
