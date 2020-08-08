@@ -8,7 +8,7 @@ import * as TABS from 'clientSrc/constants/authTabs';
 
 import Auth from './Auth';
 import Home from './Home';
-import Resource from './resources/Resource';
+import Resource from './Resource';
 
 const RouterComponent = ({ loggedUser }) => (
   <Router>

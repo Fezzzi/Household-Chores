@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import { loadResource } from 'clientSrc/effects/resourceEffects';
+import {
+  ResourceWrapper, TopButton, BannerWrapper, BodyBlock,
+  BodyWrapper, HeadlineBlock, IconBlock,
+} from 'clientSrc/styles/blocks/resources';
+import errorIcon from '~/static/resources/icons/error-icon.svg';
 
 class Resource extends Component {
   constructor(props) {
@@ -26,6 +32,7 @@ class Resource extends Component {
     ).catch(() => this.setState({
       data: {
         headline: 'Error',
+        icon: errorIcon,
         body: 'Error loading data, please try refreshing the page.',
       },
     }));
@@ -49,13 +56,21 @@ class Resource extends Component {
   }
 
   render() {
+    const { history } = this.props;
     const { data: { headline, icon, banner, body } } = this.state;
 
     return (
-      <div>
-        <h1>{headline}</h1>
-        <div dangerouslySetInnerHTML={{ __html: body }} />
-      </div>
+      <ResourceWrapper>
+        <TopButton onClick={() => history.goBack()}>
+          <ArrowBackIcon />
+        </TopButton>
+        <BannerWrapper banner={banner} />
+        <BodyWrapper>
+          <IconBlock icon={icon} />
+          <HeadlineBlock>{headline}</HeadlineBlock>
+          <BodyBlock dangerouslySetInnerHTML={{ __html: body }} />
+        </BodyWrapper>
+      </ResourceWrapper>
     );
   }
 }
@@ -66,6 +81,7 @@ Resource.propTypes = ({
       resourceId: PropTypes.string.isRequired,
     }),
   }),
+  history: PropTypes.object.isRequired,
   locale: PropTypes.string.isRequired,
 });
 
