@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 import { LOAD_STATE } from 'shared/constants/api';
 
-const config = dotenv.config();
+dotenv.config();
 
 export default () => {
   const router = express.Router();
@@ -12,11 +12,12 @@ export default () => {
     switch (action) {
       case LOAD_STATE:
         res.status(200).send({
-          debug: config.parsed && config.parsed.DEBUG,
+          debug: process.env.DEBUG,
           loggedUser: !!(req.session && req.session.user && req.cookies.user_sid),
         });
         return;
-      default: res.status(404).send('Not Found');
+      default:
+        res.status(404).send('Not Found');
     }
   });
 
