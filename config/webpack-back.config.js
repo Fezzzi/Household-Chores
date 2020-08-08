@@ -3,22 +3,16 @@ const nodeExternals = require('webpack-node-externals');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const svgToMiniDataURI = require('mini-svg-data-uri');
 
+const webpackAliases = require('./webpack-aliases.config');
+
 module.exports = {
   // Enable sourcemaps for debugging webpack's output.
   devtool: 'source-map',
-  target: "node",
+  target: 'node',
   externals: [nodeExternals()],
 
   context: path.resolve(__dirname, '../code/server'),
-  resolve: {
-    extensions: ['.js', '.ts', '.json'],
-    alias: {
-      'clientSrc': path.resolve(__dirname, '../code/client/src'),
-      'serverSrc': path.resolve(__dirname, '../code/server/src'),
-      'shared': path.resolve(__dirname, '../code/shared'),
-      '~': path.resolve(__dirname, '..'),
-    },
-  },
+  ...webpackAliases,
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, '../code/server/dist'),
@@ -43,7 +37,7 @@ module.exports = {
           {
             loader: 'url-loader',
             options: {
-              generator: (content) => svgToMiniDataURI(content.toString()),
+              generator: content => svgToMiniDataURI(content.toString()),
             },
           },
         ],

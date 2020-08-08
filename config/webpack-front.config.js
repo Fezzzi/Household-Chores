@@ -3,20 +3,14 @@ const dotenv = require('dotenv').config();
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 
+const webpackAliases = require('./webpack-aliases.config');
+
 module.exports = {
   // Enable sourcemaps for debugging webpack's output.
   devtool: 'source-map',
 
   context: path.resolve(__dirname, '../code/client'),
-  resolve: {
-    extensions: ['.js', '.ts', '.jsx', '.json'],
-    alias: {
-      'clientSrc': path.resolve(__dirname, '../code/client/src'),
-      'serverSrc': path.resolve(__dirname, '../code/server/src'),
-      'shared': path.resolve(__dirname, '../code/shared'),
-      '~': path.resolve(__dirname, '..'),
-    },
-  },
+  ...webpackAliases,
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, '../dist'),
