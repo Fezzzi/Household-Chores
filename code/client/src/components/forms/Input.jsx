@@ -9,6 +9,8 @@ import {
 
 import InputSider from './InputSider';
 
+import LocaleText from '../common/LocaleText';
+
 const activeInputStyle = ({
   borderColor: 'var(--cBorderActive)',
 });
@@ -40,17 +42,19 @@ export class Input extends Component {
 
     const { type, updateInput } = this.props;
     updateInput(isInputValid(type, e.target.value), e.target.value);
-  }
+  };
 
   render() {
-    const { name, label, type, hasError } = this.props;
+    const { name, message, type, hasError } = this.props;
     const { inputTextLength, showPassword, inputActive } = this.state;
 
     return (
       <InputRow>
         <InputWrapper style={inputActive ? activeInputStyle : {}}>
           <InputBox htmlFor={name}>
-            <InputLabel style={inputTextLength === 0 ? {} : miniLabelStyle}>{label}</InputLabel>
+            <InputLabel style={inputTextLength === 0 ? {} : miniLabelStyle}>
+              <LocaleText message={message} />
+            </InputLabel>
             <InputField
               name={this.name}
               type={type === TYPES.PASSWORD && showPassword ? TYPES.TEXT : type}
@@ -76,7 +80,7 @@ export class Input extends Component {
 
 Input.propTypes = {
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   hasError: PropTypes.bool.isRequired,
   updateInput: PropTypes.func,

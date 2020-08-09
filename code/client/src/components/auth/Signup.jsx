@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
 import * as InputTypes from 'shared/constants/inputTypes';
+import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { MessageBlock, MessageBlockLink } from 'clientSrc/styles/blocks/auth';
@@ -10,11 +11,12 @@ import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 
 import { Input, Separator, FacebookLoginButton, GoogleLoginButton, PrimaryButton } from '../forms';
+import LocaleText from '../common/LocaleText';
 
 const inputConfig = [
-  { name: 'email', label: 'Email', type: InputTypes.EMAIL },
-  { name: 'nickname', label: 'Nickname', type: InputTypes.TEXT },
-  { name: 'password', label: 'Password', type: InputTypes.PASSWORD },
+  { name: 'email', message: FORM.EMAIL, type: InputTypes.EMAIL },
+  { name: 'nickname', message: FORM.NICKNAME, type: InputTypes.TEXT },
+  { name: 'password', message: FORM.PASSWORD, type: InputTypes.PASSWORD },
 ];
 
 export class SignupComponent extends Component {
@@ -23,7 +25,7 @@ export class SignupComponent extends Component {
 
     this.timer = null;
     this.state = {
-      submitText: 'Sign Up',
+      submitMessage: AUTH.SIGN_UP,
       isFormValid: false,
       isFormSending: false,
       inputs: Object.fromEntries(inputConfig.map(input =>
@@ -41,37 +43,38 @@ export class SignupComponent extends Component {
 
   handleClick = handlerWrapper(() => {
     this.props.signUp(this.state.inputs);
-    this.setState({ isFormSending: true, submitText: 'Sending' });
+    this.setState({ isFormSending: true, submitMessage: COMMON.SENDING });
     this.timer = setTimeout(
-      () => this.setState({ isFormSending: false, submitText: 'Sign Up' }), SUBMIT_TIMEOUT
+      () => this.setState({ isFormSending: false, submitMessage: AUTH.SIGN_UP }), SUBMIT_TIMEOUT
     );
   });
 
   render() {
-    const { isFormValid, isFormSending, errors, submitText } = this.state;
+    const { submitMessage, isFormValid, isFormSending, errors } = this.state;
 
     return (
       <form method="post">
         <FacebookLoginButton handleError={this.handleError} />
         <GoogleLoginButton handleError={this.handleError} />
-        <Separator text="or" />
+        <Separator message={COMMON.OR} />
         {inputConfig.map(input => (
           <Input
             name={input.name}
             key={input.name}
-            label={input.label}
+            message={input.message}
             type={input.type}
             hasError={!!errors[input.name]}
             updateInput={updateInput(this, input.name)}
           />
         ))}
         <PrimaryButton disabled={!isFormValid || isFormSending} clickHandler={this.handleClick}>
-          {submitText}
+          <LocaleText message={submitMessage} />
         </PrimaryButton>
         <MessageBlock>
-          By signing up, you agree to our &nbsp;
-          <MessageBlockLink target="_blank" href="">Terms and Conditions</MessageBlockLink>
-          &nbsp;.
+          <LocaleText message={AUTH.TERMS_AGREEMENT} />
+          <MessageBlockLink target="_blank" href="">
+            <LocaleText message={COMMON.TERMS_AND_CONDITIONS} />
+          </MessageBlockLink>.
         </MessageBlock>
       </form>
     );

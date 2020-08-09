@@ -3,15 +3,17 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
 import * as InputTypes from 'shared/constants/inputTypes';
+import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import { MessageBlock, LinkRow } from 'clientSrc/styles/blocks/auth';
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 
 import { Separator, Input, PrimaryButton } from '../forms';
+import LocaleText from '../common/LocaleText';
 
 const inputConfig = [
-  { name: 'email', label: 'Email', type: InputTypes.EMAIL },
+  { name: 'email', message: FORM.EMAIL, type: InputTypes.EMAIL },
 ];
 
 export class ResetPassComponent extends Component {
@@ -20,7 +22,7 @@ export class ResetPassComponent extends Component {
 
     this.timer = null;
     this.state = {
-      submitText: 'Send Reset Link',
+      submitMessage: AUTH.SEND_RESET_LINK,
       isFormValid: false,
       isFormSending: false,
       inputs: Object.fromEntries(inputConfig.map(input =>
@@ -36,37 +38,37 @@ export class ResetPassComponent extends Component {
 
   handleClick = handlerWrapper(() => {
     this.props.resetPass(this.state.inputs);
-    this.setState({ isFormSending: true, submitText: 'Sending' });
+    this.setState({ isFormSending: true, submitMessage: COMMON.SENDING });
     this.timer = setTimeout(
-      () => this.setState({ isFormSending: false, submitText: 'Send Reset Link' }), SUBMIT_TIMEOUT
+      () => this.setState({ isFormSending: false, submitMessage: AUTH.SEND_RESET_LINK }), SUBMIT_TIMEOUT
     );
   });
 
   render() {
     const { switchTab } = this.props;
-    const { submitText, isFormValid, isFormSending, errors } = this.state;
+    const { submitMessage, isFormValid, isFormSending, errors } = this.state;
 
     return (
       <form method="post">
         <MessageBlock bigFont>
-          Enter your email address and we&apos;ll send you a link to reset your password.
+          <LocaleText message={AUTH.ENTER_EMAIL_QUOTE} />
         </MessageBlock>
         {inputConfig.map(input => (
           <Input
             name={input.name}
             key={input.name}
-            label={input.label}
+            message={input.message}
             type={input.type}
             hasError={!!errors[input.name]}
             updateInput={updateInput(this, input.name)}
           />
         ))}
         <PrimaryButton disabled={!isFormValid || isFormSending} clickHandler={this.handleClick}>
-          {submitText}
+          <LocaleText message={submitMessage} />
         </PrimaryButton>
-        <Separator text="or" />
+        <Separator message={COMMON.OR} />
         <LinkRow onClick={switchTab}>
-          Create New Account
+          <LocaleText message={AUTH.CREATE_ACCOUNT} />
         </LinkRow>
       </form>
     );

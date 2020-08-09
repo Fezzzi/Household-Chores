@@ -11,6 +11,8 @@ import CloseIcon from '~/static/icons/notification-close-icon.svgr';
 import ErrorIcon from '~/static/icons/notification-error-icon.svgr';
 import SuccessIcon from '~/static/icons/notification-success-icon.svgr';
 
+import LocaleText from '../common/LocaleText';
+
 export const Notification = ({ type, message, close }) => {
   setTimeout(close, 4000);
 
@@ -26,7 +28,7 @@ export const Notification = ({ type, message, close }) => {
       <NotificationContent>
         <NotificationMessage>
           <span>
-            {message}
+            <LocaleText message={message} />
           </span>
         </NotificationMessage>
       </NotificationContent>

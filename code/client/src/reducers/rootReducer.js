@@ -6,6 +6,7 @@ import * as AuthActions from 'clientSrc/actions/authActions';
 import testReducer from './testReducer';
 import notificationsReducer from './notificationsReducer';
 import themeReducer from './themeReducer';
+import localeReducer from './localeReducer';
 
 const initialState = {
   debug: true,
@@ -33,5 +34,6 @@ export default combineReducers({
   app: rootReducer,
   notifications: notificationsReducer,
   theme: themeReducer,
+  locale: localeReducer,
   test: testReducer,
 });

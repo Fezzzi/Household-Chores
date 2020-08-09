@@ -5,17 +5,21 @@ import {
   BottomMessageWrapper, BottomMessageBlock, BottomMessageLink,
 } from 'clientSrc/styles/blocks/auth';
 
-export const BottomBlock = ({ message, linkText, onClick }) => (
+import LocaleText from '../common/LocaleText';
+
+export const BottomBlock = ({ message, linkMessage, onClick }) => (
   <BottomMessageWrapper>
     <BottomMessageBlock>
-      {message}
-      <BottomMessageLink onClick={onClick}>{linkText}</BottomMessageLink>
+      <LocaleText message={message} />
+      <BottomMessageLink onClick={onClick}>
+        &nbsp;<LocaleText message={linkMessage} />
+      </BottomMessageLink>
     </BottomMessageBlock>
   </BottomMessageWrapper>
 );
 
 BottomBlock.propTypes = ({
   message: PropTypes.string.isRequired,
-  linkText: PropTypes.string.isRequired,
+  linkMessage: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 });

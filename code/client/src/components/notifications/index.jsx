@@ -8,9 +8,7 @@ import * as NotificationActions from 'clientSrc/actions/notificationActions';
 
 import { Notification } from './Notification';
 
-const NotificationsComponent = props => {
-  const { errors, warnings, messages, successes, removeNotification } = props;
-
+const NotificationsComponent = ({ errors, warnings, messages, successes, removeNotification }) => {
   const mapNotifications = (notifications, type, key) => notifications && notifications.map((msg, id) => (
     <Notification
       type={type}

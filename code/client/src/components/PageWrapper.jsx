@@ -15,6 +15,7 @@ PageWrapperComponent.propTypes = ({
   changing: PropTypes.bool,
   children: PropTypes.oneOfType([
     PropTypes.element,
+    PropTypes.node,
     PropTypes.string,
   ]),
 });
