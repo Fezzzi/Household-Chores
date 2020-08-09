@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
-import { RESOURCES_PREFIX } from 'shared/constants/api';
+import { RESOURCES_PREFIX, SETTINGS_PREFIX } from 'shared/constants/api';
 import * as TABS from 'clientSrc/constants/authTabs';
 
 import Auth from './Auth';
 import Home from './Home';
 import Resource from './Resource';
+import Settings from './settings';
 
 const RouterComponent = ({ loggedUser }) => (
   <Router>
@@ -41,6 +42,7 @@ const RouterComponent = ({ loggedUser }) => (
         )
         : (
           <>
+            <Route path={`/${SETTINGS_PREFIX}`} component={Settings} />
             <Route exact path="/" component={Home} />
             <Route path="/*">
               <Redirect to={{ pathname: '/' }} />
