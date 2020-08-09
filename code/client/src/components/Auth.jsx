@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { AUTH } from 'shared/constants/localeMessages';
 import { AuthContent, InputsBlock, LogoBlock, LogoTopBlock } from 'clientSrc/styles/blocks/auth';
 import * as TABS from 'clientSrc/constants/authTabs';
 import LogoTop from '~/static/logo-top.svgr';
@@ -31,18 +32,18 @@ export default class Auth extends Component {
   getTabBottom = () => {
     switch (this.state.tab) {
       case TABS.SIGNUP_TAB: return {
-        message: 'Have an account? ',
-        linkText: 'Log in',
+        message: AUTH.HAVE_ACCOUNT,
+        linkMessage: AUTH.LOG_IN,
         onClick: () => this.switchTab(TABS.LOGIN_TAB),
       };
       case TABS.RESET_TAB: return {
         message: '',
-        linkText: 'Back to Login',
+        linkMessage: AUTH.BACK_TO_LOGIN,
         onClick: () => this.switchTab(TABS.LOGIN_TAB),
       };
       default: return {
-        message: 'Don\'t have an account? ',
-        linkText: 'Sign up',
+        message: AUTH.DONT_HAVE_ACCOUNT,
+        linkMessage: AUTH.SIGN_UP,
         onClick: () => this.switchTab(TABS.SIGNUP_TAB),
       };
     }

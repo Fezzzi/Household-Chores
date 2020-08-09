@@ -1,3 +1,5 @@
+import { ERROR } from 'shared/constants/localeMessages';
+
 export const handleAction = async (
   data: object,
   validationFunc: (data: object) => Promise<boolean|number>,
@@ -6,9 +8,9 @@ export const handleAction = async (
 ): Promise<boolean> => {
   const valid = await validationFunc(data);
   if (valid === false || valid === null) {
-    res.status(200).send({ errors: ['Invalid data!'] });
+    res.status(200).send({ errors: [ERROR.INVALID_DATA] });
   } else if (valid === -1) {
-    res.status(200).send({ errors: ['No account with this email found!'] });
+    res.status(200).send({ errors: [ERROR.NO_ACCOUNT] });
   } else {
     const response = await handlerFunc(data);
     res.status(200).send(response);

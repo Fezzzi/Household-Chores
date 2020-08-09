@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { AUTH_LOG_IN, AUTH_SIGN_UP, AUTH_RESET } from 'shared/constants/api';
+import { ERROR, SUCCESS } from 'shared/constants/localeMessages';
 import { RESET_PASSWORD } from 'serverSrc/constants/mails';
 import { sendEmails } from 'serverSrc/helpers/mailer';
 import { logInUser, SignUpUser, findUser } from 'serverSrc/database/models/users';
@@ -16,17 +17,17 @@ const getResetPassFunc = ({ email: { value: email } }: any) => async () => {
   }, [email]);
 
   return {
-    errors: emailSent ? [] : ['An error occurred while send the link, please try again later.'],
-    successes: emailSent ? ['A reset link has been sent to your email address'] : [],
+    errors: emailSent ? [] : [ERROR.RESET_PASS_ERROR],
+    successes: emailSent ? [SUCCESS.RESET_LINK] : [],
   };
 };
 
 const getLogInFunc = (req: any, res: any, { email: { value: email }, password: { value: password } }: any) => async () => {
   const loggedUserId = await logInUser(email, password);
   if (loggedUserId === -1) {
-    return { errors: ['Incorrect password'] };
+    return { errors: [ERROR.INCORRECT_PASS] };
   } else if (loggedUserId === 0) {
-    return { errors: ['An error occurred during logging in, please try again later.'] };
+    return { errors: [ERROR.LOG_IN_ERROR] };
   }
 
   setUserCookie(req, res, loggedUserId);
@@ -47,7 +48,7 @@ const getSignUpFunc = (req: any, res: any, body: any) => async () => {
       if (await logInWithIds(req, res, userId, googleId, facebookId)) {
         return {};
       } else {
-        return { errors: ['Something broke, please try to log in with different method.'] };
+        return { errors: [ERROR.SMTHG_BROKE_LOGIN] };
       }
     }
     return getLogInFunc(req, res, body)();
@@ -63,7 +64,7 @@ const getSignUpFunc = (req: any, res: any, body: any) => async () => {
     setUserCookie(req, res, signedUp);
   }
   return {
-    errors: signedUp ? [] : ['An error occurred during signing up, please try again later.'],
+    errors: signedUp ? [] : [ERROR.SIGN_UP_ERROR],
   };
 };
 

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
 import * as InputTypes from 'shared/constants/inputTypes';
+import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { LinkRow } from 'clientSrc/styles/blocks/auth';
@@ -10,10 +11,11 @@ import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 
 import { Input, Separator, PrimaryButton, FacebookLoginButton, GoogleLoginButton } from '../forms';
+import LocaleText from '../common/LocaleText';
 
 const inputConfig = [
-  { name: 'email', label: 'Email', type: InputTypes.EMAIL },
-  { name: 'password', label: 'Password', type: InputTypes.PASSWORD },
+  { name: 'email', message: FORM.EMAIL, type: InputTypes.EMAIL },
+  { name: 'password', message: FORM.PASSWORD, type: InputTypes.PASSWORD },
 ];
 
 export class LoginComponent extends Component {
@@ -22,7 +24,7 @@ export class LoginComponent extends Component {
 
     this.timer = null;
     this.state = {
-      submitText: 'Log In',
+      submitMessage: AUTH.LOG_IN,
       isFormValid: false,
       isFormSending: false,
       inputs: Object.fromEntries(inputConfig.map(input =>
@@ -40,15 +42,15 @@ export class LoginComponent extends Component {
 
   handleClick = handlerWrapper(() => {
     this.props.logIn(this.state.inputs);
-    this.setState({ isFormSending: true, submitText: 'Sending' });
+    this.setState({ isFormSending: true, submitMessage: COMMON.SENDING });
     this.timer = setTimeout(
-      () => this && this.setState({ isFormSending: false, submitText: 'Log In' }), SUBMIT_TIMEOUT
+      () => this && this.setState({ isFormSending: false, submitMessage: AUTH.LOG_IN }), SUBMIT_TIMEOUT
     );
   });
 
   render() {
     const { switchTab } = this.props;
-    const { submitText, isFormValid, isFormSending, errors } = this.state;
+    const { submitMessage, isFormValid, isFormSending, errors } = this.state;
 
     return (
       <form method="post">
@@ -56,20 +58,20 @@ export class LoginComponent extends Component {
           <Input
             name={input.name}
             key={input.name}
-            label={input.label}
+            message={input.message}
             type={input.type}
             hasError={!!errors[input.name]}
             updateInput={updateInput(this, input.name)}
           />
         ))}
         <PrimaryButton disabled={!isFormValid || isFormSending} clickHandler={this.handleClick}>
-          {submitText}
+          <LocaleText message={submitMessage} />
         </PrimaryButton>
-        <Separator text="or" />
+        <Separator message={COMMON.OR} />
         <FacebookLoginButton handleError={this.handleError} />
         <GoogleLoginButton handleError={this.handleError} />
         <LinkRow onClick={switchTab}>
-          Forgot Your Password?
+          <LocaleText message={AUTH.FORGOT_PASS} />
         </LinkRow>
       </form>
     );

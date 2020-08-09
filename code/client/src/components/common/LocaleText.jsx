@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 const LocaleTextComponent = ({ message, modifierFunc, applicationTexts }) => (
   <>
-    {modifierFunc(applicationTexts[message] || '')}
+    {modifierFunc(applicationTexts[message]) || message}
   </>
 );
 
@@ -15,7 +15,7 @@ LocaleTextComponent.defaultProps = ({
 LocaleTextComponent.propTypes = ({
   message: PropTypes.string.isRequired,
   modifierFunc: PropTypes.func,
-  applicationTexts: PropTypes.objectOf(PropTypes.string).isRequired,
+  applicationTexts: PropTypes.object.isRequired,
 });
 
 const mapStateToProps = ({ locale: { applicationTexts } }) => ({

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { COMMON } from 'shared/constants/localeMessages';
 import * as TYPES from 'shared/constants/inputTypes';
 import {
   InputSider, ShowPassWrapper, ShowPassButton, ErrorSpan,
@@ -24,7 +25,7 @@ const Sider = ({ inputTextLength, type, hasError, showPassword, updateInputState
             updateInputState({ showPassword: !showPassword });
           }}
           >
-            {showPassword ? 'Hide' : 'Show'}
+            {showPassword ? COMMON.HIDE : COMMON.SHOW}
           </ShowPassButton>
         </ShowPassWrapper>
       )
