@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import * as TYPES from 'shared/constants/inputTypes';
 import { isInputValid } from 'shared/helpers/validation';
-import { COMMON } from 'shared/constants/localeMessages';
 import {
   InputRow, InputField, InputWrapper, InputBox, InputLabel,
 } from 'clientSrc/styles/blocks/auth';
