@@ -1,9 +1,11 @@
 import { createReducer, combineReducers } from '@reduxjs/toolkit';
 
-import * as RootActions from '../actions/rootActions';
-import * as AuthActions from '../actions/authActions';
+import * as RootActions from 'clientSrc/actions/rootActions';
+import * as AuthActions from 'clientSrc/actions/authActions';
+
 import testReducer from './testReducer';
 import notificationsReducer from './notificationsReducer';
+import themeReducer from './themeReducer';
 
 const initialState = {
   debug: true,
@@ -30,5 +32,6 @@ const rootReducer = createReducer(initialState, {
 export default combineReducers({
   app: rootReducer,
   notifications: notificationsReducer,
+  theme: themeReducer,
   test: testReducer,
 });

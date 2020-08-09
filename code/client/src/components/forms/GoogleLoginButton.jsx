@@ -14,7 +14,7 @@ const GoogleButtonComponent = ({ handleError, logInGoogle }) => (
     render={({ onClick, disabled }) => (
       <PrimaryButton
         clickHandler={onClick}
-        background="#fafafa"
+        background="#FAFAFA"
         color="#262626"
         disabled={disabled}
         border

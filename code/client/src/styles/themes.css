@@ -1,30 +1,57 @@
 .light {
-  --cTheme: #fafafa;
+  --cThemeBack: #FAFAFA;
+  --cThemeFront: #FFF;
   --cFont: #262626;
+  --cBorder: #DBDBDB;
 
-  --cError: #ee2d3e;
-  --cMessage: #0095f6;
-  --cWarning: #f6a716;
-  --cSuccess: #aae770;
+  --cGreyPrimary: #898989;
+
+  --cRedPrimary: #EB4132;
+  --cRedSecondary: #CA1E0F;
+
+  --cBluePrimary: #4B8CF5;
+  --cBlueSecondary: #084BB7;
+
+  --cGreenPrimary: #35C15D;
+  --cGreenSecondary: #0B8D30;
+
+  --cYellowPrimary: #FFB700;
+  --cYellowSecondary: #AE7D00;
 }
 
 .dark {
-  --cTheme: #262626;
-  --cFont: #fafafa;
+  --cThemeBack: #262626;
+  --cThemeFront: #121212;
+  --cFont: #FAFAFA;
+  --cBorder: #585858;
 
-  --cError: #ee2d3e;
-  --cMessage: #0095f6;
-  --cWarning: #f6a716;
-  --cSuccess: #aae770;
+  --cGreyPrimary: #989898;
+
+  --cRedPrimary: #F47365;
+  --cRedSecondary: #C11300;
+
+  --cBluePrimary: #4EB9FF;
+  --cBlueSecondary: #006FB8;
+
+  --cGreenPrimary: #8AEE5B;
+  --cGreenSecondary: #51B920;
+
+  --cYellowPrimary: #FFD870;
+  --cYellowSecondary: #CF9500;
 }
 
 .light,
 .dark {
-  background-color: var(--cTheme);
+  --cBorderActive: #A8A8A8;
+
+  --cError: var(--cRedPrimary);
+  --cMessage: var(--cBluePrimary);
+  --cWarning: var(--cYellowPrimary);
+  --cSuccess: var(--cGreenPrimary);
 }
 
 .theme-transition,
 .theme-transition * {
   transition: all 500ms;
-  transition-delay: 0;
+  transition-delay: 0ms;
 }

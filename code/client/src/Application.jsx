@@ -3,13 +3,14 @@ import createSagaMiddleware from 'redux-saga';
 import { Provider } from 'react-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 
-import { PageWrapper, PageContent } from 'clientSrc/styles/blocks';
+import { PageContent } from 'clientSrc/styles/blocks';
 
 import rootReducer from './reducers/rootReducer';
 import { rootSaga } from './sagas/rootSaga';
-import { Notifications } from './components/notifications';
+import Notifications from './components/notifications';
 import Router from './components/Router';
-import { Footer } from './components/Footer';
+import PageWrapper from './components/PageWrapper';
+import Footer from './components/Footer';
 
 export default () => {
   const sagaMiddleware = createSagaMiddleware();
@@ -23,7 +24,7 @@ export default () => {
 
   return (
     <Provider store={store}>
-      <PageWrapper className="light">
+      <PageWrapper>
         <PageContent>
           <Notifications />
           <Router />

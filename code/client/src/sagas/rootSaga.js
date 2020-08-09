@@ -1,12 +1,13 @@
 import { all, call, fork, put } from 'redux-saga/effects';
 import { testSaga } from 'clientSrc/sagas/testSaga';
 import { authSaga } from 'clientSrc/sagas/authSaga';
-import * as RootActions from 'clientSrc/actions/rootActions';
+import { themeSaga } from 'clientSrc/sagas/themeSaga';
 import { loadState } from 'clientSrc/effects/rootEffects';
-
+import * as RootActions from 'clientSrc/actions/rootActions';
 
 export function* rootSaga() {
   yield all([
+    fork(themeSaga),
     fork(testSaga),
     fork(authSaga),
   ]);

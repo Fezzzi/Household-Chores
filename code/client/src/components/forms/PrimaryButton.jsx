@@ -12,8 +12,8 @@ export const PrimaryButton = ({ background, color, border, disabled, children, c
 );
 
 PrimaryButton.defaultProps = ({
-  background: '#0095f6',
-  color: '#fff',
+  background: 'var(--cBluePrimary)',
+  color: '#FAFAFA',
   border: false,
   disabled: false,
 });

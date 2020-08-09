@@ -2,7 +2,7 @@ import React from 'react';
 
 import { PageFooter, FooterWrapper, CopyrightRow } from 'clientSrc/styles/blocks/footer';
 
-export const Footer = () => (
+export default () => (
   <PageFooter>
     <FooterWrapper>
       <CopyrightRow>

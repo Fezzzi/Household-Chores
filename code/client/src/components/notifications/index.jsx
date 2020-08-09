@@ -8,7 +8,7 @@ import * as NotificationActions from 'clientSrc/actions/notificationActions';
 
 import { Notification } from './Notification';
 
-export const NotificationsComponent = props => {
+const NotificationsComponent = props => {
   const { errors, warnings, messages, successes, removeNotification } = props;
 
   const mapNotifications = (notifications, type, key) => notifications && notifications.map((msg, id) => (
@@ -44,4 +44,4 @@ const mapDispatchToProps = dispatch => ({
   removeNotification: notification => dispatch(NotificationActions.removeNotification(notification)),
 });
 
-export const Notifications = connect(mapStateToProps, mapDispatchToProps)(NotificationsComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationsComponent);
