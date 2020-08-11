@@ -1,7 +1,6 @@
 const path = require('path');
 
-module.exports = ({
-  context: path.resolve(__dirname, '../code/client'),
+module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.json'],
     alias: {
@@ -11,4 +10,4 @@ module.exports = ({
       '~': path.resolve(__dirname, '..'),
     },
   },
-});
+};

@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { AVAILABLE_LOCALES, DEFAULT_LOCALE } from 'clientSrc/constants/locale';
+import { AVAILABLE_LOCALES, DEFAULT_LOCALE } from 'shared/constants/locale';
 import * as LocaleActions from 'clientSrc/actions/localeActions';
 import applicationTexts from '~/code/client/locales';
 

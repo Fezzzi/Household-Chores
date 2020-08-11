@@ -3,7 +3,6 @@ import { createReducer, combineReducers } from '@reduxjs/toolkit';
 import * as RootActions from 'clientSrc/actions/rootActions';
 import * as AuthActions from 'clientSrc/actions/authActions';
 
-import testReducer from './testReducer';
 import notificationsReducer from './notificationsReducer';
 import themeReducer from './themeReducer';
 import localeReducer from './localeReducer';
@@ -35,5 +34,4 @@ export default combineReducers({
   notifications: notificationsReducer,
   theme: themeReducer,
   locale: localeReducer,
-  test: testReducer,
 });

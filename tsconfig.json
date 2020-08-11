@@ -9,6 +9,7 @@
     },
     "jsx": "react",
     "target": "es6",
+    "module": "commonjs",
     "sourceMap": true,
     "experimentalDecorators": true,
     "types": [

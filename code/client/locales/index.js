@@ -1,4 +1,4 @@
-import { CODES } from 'clientSrc/constants/locale';
+import { CODES } from 'shared/constants/locale';
 
 import textsUS from './en_US';
 import textsCZ from './cs_CZ';

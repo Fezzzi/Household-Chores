@@ -3,16 +3,18 @@ const dotenv = require('dotenv').config();
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 
-const webpackResolver = require('./webpackResolver.config');
+const webpackAliases = require('./webpack-aliases.config');
 
 module.exports = {
   // Enable sourcemaps for debugging webpack's output.
   devtool: 'source-map',
 
-  ...webpackResolver,
+  context: path.resolve(__dirname, '../code/client'),
+  ...webpackAliases,
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, '../dist'),
+    publicPath: '/',
   },
   entry: {
     js: ['babel-polyfill', 'clientSrc/index.jsx'],

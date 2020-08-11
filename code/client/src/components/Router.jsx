@@ -3,14 +3,22 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
+import { RESOURCES_PREFIX } from 'shared/constants/api';
 import * as TABS from 'clientSrc/constants/authTabs';
 
 import Auth from './Auth';
 import Home from './Home';
+import Resource from './Resource';
 
 const RouterComponent = ({ loggedUser }) => (
   <Router>
     <Switch>
+      <Route
+        path={`/${RESOURCES_PREFIX}`}
+        render={({ match: { url } }) => (
+          <Route path={`${url}/:resourceId`} component={Resource} />
+        )}
+      />
       {!loggedUser
         ? (
           <>

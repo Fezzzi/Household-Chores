@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 
-import { LABELS } from 'clientSrc/constants/locale';
+import { LABELS } from 'shared/constants/locale';
 import { FLAGS } from 'clientSrc/constants/localeFlags';
 import * as LocaleActions from 'clientSrc/actions/localeActions';
 import { IconButton, LocaleIcon, LocaleLabel, LocaleSelector, LocaleLine } from 'clientSrc/styles/blocks/navbar';

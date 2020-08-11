@@ -4,6 +4,7 @@ import { PropTypes } from 'prop-types';
 
 import * as InputTypes from 'shared/constants/inputTypes';
 import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages';
+import { RESOURCES_PREFIX, RESOURCE_TAC } from 'shared/constants/api';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { MessageBlock, MessageBlockLink } from 'clientSrc/styles/blocks/auth';
@@ -72,7 +73,7 @@ export class SignupComponent extends Component {
         </PrimaryButton>
         <MessageBlock>
           <LocaleText message={AUTH.TERMS_AGREEMENT} />
-          <MessageBlockLink target="_blank" href="">
+          <MessageBlockLink target="_self" href={`/${RESOURCES_PREFIX}/${RESOURCE_TAC}`}>
             <LocaleText message={COMMON.TERMS_AND_CONDITIONS} />
           </MessageBlockLink>.
         </MessageBlock>

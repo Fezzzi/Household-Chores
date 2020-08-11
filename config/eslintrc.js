@@ -1,3 +1,5 @@
+const webpackAliases = require('./webpack-aliases.config');
+
 const tsRules = {
   '@typescript-eslint/ban-types': 1,
   '@typescript-eslint/no-namespace': 1,
@@ -94,6 +96,7 @@ module.exports = {
     }],
     'react/no-access-state-in-setstate': 2,
     'react/no-multi-comp': 1,
+    'react/no-danger': 0,
     'react/sort-comp': 0,
     'react/jsx-no-bind': 0,
     'react/button-has-type': 0,
@@ -118,7 +121,7 @@ module.exports = {
     },
     'import/resolver': {
       webpack: {
-        config: 'config/webpackResolver.config.js',
+        config: webpackAliases,
       },
     },
   },
