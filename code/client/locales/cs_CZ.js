@@ -1,4 +1,5 @@
-import { AUTH, COMMON, ERROR, FORM, SUCCESS } from 'shared/constants/localeMessages';
+import { AUTH, COMMON, ERROR, FORM, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
+import * as SettingTypes from 'shared/constants/settingTypes';
 
 export default {
   [AUTH.BACK_TO_LOGIN]: 'Zpět na přihlášení',
@@ -37,6 +38,12 @@ export default {
   [FORM.EMAIL]: 'Email',
   [FORM.NICKNAME]: 'Jméno',
   [FORM.PASSWORD]: 'Heslo',
+
+  [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]]: 'Profil',
+  [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.GROUPS}`]]: 'Skupiny',
+  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.GENERAL}`]]: 'Obecné',
+  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NOTIFICATIONS}`]]: 'Notifikace',
+  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.CONNECTIONS}`]]: 'Spojení',
 
   [SUCCESS.RESET_LINK]: 'Link pro obnovu hesla byl úspěšně zaslán na Vaši emailovou adresu.',
 };

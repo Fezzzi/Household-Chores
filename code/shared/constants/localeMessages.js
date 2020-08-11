@@ -1,3 +1,5 @@
+import * as SettingTypes from 'shared/constants/settingTypes';
+
 export const AUTH = {
   BACK_TO_LOGIN: 'auth.backToLogin',
   CREATE_ACCOUNT: 'auth.createAccount',
@@ -41,6 +43,15 @@ export const FORM = {
   EMAIL: 'form.email',
   NICKNAME: 'form.nickname',
   PASSWORD: 'form.password',
+};
+
+export const SETTINGS = {
+  [`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]: 'settings.categoryProfile',
+  [`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.GROUPS}`]: 'settings.categoryGroups',
+
+  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.GENERAL}`]: 'settings.tabGeneral',
+  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NOTIFICATIONS}`]: 'settings.tabNotifications',
+  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.CONNECTIONS}`]: 'settings.tabConnections',
 };
 
 export const SUCCESS = {

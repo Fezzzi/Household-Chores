@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
+import * as SettingTypes from 'shared/constants/settingTypes';
 import { RESOURCES_PREFIX, SETTINGS_PREFIX } from 'shared/constants/api';
 import * as TABS from 'clientSrc/constants/authTabs';
 
@@ -14,15 +15,21 @@ import Settings from './settings';
 const RouterComponent = ({ loggedUser }) => (
   <Router>
     <Switch>
+      /* STATIC RESOURCES ROUTING */
       <Route
         path={`/${RESOURCES_PREFIX}`}
         render={({ match: { url } }) => (
-          <Route path={`${url}/:resourceId`} component={Resource} />
+          <>
+            <Route path={`${url}/:resourceId`} component={Resource} />
+            <Route exact path={`${url}`}>
+              <Redirect to={{ pathname: '/' }} />
+            </Route>
+          </>
         )}
       />
       {!loggedUser
         ? (
-          <>
+          <Switch>
             <Route
               path={`/${TABS.LOGIN_TAB}`}
               render={props => <Auth {...props} tab={TABS.LOGIN_TAB} />}
@@ -38,16 +45,29 @@ const RouterComponent = ({ loggedUser }) => (
             <Route path="/*">
               <Redirect to={`/${TABS.LOGIN_TAB}`} />
             </Route>
-          </>
+          </Switch>
         )
         : (
-          <>
-            <Route path={`/${SETTINGS_PREFIX}`} component={Settings} />
+          <Switch>
+            /* SETTINGS ROUTING */
+            <Route path={`/${SETTINGS_PREFIX}`} render={({ match: { url } }) => (
+              <>
+                {Object.values(SettingTypes.CATEGORIES).map(category => (
+                  <Route path={`${url}/${category}`} key={`settings-${category}`} render={props =>
+                    <Settings {...props} categoryId={category} />
+                  } />
+                ))}
+                <Route exact path={`${url}`} render={props =>
+                  <Settings {...props} category={SettingTypes.CATEGORIES.PROFILE} />
+                } />
+              </>
+            )} />
+
             <Route exact path="/" component={Home} />
             <Route path="/*">
               <Redirect to={{ pathname: '/' }} />
             </Route>
-          </>
+          </Switch>
         )}
     </Switch>
   </Router>

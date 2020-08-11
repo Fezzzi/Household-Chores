@@ -1,4 +1,5 @@
-import { AUTH, COMMON, ERROR, FORM, SUCCESS } from 'shared/constants/localeMessages';
+import { AUTH, COMMON, ERROR, FORM, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
+import * as SettingTypes from 'shared/constants/settingTypes';
 
 export default {
   [AUTH.BACK_TO_LOGIN]: 'Back to Login',
@@ -37,6 +38,12 @@ export default {
   [FORM.EMAIL]: 'Email',
   [FORM.NICKNAME]: 'Nickname',
   [FORM.PASSWORD]: 'Password',
+
+  [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]]: 'Profile',
+  [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.GROUPS}`]]: 'Groups',
+  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.GENERAL}`]]: 'General',
+  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NOTIFICATIONS}`]]: 'Notifications',
+  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.CONNECTIONS}`]]: 'Connections',
 
   [SUCCESS.RESET_LINK]: 'A reset link has been sent to your email address.',
 };
