@@ -7,9 +7,9 @@ import * as SettingTypes from 'shared/constants/settingTypes';
 import { RESOURCES_PREFIX, SETTINGS_PREFIX } from 'shared/constants/api';
 import * as TABS from 'clientSrc/constants/authTabs';
 
-import Auth from './Auth';
 import Home from './Home';
 import Resource from './Resource';
+import Auth from './auth';
 import Settings from './settings';
 
 const RouterComponent = ({ loggedUser }) => (
