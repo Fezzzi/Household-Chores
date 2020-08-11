@@ -84,6 +84,7 @@
     "nodemailer": "^6.4.8",
     "react-scripts": "^3.4.1",
     "ts-loader": "^8.0.2",
+    "ts-node": "^8.10.2",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.8.3",
     "webpack-node-externals": "^2.5.1"
