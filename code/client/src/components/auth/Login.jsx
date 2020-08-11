@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
 import * as InputTypes from 'shared/constants/inputTypes';
+import * as NotificationTypes from 'shared/constants/notificationTypes';
 import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
@@ -38,7 +39,7 @@ export class LoginComponent extends Component {
     clearTimeout(this.timer);
   }
 
-  handleError = error => this.props.addNotification('errors', error.message);
+  handleError = error => this.props.addNotification(NotificationTypes.ERRORS, error.message);
 
   handleClick = handlerWrapper(() => {
     this.props.logIn(this.state.inputs);

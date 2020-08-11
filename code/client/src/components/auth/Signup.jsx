@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
 import * as InputTypes from 'shared/constants/inputTypes';
+import * as NotificationTypes from 'shared/constants/notificationTypes';
 import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages';
 import { RESOURCES_PREFIX, RESOURCE_TAC } from 'shared/constants/api';
 import * as AuthActions from 'clientSrc/actions/authActions';
@@ -40,7 +41,7 @@ export class SignupComponent extends Component {
     clearTimeout(this.timer);
   }
 
-  handleError = error => this.props.addNotification('errors', error.message);
+  handleError = error => this.props.addNotification(NotificationTypes.ERRORS, error.message);
 
   handleClick = handlerWrapper(() => {
     this.props.signUp(this.state.inputs);

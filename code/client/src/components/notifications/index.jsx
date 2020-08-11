@@ -2,28 +2,28 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
+import * as NotificationTypes from 'shared/constants/notificationTypes';
 import { NotificationsBlock } from 'clientSrc/styles/blocks/notifications';
-import * as NotificationTypes from 'clientSrc/constants/notificationTypes';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 
 import { Notification } from './Notification';
 
 const NotificationsComponent = ({ errors, warnings, messages, successes, removeNotification }) => {
-  const mapNotifications = (notifications, type, key) => notifications && notifications.map((msg, id) => (
+  const mapNotifications = (notifications, type) => notifications && notifications.map((msg, id) => (
     <Notification
       type={type}
       message={msg}
-      close={() => removeNotification({ key, id })}
-      key={`error-${id}`}
+      close={() => removeNotification({ type, id })}
+      key={`${type}-${id}`}
     />
   ));
 
   return (
     <NotificationsBlock>
-      {mapNotifications(errors, NotificationTypes.ERROR, 'errors')}
-      {mapNotifications(warnings, NotificationTypes.WARNING, 'warnings')}
-      {mapNotifications(messages, NotificationTypes.MESSAGE, 'messages')}
-      {mapNotifications(successes, NotificationTypes.SUCCESS, 'successes')}
+      {mapNotifications(errors, NotificationTypes.ERRORS)}
+      {mapNotifications(warnings, NotificationTypes.WARNINGS)}
+      {mapNotifications(messages, NotificationTypes.MESSAGES)}
+      {mapNotifications(successes, NotificationTypes.SUCCESSES)}
     </NotificationsBlock>
   );
 };

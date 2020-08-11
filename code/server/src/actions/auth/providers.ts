@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import base64url from 'base64url';
 import dotenv from 'dotenv';
 
+import * as NotificationTypes from 'shared/constants/notificationTypes';
 import { ERROR } from 'shared/constants/localeMessages';
 import { findFacebookUser, findGoogleUser, assignUserProvider, updateLoginTime } from 'serverSrc/database/models/users';
 import { setUserCookie } from 'serverSrc/helpers/auth';
@@ -58,11 +59,15 @@ export const handleProvidersLogIn = async (
   facebook: any
 ): Promise<object|false> => {
   if (googleId === -1) {
-    return { errors: [ERROR.INVALID_GOOGLE_DATA] };
+    return {
+      [NotificationTypes.ERRORS]: [ERROR.INVALID_GOOGLE_DATA],
+    };
   }
 
   if (facebookId === -1) {
-    return { errors: [ERROR.INVALID_FACEBOOK_DATA] };
+    return {
+      [NotificationTypes.ERRORS]: [ERROR.INVALID_FACEBOOK_DATA],
+    };
   }
 
   if (
