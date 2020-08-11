@@ -14,7 +14,7 @@ const {
 
 export const findUser = async (email: string): Promise<number> => {
   const result = await database.query(
-    `SELECT ${tabID} FROM ${tName} WHERE ${tabEmail} = '${email}'`
+    `SELECT ${tabID} FROM ${tName} WHERE ${tabEmail}=?`, [email]
   );
 
   return result && result.length
@@ -24,7 +24,7 @@ export const findUser = async (email: string): Promise<number> => {
 
 export const findGoogleUser = async (googleId: string): Promise<number> => {
   const result = await database.query(
-    `SELECT ${tabID} FROM ${tName} WHERE ${tabGoogleID} = '${googleId}'`
+    `SELECT ${tabID} FROM ${tName} WHERE ${tabGoogleID}=?`, [googleId]
   );
 
   return result && result.length
@@ -34,7 +34,7 @@ export const findGoogleUser = async (googleId: string): Promise<number> => {
 
 export const findFacebookUser = async (facebookId: string): Promise<number> => {
   const result = await database.query(
-    `SELECT ${tabID} FROM ${tName} WHERE ${tabFacebookID} = '${facebookId}'`
+    `SELECT ${tabID} FROM ${tName} WHERE ${tabFacebookID}=?`, [facebookId]
   );
 
   return result && result.length
@@ -44,7 +44,7 @@ export const findFacebookUser = async (facebookId: string): Promise<number> => {
 
 export const logInUser = async (email: string, password: string): Promise<number> => {
   const result = await database.query(
-    `SELECT ${tabPassword}, ${tabID} FROM ${tName} WHERE ${tabEmail} = '${email}'`
+    `SELECT ${tabPassword}, ${tabID} FROM ${tName} WHERE ${tabEmail}=?`, [email]
   );
 
   const validPass = result && result.length && await checkPass(password, result[0][tabPassword]);
@@ -58,7 +58,7 @@ export const logInUser = async (email: string, password: string): Promise<number
 };
 
 export const updateLoginTime = (userId: number) =>
-  database.query(`UPDATE ${tName} SET ${tabDateLastActive}=NOW() WHERE ${tabID}=${userId}`);
+  database.query(`UPDATE ${tName} SET ${tabDateLastActive}=NOW() WHERE ${tabID}=?`, [userId]);
 
 export const SignUpUser = async (
   email: string,
@@ -73,15 +73,15 @@ export const SignUpUser = async (
   return database.query(`
     INSERT INTO ${tName} (
       ${tabEmail}, ${tabNickname}, ${tabPassword}, ${tabPhoto}, ${tabGoogleID}, ${tabFacebookID}, ${tabDateRegistered}, ${tabDateLastActive}
-    ) VALUES ('${email}', '${nickname}', '${pass}', ${photo ? `'${photo}'` : photo}, ${googleId}, ${facebookId}, NOW(), NOW())
-  `, false);
+    ) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
+  `, [email, nickname, pass, photo, googleId, facebookId], false);
 };
 
 export const assignUserProvider = async (userId: number, googleId: string, facebookId: string): Promise<boolean> => {
   if (googleId !== null) {
-    return !!database.query(`UPDATE ${tName} SET ${tabGoogleID}='${googleId}' WHERE ${tabID}=${userId}`);
+    return !!database.query(`UPDATE ${tName} SET ${tabGoogleID}=? WHERE ${tabID}=?`, [googleId, userId]);
   } else if (facebookId !== null) {
-    return !!database.query(`UPDATE ${tName} SET ${tabFacebookID}='${facebookId}' WHERE ${tabID}=${userId}`);
+    return !!database.query(`UPDATE ${tName} SET ${tabFacebookID}=? WHERE ${tabID}=?`, [facebookId, userId]);
   }
   return false;
 };
