@@ -7,9 +7,11 @@ import LocaleText from '../common/LocaleText';
 export const Separator = ({ message }) => (
   <SeparatorWrapper>
     <SeparatorLine />
-    <SeparatorText>
-      <LocaleText message={message} />
-    </SeparatorText>
+    {message && (
+      <SeparatorText>
+        <LocaleText message={message} />
+      </SeparatorText>
+    )}
     <SeparatorLine />
   </SeparatorWrapper>
 );

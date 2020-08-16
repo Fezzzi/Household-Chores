@@ -43,6 +43,7 @@ export const FORM = {
   EMAIL: 'form.email',
   NICKNAME: 'form.nickname',
   PASSWORD: 'form.password',
+  PHOTO: 'form.photo',
 };
 
 export const SETTINGS = {

@@ -38,6 +38,7 @@ export default {
   [FORM.EMAIL]: 'Email',
   [FORM.NICKNAME]: 'Nickname',
   [FORM.PASSWORD]: 'Password',
+  [FORM.PHOTO]: 'Photo',
 
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]]: 'Profile',
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.GROUPS}`]]: 'Groups',

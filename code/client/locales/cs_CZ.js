@@ -38,6 +38,7 @@ export default {
   [FORM.EMAIL]: 'Email',
   [FORM.NICKNAME]: 'Jméno',
   [FORM.PASSWORD]: 'Heslo',
+  [FORM.PHOTO]: 'Obrázek',
 
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]]: 'Profil',
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.GROUPS}`]]: 'Skupiny',
