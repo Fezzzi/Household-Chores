@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { Check } from '@material-ui/icons';
 
 import {
-  InputRow, SwitchInputWrapper, SwitchInputBox, SwitchInputField, InputLabel, SwitchInputLabel, FixedInputRow,
+  InputRow, SwitchInputWrapper, SwitchInputBox, SwitchInputField,
+  InputLabel, SwitchInputLabel, FixedInputBlock,
 } from 'clientSrc/styles/blocks/form';
 
 import LocaleText from '../../common/LocaleText';
@@ -31,11 +32,11 @@ class SwitchInputComponent extends Component {
   };
 
   getInputBody() {
-    const {name, label, hasError} = this.props;
+    const {name, label, fixedProps, hasError} = this.props;
     const {isOn, inputActive} = this.state;
 
     return (
-      <>
+      <FixedInputBlock {...fixedProps}>
         <InputLabel>
           <LocaleText message={label}/>
         </InputLabel>
@@ -54,21 +55,21 @@ class SwitchInputComponent extends Component {
             />
           </SwitchInputBox>
         </SwitchInputWrapper>
-      </>
+      </FixedInputBlock>
     );
   }
 
   render() {
-    const { fixed, half } = this.props;
+    const { inline } = this.props;
     const body = this.getInputBody();
 
-    return (
-      <InputRow>
-        {fixed
-          ? <FixedInputRow half={half}>{body}</FixedInputRow>
-          : body}
-      </InputRow>
-    );
+    return inline
+      ? body
+      : (
+        <InputRow>
+          {body}
+        </InputRow>
+      );
   }
 }
 
@@ -76,8 +77,8 @@ SwitchInputComponent.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  fixed: PropTypes.bool,
-  half: PropTypes.bool,
+  inline: PropTypes.bool,
+  fixedProps: PropTypes.object,
   hasError: PropTypes.bool.isRequired,
   updateInput: PropTypes.func,
 };

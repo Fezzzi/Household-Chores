@@ -7,7 +7,7 @@ import * as TYPES from 'shared/constants/inputTypes';
 import { isInputValid } from 'shared/helpers/validation';
 import {
   InputRow, TextInputField, InputWrapper, TextInputBox, TextInputLabel,
-  InputPlaceholder, ToggleInputIcon, InputLabel,
+  InputPlaceholder, ToggleInputIcon, InputLabel, FixedInputBlock,
 } from 'clientSrc/styles/blocks/form';
 
 import TextInputSider from './TextInputSider';
@@ -34,12 +34,12 @@ class TextInput extends Component {
     updateInput(isInputValid(type, e.target.value), e.target.value);
   };
 
-  render() {
+  getInputBody() {
     const { name, message, label, placeholder, type, hasError } = this.props;
     const { inputTextLength, showPassword, inputActive, inputShown } = this.state;
 
     return (
-      <InputRow>
+      <>
         {inputShown && (
           <InputWrapper active={inputActive}>
             <TextInputBox htmlFor={name}>
@@ -47,7 +47,7 @@ class TextInput extends Component {
                 <LocaleText message={message} />
               </TextInputLabel>
               <TextInputField
-                name={this.name}
+                name={name}
                 type={type === TYPES.PASSWORD && showPassword ? TYPES.TEXT : type}
                 onChange={this.handleInputChange}
                 onFocus={() => this.setState({ inputActive: true })}
@@ -82,8 +82,24 @@ class TextInput extends Component {
             </InputPlaceholder>
           </>
         )}
-      </InputRow>
+      </>
     );
+  }
+
+  render() {
+    const { inline, fixedProps } = this.props;
+    const body = this.getInputBody();
+
+    return inline
+      ? (
+        <FixedInputBlock {...fixedProps}>
+          {body}
+        </FixedInputBlock>
+      ) : (
+        <InputRow>
+          {body}
+        </InputRow>
+      );
   }
 }
 
@@ -91,6 +107,8 @@ TextInput.propTypes = {
   name: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
   label: PropTypes.string,
+  inline: PropTypes.bool,
+  fixedProps: PropTypes.object,
   placeholder: PropTypes.string,
   type: PropTypes.string.isRequired,
   hasError: PropTypes.bool.isRequired,

@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  InputRow, InputLabel, FixedInputRow,
+  InputRow, InputLabel, FixedInputBlock,
 } from 'clientSrc/styles/blocks/form';
 
 import LocaleText from '../../common/LocaleText';
 
-const getInputBody = (label, body) => (
+const getBody = (label, body) => (
   <>
     {label && (
       <InputLabel>
@@ -18,19 +18,25 @@ const getInputBody = (label, body) => (
   </>
 );
 
-const CustomInput = ({ label, body, fixed, half }) => (
-  <InputRow>
-    {fixed
-      ? <FixedInputRow half={half}>{getInputBody(label, body)}</FixedInputRow>
-      : getInputBody(label, body)}
-  </InputRow>
+const CustomInput = ({ inline, label, body, fixedProps }) => (
+  <>
+    {inline ? (
+      <FixedInputBlock {...fixedProps}>
+        {getBody(label, body)}
+      </FixedInputBlock>
+    ) : (
+      <InputRow>
+        {getBody(label, body)}
+      </InputRow>
+    )}
+  </>
 );
 
 CustomInput.propTypes = {
   label: PropTypes.string,
   body: PropTypes.element.isRequired,
-  fixed: PropTypes.bool,
-  half: PropTypes.bool,
+  inline: PropTypes.bool,
+  fixedProps: PropTypes.object,
 };
 
 export default CustomInput;

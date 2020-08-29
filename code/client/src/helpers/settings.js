@@ -47,9 +47,26 @@ class SettingsForm extends Component {
 
   isFormValidFunc = inputs => Object.values(inputs).every(input => (input.value && input.valid) || !input.value);
 
+  renderFormInput = ({name, dataKey, ...props}, key, inline = false) => {
+    const { data } = this.props;
+    const { errors } = this.state;
+
+    return (
+      <Input
+        key={key}
+        name={name}
+        placeholder={(dataKey && data[dataKey]) || ''}
+        inline={inline}
+        hasError={!!errors[name]}
+        updateInput={updateInput(this.setState.bind(this), name, this.isFormValidFunc)}
+        {...props}
+      />
+    );
+  };
+
   render() {
-    const { settings, data } = this.props;
-    const { errors, submitMessage, isFormValid, isFormSending, isFormChanged } = this.state;
+    const { settings } = this.props;
+    const { submitMessage, isFormValid, isFormSending, isFormChanged } = this.state;
 
     return (
       <>
@@ -59,18 +76,22 @@ class SettingsForm extends Component {
               ? <Separator/>
               : ''
             }
-            {group.map(({name, dataKey, ...props}, configKey) => (
-              <Fragment key={`${groupKey}-${configKey}`}>
-                <Input
-                  key={`${groupKey}-${configKey}`}
-                  name={name}
-                  placeholder={(dataKey && data[dataKey]) || ''}
-                  hasError={!!errors[name]}
-                  updateInput={updateInput(this.setState.bind(this), name, this.isFormValidFunc)}
-                  {...props}
-                />
-              </Fragment>
-            ))}
+            {group.map((inputRow, configKey) => {
+              const key = `${groupKey}-${configKey}`;
+
+              if (Array.isArray(inputRow)) {
+                return (
+                  <InputRow key={key}>
+                    {inputRow.map((input, inputKey) => (
+                      <Fragment key={`${key}-${inputKey}`}>
+                        {this.renderFormInput(input, `${key}-${inputKey}`, true)}
+                      </Fragment>
+                    ))}
+                  </InputRow>
+                );
+              }
+              return this.renderFormInput(inputRow, key);
+            })}
           </Fragment>
         ))}
         {isFormChanged && (

@@ -10,13 +10,14 @@ export const InputRow = styled.div`
   max-width: 650px;
 `;
 
-export const FixedInputRow = styled.div`
-  margin-right: 40px;
+export const FixedInputBlock = styled.div`
+  margin-right: 20px;
   position: relative;
   min-height: 38px;
-  max-width: ${props => props.half ? 180 : 350}px;
+  max-width: ${props => props.maxWidth ?? 400}px;
   width: fill-available;
   display: inline-block;
+  vertical-align: top;
 `;
 
 export const InputWrapper = styled.div`
@@ -82,6 +83,7 @@ export const SwitchInputBox = styled.label`
   flex: 1 0 0;
   display: flex;
   color: var(--cGreenPrimary);
+  background-color: var(--cThemeBack);
   
   &:hover {
     color: var(--cGreenSecondary);

@@ -6,6 +6,8 @@ import { FORM } from 'shared/constants/localeMessages';
 import { renderFormFromConfig } from 'clientSrc/helpers/settings';
 import { ThemeSwitch, LocaleSwitch } from 'clientSrc/components/forms';
 
+const HALF_WIDTH = 190;
+
 const settings = {
   PROFILE: {
     GENERAL: [
@@ -41,50 +43,72 @@ const settings = {
           type: InputTypes.PASSWORD,
         },
       ], [
-        {
-          name: 'language',
-          label: FORM.LANGUAGE,
-          type: InputTypes.CUSTOM,
-          body: <LocaleSwitch />,
-          fixed: true,
-          half: true,
-        }, {
-          name: 'theme',
-          label: FORM.THEME,
-          type: InputTypes.CUSTOM,
-          body: <ThemeSwitch />,
-          fixed: true,
-          half: true,
-        },
+        [
+          {
+            name: 'language',
+            label: FORM.LANGUAGE,
+            type: InputTypes.CUSTOM,
+            body: <LocaleSwitch />,
+            fixedProps: { maxWidth: HALF_WIDTH },
+          }, {
+            name: 'theme',
+            label: FORM.THEME,
+            type: InputTypes.CUSTOM,
+            body: <ThemeSwitch />,
+            fixedProps: { maxWidth: HALF_WIDTH },
+          },
+        ],
       ],
     ],
     NOTIFICATIONS: [
       [
-        { name: 'notifications', label: FORM.NOTIFICATIONS, type: InputTypes.SWITCH, dataKey: 'notifications', fixed: true },
+        {
+          name: 'notifications',
+          label: FORM.NOTIFICATIONS,
+          type: InputTypes.SWITCH,
+          dataKey: 'notifications'
+        },
       ],
     ],
     CONNECTIONS: [
       [
-        { name: 'notifications', label: FORM.NOTIFICATIONS, type: InputTypes.SWITCH, dataKey: 'notifications', fixed: true, half: true  },
-        { name: 'notifications', label: FORM.NOTIFICATIONS, type: InputTypes.SWITCH, dataKey: 'notifications', fixed: true, half: true  },
+        [
+          {
+            name: 'notifications',
+            label: FORM.NOTIFICATIONS,
+            type: InputTypes.SWITCH,
+            dataKey: 'notifications',
+            fixedProps: { maxWidth: HALF_WIDTH },
+          }, {
+            name: 'notifications',
+            label: FORM.NOTIFICATIONS,
+            type: InputTypes.SWITCH,
+            dataKey: 'notifications',
+            fixedProps: { maxWidth: HALF_WIDTH },
+          },
+        ],
       ],
       [
-        { name: 'old-password', message: FORM.OLD_PASSWORD, type: InputTypes.PASSWORD },
-        { name: 'new-password', message: FORM.NEW_PASSWORD, type: InputTypes.PASSWORD },
-      ],
-      [
-        { name: 'language', label: FORM.LANGUAGE, type: InputTypes.CUSTOM, body: <LocaleSwitch />, fixed: true, half: true },
-        { name: 'theme', label: FORM.THEME, type: InputTypes.CUSTOM, body: <ThemeSwitch />, fixed: true, half: true },
+        [
+          {
+            name: 'old-password',
+            message: FORM.OLD_PASSWORD,
+            type: InputTypes.PASSWORD,
+            fixedProps: { maxWidth: HALF_WIDTH },
+          },
+          {
+            name: 'new-password',
+            message: FORM.NEW_PASSWORD,
+            type: InputTypes.PASSWORD,
+            fixedProps: { maxWidth: HALF_WIDTH },
+          },
+        ],
       ],
     ],
   },
   GROUPS: {
-    GENERAL: [
-      'd'
-    ],
-    _GROUP: [
-      'e'
-    ],
+    GENERAL: [],
+    _GROUP: [],
   },
 };
 
