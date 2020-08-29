@@ -5,9 +5,9 @@ import { PropTypes } from 'prop-types';
 
 import { AUTH } from 'shared/constants/localeMessages';
 import * as AuthActions from 'clientSrc/actions/authActions';
-import { GoogleIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/blocks/auth';
+import { GoogleIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/blocks/form';
 
-import { PrimaryButton } from './PrimaryButton';
+import { PrimaryButton } from '../forms/PrimaryButton';
 import LocaleText from '../common/LocaleText';
 
 const GoogleButtonComponent = ({ handleError, logInGoogle }) => (
@@ -17,6 +17,7 @@ const GoogleButtonComponent = ({ handleError, logInGoogle }) => (
       <PrimaryButton
         clickHandler={onClick}
         background="#FAFAFA"
+        backgroundHover="#E7E7E7"
         color="#262626"
         disabled={disabled}
         border
@@ -43,4 +44,4 @@ const mapDispatchToProps = dispatch => ({
   logInGoogle: data => dispatch(AuthActions.logInGoogle(data)),
 });
 
-export const GoogleLoginButton = connect(null, mapDispatchToProps)(GoogleButtonComponent);
+export default connect(null, mapDispatchToProps)(GoogleButtonComponent);

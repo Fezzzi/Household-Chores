@@ -1,12 +1,14 @@
+import Input from './Input';
+import TextInput from './inputs/TextInput';
+import PhotoInput from './inputs/PhotoInput';
+import SwitchInput from './inputs/SwitchInput';
+import CustomInput from './inputs/CustomInput';
+import ThemeSwitch from './inputs/ThemeSwitch';
+import LocaleSwitch from './inputs/LocaleSwitch';
 import { PrimaryButton } from './PrimaryButton';
-import { FacebookLoginButton } from './FacebookLoginButton';
-import { GoogleLoginButton } from './GoogleLoginButton';
 import { Separator } from './Separator';
-import { BottomBlock } from './BottomBlock';
-import { Input } from './Input';
 
 export {
-  PrimaryButton, FacebookLoginButton, GoogleLoginButton,
-  Input,
-  Separator, BottomBlock,
+  Input, PrimaryButton, TextInput, PhotoInput, SwitchInput, CustomInput, Separator,
+  ThemeSwitch, LocaleSwitch,
 };

@@ -27,6 +27,7 @@ export const COMMON = {
 export const ERROR = {
   CONNECTION_ERROR: 'error.connectionError',
   GOOGLE_API_INIT_ERROR: 'error.googleAPIInitError',
+  IMAGE_INVALID: 'error.imageInvalid',
   INCORRECT_PASS: 'error.incorrectPass',
   INVALID_DATA: 'error.invalidData',
   INVALID_FACEBOOK_DATA: 'error.invalidFacebookData',
@@ -40,10 +41,19 @@ export const ERROR = {
 };
 
 export const FORM = {
+  DROP_PHOTO_HERE: 'form.dropPhotoHere',
   EMAIL: 'form.email',
+  LANGUAGE: 'form.language',
+  NEW_EMAIL: 'form.newEmail',
   NICKNAME: 'form.nickname',
+  NEW_NICKNAME: 'form.newNickname',
+  NOTIFICATIONS: 'form.notifications',
   PASSWORD: 'form.password',
-  PHOTO: 'form.photo',
+  THEME: 'form.theme',
+  OLD_PASSWORD: 'form.oldPassword',
+  NEW_PASSWORD: 'form.newPassword',
+  SELECT_PHOTO: 'form.selectPhoto',
+  SAVE: 'form.save',
 };
 
 export const SETTINGS = {

@@ -6,7 +6,7 @@ import { Brightness6 } from '@material-ui/icons';
 
 import * as ThemeActions from 'clientSrc/actions/themeActions';
 import * as THEMES from 'clientSrc/constants/themeTypes';
-import { IconButton } from 'clientSrc/styles/blocks/navbar';
+import { IconButtonWrapper, IconButton } from 'clientSrc/styles/blocks/settings';
 
 const reverseColorStyle = {
   position: 'absolute',
@@ -14,14 +14,16 @@ const reverseColorStyle = {
 };
 
 const ThemeSwitchComponent = ({ theme, switchTheme }) => (
-  <IconButton onClick={() => switchTheme(theme)}>
-    <Zoom in={theme === THEMES.DARK_THEME} timeout={300} style={reverseColorStyle}>
-      <Brightness6 />
-    </Zoom>
-    <Zoom in={theme !== THEMES.DARK_THEME} timeout={300}>
-      <Brightness6 />
-    </Zoom>
-  </IconButton>
+  <IconButtonWrapper>
+    <IconButton onClick={() => switchTheme(theme)}>
+      <Zoom in={theme === THEMES.DARK_THEME} timeout={300} style={reverseColorStyle}>
+        <Brightness6 />
+      </Zoom>
+      <Zoom in={theme !== THEMES.DARK_THEME} timeout={300}>
+        <Brightness6 />
+      </Zoom>
+    </IconButton>
+  </IconButtonWrapper>
 );
 
 ThemeSwitchComponent.propTypes = ({

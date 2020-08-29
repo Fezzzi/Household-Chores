@@ -21,13 +21,14 @@ const Settings = ({ categoryId, addNotification }) => {
     prevTabs: [],
     tab: SettingTypes.TAB_ROWS[categoryId][0],
     messages: {},
+    data: {},
   });
 
-  const { category, tab, categories, tabs, prevTabs, messages } = state;
+  const { category, tab, categories, tabs, prevTabs, messages, data } = state;
 
   useEffect(() => {
     loadSettings(category, tab)
-      .then(({ data: { categories, tabs, messages, data } }) => console.log(data) || setState({
+      .then(({ data: { categories, tabs, messages, data } }) => setState({
         ...state,
         categories,
         tabs,
@@ -72,7 +73,7 @@ const Settings = ({ categoryId, addNotification }) => {
         })}
       />
       <ContentColumn>
-        {formRenderers[category] && formRenderers[category][tab] && formRenderers[category][tab]()}
+        {formRenderers[category] && formRenderers[category][tab] && formRenderers[category][tab](data)}
       </ContentColumn>
     </SettingsWrapper>
   );

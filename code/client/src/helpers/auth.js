@@ -1,5 +1,10 @@
-export const updateInput = (ctx, input) => (isValid, value) => {
-  ctx.setState(prevState => {
+export const updateInput = (
+  setState,
+  input,
+  formValidFunc = inputs => Object.values(inputs).every(i => i.valid),
+  formChangedFunc = inputs => Object.values(inputs).find(i => i.value),
+) => (isValid, value) => {
+  setState(prevState => {
     const inputs = {
       ...prevState.inputs,
       [input]: {
@@ -9,7 +14,8 @@ export const updateInput = (ctx, input) => (isValid, value) => {
     };
 
     return {
-      isFormValid: Object.values(inputs).every(i => i.valid),
+      isFormValid: formValidFunc(inputs),
+      isFormChanged: formChangedFunc(inputs),
       inputs,
     };
   });

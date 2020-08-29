@@ -9,7 +9,7 @@ import LogoTop from '~/static/logo-top.svgr';
 import { Login } from './Login';
 import { Signup } from './Signup';
 import { ResetPass } from './ResetPass';
-import { BottomBlock } from '../forms';
+import BottomBlock from './BottomBlock';
 
 export default class Auth extends Component {
   constructor(props) {

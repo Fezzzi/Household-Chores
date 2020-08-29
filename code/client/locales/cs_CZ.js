@@ -24,6 +24,7 @@ export default {
 
   [ERROR.CONNECTION_ERROR]: 'Chyba spojení, zkuste to prosím později',
   [ERROR.GOOGLE_API_INIT_ERROR]: 'Chyba inicializace Google API.',
+  [ERROR.IMAGE_INVALID]: 'Neplatny obrazek, prosim zkonrolujte ze se jedna o obrazek s velikosti do 1MB',
   [ERROR.INCORRECT_PASS]: 'Špatné heslo.',
   [ERROR.INVALID_DATA]: 'Chybná data.',
   [ERROR.INVALID_FACEBOOK_DATA]: 'Invalid Facebook data',
@@ -35,10 +36,20 @@ export default {
   [ERROR.SIGN_UP_ERROR]: 'Během registrace došlo k chybě, zkuste to prosím později.',
   [ERROR.SMTHG_BROKE_LOGIN]: 'Něco se porouchalo, zkuste prosím jinou metodu přihlášení.',
 
+  [FORM.DROP_PHOTO_HERE]: 'Pretahnete obrazek sem',
   [FORM.EMAIL]: 'Email',
+  [FORM.LANGUAGE]: 'Jazyk',
+  [FORM.NEW_EMAIL]: 'Nový email',
   [FORM.NICKNAME]: 'Jméno',
+  [FORM.NOTIFICATIONS]: 'Notifikace',
+  [FORM.NEW_NICKNAME]: 'Nové jméno',
   [FORM.PASSWORD]: 'Heslo',
-  [FORM.PHOTO]: 'Obrázek',
+  [FORM.THEME]: 'Prostředí',
+  [FORM.OLD_PASSWORD]: 'Staré heslo',
+  [FORM.NEW_PASSWORD]: 'Nové heslo',
+  [FORM.SELECT_PHOTO]: 'Nahrajte nebo přetáhněte obrázek',
+  [FORM.SAVE]: 'Uložit',
+
 
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]]: 'Profil',
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.GROUPS}`]]: 'Skupiny',

@@ -24,6 +24,7 @@ export default {
 
   [ERROR.CONNECTION_ERROR]: 'Connection error, please try again later.',
   [ERROR.GOOGLE_API_INIT_ERROR]: 'Google API initialization error.',
+  [ERROR.IMAGE_INVALID]: 'Invalid photo, please verify that the file uploaded is an image with size under 1MB',
   [ERROR.INCORRECT_PASS]: 'Incorrect password.',
   [ERROR.INVALID_DATA]: 'Invalid data.',
   [ERROR.INVALID_FACEBOOK_DATA]: 'Invalid Facebook data',
@@ -35,10 +36,19 @@ export default {
   [ERROR.SIGN_UP_ERROR]: 'An error occurred during signing up, please try again later.',
   [ERROR.SMTHG_BROKE_LOGIN]: 'Something broke, please try to log in with different method.',
 
+  [FORM.DROP_PHOTO_HERE]: 'Drop photo here',
   [FORM.EMAIL]: 'Email',
+  [FORM.LANGUAGE]: "Language",
+  [FORM.NEW_EMAIL]: 'New email',
   [FORM.NICKNAME]: 'Nickname',
+  [FORM.NEW_NICKNAME]: 'New nickname',
+  [FORM.NOTIFICATIONS]: 'Notifications',
   [FORM.PASSWORD]: 'Password',
-  [FORM.PHOTO]: 'Photo',
+  [FORM.THEME]: 'Theme',
+  [FORM.OLD_PASSWORD]: 'Old password',
+  [FORM.NEW_PASSWORD]: 'New password',
+  [FORM.SELECT_PHOTO]: 'Upload or drop photo',
+  [FORM.SAVE]: 'Save',
 
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]]: 'Profile',
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.GROUPS}`]]: 'Groups',

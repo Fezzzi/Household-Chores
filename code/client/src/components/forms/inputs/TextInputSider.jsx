@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { COMMON } from 'shared/constants/localeMessages';
-import * as TYPES from 'shared/constants/inputTypes';
-import {
-  InputSider, ShowPassWrapper, ShowPassButton, ErrorSpan,
-} from 'clientSrc/styles/blocks/auth';
 import InputErrorIcon from '~/static/icons/input-error-icon.svgr';
+import { COMMON } from 'shared/constants/localeMessages';
+import * as InputTypes from 'shared/constants/inputTypes';
+import {
+  TextInputSider, ShowPassWrapper, ShowPassButton, ErrorSpan,
+} from 'clientSrc/styles/blocks/form';
+import LocaleText from 'clientSrc/components/common/LocaleText';
 
 const Sider = ({ inputTextLength, type, hasError, showPassword, updateInputState }) => (
-  <InputSider>
+  <TextInputSider>
     {hasError
       ? (
         <ErrorSpan>
@@ -17,7 +18,7 @@ const Sider = ({ inputTextLength, type, hasError, showPassword, updateInputState
         </ErrorSpan>
       )
       : ''}
-    {type === TYPES.PASSWORD && inputTextLength > 0
+    {type === InputTypes.PASSWORD && inputTextLength > 0
       ? (
         <ShowPassWrapper>
           <ShowPassButton onClick={e => {
@@ -25,12 +26,12 @@ const Sider = ({ inputTextLength, type, hasError, showPassword, updateInputState
             updateInputState({ showPassword: !showPassword });
           }}
           >
-            {showPassword ? COMMON.HIDE : COMMON.SHOW}
+            <LocaleText message={showPassword ? COMMON.HIDE : COMMON.SHOW} />
           </ShowPassButton>
         </ShowPassWrapper>
       )
       : ''}
-  </InputSider>
+  </TextInputSider>
 );
 
 Sider.propTypes = {

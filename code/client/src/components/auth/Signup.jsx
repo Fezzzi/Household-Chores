@@ -12,7 +12,9 @@ import { MessageBlock, MessageBlockLink } from 'clientSrc/styles/blocks/auth';
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 
-import { Input, Separator, FacebookLoginButton, GoogleLoginButton, PrimaryButton } from '../forms';
+import FacebookLoginButton from './FacebookLoginButton';
+import GoogleLoginButton from './GoogleLoginButton';
+import { TextInput, Separator, PrimaryButton } from '../forms';
 import LocaleText from '../common/LocaleText';
 
 const inputConfig = [
@@ -60,13 +62,13 @@ export class SignupComponent extends Component {
         <GoogleLoginButton handleError={this.handleError} />
         <Separator message={COMMON.OR} />
         {inputConfig.map(input => (
-          <Input
+          <TextInput
             name={input.name}
             key={input.name}
             message={input.message}
             type={input.type}
             hasError={!!errors[input.name]}
-            updateInput={updateInput(this, input.name)}
+            updateInput={updateInput(this.setState.bind(this), input.name)}
           />
         ))}
         <PrimaryButton disabled={!isFormValid || isFormSending} clickHandler={this.handleClick}>
