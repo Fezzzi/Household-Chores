@@ -19,7 +19,7 @@ export default () => {
 
   router.post(/.*/, (req, res) => {
     const { body } = req;
-    console.log(`HOHO, somebody is trying to update data ${body}`);
+    console.log(`Attempt to update data ${body}`);
 
     res.status(404).send('Not Found');
   });

@@ -13,7 +13,7 @@ import { CATEGORY_ICONS, TAB_ICONS } from 'clientSrc/constants/settingIcons';
 
 import Column from './Column';
 
-const Settings = ({ categoryId, addNotification }) => {
+const Settings = ({ categoryId, addNotification, history }) => {
   const [state, setState] = useState({
     categories: Object.values(SettingTypes.CATEGORIES),
     category: categoryId,
@@ -35,8 +35,23 @@ const Settings = ({ categoryId, addNotification }) => {
         messages,
         data,
       }))
-      .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR))
+      .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR));
+
+    history.push({
+      search: `?tab=${tab}`
+    });
   }, [category, tab]);
+
+  const changeCategory = category => history.push(category) && setState({
+    ...state,
+    category,
+    tab: SettingTypes.TAB_ROWS[category] && SettingTypes.TAB_ROWS[category][0],
+  });
+
+  const changeTab = tab => setState({
+    ...state,
+    tab,
+  });
 
   return (
     <SettingsWrapper>
@@ -48,11 +63,7 @@ const Settings = ({ categoryId, addNotification }) => {
         icons={CATEGORY_ICONS}
         selected={category}
         messages={messages}
-        changeSelection={category => setState({
-          ...state,
-          category,
-          tab: SettingTypes.TAB_ROWS[category] && SettingTypes.TAB_ROWS[category][0],
-        })}
+        changeSelection={changeCategory}
         peekSelection={(peekCategory, enter) => setState({
           ...state,
           prevTabs: (enter && tabs) || prevTabs,
@@ -67,10 +78,7 @@ const Settings = ({ categoryId, addNotification }) => {
         selected={tab}
         icons={TAB_ICONS}
         messages={messages}
-        changeSelection={tab => setState({
-          ...state,
-          tab,
-        })}
+        changeSelection={changeTab}
       />
       <ContentColumn>
         {formRenderers[category] && formRenderers[category][tab] && formRenderers[category][tab](data)}
@@ -80,9 +88,8 @@ const Settings = ({ categoryId, addNotification }) => {
 };
 
 Settings.propTypes = {
-  match: PropTypes.shape({
-    url: PropTypes.string.isRequired
-  }),
+  categoryId: PropTypes.string.isRequired,
+  history: PropTypes.object.isRequired,
   addNotification: PropTypes.func.isRequired,
 };
 

@@ -57,9 +57,9 @@ const RouterComponent = ({ loggedUser }) => (
                     <Settings {...props} categoryId={category} />
                   } />
                 ))}
-                <Route exact path={`${url}`} render={props =>
-                  <Settings {...props} category={SettingTypes.CATEGORIES.PROFILE} />
-                } />
+                <Route exact path={`${url}`} >
+                  <Redirect to={{ pathname: `${url}/${SettingTypes.CATEGORIES.PROFILE}` }} />
+                </Route>
               </>
             )} />
 
