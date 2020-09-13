@@ -8,18 +8,18 @@ import { ERROR } from 'shared/constants/localeMessages';
 import { ContentColumn, SettingsWrapper } from 'clientSrc/styles/blocks/settings';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { loadSettings } from 'clientSrc/effects/settingsEffects';
-import { formRenderers } from 'clientSrc/constants/settingsConfiguration';
+import { settingsRenderers } from 'clientSrc/constants/settingsRenderers';
 import { CATEGORY_ICONS, TAB_ICONS } from 'clientSrc/constants/settingIcons';
 
 import Column from './Column';
 
-const Settings = ({ categoryId, addNotification, history }) => {
+const Settings = ({ categoryId, tabId, addNotification, history }) => {
   const [state, setState] = useState({
     categories: Object.values(SettingTypes.CATEGORIES),
     category: categoryId,
     tabs: SettingTypes.TAB_ROWS[categoryId],
     prevTabs: [],
-    tab: SettingTypes.TAB_ROWS[categoryId][0],
+    tab: tabId || SettingTypes.TAB_ROWS[categoryId][0],
     messages: {},
     data: {},
   });
@@ -82,7 +82,7 @@ const Settings = ({ categoryId, addNotification, history }) => {
         changeSelection={changeTab}
       />
       <ContentColumn>
-        {formRenderers[category] && formRenderers[category][tab] && formRenderers[category][tab](data)}
+        {settingsRenderers[category] && settingsRenderers[category][tab] && settingsRenderers[category][tab](data)}
       </ContentColumn>
     </SettingsWrapper>
   );
@@ -90,6 +90,10 @@ const Settings = ({ categoryId, addNotification, history }) => {
 
 Settings.propTypes = {
   categoryId: PropTypes.string.isRequired,
+  tabId: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool,
+  ]).isRequired,
   history: PropTypes.object.isRequired,
   addNotification: PropTypes.func.isRequired,
 };

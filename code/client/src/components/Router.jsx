@@ -12,6 +12,9 @@ import Resource from './Resource';
 import Auth from './auth';
 import Settings from './settings';
 
+const getTabQuery = queries =>
+  queries.split(/\?&/)?.find(query => query.match(/tab=.+/))?.split('=')[1];
+
 const RouterComponent = ({ loggedUser }) => (
   <Router>
     <Switch>
@@ -50,14 +53,15 @@ const RouterComponent = ({ loggedUser }) => (
           <Switch>
             <Route
               path={`/${SETTINGS_PREFIX}`}
-              render={({ match: { url } }) => (
+              render={({ match: { url, ...rest } }) => (
                 <>
+                  {console.log('MATCHED RESET', url, rest)}
                   {Object.values(SettingTypes.CATEGORIES).map(category => (
                     <Route
                       path={`${url}/${category}`}
                       key={`settings-${category}`}
                       render={props =>
-                        <Settings {...props} categoryId={category} />}
+                        <Settings {...props} categoryId={category} tabId={getTabQuery(props.location.search)} />}
                     />
                   ))}
                   <Route exact path={`${url}`}>
