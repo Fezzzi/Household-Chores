@@ -39,7 +39,7 @@ describe('Settings > integrity', () => {
       AVAILABLE_LOCALES.forEach(locale => {
         const localeTexts = applicationTexts[locale] as any;
         if (keys.find(key => !localeTexts[key])) {
-          assert.fail(`missing setting translations for 'AVAILABLE_LOCALE' ${ locale }!`);
+          assert.fail(`missing setting translations for 'AVAILABLE_LOCALE' ${locale}!`);
         }
       });
 

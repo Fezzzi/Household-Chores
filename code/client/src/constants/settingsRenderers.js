@@ -1,9 +1,13 @@
-import { renderFormFromConfig } from 'clientSrc/helpers/settings';
+import React from 'react';
 
+import { SettingsForm } from 'clientSrc/components/settings/SettingsForm';
 import { settingsConfiguration } from './settingsConfiguration';
 
-export const settingsRenderers =
-  Object.fromEntries(
+const renderFormFromConfig = (category, tab, settings) => data =>
+  <SettingsForm category={category} tab={tab} settings={settings} data={data} />;
+
+export const settingsRenderers
+  = Object.fromEntries(
     Object.keys(settingsConfiguration).map(category =>
       [category, Object.fromEntries(
         Object.keys(settingsConfiguration[category]).map(tab =>

@@ -53,14 +53,14 @@ const RouterComponent = ({ loggedUser }) => (
           <Switch>
             <Route
               path={`/${SETTINGS_PREFIX}`}
-              render={({ match: { url, ...rest } }) => (
+              render={({ match: { url } }) => (
                 <>
                   {Object.values(SettingTypes.CATEGORIES).map(category => (
                     <Route
                       path={`${url}/${category}`}
                       key={`settings-${category}`}
-                      render={props =>
-                        <Settings {...props} categoryId={category} tabId={getTabQuery(props.location.search)} />}
+                      render={params =>
+                        <Settings {...params} categoryId={category} tabId={getTabQuery(params.location.search)} />}
                     />
                   ))}
                   <Route exact path={`${url}`}>
