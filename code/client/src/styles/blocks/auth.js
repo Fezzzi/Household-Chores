@@ -1,7 +1,4 @@
-import styled, { css } from 'styled-components';
-
-import FacebookIcon from '~/static/social/facebook-icon-white.png';
-import GoogleIcon from '~/static/social/google-icon.svg';
+import styled from 'styled-components';
 
 export const AuthContent = styled.div`
   color: var(--cFont);

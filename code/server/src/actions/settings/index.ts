@@ -9,7 +9,8 @@ dotenv.config();
 
 export default () => {
   const router = express.Router();
-  router.get(/.*/, (req: { query: { category: string, tab: string }}, res) => {const { query: { category, tab } } = req;
+  router.get(/.*/, (req: { query: { category: string; tab: string }}, res) => {
+    const { query: { category, tab } } = req;
     if (Object.values(SettingTypes.CATEGORIES).find(cat => cat === category) !== null) {
       handleSettingsDataFetch(category, tab, res);
     } else {

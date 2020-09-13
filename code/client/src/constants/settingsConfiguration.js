@@ -17,7 +17,7 @@ const settings = {
           message: FORM.SELECT_PHOTO,
           type: InputTypes.PHOTO,
           dataKey: 'photo',
-        }
+        },
       ], [
         {
           name: 'nickname',
@@ -66,7 +66,7 @@ const settings = {
           name: 'notifications',
           label: FORM.NOTIFICATIONS,
           type: InputTypes.SWITCH,
-          dataKey: 'notifications'
+          dataKey: 'notifications',
         },
       ],
     ],

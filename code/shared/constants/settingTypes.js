@@ -12,7 +12,7 @@ export const TABS = {
   GENERAL: 'general',
   CONNECTIONS: 'connections',
   NOTIFICATIONS: 'notifications',
-  _GROUP: 'group'
+  _GROUP: 'group',
 };
 
 export const TAB_ROWS = {

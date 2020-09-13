@@ -38,7 +38,7 @@ export default {
 
   [FORM.DROP_PHOTO_HERE]: 'Drop photo here',
   [FORM.EMAIL]: 'Email',
-  [FORM.LANGUAGE]: "Language",
+  [FORM.LANGUAGE]: 'Language',
   [FORM.NEW_EMAIL]: 'New email',
   [FORM.NICKNAME]: 'Nickname',
   [FORM.NEW_NICKNAME]: 'New nickname',

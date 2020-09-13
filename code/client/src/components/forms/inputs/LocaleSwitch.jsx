@@ -7,10 +7,8 @@ import { FLAGS } from 'clientSrc/constants/localeFlags';
 import * as LocaleActions from 'clientSrc/actions/localeActions';
 import {
   IconButtonWrapper, IconButton, LocaleIcon,
-  LocaleLabel, LocaleSelector, LocaleLine
+  LocaleLabel, LocaleSelector, LocaleLine,
 } from 'clientSrc/styles/blocks/settings';
-import {InputWrapper} from 'clientSrc/styles/blocks/form';
-
 
 const renderAvailableLocales = (availableLocales, switchFunc) =>
   availableLocales.map((locale, key) => (
@@ -40,7 +38,8 @@ class LocaleSwitchComponent extends Component {
 
     return (
       <IconButtonWrapper>
-        <IconButton active={inputActive}
+        <IconButton
+          active={inputActive}
           onClick={() => this.setState({
             expanded: !expanded,
             inputActive: true,

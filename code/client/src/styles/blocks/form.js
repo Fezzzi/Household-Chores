@@ -106,9 +106,9 @@ export const TextInputLabel = styled.span`
   transition: transform ease-out .1s, -webkit-transform ease-out .1s;
   
   ${props => props.shrunken && {
-  WebkitTransform: 'scale(.83333) translateY(-10px)',
-  transform: 'scale(.83333) translateY(-10px)'
-}}
+    WebkitTransform: 'scale(.83333) translateY(-10px)',
+    transform: 'scale(.83333) translateY(-10px)',
+  }}
 `;
 
 export const FileInputLabel = styled.span`
@@ -281,8 +281,8 @@ export const FormButton = styled.button`
   }
 
   ${props => props.disabled
-  ? css`opacity: .4; pointer-events: none;`
-  : ''
+    ? css`opacity: .4; pointer-events: none;`
+    : ''
 };
 `;
 

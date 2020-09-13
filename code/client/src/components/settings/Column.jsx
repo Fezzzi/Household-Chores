@@ -7,11 +7,11 @@ import LocaleText from 'clientSrc/components/common/LocaleText';
 
 const Column = ({
   type, rows, primary, icons, width, selected, messages = {},
-  changeSelection, peekSelection = () => {}
+  changeSelection, peekSelection = () => {},
 }) => (
   <SettingsColumnWrapper width={width}>
     <SettingsColumn>
-      {rows.map(row =>
+      {rows.map(row => (
         <SettingRow
           primary={primary}
           onClick={() => changeSelection(row)}
@@ -26,12 +26,12 @@ const Column = ({
                 {icons[row]}
               </SettingIcon>
             )
-            : ''
-          }
+            : ''}
           <SettingText>
             <LocaleText message={SETTINGS[`${type}_${row}`] || messages[`${type}_${row}`]} />
           </SettingText>
         </SettingRow>
+      )
       )}
     </SettingsColumn>
   </SettingsColumnWrapper>
@@ -40,6 +40,7 @@ const Column = ({
 Column.propTypes = ({
   type: PropTypes.string.isRequired,
   rows: PropTypes.arrayOf(PropTypes.string).isRequired,
+  primary: PropTypes.bool.isRequired,
   icons: PropTypes.object,
   messages: PropTypes.object,
   width: PropTypes.string.isRequired,

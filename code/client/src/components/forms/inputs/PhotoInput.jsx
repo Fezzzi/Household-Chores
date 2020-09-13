@@ -27,7 +27,7 @@ class PhotoInputComponent extends Component {
     };
   }
 
-  handleInputChange = ({ target: { files }}) => {
+  handleInputChange = ({ target: { files } }) => {
     if (!files[0]) {
       return;
     }
@@ -38,14 +38,14 @@ class PhotoInputComponent extends Component {
       return;
     }
     const reader = new FileReader();
-    reader.onload = ({ target: { result }}) => {
+    reader.onload = ({ target: { result } }) => {
       this.setState({
         file: result,
       });
 
       updateInput(valid, result);
     };
-    reader.readAsDataURL(files[0])
+    reader.readAsDataURL(files[0]);
   };
 
   removeFileHandler() {
@@ -79,7 +79,7 @@ class PhotoInputComponent extends Component {
                   <Publish />
                   <LocaleText message={dragActive ? FORM.DROP_PHOTO_HERE : message} />
                 </FileInputLabel>
-            )}
+              )}
             <FileInputField
               name={name}
               type="file"
@@ -94,7 +94,7 @@ class PhotoInputComponent extends Component {
           </FileInputBox>
         </InputWrapper>
         <PhotoPreviewBlock>
-          {(file || placeholder) && <PhotoPreview src={file ?? placeholder}/>}
+          {(file || placeholder) && <PhotoPreview src={file ?? placeholder} />}
         </PhotoPreviewBlock>
       </InputRow>
     );

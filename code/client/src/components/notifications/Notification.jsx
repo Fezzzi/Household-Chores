@@ -14,7 +14,7 @@ import SuccessIcon from '~/static/icons/notification-success-icon.svgr';
 import LocaleText from '../common/LocaleText';
 
 const getNotificationColor = type => {
-  switch(type) {
+  switch (type) {
     case NotificationTypes.SUCCESSES: return 'var(--cSuccess)';
     case NotificationTypes.MESSAGES: return 'var(--cMessage)';
     case NotificationTypes.WARNINGS: return 'var(--cWarning)';

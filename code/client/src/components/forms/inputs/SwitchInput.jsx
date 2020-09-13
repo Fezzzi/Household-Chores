@@ -32,25 +32,25 @@ class SwitchInputComponent extends Component {
   };
 
   getInputBody() {
-    const {name, label, fixedProps, hasError} = this.props;
-    const {isOn, inputActive} = this.state;
+    const { name, label, fixedProps, hasError } = this.props;
+    const { isOn, inputActive } = this.state;
 
     return (
       <FixedInputBlock {...fixedProps}>
         <InputLabel>
-          <LocaleText message={label}/>
+          <LocaleText message={label} />
         </InputLabel>
         <SwitchInputWrapper active={inputActive}>
           <SwitchInputBox htmlFor={name}>
             <SwitchInputLabel>
-              {isOn && <Check/>}
+              {isOn && <Check />}
             </SwitchInputLabel>
             <SwitchInputField
               name={name}
               type="checkbox"
               onChange={this.handleInputChange}
-              onFocus={() => this.setState({inputActive: true})}
-              onBlur={() => this.setState({inputActive: false})}
+              onFocus={() => this.setState({ inputActive: true })}
+              onBlur={() => this.setState({ inputActive: false })}
               noValidate
             />
           </SwitchInputBox>

@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import * as InputTypes from 'shared/constants/inputTypes';
-import { TextInput, PhotoInput, SwitchInput, CustomInput } from './';
+import { TextInput, PhotoInput, SwitchInput, CustomInput } from './inputs';
 
-const Input = ({type, ...props}) => {
+const Input = ({ type, ...props }) => {
   switch (type) {
     case InputTypes.PHOTO:
       return <PhotoInput {...props} />;

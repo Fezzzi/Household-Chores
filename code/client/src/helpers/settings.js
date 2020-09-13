@@ -22,10 +22,10 @@ class SettingsForm extends Component {
       isFormSending: false,
       isFormChanged: false,
       inputs: Object.fromEntries(inputs.map(input =>
-        [input.name, {valid: false, value: ''}]
+        [input.name, { valid: false, value: '' }]
       )),
       errors: {},
-    }
+    };
   }
 
   componentWillUnmount() {
@@ -47,7 +47,7 @@ class SettingsForm extends Component {
 
   isFormValidFunc = inputs => Object.values(inputs).every(input => (input.value && input.valid) || !input.value);
 
-  renderFormInput = ({name, dataKey, ...props}, key, inline = false) => {
+  renderFormInput = ({ name, dataKey, ...props }, key, inline = false) => {
     const { data } = this.props;
     const { errors } = this.state;
 
@@ -73,9 +73,8 @@ class SettingsForm extends Component {
         {settings.map((group, groupKey) => (
           <Fragment key={groupKey}>
             {groupKey !== 0
-              ? <Separator/>
-              : ''
-            }
+              ? <Separator />
+              : ''}
             {group.map((inputRow, configKey) => {
               const key = `${groupKey}-${configKey}`;
 

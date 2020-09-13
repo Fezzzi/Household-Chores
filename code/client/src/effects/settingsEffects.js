@@ -6,7 +6,7 @@ export const loadSettings = (category, tab) =>
     params: {
       category,
       tab,
-    }
+    },
   });
 
 export const updateSettings = (category, tab, data) =>

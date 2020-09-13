@@ -24,7 +24,18 @@ const Settings = ({ categoryId, addNotification, history }) => {
     data: {},
   });
 
-  const { category, tab, categories, tabs, prevTabs, messages, data } = state;
+  const changeCategory = category => history.push(category) && setState({
+    ...state,
+    category,
+    tab: SettingTypes.TAB_ROWS[category] && SettingTypes.TAB_ROWS[category][0],
+  });
+
+  const changeTab = tab => setState({
+    ...state,
+    tab,
+  });
+
+  const { category, tab } = state;
 
   useEffect(() => {
     loadSettings(category, tab)
@@ -38,27 +49,17 @@ const Settings = ({ categoryId, addNotification, history }) => {
       .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR));
 
     history.push({
-      search: `?tab=${tab}`
+      search: `?tab=${tab}`,
     });
   }, [category, tab]);
 
-  const changeCategory = category => history.push(category) && setState({
-    ...state,
-    category,
-    tab: SettingTypes.TAB_ROWS[category] && SettingTypes.TAB_ROWS[category][0],
-  });
-
-  const changeTab = tab => setState({
-    ...state,
-    tab,
-  });
-
+  const { categories, tabs, prevTabs, messages, data } = state;
   return (
     <SettingsWrapper>
       <Column
         type={SettingTypes.COLUMNS.CATEGORY}
         rows={categories}
-        primary={true}
+        primary
         width="175px"
         icons={CATEGORY_ICONS}
         selected={category}

@@ -10,7 +10,7 @@ export const CATEGORY_ICONS = {
   [CATEGORIES.GROUPS]: <Group />,
 };
 
-export const TAB_ICONS ={
+export const TAB_ICONS = {
   [TABS.CONNECTIONS]: <PersonAdd />,
   [TABS.NOTIFICATIONS]: <NotificationsActive />,
   [TABS.GENERAL]: <Settings />,

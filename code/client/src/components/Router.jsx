@@ -15,7 +15,6 @@ import Settings from './settings';
 const RouterComponent = ({ loggedUser }) => (
   <Router>
     <Switch>
-      /* STATIC RESOURCES ROUTING */
       <Route
         path={`/${RESOURCES_PREFIX}`}
         render={({ match: { url } }) => (
@@ -49,19 +48,24 @@ const RouterComponent = ({ loggedUser }) => (
         )
         : (
           <Switch>
-            /* SETTINGS ROUTING */
-            <Route path={`/${SETTINGS_PREFIX}`} render={({ match: { url } }) => (
-              <>
-                {Object.values(SettingTypes.CATEGORIES).map(category => (
-                  <Route path={`${url}/${category}`} key={`settings-${category}`} render={props =>
-                    <Settings {...props} categoryId={category} />
-                  } />
-                ))}
-                <Route exact path={`${url}`} >
-                  <Redirect to={{ pathname: `${url}/${SettingTypes.CATEGORIES.PROFILE}` }} />
-                </Route>
-              </>
-            )} />
+            <Route
+              path={`/${SETTINGS_PREFIX}`}
+              render={({ match: { url } }) => (
+                <>
+                  {Object.values(SettingTypes.CATEGORIES).map(category => (
+                    <Route
+                      path={`${url}/${category}`}
+                      key={`settings-${category}`}
+                      render={props =>
+                        <Settings {...props} categoryId={category} />}
+                    />
+                  ))}
+                  <Route exact path={`${url}`}>
+                    <Redirect to={{ pathname: `${url}/${SettingTypes.CATEGORIES.PROFILE}` }} />
+                  </Route>
+                </>
+              )}
+            />
 
             <Route exact path="/" component={Home} />
             <Route path="/*">
