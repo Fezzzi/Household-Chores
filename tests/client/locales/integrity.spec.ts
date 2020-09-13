@@ -4,7 +4,7 @@ import { DEFAULT_LOCALE, AVAILABLE_LOCALES } from 'shared/constants/locale';
 import applicationTexts from '~/code/client/locales';
 
 describe('Locales > integrity', () => {
-  describe('integrity test', () => {
+  describe('Integrity test', () => {
     const defaultLocaleTexts = applicationTexts[DEFAULT_LOCALE] as any;
     if (!defaultLocaleTexts) {
       assert.fail('no texts for default locale found!');
