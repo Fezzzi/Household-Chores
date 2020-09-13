@@ -14,6 +14,7 @@ export const updateInput = (
     };
 
     return {
+      ...prevState,
       isFormValid: formValidFunc(inputs),
       isFormChanged: formChangedFunc(inputs),
       inputs,

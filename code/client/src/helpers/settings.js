@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'react';
+import React, {Fragment, Component, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import { Input, PrimaryButton, Separator } from 'clientSrc/components/forms';
@@ -8,48 +8,62 @@ import LocaleText from 'clientSrc/components/common/LocaleText';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 import { InputRow } from 'clientSrc/styles/blocks/form';
 
-export const renderFormFromConfig = settings => data => <SettingsForm settings={settings} data={data} />;
+export const renderFormFromConfig = (category, tab, settings) => data =>
+  <SettingsForm category={category} tab={tab} settings={settings} data={data} />;
 
-class SettingsForm extends Component {
-  constructor(props) {
-    super(props);
-    const inputs = props.settings.reduce((acc, group) => acc.concat(group), []);
+const SettingsForm = ({ category, tab, settings, data }) => {
+  const inputEntries = settings
+    .reduce((acc, group) => acc.concat(group), [])
+    .map(input => [input.name, { valid: false, value: '' }]);
 
-    this.timer = null;
-    this.state = {
-      submitMessage: FORM.SAVE,
+  const [timer, setTimer] = useState(null);
+  const [state, setState] = useState({
+    category,
+    tab,
+    submitMessage: FORM.SAVE,
+    isFormValid: false,
+    isFormSending: false,
+    isFormChanged: false,
+    inputs: Object.fromEntries(inputEntries),
+    errors: {},
+  });
+
+  useEffect(() =>
+    setState(prevState => ({
+      ...prevState,
+      category,
+      tab,
       isFormValid: false,
       isFormSending: false,
       isFormChanged: false,
-      inputs: Object.fromEntries(inputs.map(input =>
-        [input.name, { valid: false, value: '' }]
-      )),
+      inputs: Object.fromEntries(inputEntries),
       errors: {},
-    };
-  }
+    })), [category, tab]);
 
-  componentWillUnmount() {
-    clearTimeout(this.timer);
-  }
-
-  handleClick = handlerWrapper(() => {
-    this.setState({
-      isFormSending: true,
-      submitMessage: COMMON.SENDING,
-    });
-    this.timer = setTimeout(
-      () => this && this.setState({
-        isFormSending: false,
-        submitMessage: FORM.SAVE,
-      }), SUBMIT_TIMEOUT
-    );
+  useEffect(() => {
+    return () => clearTimeout(timer)
   });
 
-  isFormValidFunc = inputs => Object.values(inputs).every(input => (input.value && input.valid) || !input.value);
+  const handleClick = handlerWrapper(() => {
+    setState(prevState => ({
+      ...prevState,
+      isFormSending: true,
+      submitMessage: COMMON.SENDING,
+    }));
 
-  renderFormInput = ({ name, dataKey, ...props }, key, inline = false) => {
-    const { data } = this.props;
-    const { errors } = this.state;
+    setTimer(setTimeout(
+      () => setState && setState(prevState => ({
+        ...prevState,
+        isFormSending: false,
+        submitMessage: FORM.SAVE,
+      })), SUBMIT_TIMEOUT));
+  });
+
+  const isFormValidFunc = inputs =>
+    Object.values(inputs).every(input => (input.value && input.valid) || !input.value);
+
+  const renderFormInput = ({ name, dataKey, ...props }, key, inline = false) => {
+    const { errors } = state;
 
     return (
       <Input
@@ -58,57 +72,55 @@ class SettingsForm extends Component {
         placeholder={(dataKey && data[dataKey]) || ''}
         inline={inline}
         hasError={!!errors[name]}
-        updateInput={updateInput(this.setState.bind(this), name, this.isFormValidFunc)}
+        updateInput={updateInput(setState, name, isFormValidFunc)}
         {...props}
       />
     );
   };
 
-  render() {
-    const { settings } = this.props;
-    const { submitMessage, isFormValid, isFormSending, isFormChanged } = this.state;
+  const { submitMessage, isFormValid, isFormSending, isFormChanged } = state;
+  return (
+    <>
+      {settings.map((group, groupKey) => (
+        <Fragment key={groupKey}>
+          {groupKey !== 0
+            ? <Separator />
+            : ''}
+          {group.map((inputRow, configKey) => {
+            const key = `${groupKey}-${configKey}`;
 
-    return (
-      <>
-        {settings.map((group, groupKey) => (
-          <Fragment key={groupKey}>
-            {groupKey !== 0
-              ? <Separator />
-              : ''}
-            {group.map((inputRow, configKey) => {
-              const key = `${groupKey}-${configKey}`;
-
-              if (Array.isArray(inputRow)) {
-                return (
-                  <InputRow key={key}>
-                    {inputRow.map((input, inputKey) => (
-                      <Fragment key={`${key}-${inputKey}`}>
-                        {this.renderFormInput(input, `${key}-${inputKey}`, true)}
-                      </Fragment>
-                    ))}
-                  </InputRow>
-                );
-              }
-              return this.renderFormInput(inputRow, key);
-            })}
-          </Fragment>
-        ))}
-        {isFormChanged && (
-          <>
-            <Separator line={false} />
-            <InputRow>
-              <PrimaryButton disabled={!isFormValid || isFormSending} clickHandler={this.handleClick} margin={0}>
-                <LocaleText message={submitMessage} />
-              </PrimaryButton>
-            </InputRow>
-          </>
-        )}
-      </>
-    );
-  }
-}
+            if (Array.isArray(inputRow)) {
+              return (
+                <InputRow key={key}>
+                  {inputRow.map((input, inputKey) => (
+                    <Fragment key={`${key}-${inputKey}`}>
+                      {renderFormInput(input, `${key}-${inputKey}`, true)}
+                    </Fragment>
+                  ))}
+                </InputRow>
+              );
+            }
+            return renderFormInput(inputRow, key);
+          })}
+        </Fragment>
+      ))}
+      {isFormChanged && (
+        <>
+          <Separator line={false} />
+          <InputRow>
+            <PrimaryButton disabled={!isFormValid || isFormSending} clickHandler={handleClick} margin={0}>
+              <LocaleText message={submitMessage} />
+            </PrimaryButton>
+          </InputRow>
+        </>
+      )}
+    </>
+  );
+};
 
 SettingsForm.propTypes = ({
+  category: PropTypes.string.isRequired,
+  tab: PropTypes.string.isRequired,
   settings: PropTypes.arrayOf(
     PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string.isRequired,

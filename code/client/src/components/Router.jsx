@@ -55,7 +55,6 @@ const RouterComponent = ({ loggedUser }) => (
               path={`/${SETTINGS_PREFIX}`}
               render={({ match: { url, ...rest } }) => (
                 <>
-                  {console.log('MATCHED RESET', url, rest)}
                   {Object.values(SettingTypes.CATEGORIES).map(category => (
                     <Route
                       path={`${url}/${category}`}

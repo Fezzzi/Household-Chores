@@ -7,7 +7,7 @@ export const settingsRenderers =
     Object.keys(settingsConfiguration).map(category =>
       [category, Object.fromEntries(
         Object.keys(settingsConfiguration[category]).map(tab =>
-          [tab, renderFormFromConfig(settingsConfiguration[category][tab])]
+          [tab, renderFormFromConfig(category, tab, settingsConfiguration[category][tab])]
         )
       )]
     )
