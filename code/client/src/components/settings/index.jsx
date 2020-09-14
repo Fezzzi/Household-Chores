@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -23,34 +23,43 @@ const Settings = ({ categoryId, tabId, addNotification, history }) => {
     messages: {},
     data: {},
   });
+  const ref = useRef(categoryId);
 
-  const changeCategory = category => history.push(category) && setState({
-    ...state,
+  const changeCategory = category => setState(prevState => ({
+    ...prevState,
     category,
     tab: SettingTypes.TAB_ROWS[category] && SettingTypes.TAB_ROWS[category][0],
-  });
+  }));
 
-  const changeTab = tab => setState({
-    ...state,
+  const changeTab = tab => setState(prevState => ({
+    ...prevState,
     tab,
-  });
+  }));
 
   const { category, tab } = state;
 
   useEffect(() => {
     loadSettings(category, tab)
-      .then(({ data: { categories, tabs, messages, data } }) => setState({
-        ...state,
+      .then(({ data: { categories, tabs, messages, data } }) => setState(prevState => ({
+        ...prevState,
         categories,
         tabs,
         messages,
         data,
-      }))
+      })))
       .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR));
 
-    history.push({
-      search: `?tab=${tab}`,
-    });
+    if (category !== ref.current) {
+      ref.current = category;
+      history.push({
+        pathname: category,
+        search: `?tab=${tab}`,
+      });
+    } else {
+      history.push({
+        search: `?tab=${tab}`,
+      });
+    }
   }, [category, tab]);
 
   const { categories, tabs, prevTabs, messages, data } = state;
