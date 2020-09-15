@@ -1,8 +1,8 @@
 import { assert } from 'chai';
 
 import { DEFAULT_LOCALE, AVAILABLE_LOCALES } from 'shared/constants/locale';
-import applicationTexts from '~/code/client/locales';
 import * as MESSAGES from 'shared/constants/localeMessages';
+import applicationTexts from '~/code/client/locales';
 
 describe('Locales > integrity', () => {
   describe('Integrity test', () => {
@@ -15,7 +15,7 @@ describe('Locales > integrity', () => {
       Object.values(MESSAGES).forEach(msgType =>
         Object.values(msgType).forEach(msgKey => {
           if (!defaultLocaleTexts[msgKey]) {
-            assert.fail(`missing translation of key ${msgKey}`)
+            assert.fail(`missing translation of key ${msgKey}`);
           }
         })
       );

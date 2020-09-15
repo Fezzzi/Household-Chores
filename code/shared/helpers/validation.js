@@ -1,5 +1,5 @@
 import * as InputTypes from 'shared/constants/inputTypes';
-import {ERROR} from 'shared/constants/localeMessages';
+import { ERROR } from 'shared/constants/localeMessages';
 
 const isEmailValid = value => {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -31,7 +31,7 @@ export const isInputValid = (type, value, maxFileSize) => {
       return {
         valid: value.length > 7 && value.length < 128,
         message: (value.length <= 7 && ERROR.VALUE_TOO_SHORT) || (value.length >= 128 && ERROR.VALUE_TOO_LONG) || '',
-    };
+      };
     case InputTypes.EMAIL:
       return isEmailValid(value);
     case InputTypes.PHOTO:
