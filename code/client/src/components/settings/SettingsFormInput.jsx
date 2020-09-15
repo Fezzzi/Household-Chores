@@ -15,7 +15,7 @@ export const SettingsFormInput = ({ input: { name, dataKey, ...props }, data, up
 );
 
 SettingsFormInput.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.object.isRequired,
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
     dataKey: PropTypes.string,

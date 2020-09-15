@@ -112,15 +112,22 @@ export const SettingsForm = ({ category, tab, settings, data }) => {
   );
 };
 
+const inputShape = PropTypes.shape({
+  name: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  message: PropTypes.string,
+});
+
 SettingsForm.propTypes = ({
   category: PropTypes.string.isRequired,
   tab: PropTypes.string.isRequired,
   settings: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-      message: PropTypes.string,
-    }))
+    PropTypes.arrayOf(
+      PropTypes.oneOfType([
+        inputShape,
+        PropTypes.arrayOf(inputShape),
+      ])
+    )
   ),
   data: PropTypes.object,
 });

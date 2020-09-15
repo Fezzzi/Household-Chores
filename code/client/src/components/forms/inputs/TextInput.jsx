@@ -21,7 +21,7 @@ class TextInput extends Component {
       inputTextLength: 0,
       showPassword: false,
       inputActive: false,
-      inputShown: !props.placeholder,
+      inputShown: null,
     };
   }
 
@@ -41,7 +41,7 @@ class TextInput extends Component {
 
     return (
       <>
-        {inputShown && (
+        {(inputShown === true || (inputShown === null && !placeholder)) && (
           <InputWrapper active={inputActive}>
             <TextInputBox htmlFor={name}>
               <TextInputLabel shrunken={inputTextLength !== 0}>
