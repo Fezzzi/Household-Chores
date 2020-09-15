@@ -32,7 +32,7 @@ class SwitchInputComponent extends Component {
   };
 
   getInputBody() {
-    const { name, label, fixedProps, hasError } = this.props;
+    const { name, label, fixedProps } = this.props;
     const { isOn, inputActive } = this.state;
 
     return (
@@ -79,7 +79,6 @@ SwitchInputComponent.propTypes = {
   placeholder: PropTypes.string,
   inline: PropTypes.bool,
   fixedProps: PropTypes.object,
-  hasError: PropTypes.bool.isRequired,
   updateInput: PropTypes.func,
 };
 

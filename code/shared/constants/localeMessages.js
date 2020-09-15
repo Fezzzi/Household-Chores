@@ -30,6 +30,7 @@ export const ERROR = {
   IMAGE_INVALID: 'error.imageInvalid',
   INCORRECT_PASS: 'error.incorrectPass',
   INVALID_DATA: 'error.invalidData',
+  INVALID_EMAIL: 'error.invalidEmail',
   INVALID_FACEBOOK_DATA: 'error.invalidFacebookData',
   INVALID_GOOGLE_DATA: 'error.invalidGoogleData',
   LOG_IN_ERROR: 'error.logInError',
@@ -38,6 +39,8 @@ export const ERROR = {
   RESET_PASS_ERROR: 'error.resetPassError',
   SIGN_UP_ERROR: 'error.signUpError',
   SMTHG_BROKE_LOGIN: 'error.smthgBrokeLogIn',
+  VALUE_TOO_SHORT: 'error.valueTooShort',
+  VALUE_TOO_LONG: 'error.valueTooLong',
 };
 
 export const FORM = {

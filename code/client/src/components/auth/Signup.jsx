@@ -9,7 +9,7 @@ import { RESOURCES_PREFIX, RESOURCE_TAC } from 'shared/constants/api';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { MessageBlock, MessageBlockLink } from 'clientSrc/styles/blocks/auth';
-import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
+import { updateInput, handlerWrapper } from 'clientSrc/helpers/form';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 
 import FacebookLoginButton from './FacebookLoginButton';
@@ -67,7 +67,7 @@ export class SignupComponent extends Component {
             key={input.name}
             message={input.message}
             type={input.type}
-            hasError={!!errors[input.name]}
+            inputError={errors[input.name] || ''}
             updateInput={updateInput(this.setState.bind(this), input.name)}
           />
         ))}

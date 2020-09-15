@@ -24,17 +24,20 @@ export default {
 
   [ERROR.CONNECTION_ERROR]: 'Chyba spojení, zkuste to prosím později',
   [ERROR.GOOGLE_API_INIT_ERROR]: 'Chyba inicializace Google API.',
-  [ERROR.IMAGE_INVALID]: 'Neplatny obrazek, prosim zkonrolujte ze se jedna o obrazek s velikosti do 1MB',
+  [ERROR.IMAGE_INVALID]: 'Neplatný obrázek, prosím zkonrolujte zdali se jedná o obrázek s velikostí do 1MB',
   [ERROR.INCORRECT_PASS]: 'Špatné heslo.',
   [ERROR.INVALID_DATA]: 'Chybná data.',
-  [ERROR.INVALID_FACEBOOK_DATA]: 'Invalid Facebook data',
-  [ERROR.INVALID_GOOGLE_DATA]: 'Invalid Google data.',
+  [ERROR.INVALID_EMAIL]: 'Neplatný email.',
+  [ERROR.INVALID_FACEBOOK_DATA]: 'Chybná data Facebook.',
+  [ERROR.INVALID_GOOGLE_DATA]: 'Chybná data Google.',
   [ERROR.LOG_IN_ERROR]: 'Během přihlašování došlo k chybě, zkuste to prosím později',
   [ERROR.LOG_IN_MISSING_FIELDS]: 'Přihlášení selhalo, chybí jedno nebo více povinných polí.',
   [ERROR.NO_ACCOUNT]: 'Účet s tímto emailem nebyl nalezen.',
   [ERROR.RESET_PASS_ERROR]: 'Během odesílání linku došlo k chybě, zkuste to prosím později',
   [ERROR.SIGN_UP_ERROR]: 'Během registrace došlo k chybě, zkuste to prosím později.',
   [ERROR.SMTHG_BROKE_LOGIN]: 'Něco se porouchalo, zkuste prosím jinou metodu přihlášení.',
+  [ERROR.VALUE_TOO_LONG]: 'Hodnota je příliš dlouhá.',
+  [ERROR.VALUE_TOO_SHORT]: 'Hodnota je příliš krátká',
 
   [FORM.DROP_PHOTO_HERE]: 'Pretahnete obrazek sem',
   [FORM.EMAIL]: 'Email',
@@ -49,7 +52,6 @@ export default {
   [FORM.NEW_PASSWORD]: 'Nové heslo',
   [FORM.SELECT_PHOTO]: 'Nahrajte nebo přetáhněte obrázek',
   [FORM.SAVE]: 'Uložit',
-
 
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]]: 'Profil',
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.GROUPS}`]]: 'Skupiny',

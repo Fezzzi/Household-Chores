@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { COMMON, FORM } from 'shared/constants/localeMessages';
-import { handlerWrapper, updateInput } from 'clientSrc/helpers/auth';
+import { handlerWrapper, updateInput } from 'clientSrc/helpers/form';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 import { InputRow } from 'clientSrc/styles/blocks/form';
 import { SettingsFormInput } from './SettingsFormInput';
@@ -80,7 +80,7 @@ export const SettingsForm = ({ category, tab, settings, data }) => {
                       data={data}
                       input={input}
                       updateInput={inputUpdater}
-                      hasError={name => !!errors[name]}
+                      inputError={name => errors[name] || ''}
                       inline
                     />
                   )
@@ -92,7 +92,7 @@ export const SettingsForm = ({ category, tab, settings, data }) => {
                   data={data}
                   input={inputRow}
                   updateInput={inputUpdater}
-                  hasError={name => !!errors[name]}
+                  inputError={name => errors[name] || ''}
                 />
               );
           })}

@@ -13,7 +13,7 @@ export const SettingsColumnWrapper = styled.div`
   max-width: ${props => props.width};
   height: calc(100% - 30px);;
   display: table-col;
-  margin-right: 20px;
+  margin-right: 10px;
   color: var(--cFont);
 `;
 

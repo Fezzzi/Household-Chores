@@ -21,7 +21,7 @@ Input.propTypes = {
   name: PropTypes.string.isRequired,
   message: PropTypes.string,
   type: PropTypes.string.isRequired,
-  hasError: PropTypes.bool.isRequired,
+  inputError: PropTypes.string.isRequired,
   updateInput: PropTypes.func,
 };
 

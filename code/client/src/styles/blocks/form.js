@@ -4,7 +4,7 @@ import FacebookIcon from '~/static/social/facebook-icon-white.png';
 import GoogleIcon from '~/static/social/google-icon.svg';
 
 export const InputRow = styled.div`
-  margin: 0 auto 6px;
+  margin: 0 40px 6px;
   position: relative;
   min-height: 38px;
   max-width: 650px;
@@ -151,7 +151,7 @@ export const TextInputField = styled.input`
   text-overflow: ellipsis;
   margin: 0;
   border: 0;
-  flex: 1 0 auto;
+  width: 100%;
   
   &:active, &:focus {
     outline: 0;
@@ -337,8 +337,9 @@ export const ErrorSpan = styled.span`
   stroke: var(--cError);
   height: 22px;
   width: 22px;
-  margin-left: 8px;
+  padding-left: 8px;
   display: block;
+  position: relative;
 `;
 
 export const InputLabel = styled.span`

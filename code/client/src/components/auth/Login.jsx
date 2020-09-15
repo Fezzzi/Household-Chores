@@ -8,7 +8,7 @@ import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { LinkRow } from 'clientSrc/styles/blocks/auth';
-import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
+import { updateInput, handlerWrapper } from 'clientSrc/helpers/form';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 
 import FacebookLoginButton from './FacebookLoginButton';
@@ -63,7 +63,7 @@ export class LoginComponent extends Component {
             key={input.name}
             message={input.message}
             type={input.type}
-            hasError={!!errors[input.name]}
+            inputError={errors[input.name] || ''}
             updateInput={updateInput(this.setState.bind(this), input.name)}
           />
         ))}

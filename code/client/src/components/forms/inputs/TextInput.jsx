@@ -31,11 +31,12 @@ class TextInput extends Component {
     });
 
     const { type, updateInput } = this.props;
-    updateInput(isInputValid(type, e.target.value), e.target.value);
+    const { valid, message } = isInputValid(type, e.target.value);
+    updateInput(valid, e.target.value, message);
   };
 
   getInputBody() {
-    const { name, message, label, placeholder, type, hasError } = this.props;
+    const { name, message, label, placeholder, type, inputError } = this.props;
     const { inputTextLength, showPassword, inputActive, inputShown } = this.state;
 
     return (
@@ -59,9 +60,10 @@ class TextInput extends Component {
             <TextInputSider
               inputTextLength={inputTextLength}
               type={type}
-              hasError={hasError}
+              inputError={inputError}
               updateInputState={this.setState.bind(this)}
               showPassword={showPassword}
+              inputActive={inputActive}
             />
           </InputWrapper>
         )}
@@ -111,7 +113,7 @@ TextInput.propTypes = {
   fixedProps: PropTypes.object,
   placeholder: PropTypes.string,
   type: PropTypes.string.isRequired,
-  hasError: PropTypes.bool.isRequired,
+  inputError: PropTypes.string.isRequired,
   updateInput: PropTypes.func,
 };
 

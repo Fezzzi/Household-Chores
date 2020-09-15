@@ -32,9 +32,9 @@ class PhotoInputComponent extends Component {
       return;
     }
     const { updateInput, addNotification } = this.props;
-    const valid = isInputValid(InputTypes.PHOTO, files);
+    const { valid, message } = isInputValid(InputTypes.PHOTO, files);
     if (!valid) {
-      addNotification(NotificationTypes.WARNINGS, ERROR.IMAGE_INVALID);
+      addNotification(NotificationTypes.WARNINGS, message || ERROR.IMAGE_INVALID);
       return;
     }
     const reader = new FileReader();
@@ -56,7 +56,7 @@ class PhotoInputComponent extends Component {
   }
 
   render() {
-    const { name, placeholder, message, hasError } = this.props;
+    const { name, placeholder, message } = this.props;
     const { file, inputActive, dragActive } = this.state;
 
     return (
@@ -105,7 +105,6 @@ PhotoInputComponent.propTypes = {
   name: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  hasError: PropTypes.bool.isRequired,
   updateInput: PropTypes.func,
   addNotification: PropTypes.func.isRequired,
 };

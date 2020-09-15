@@ -3,7 +3,7 @@ export const updateInput = (
   input,
   formValidFunc = inputs => Object.values(inputs).every(i => i.valid),
   formChangedFunc = inputs => Object.values(inputs).find(i => i.value),
-) => (isValid, value) => {
+) => (isValid, value, errorMessage) => {
   setState(prevState => {
     const inputs = {
       ...prevState.inputs,
@@ -13,11 +13,18 @@ export const updateInput = (
       },
     };
 
+    const isFormValid = formValidFunc(inputs);
+    const errors = {
+      ...prevState.errors,
+      [input]: isValid || !value ? '' : errorMessage,
+    };
+
     return {
       ...prevState,
-      isFormValid: formValidFunc(inputs),
+      isFormValid,
       isFormChanged: formChangedFunc(inputs),
       inputs,
+      errors,
     };
   });
 };
