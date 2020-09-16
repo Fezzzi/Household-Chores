@@ -5,7 +5,10 @@ import { connect } from 'react-redux';
 import { LABELS } from 'shared/constants/locale';
 import { FLAGS } from 'clientSrc/constants/localeFlags';
 import * as LocaleActions from 'clientSrc/actions/localeActions';
-import { IconButton, LocaleIcon, LocaleLabel, LocaleSelector, LocaleLine } from 'clientSrc/styles/blocks/navbar';
+import {
+  IconButtonWrapper, IconButton, LocaleIcon,
+  LocaleLabel, LocaleSelector, LocaleLine,
+} from 'clientSrc/styles/blocks/settings';
 
 const renderAvailableLocales = (availableLocales, switchFunc) =>
   availableLocales.map((locale, key) => (
@@ -25,20 +28,33 @@ class LocaleSwitchComponent extends Component {
 
     this.state = ({
       expanded: false,
+      inputActive: false,
     });
   }
 
   render() {
     const { locale, availableLocales, switchLocale } = this.props;
-    const { expanded } = this.state;
+    const { expanded, inputActive } = this.state;
 
     return (
-      <IconButton onClick={() => this.setState({ expanded: !expanded })} onBlur={() => this.setState({ expanded: false })}>
-        <LocaleSelector hidden={!expanded}>
-          {renderAvailableLocales(availableLocales.filter(l => l !== locale), switchLocale)}
-        </LocaleSelector>
-        {FLAGS[locale]()}
-      </IconButton>
+      <IconButtonWrapper>
+        <IconButton
+          active={inputActive}
+          onClick={() => this.setState({
+            expanded: !expanded,
+            inputActive: true,
+          })}
+          onBlur={() => this.setState({
+            expanded: false,
+            inputActive: false,
+          })}
+        >
+          <LocaleSelector hidden={!expanded}>
+            {renderAvailableLocales(availableLocales.filter(l => l !== locale), switchLocale)}
+          </LocaleSelector>
+          {FLAGS[locale]()}
+        </IconButton>
+      </IconButtonWrapper>
     );
   }
 }

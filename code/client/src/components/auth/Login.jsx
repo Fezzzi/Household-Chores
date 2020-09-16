@@ -3,14 +3,17 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
 import * as InputTypes from 'shared/constants/inputTypes';
+import * as NotificationTypes from 'shared/constants/notificationTypes';
 import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { LinkRow } from 'clientSrc/styles/blocks/auth';
-import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
+import { updateInput, handlerWrapper } from 'clientSrc/helpers/form';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 
-import { Input, Separator, PrimaryButton, FacebookLoginButton, GoogleLoginButton } from '../forms';
+import FacebookLoginButton from './FacebookLoginButton';
+import GoogleLoginButton from './GoogleLoginButton';
+import { TextInput, Separator, PrimaryButton } from '../forms';
 import LocaleText from '../common/LocaleText';
 
 const inputConfig = [
@@ -38,7 +41,7 @@ export class LoginComponent extends Component {
     clearTimeout(this.timer);
   }
 
-  handleError = error => this.props.addNotification('errors', error.message);
+  handleError = error => this.props.addNotification(NotificationTypes.ERRORS, error.message);
 
   handleClick = handlerWrapper(() => {
     this.props.logIn(this.state.inputs);
@@ -55,13 +58,13 @@ export class LoginComponent extends Component {
     return (
       <form method="post">
         {inputConfig.map(input => (
-          <Input
+          <TextInput
             name={input.name}
             key={input.name}
             message={input.message}
             type={input.type}
-            hasError={!!errors[input.name]}
-            updateInput={updateInput(this, input.name)}
+            inputError={errors[input.name] || ''}
+            updateInput={updateInput(this.setState.bind(this), input.name)}
           />
         ))}
         <PrimaryButton disabled={!isFormValid || isFormSending} clickHandler={this.handleClick}>

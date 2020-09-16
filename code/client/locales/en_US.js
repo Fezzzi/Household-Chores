@@ -1,4 +1,5 @@
-import { AUTH, COMMON, ERROR, FORM, SUCCESS } from 'shared/constants/localeMessages';
+import { AUTH, COMMON, ERROR, FORM, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
+import * as SettingTypes from 'shared/constants/settingTypes';
 
 export default {
   [AUTH.BACK_TO_LOGIN]: 'Back to Login',
@@ -23,9 +24,11 @@ export default {
 
   [ERROR.CONNECTION_ERROR]: 'Connection error, please try again later.',
   [ERROR.GOOGLE_API_INIT_ERROR]: 'Google API initialization error.',
+  [ERROR.IMAGE_INVALID]: 'Invalid photo, please verify that the file uploaded is an image with size under 1MB.',
   [ERROR.INCORRECT_PASS]: 'Incorrect password.',
   [ERROR.INVALID_DATA]: 'Invalid data.',
-  [ERROR.INVALID_FACEBOOK_DATA]: 'Invalid Facebook data',
+  [ERROR.INVALID_EMAIL]: 'Invalid email.',
+  [ERROR.INVALID_FACEBOOK_DATA]: 'Invalid Facebook data.',
   [ERROR.INVALID_GOOGLE_DATA]: 'Invalid Google data.',
   [ERROR.LOG_IN_ERROR]: 'An error occurred during logging in, please try again later.',
   [ERROR.LOG_IN_MISSING_FIELDS]: 'Log in failed, missing one or more required fields.',
@@ -33,10 +36,28 @@ export default {
   [ERROR.RESET_PASS_ERROR]: 'An error occurred while send the link, please try again later.',
   [ERROR.SIGN_UP_ERROR]: 'An error occurred during signing up, please try again later.',
   [ERROR.SMTHG_BROKE_LOGIN]: 'Something broke, please try to log in with different method.',
+  [ERROR.VALUE_TOO_LONG]: 'Value is too long.',
+  [ERROR.VALUE_TOO_SHORT]: 'Value is too short.',
 
+  [FORM.DROP_PHOTO_HERE]: 'Drop photo here',
   [FORM.EMAIL]: 'Email',
+  [FORM.LANGUAGE]: 'Language',
+  [FORM.NEW_EMAIL]: 'New email',
   [FORM.NICKNAME]: 'Nickname',
+  [FORM.NEW_NICKNAME]: 'New nickname',
+  [FORM.NOTIFICATIONS]: 'Notifications',
   [FORM.PASSWORD]: 'Password',
+  [FORM.THEME]: 'Theme',
+  [FORM.OLD_PASSWORD]: 'Old password',
+  [FORM.NEW_PASSWORD]: 'New password',
+  [FORM.SELECT_PHOTO]: 'Upload or drop photo',
+  [FORM.SAVE]: 'Save',
+
+  [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]]: 'Profile',
+  [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.GROUPS}`]]: 'Groups',
+  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.GENERAL}`]]: 'General',
+  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NOTIFICATIONS}`]]: 'Notifications',
+  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.CONNECTIONS}`]]: 'Connections',
 
   [SUCCESS.RESET_LINK]: 'A reset link has been sent to your email address.',
 };

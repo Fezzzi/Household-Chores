@@ -1,3 +1,5 @@
+import * as SettingTypes from 'shared/constants/settingTypes';
+
 export const AUTH = {
   BACK_TO_LOGIN: 'auth.backToLogin',
   CREATE_ACCOUNT: 'auth.createAccount',
@@ -25,8 +27,10 @@ export const COMMON = {
 export const ERROR = {
   CONNECTION_ERROR: 'error.connectionError',
   GOOGLE_API_INIT_ERROR: 'error.googleAPIInitError',
+  IMAGE_INVALID: 'error.imageInvalid',
   INCORRECT_PASS: 'error.incorrectPass',
   INVALID_DATA: 'error.invalidData',
+  INVALID_EMAIL: 'error.invalidEmail',
   INVALID_FACEBOOK_DATA: 'error.invalidFacebookData',
   INVALID_GOOGLE_DATA: 'error.invalidGoogleData',
   LOG_IN_ERROR: 'error.logInError',
@@ -35,12 +39,33 @@ export const ERROR = {
   RESET_PASS_ERROR: 'error.resetPassError',
   SIGN_UP_ERROR: 'error.signUpError',
   SMTHG_BROKE_LOGIN: 'error.smthgBrokeLogIn',
+  VALUE_TOO_SHORT: 'error.valueTooShort',
+  VALUE_TOO_LONG: 'error.valueTooLong',
 };
 
 export const FORM = {
+  DROP_PHOTO_HERE: 'form.dropPhotoHere',
   EMAIL: 'form.email',
+  LANGUAGE: 'form.language',
+  NEW_EMAIL: 'form.newEmail',
   NICKNAME: 'form.nickname',
+  NEW_NICKNAME: 'form.newNickname',
+  NOTIFICATIONS: 'form.notifications',
   PASSWORD: 'form.password',
+  THEME: 'form.theme',
+  OLD_PASSWORD: 'form.oldPassword',
+  NEW_PASSWORD: 'form.newPassword',
+  SELECT_PHOTO: 'form.selectPhoto',
+  SAVE: 'form.save',
+};
+
+export const SETTINGS = {
+  [`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]: 'settings.categoryProfile',
+  [`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.GROUPS}`]: 'settings.categoryGroups',
+
+  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.GENERAL}`]: 'settings.tabGeneral',
+  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NOTIFICATIONS}`]: 'settings.tabNotifications',
+  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.CONNECTIONS}`]: 'settings.tabConnections',
 };
 
 export const SUCCESS = {

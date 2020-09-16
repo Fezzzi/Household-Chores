@@ -1,5 +1,6 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 
+import * as NotificationTypes from 'shared/constants/notificationTypes';
 import { ERROR } from 'shared/constants/localeMessages';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
@@ -7,18 +8,18 @@ import { signUp, logIn, resetPass } from 'clientSrc/effects/authEffects';
 
 const getAuthenticationSaga = effect => function* authenticationSaga({ payload }) {
   try {
-    const response = yield call(effect, payload);
-    if (!response.data.errors || !response.data.errors.length) {
+    const { data } = yield call(effect, payload);
+    if (!data[NotificationTypes.ERRORS] || !data[NotificationTypes.ERRORS].length) {
       // We login user after both signUp and LogIn
       yield put(AuthActions.logInSuccess());
     } else {
       yield put(NotificationActions.addNotifications({
-        errors: response.data.errors,
+        [NotificationTypes.ERRORS]: data[NotificationTypes.ERRORS],
       }));
     }
   } catch (error) {
     yield put(NotificationActions.addNotifications({
-      errors: [ERROR.CONNECTION_ERROR],
+      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
     }));
   }
 };
@@ -26,10 +27,9 @@ const getAuthenticationSaga = effect => function* authenticationSaga({ payload }
 function* logInFacebookSaga(action) {
   const { payload: { profile: { first_name: nickname, email, id }, tokenDetail: { userID, signedRequest } } } = action;
   if (!(nickname || email || id || userID || signedRequest)) {
-    const payload = {
-      errors: [ERROR.LOG_IN_MISSING_FIELDS],
-    };
-    yield put(NotificationActions.addNotifications(payload));
+    yield put(NotificationActions.addNotifications({
+      [NotificationTypes.ERRORS]: [ERROR.LOG_IN_MISSING_FIELDS],
+    }));
   } else {
     yield put(AuthActions.signUp({
       nickname: { value: nickname, valid: true },
@@ -47,10 +47,9 @@ function* logInFacebookSaga(action) {
 function* logInGoogleSaga(action) {
   const { payload: { profileObj: { name, email, imageUrl, googleId }, tokenObj: { id_token: googleToken } } } = action;
   if (!(name || email || googleId || googleToken)) {
-    const payload = {
-      errors: [ERROR.LOG_IN_MISSING_FIELDS],
-    };
-    yield put(NotificationActions.addNotifications(payload));
+    yield put(NotificationActions.addNotifications({
+      [NotificationTypes.ERRORS]: [ERROR.LOG_IN_MISSING_FIELDS],
+    }));
   } else {
     yield put(AuthActions.signUp({
       nickname: { value: name, valid: true },
@@ -67,7 +66,7 @@ function* resetPassSaga(action) {
     yield put(NotificationActions.addNotifications(response.data));
   } catch (error) {
     yield put(NotificationActions.addNotifications({
-      errors: [ERROR.CONNECTION_ERROR],
+      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
     }));
   }
 }

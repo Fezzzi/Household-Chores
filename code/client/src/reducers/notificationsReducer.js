@@ -1,5 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 
+import * as NotificationTypes from 'shared/constants/notificationTypes';
+
 import * as NotificationActions from '../actions/notificationActions';
 
 const initialState = {
@@ -10,15 +12,15 @@ const initialState = {
 };
 
 const addNotifications = ({ errors, messages, warnings, successes }, { payload }) => ({
-  errors: [...errors, ...(payload.errors || [])],
-  messages: [...messages, ...(payload.messages || [])],
-  warnings: [...warnings, ...(payload.warnings || [])],
-  successes: [...successes, ...(payload.successes || [])],
+  errors: [...errors, ...(payload[NotificationTypes.ERRORS] || [])],
+  messages: [...messages, ...(payload[NotificationTypes.MESSAGES] || [])],
+  warnings: [...warnings, ...(payload[NotificationTypes.WARNINGS] || [])],
+  successes: [...successes, ...(payload[NotificationTypes.SUCCESSES] || [])],
 });
 
-const removeNotification = (state, { payload: { key, id } }) => ({
+const removeNotification = (state, { payload: { type, id } }) => ({
   ...state,
-  [key]: state[key].filter((_notification, index) => index !== id),
+  [type]: state[type].filter((_notification, index) => index !== id),
 });
 
 export default createReducer(initialState, {

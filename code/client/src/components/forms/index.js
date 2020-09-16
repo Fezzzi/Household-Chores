@@ -1,12 +1,6 @@
-import { PrimaryButton } from './PrimaryButton';
-import { FacebookLoginButton } from './FacebookLoginButton';
-import { GoogleLoginButton } from './GoogleLoginButton';
+import Input from './Input';
 import { Separator } from './Separator';
-import { BottomBlock } from './BottomBlock';
-import { Input } from './Input';
+import { PrimaryButton } from './PrimaryButton';
 
-export {
-  PrimaryButton, FacebookLoginButton, GoogleLoginButton,
-  Input,
-  Separator, BottomBlock,
-};
+export { Input, Separator, PrimaryButton };
+export * from './inputs';

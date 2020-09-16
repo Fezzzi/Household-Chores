@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { ArrowBack } from '@material-ui/icons';
 
 import { loadResource } from 'clientSrc/effects/resourceEffects';
 import {
@@ -62,7 +62,7 @@ class Resource extends Component {
     return (
       <ResourceWrapper>
         <TopButton onClick={() => history.goBack()}>
-          <ArrowBackIcon />
+          <ArrowBack />
         </TopButton>
         <BannerWrapper banner={banner} />
         <BodyWrapper>

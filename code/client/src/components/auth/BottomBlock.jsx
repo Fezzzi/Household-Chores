@@ -7,7 +7,7 @@ import {
 
 import LocaleText from '../common/LocaleText';
 
-export const BottomBlock = ({ message, linkMessage, onClick }) => (
+const BottomBlock = ({ message, linkMessage, onClick }) => (
   <BottomMessageWrapper>
     <BottomMessageBlock>
       <LocaleText message={message} />
@@ -23,3 +23,5 @@ BottomBlock.propTypes = ({
   linkMessage: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 });
+
+export default BottomBlock;

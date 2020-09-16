@@ -6,10 +6,10 @@ import * as InputTypes from 'shared/constants/inputTypes';
 import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import { MessageBlock, LinkRow } from 'clientSrc/styles/blocks/auth';
-import { updateInput, handlerWrapper } from 'clientSrc/helpers/auth';
+import { updateInput, handlerWrapper } from 'clientSrc/helpers/form';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 
-import { Separator, Input, PrimaryButton } from '../forms';
+import { Separator, TextInput, PrimaryButton } from '../forms';
 import LocaleText from '../common/LocaleText';
 
 const inputConfig = [
@@ -54,13 +54,13 @@ export class ResetPassComponent extends Component {
           <LocaleText message={AUTH.ENTER_EMAIL_QUOTE} />
         </MessageBlock>
         {inputConfig.map(input => (
-          <Input
+          <TextInput
             name={input.name}
             key={input.name}
             message={input.message}
             type={input.type}
-            hasError={!!errors[input.name]}
-            updateInput={updateInput(this, input.name)}
+            inputError={errors[input.name] || ''}
+            updateInput={updateInput(this.setState.bind(this), input.name)}
           />
         ))}
         <PrimaryButton disabled={!isFormValid || isFormSending} clickHandler={this.handleClick}>

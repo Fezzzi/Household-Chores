@@ -6,10 +6,10 @@ import { AuthContent, InputsBlock, LogoBlock, LogoTopBlock } from 'clientSrc/sty
 import * as TABS from 'clientSrc/constants/authTabs';
 import LogoTop from '~/static/logo-top.svgr';
 
-import { Login } from './auth/Login';
-import { Signup } from './auth/Signup';
-import { ResetPass } from './auth/ResetPass';
-import { BottomBlock } from './forms';
+import { Login } from './Login';
+import { Signup } from './Signup';
+import { ResetPass } from './ResetPass';
+import BottomBlock from './BottomBlock';
 
 export default class Auth extends Component {
   constructor(props) {

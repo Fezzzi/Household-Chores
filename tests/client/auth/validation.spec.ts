@@ -44,7 +44,7 @@ const testData: any = {
 const validateInputs = (inputKey: string, validityKey: string): boolean => {
   let validity = true;
   testData[inputKey][validityKey].forEach((input: string) => {
-    validity = validity && isInputValid(inputKey, input);
+    validity = validity && isInputValid(inputKey, input).valid;
   });
   return validity;
 };

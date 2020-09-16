@@ -56,7 +56,7 @@ app.use(morgan(':remote-addr - :remote-user ":method :url" :status :response-tim
 
 // Setup CORS policy
 app.use(cors(
-  process.env.DEBUG
+  process.env.DEBUG === 'true'
     ? {
       origin: `http://localhost:${process.env.PORT === '8080' ? 8081 : 8080}`,
       credentials: true,

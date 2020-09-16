@@ -97,11 +97,11 @@
     "build-front": "webpack --config config/webpack-front.config.js --mode production",
     "build-back": "webpack --config config/webpack-back.config.js --mode production",
     "test": "npm run lint && npm run mocha",
-    "lint": "eslint --cache -c ./config/eslintrc.js . --ext .js,.jsx,.ts",
-    "lint-fix": "eslint --fix --cache -c ./config/eslintrc.js . --ext .js,.jsx,.ts",
-    "mocha": "cross-env-file -p ./config/mocha-env.json mocha -r ts-node/register -r tsconfig-paths/register \"tests/**/*.spec.ts\"",
+    "lint": "eslint --cache -c config/eslintrc.js . --ext .js,.jsx,.ts",
+    "lint-fix": "eslint --fix --cache -c config/eslintrc.js . --ext .js,.jsx,.ts",
+    "mocha": "mocha -r ts-node/register -r tsconfig-paths/register -r ./config/mocha-ignores.js \"tests/**/*.spec.ts\"",
     "migrate": "ts-node -r tsconfig-paths/register config/migration.js",
-    "configure": "cp ./config/git-hooks/pre-push ./.git/hooks/pre-push"
+    "configure": "cp config/git-hooks/pre-push .git/hooks/pre-push"
   },
   "browserslist": {
     "production": [

@@ -1,5 +1,6 @@
 import express from 'express';
 
+import * as NotificationTypes from 'shared/constants/notificationTypes';
 import { AUTH_LOG_IN, AUTH_SIGN_UP, AUTH_RESET } from 'shared/constants/api';
 import { ERROR, SUCCESS } from 'shared/constants/localeMessages';
 import { RESET_PASSWORD } from 'serverSrc/constants/mails';
@@ -17,17 +18,21 @@ const getResetPassFunc = ({ email: { value: email } }: any) => async () => {
   }, [email]);
 
   return {
-    errors: emailSent ? [] : [ERROR.RESET_PASS_ERROR],
-    successes: emailSent ? [SUCCESS.RESET_LINK] : [],
+    [NotificationTypes.ERRORS]: emailSent ? [] : [ERROR.RESET_PASS_ERROR],
+    [NotificationTypes.SUCCESSES]: emailSent ? [SUCCESS.RESET_LINK] : [],
   };
 };
 
 const getLogInFunc = (req: any, res: any, { email: { value: email }, password: { value: password } }: any) => async () => {
   const loggedUserId = await logInUser(email, password);
   if (loggedUserId === -1) {
-    return { errors: [ERROR.INCORRECT_PASS] };
+    return {
+      [NotificationTypes.ERRORS]: [ERROR.INCORRECT_PASS],
+    };
   } else if (loggedUserId === 0) {
-    return { errors: [ERROR.LOG_IN_ERROR] };
+    return {
+      [NotificationTypes.ERRORS]: [ERROR.LOG_IN_ERROR],
+    };
   }
 
   setUserCookie(req, res, loggedUserId);
@@ -48,7 +53,9 @@ const getSignUpFunc = (req: any, res: any, body: any) => async () => {
       if (await logInWithIds(req, res, userId, googleId, facebookId)) {
         return {};
       } else {
-        return { errors: [ERROR.SMTHG_BROKE_LOGIN] };
+        return {
+          [NotificationTypes.ERRORS]: [ERROR.SMTHG_BROKE_LOGIN],
+        };
       }
     }
     return getLogInFunc(req, res, body)();
@@ -64,7 +71,7 @@ const getSignUpFunc = (req: any, res: any, body: any) => async () => {
     setUserCookie(req, res, signedUp);
   }
   return {
-    errors: signedUp ? [] : [ERROR.SIGN_UP_ERROR],
+    [NotificationTypes.ERRORS]: signedUp ? [] : [ERROR.SIGN_UP_ERROR],
   };
 };
 
