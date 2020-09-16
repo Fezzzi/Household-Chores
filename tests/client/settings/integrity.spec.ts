@@ -9,11 +9,11 @@ import applicationTexts from '~/code/client/locales';
 
 describe('Settings > integrity', () => {
   describe('Form configuration integrity test', () => {
-    if (Object.keys(SettingTypes.CATEGORIES).find(category => !settingsConfiguration[category])) {
+    if (Object.values(SettingTypes.CATEGORIES).find(category => !settingsConfiguration[category])) {
       assert.fail('missing form configuration for SettingTypes CATEGORIES!');
     }
 
-    const categories = Object.keys(SettingTypes.CATEGORIES);
+    const categories = Object.values(SettingTypes.CATEGORIES);
     it('each category and tab has its form configuration', () => {
       categories.forEach(category => {
         const tabs = SettingTypes.TAB_ROWS[category];
