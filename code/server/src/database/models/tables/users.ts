@@ -9,6 +9,7 @@ export default {
     password: 'password',
     photo: 'photo',
     confirmed: 'confirmed',
+    visibility: 'visibility',
     date_registered: 'date_registered',
     date_last_active: 'date_last_active',
   },

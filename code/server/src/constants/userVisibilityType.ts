@@ -1,0 +1,6 @@
+enum USER_VISIBILITY_TYPE {
+  ALL = 'ALL',
+  FOF = 'FRIENDS_OF_FRIENDS'
+}
+
+export default USER_VISIBILITY_TYPE;
