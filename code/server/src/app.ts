@@ -67,7 +67,7 @@ app.use(cors(
 app.options('*', cors());
 
 // Serve static assets
-app.use(express.static(path.resolve(__dirname, '..', '..', '..', 'dist')));
+app.use(express.static(path.resolve('./dist')));
 
 // Checks if user's cookie is still saved in the browser without associated user, then clears the cookie
 app.use((req, res, next) => {

@@ -26,7 +26,7 @@ export default () => {
     } else {
       res
         .status(200)
-        .sendFile(path.resolve(__dirname, '..', '..', '..', '..', 'dist', 'index.html'));
+        .sendFile(path.resolve('./dist/index.html'));
     }
   });
 

@@ -6,7 +6,7 @@ import * as LOGS from 'serverSrc/constants/logs';
 
 dotenv.config();
 
-const LOGS_PATH = path.join(__dirname, '..', '..', process.env.LOGS_PATH || 'logs');
+const LOGS_PATH = path.join(path.resolve('./code/server'), process.env.LOGS_PATH || 'logs');
 
 const formatMessage = (message: string): string => {
   const date = new Date();

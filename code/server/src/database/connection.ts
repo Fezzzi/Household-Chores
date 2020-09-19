@@ -6,6 +6,10 @@ import { DB_LOG } from '../constants/logs';
 
 dotenv.config();
 
+const FATAL_ERROR_CODES = [
+  'PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR',
+];
+
 const config: object = {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -15,7 +19,7 @@ const config: object = {
 };
 
 export const handleConnectionError = (err: MysqlError | null, type: string) => {
-  if (err && err.fatal) {
+  if (err && (err.fatal || FATAL_ERROR_CODES.find(code => err.code === code))) {
     Logger(DB_LOG, `FATAL ERROR (${type}) [${err.message}] - Resetting connection...\n`);
     Connection.reset();
   }
