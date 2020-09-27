@@ -54,7 +54,7 @@ const getSignUpFunc = (req: any, res: any, body: any) => async () => {
         return {};
       } else {
         return {
-          [NotificationTypes.ERRORS]: [ERROR.SMTHG_BROKE_LOGIN],
+          [NotificationTypes.ERRORS]: [ERROR.SMTH_BROKE_LOGIN],
         };
       }
     }

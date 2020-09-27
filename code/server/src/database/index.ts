@@ -5,7 +5,7 @@ import { Connection, handleConnectionError } from './connection';
 import { Logger } from '../helpers/logger';
 import { DB_LOG, ERROR_LOG } from '../constants/logs';
 
-const toLine = (sql: string) => sql.replace('\n', '');
+const toLine = (sql: string) => sql.replace(/(\r\n|\r|\n)+/g, '').trim();
 
 const getQueryPromise = (): ((options: string, values: any, callback?: queryCallback) => Promise<any>) =>
   util.promisify(Connection.get().query);
@@ -26,7 +26,7 @@ export const database = {
       }),
   withTransaction: async (func: () => Promise<void>): Promise<void> => {
     try {
-      Logger(DB_LOG, 'Beggining transaction...');
+      Logger(DB_LOG, 'Beginning transaction...');
       Connection.get().beginTransaction();
       await func();
       Connection.get().commit();

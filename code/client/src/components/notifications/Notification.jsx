@@ -48,8 +48,8 @@ export const Notification = ({ type, message, close }) => {
   );
 };
 
-Notification.propTypes = ({
+Notification.propTypes = {
   type: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
   close: PropTypes.func.isRequired,
-});
+};

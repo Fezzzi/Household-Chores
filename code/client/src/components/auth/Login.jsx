@@ -63,6 +63,7 @@ export class LoginComponent extends Component {
             key={input.name}
             message={input.message}
             type={input.type}
+            fixedPadding
             inputError={errors[input.name] || ''}
             updateInput={updateInput(this.setState.bind(this), input.name)}
           />
@@ -81,11 +82,11 @@ export class LoginComponent extends Component {
   }
 }
 
-LoginComponent.propTypes = ({
+LoginComponent.propTypes = {
   switchTab: PropTypes.func,
   logIn: PropTypes.func,
   addNotification: PropTypes.func,
-});
+};
 
 const mapDispatchToProps = dispatch => ({
   logIn: values => dispatch(AuthActions.logIn(values)),

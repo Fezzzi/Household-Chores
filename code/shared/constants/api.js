@@ -11,3 +11,12 @@ export const AUTH_PREFIX = 'auth';
 export const AUTH_SIGN_UP = 'sign-up';
 export const AUTH_LOG_IN = 'log-in';
 export const AUTH_RESET = 'reset';
+
+export const CONNECTIONS_PREFIX = 'connections';
+export const CONNECTION_FIND = 'find';
+export const CONNECTION_REQUEST = 'request';
+export const CONNECTION_APPROVE = 'approve';
+export const CONNECTION_IGNORE = 'ignore';
+export const CONNECTION_REMOVE = 'remove';
+export const CONNECTION_BLOCK = 'block';
+export const CONNECTION_UNBLOCK = 'unblock';

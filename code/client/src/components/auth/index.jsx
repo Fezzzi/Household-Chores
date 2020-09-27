@@ -98,9 +98,9 @@ export default class Auth extends Component {
   }
 }
 
-Auth.propTypes = ({
+Auth.propTypes = {
   tab: PropTypes.string.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
-});
+};

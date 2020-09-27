@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import * as InputTypes from 'shared/constants/inputTypes';
-import { TextInput, PhotoInput, SwitchInput, CustomInput } from './inputs';
+import { TextInput, PhotoInput, SwitchInput, CustomInput } from '../inputs';
 
 const Input = ({ type, ...props }) => {
   switch (type) {
@@ -21,7 +21,7 @@ Input.propTypes = {
   name: PropTypes.string.isRequired,
   message: PropTypes.string,
   type: PropTypes.string.isRequired,
-  inputError: PropTypes.string.isRequired,
+  inputError: PropTypes.string,
   updateInput: PropTypes.func,
 };
 

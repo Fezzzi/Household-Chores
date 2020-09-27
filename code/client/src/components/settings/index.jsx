@@ -40,13 +40,15 @@ const Settings = ({ categoryId, tabId, addNotification, history }) => {
 
   useEffect(() => {
     loadSettings(category, tab)
-      .then(({ data: { categories, tabs, messages, data } }) => setState(prevState => ({
-        ...prevState,
-        categories,
-        tabs,
-        messages,
-        data,
-      })))
+      .then(({ data: { categories, tabs, messages, data } }) => {
+        setState(prevState => ({
+          ...prevState,
+          categories,
+          tabs,
+          messages,
+          data,
+        }));
+      })
       .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR));
 
     if (category !== ref.current) {
@@ -84,14 +86,18 @@ const Settings = ({ categoryId, tabId, addNotification, history }) => {
         type={SettingTypes.COLUMNS.TAB}
         rows={tabs}
         primary={false}
-        width="200px"
+        width="225px"
         selected={tab}
         icons={TAB_ICONS}
         messages={messages}
         changeSelection={changeTab}
+        modifiers={settingsRenderers[category].tabModifiers && settingsRenderers[category].tabModifiers(data)}
       />
       <ContentColumn>
-        {settingsRenderers[category] && settingsRenderers[category][tab] && settingsRenderers[category][tab](data)}
+        {settingsRenderers[category] && settingsRenderers[category][tab] && settingsRenderers[category][tab](
+          data,
+          newData => setState(prevState => ({ ...prevState, data: newData })),
+        )}
       </ContentColumn>
     </SettingsWrapper>
   );

@@ -6,8 +6,8 @@ import { SettingsColumnWrapper, SettingIcon, SettingText, SettingsColumn, Settin
 import LocaleText from 'clientSrc/components/common/LocaleText';
 
 const Column = ({
-  type, rows, primary, icons, width, selected, messages = {},
-  changeSelection, peekSelection = () => {},
+  type, rows, primary, icons, width, selected,
+  messages, modifiers, changeSelection, peekSelection,
 }) => (
   <SettingsColumnWrapper width={width}>
     <SettingsColumn>
@@ -29,6 +29,7 @@ const Column = ({
             : ''}
           <SettingText>
             <LocaleText message={SETTINGS[`${type}_${row}`] || messages[`${type}_${row}`]} />
+            {modifiers && modifiers(row)}
           </SettingText>
         </SettingRow>
       )
@@ -37,7 +38,13 @@ const Column = ({
   </SettingsColumnWrapper>
 );
 
-Column.propTypes = ({
+Column.defaultProps = {
+  messages: {},
+  peekSelection: () => {},
+  modifiers: () => '',
+};
+
+Column.propTypes = {
   type: PropTypes.string.isRequired,
   rows: PropTypes.arrayOf(PropTypes.string).isRequired,
   primary: PropTypes.bool.isRequired,
@@ -45,8 +52,9 @@ Column.propTypes = ({
   messages: PropTypes.object,
   width: PropTypes.string.isRequired,
   selected: PropTypes.string,
+  modifiers: PropTypes.func,
   changeSelection: PropTypes.func.isRequired,
   peekSelection: PropTypes.func,
-});
+};
 
 export default Column;

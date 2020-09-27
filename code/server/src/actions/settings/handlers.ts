@@ -1,9 +1,9 @@
 import * as SettingTypes from 'shared/constants/settingTypes';
 
 import { getCategoryList, getTabList } from 'serverSrc/helpers/settings';
+import { findConnectedUsers } from 'serverSrc/database/models/connections';
 
-const getTabData = (category: string, tab: string) => {
-  console.log(`Fetching data for category ${category} and tab ${tab}`);
+const getTabData = async (req: any, category: string, tab: string) => {
   switch (category) {
     case SettingTypes.CATEGORIES.PROFILE:
       return {
@@ -12,20 +12,22 @@ const getTabData = (category: string, tab: string) => {
         name: 'test test',
         email: 'test@test.com',
       };
-    case SettingTypes.CATEGORIES.GROUPS:
+    case SettingTypes.CATEGORIES.HOUSEHOLDS:
       return {};
+    case SettingTypes.CATEGORIES.CONNECTIONS:
+      return findConnectedUsers(req.session.user);
     default:
       return {};
   }
 };
 
-export const handleSettingsDataFetch = (category: string, tab: string, res: any): void => {
+export const handleSettingsDataFetch = async (category: string, tab: string, req: any, res: any): Promise<void> => {
   const { categories, messages: categoryMessages } = getCategoryList();
   const { tabs, messages: tabMessages } = getTabList(category);
   res.status(200).send({
     categories,
     tabs,
-    data: getTabData(category, tab),
+    data: await getTabData(req, category, tab),
     messages: {
       ...categoryMessages,
       ...tabMessages,

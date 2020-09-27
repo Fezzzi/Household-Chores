@@ -3,26 +3,22 @@ import { assert } from 'chai';
 import * as SettingTypes from 'shared/constants/settingTypes';
 import { SETTINGS } from 'shared/constants/localeMessages';
 import { AVAILABLE_LOCALES } from 'shared/constants/locale';
-import { settingsConfiguration } from 'clientSrc/constants/settingsConfiguration';
+import { settingsRenderers } from 'clientSrc/constants/settingsRenderers';
 import applicationTexts from '~/code/client/locales';
 
 
 describe('Settings > integrity', () => {
   describe('Form configuration integrity test', () => {
-    if (Object.values(SettingTypes.CATEGORIES).find(category => !settingsConfiguration[category])) {
-      assert.fail('missing form configuration for SettingTypes CATEGORIES!');
-    }
-
     const categories = Object.values(SettingTypes.CATEGORIES);
-    it('each category and tab has its form configuration', () => {
+    it('each category and tab has its form renderer', () => {
       categories.forEach(category => {
         const tabs = SettingTypes.TAB_ROWS[category];
         if (!tabs) {
-          assert.fail(`missing tabs configuration for category ${category} in SettingTypes!`);
+          assert.fail(`missing tab configuration for category ${category} in SettingTypes!`);
         }
 
-        if (tabs.find(tab => !settingsConfiguration[category][tab])) {
-          assert.fail('missing form configuration for SettingTypes TAB!');
+        if (tabs.find(tab => !settingsRenderers[category][tab])) {
+          assert.fail('missing form renderer for SettingTypes TAB!');
         }
       });
 

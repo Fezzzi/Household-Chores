@@ -69,43 +69,8 @@ export const settingsConfiguration = {
         },
       ],
     ],
-    [SettingTypes.TABS.CONNECTIONS]: [
-      [
-        [
-          {
-            name: 'notifications',
-            label: FORM.NOTIFICATIONS,
-            type: InputTypes.SWITCH,
-            dataKey: 'notifications',
-            fixedProps: { maxWidth: HALF_WIDTH },
-          }, {
-            name: 'notifications',
-            label: FORM.NOTIFICATIONS,
-            type: InputTypes.SWITCH,
-            dataKey: 'notifications',
-            fixedProps: { maxWidth: HALF_WIDTH },
-          },
-        ],
-      ],
-      [
-        [
-          {
-            name: 'old-password',
-            message: FORM.OLD_PASSWORD,
-            type: InputTypes.PASSWORD,
-            fixedProps: { maxWidth: HALF_WIDTH },
-          },
-          {
-            name: 'new-password',
-            message: FORM.NEW_PASSWORD,
-            type: InputTypes.PASSWORD,
-            fixedProps: { maxWidth: HALF_WIDTH },
-          },
-        ],
-      ],
-    ],
   },
-  [SettingTypes.CATEGORIES.GROUPS]: {
+  [SettingTypes.CATEGORIES.HOUSEHOLDS]: {
     [SettingTypes.TABS.GENERAL]: [],
     [SettingTypes.TABS._GROUP]: [],
   },

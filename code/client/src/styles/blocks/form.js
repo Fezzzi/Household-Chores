@@ -4,7 +4,7 @@ import FacebookIcon from '~/static/social/facebook-icon-white.png';
 import GoogleIcon from '~/static/social/google-icon.svg';
 
 export const InputRow = styled.div`
-  margin: 0 40px 6px;
+  margin: 0 ${props => props.fixedPadding ? '42px' : 'auto'} 6px;
   position: relative;
   min-height: 38px;
   max-width: 650px;
@@ -248,6 +248,8 @@ export const ShowPassButton = styled.button`
 
 export const FormButtonWrapper = styled.div`
   margin: ${props => props.margin};
+  display: ${props => props.inline ? 'inline-block' : 'block'};
+  min-width: 100px;
   align-content: stretch;
 `;
 
@@ -361,7 +363,7 @@ export const InputPlaceholder = styled.span`
 export const ToggleInputIcon = styled.span`
   height: 20px;
   position: absolute;
-  margin-left: 10px;
+  margin-left: ${props => props.left || 10}px;
   color: var(--cFont);
   opacity: .8;
   

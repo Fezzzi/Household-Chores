@@ -89,7 +89,7 @@ class TextInput extends Component {
   }
 
   render() {
-    const { inline, fixedProps } = this.props;
+    const { inline, fixedPadding, fixedProps } = this.props;
     const body = this.getInputBody();
 
     return inline
@@ -98,7 +98,7 @@ class TextInput extends Component {
           {body}
         </FixedInputBlock>
       ) : (
-        <InputRow>
+        <InputRow fixedPadding={fixedPadding}>
           {body}
         </InputRow>
       );
@@ -110,10 +110,11 @@ TextInput.propTypes = {
   message: PropTypes.string.isRequired,
   label: PropTypes.string,
   inline: PropTypes.bool,
+  fixedPadding: PropTypes.bool,
   fixedProps: PropTypes.object,
   placeholder: PropTypes.string,
   type: PropTypes.string.isRequired,
-  inputError: PropTypes.string.isRequired,
+  inputError: PropTypes.string,
   updateInput: PropTypes.func,
 };
 

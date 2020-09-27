@@ -7,7 +7,7 @@ import { AUTH } from 'shared/constants/localeMessages';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import { GoogleIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/blocks/form';
 
-import { PrimaryButton } from '../forms/PrimaryButton';
+import { PrimaryButton } from '../forms';
 import LocaleText from '../common/LocaleText';
 
 const GoogleButtonComponent = ({ handleError, logInGoogle }) => (
@@ -35,10 +35,10 @@ const GoogleButtonComponent = ({ handleError, logInGoogle }) => (
   />
 );
 
-GoogleButtonComponent.propTypes = ({
+GoogleButtonComponent.propTypes = {
   handleError: PropTypes.func.isRequired,
   logInGoogle: PropTypes.func,
-});
+};
 
 const mapDispatchToProps = dispatch => ({
   logInGoogle: data => dispatch(AuthActions.logInGoogle(data)),

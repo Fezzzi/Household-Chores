@@ -1,8 +1,8 @@
 import CONNECTIONS_TABLE from 'serverSrc/database/models/tables/connections';
 import USERS_TABLE from 'serverSrc/database/models/tables/users';
-import CONNECTION_STATE_TYPE from 'serverSrc/constants/connectionStateType';
 import USER_VISIBILITY_TYPE from 'serverSrc/constants/userVisibilityType';
 import { migrateWithQueries } from 'serverSrc/helpers/migrations';
+import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
 
 const { columns: { id_from, id_to, message, state, date_created } } = CONNECTIONS_TABLE;
 

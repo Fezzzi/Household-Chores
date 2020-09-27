@@ -18,10 +18,10 @@ const BottomBlock = ({ message, linkMessage, onClick }) => (
   </BottomMessageWrapper>
 );
 
-BottomBlock.propTypes = ({
+BottomBlock.propTypes = {
   message: PropTypes.string.isRequired,
   linkMessage: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
-});
+};
 
 export default BottomBlock;

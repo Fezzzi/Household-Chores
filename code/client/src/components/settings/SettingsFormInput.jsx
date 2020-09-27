@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Input } from '../forms';
 
-export const SettingsFormInput = ({ input: { name, dataKey, ...props }, data, updateInput, inputError, inline = false }) => (
+export const SettingsFormInput = ({ input: { name, dataKey, ...props }, data, updateInput, inputError, inline }) => (
   <Input
     name={name}
     placeholder={(dataKey && data[dataKey]) || ''}
@@ -13,6 +13,10 @@ export const SettingsFormInput = ({ input: { name, dataKey, ...props }, data, up
     {...props}
   />
 );
+
+SettingsFormInput.defaultProps = {
+  inline: false,
+};
 
 SettingsFormInput.propTypes = {
   data: PropTypes.object.isRequired,

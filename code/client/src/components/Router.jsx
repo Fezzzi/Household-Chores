@@ -80,9 +80,9 @@ const RouterComponent = ({ loggedUser }) => (
   </Router>
 );
 
-RouterComponent.propTypes = ({
+RouterComponent.propTypes = {
   loggedUser: PropTypes.bool,
-});
+};
 
 const mapStateToProps = ({ app: { loggedUser } }) => ({ loggedUser });
 

@@ -118,7 +118,7 @@ const inputShape = PropTypes.shape({
   message: PropTypes.string,
 });
 
-SettingsForm.propTypes = ({
+SettingsForm.propTypes = {
   category: PropTypes.string.isRequired,
   tab: PropTypes.string.isRequired,
   settings: PropTypes.arrayOf(
@@ -130,4 +130,4 @@ SettingsForm.propTypes = ({
     )
   ),
   data: PropTypes.object,
-});
+};

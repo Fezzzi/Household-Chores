@@ -15,7 +15,7 @@ const Sider = ({ inputTextLength, type, inputError, showPassword, updateInputSta
 
   return (
     <TextInputSider>
-      {!inputActive && inputError !== ''
+      {!inputActive && inputError
         ? (
           <ErrorSpan>
             <InputErrorIcon onMouseEnter={() => setErrorHovered(true)} onMouseLeave={() => setErrorHovered(false)} />
@@ -43,7 +43,7 @@ const Sider = ({ inputTextLength, type, inputError, showPassword, updateInputSta
 Sider.propTypes = {
   type: PropTypes.string.isRequired,
   inputTextLength: PropTypes.number.isRequired,
-  inputError: PropTypes.string.isRequired,
+  inputError: PropTypes.string,
   updateInputState: PropTypes.func.isRequired,
   showPassword: PropTypes.bool,
   inputActive: PropTypes.bool,

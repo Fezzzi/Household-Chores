@@ -34,11 +34,11 @@ const FacebookButtonComponent = ({ locale, handleError, logInFacebook }) => (
   </FacebookProvider>
 );
 
-FacebookButtonComponent.propTypes = ({
+FacebookButtonComponent.propTypes = {
   locale: PropTypes.string,
   handleError: PropTypes.func.isRequired,
   logInFacebook: PropTypes.func,
-});
+};
 
 const mapStateToProps = ({ locale: { locale } }) => ({
   locale,

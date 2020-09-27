@@ -10,7 +10,7 @@ const PageWrapperComponent = ({ theme, changing, children }) => (
   </PageWrapper>
 );
 
-PageWrapperComponent.propTypes = ({
+PageWrapperComponent.propTypes = {
   theme: PropTypes.string,
   changing: PropTypes.bool,
   children: PropTypes.oneOfType([
@@ -18,7 +18,7 @@ PageWrapperComponent.propTypes = ({
     PropTypes.node,
     PropTypes.string,
   ]),
-});
+};
 
 const mapStateToProps = ({ theme: { theme, changing } }) => ({
   theme,

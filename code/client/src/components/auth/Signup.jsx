@@ -67,6 +67,7 @@ export class SignupComponent extends Component {
             key={input.name}
             message={input.message}
             type={input.type}
+            fixedPadding
             inputError={errors[input.name] || ''}
             updateInput={updateInput(this.setState.bind(this), input.name)}
           />
@@ -85,10 +86,10 @@ export class SignupComponent extends Component {
   }
 }
 
-SignupComponent.propTypes = ({
+SignupComponent.propTypes = {
   signUp: PropTypes.func,
   addNotification: PropTypes.func,
-});
+};
 
 const mapDispatchToProps = dispatch => ({
   signUp: values => dispatch(AuthActions.signUp(values)),

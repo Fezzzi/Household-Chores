@@ -59,6 +59,7 @@ export class ResetPassComponent extends Component {
             key={input.name}
             message={input.message}
             type={input.type}
+            fixedPadding
             inputError={errors[input.name] || ''}
             updateInput={updateInput(this.setState.bind(this), input.name)}
           />
@@ -75,10 +76,10 @@ export class ResetPassComponent extends Component {
   }
 }
 
-ResetPassComponent.propTypes = ({
+ResetPassComponent.propTypes = {
   switchTab: PropTypes.func,
   resetPass: PropTypes.func,
-});
+};
 
 const mapDispatchToProps = dispatch => ({
   resetPass: values => dispatch(AuthActions.resetPass(values)),

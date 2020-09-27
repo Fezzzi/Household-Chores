@@ -17,6 +17,9 @@
 
   --cYellowPrimary: #FFB700;
   --cYellowSecondary: #AE7D00;
+
+  --cLightPrimary: #FAFAFA;
+  --cLightSecondary: #E7E7E7;
 }
 
 .dark {
@@ -38,6 +41,9 @@
 
   --cYellowPrimary: #FFD870;
   --cYellowSecondary: #CF9500;
+
+  --cLightPrimary: #262626;
+  --cLightSecondary: #585858;
 }
 
 .light,

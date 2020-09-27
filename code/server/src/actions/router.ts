@@ -1,12 +1,15 @@
 import express, { NextFunction } from 'express';
 import path from 'path';
 
-import { AUTH_PREFIX, LOAD_PREFIX, RESOURCES_PREFIX, SETTINGS_PREFIX } from 'shared/constants/api';
+import {
+  AUTH_PREFIX, CONNECTIONS_PREFIX, LOAD_PREFIX, RESOURCES_PREFIX, SETTINGS_PREFIX,
+} from 'shared/constants/api';
 
 import LoadRouter from './load';
 import AuthRouter from './auth';
 import ResourceRouter from './resources';
 import SettingsRouter from './settings';
+import ConnectionsRouter from './connections';
 
 // Middleware function to check for logged-in users
 const sessionChecker = (req: any, res: any, next: NextFunction) => {
@@ -34,6 +37,7 @@ export default () => {
   router.use(`/${AUTH_PREFIX}`, AuthRouter());
   router.use(`/${RESOURCES_PREFIX}`, ResourceRouter());
   router.use(`/${SETTINGS_PREFIX}`, sessionChecker, SettingsRouter());
+  router.use(`/${CONNECTIONS_PREFIX}`, sessionChecker, ConnectionsRouter());
 
   router.all(/.*/, (_req, res) => {
     res.status(404).send('Not Found');
