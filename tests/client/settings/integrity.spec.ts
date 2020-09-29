@@ -18,7 +18,7 @@ describe('Settings > integrity', () => {
         }
 
         if (tabs.find(tab => !settingsRenderers[category][tab])) {
-          assert.fail('missing form renderer for SettingTypes TAB!');
+          assert.fail(`missing form renderer for SettingTypes TAB of category ${category}!`);
         }
       });
 
