@@ -46,7 +46,7 @@ export const SettingsColumn = styled.div`
 `;
 
 export const SettingRow = styled.div`
-  margin: 0 14px 14px 14px;
+  padding: 0 14px 14px 14px;
   opacity: ${props => props.selected ? 1 : 0.6};
   font-weight: ${props => props.selected ? 600 : 400};
   font-size: ${props => props.primary ? 1.17 : 1.10}em;

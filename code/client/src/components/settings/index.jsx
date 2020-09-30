@@ -18,11 +18,13 @@ const Settings = ({ categoryId, tabId, addNotification, history }) => {
     categories: Object.values(SettingTypes.CATEGORIES),
     category: categoryId,
     tabs: SettingTypes.TAB_ROWS[categoryId],
-    prevTabs: [],
     tab: tabId || SettingTypes.TAB_ROWS[categoryId][0],
+    renderedTabs: SettingTypes.TAB_ROWS[categoryId],
     messages: {},
-    data: {},
+    categoryTypes: {},
+    tabTypes: {},
   });
+  const [data, setData] = useState({});
   const ref = useRef(categoryId);
 
   const changeCategory = category => setState(prevState => ({
@@ -40,14 +42,17 @@ const Settings = ({ categoryId, tabId, addNotification, history }) => {
 
   useEffect(() => {
     loadSettings(category, tab)
-      .then(({ data: { categories, tabs, messages, data } }) => {
+      .then(({ data: { categories, tabs, messages, categoryTypes, tabTypes, data: newData } }) => {
         setState(prevState => ({
           ...prevState,
           categories,
           tabs,
+          renderedTabs: tabs,
           messages,
-          data,
+          categoryTypes,
+          tabTypes,
         }));
+        setData(newData);
       })
       .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR));
 
@@ -64,7 +69,7 @@ const Settings = ({ categoryId, tabId, addNotification, history }) => {
     }
   }, [category, tab]);
 
-  const { categories, tabs, prevTabs, messages, data } = state;
+  const { categories, tabs, renderedTabs, messages, categoryTypes, tabTypes } = state;
   return (
     <SettingsWrapper>
       <Column
@@ -75,28 +80,29 @@ const Settings = ({ categoryId, tabId, addNotification, history }) => {
         icons={CATEGORY_ICONS}
         selected={category}
         messages={messages}
+        types={categoryTypes}
         changeSelection={changeCategory}
         peekSelection={(peekCategory, enter) => setState({
           ...state,
-          prevTabs: (enter && tabs) || prevTabs,
-          tabs: (enter && SettingTypes.TAB_ROWS[peekCategory]) || prevTabs,
+          renderedTabs: (enter && SettingTypes.TAB_ROWS[peekCategory]) || tabs,
         })}
       />
       <Column
         type={SettingTypes.COLUMNS.TAB}
-        rows={tabs}
+        rows={renderedTabs}
         primary={false}
         width="225px"
         selected={tab}
         icons={TAB_ICONS}
         messages={messages}
+        types={tabTypes}
         changeSelection={changeTab}
         modifiers={settingsRenderers[category].tabModifiers && settingsRenderers[category].tabModifiers(data)}
       />
       <ContentColumn>
         {settingsRenderers[category] && settingsRenderers[category][tab] && settingsRenderers[category][tab](
           data,
-          newData => setState(prevState => ({ ...prevState, data: newData })),
+          setData,
         )}
       </ContentColumn>
     </SettingsWrapper>
@@ -108,7 +114,7 @@ Settings.propTypes = {
   tabId: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.bool,
-  ]).isRequired,
+  ]),
   history: PropTypes.object.isRequired,
   addNotification: PropTypes.func.isRequired,
 };

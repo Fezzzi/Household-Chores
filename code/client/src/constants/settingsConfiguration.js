@@ -70,8 +70,4 @@ export const settingsConfiguration = {
       ],
     ],
   },
-  [SettingTypes.CATEGORIES.HOUSEHOLDS]: {
-    [SettingTypes.TABS.GENERAL]: [],
-    [SettingTypes.TABS._GROUP]: [],
-  },
 };

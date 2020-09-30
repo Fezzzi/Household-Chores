@@ -98,7 +98,7 @@ export const assignUserProvider = async (userId: number, googleId: string, faceb
 
 export const queryUsers = async (query: string, userId: number): Promise<Array<object>> =>
   database.query(`
-    SELECT ${tabID}, ${tabNickname}, ${tabPhoto}, connections.${tabConnectionsState}, connections.${tabConnectionsMessage}
+    SELECT users.${tabID}, users.${tabNickname}, users.${tabPhoto}, connections.${tabConnectionsState}, connections.${tabConnectionsMessage}
     FROM ${tName} AS users
     LEFT JOIN ${tConnectionsName} AS connections
       ON connections.${tabConnectionsIDFrom}=${userId} AND connections.${tabConnectionsIDTo}=users.${tabID}

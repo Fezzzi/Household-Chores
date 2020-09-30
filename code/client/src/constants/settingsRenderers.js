@@ -1,6 +1,7 @@
 import React from 'react';
 
 import ConnectionListForm from 'clientSrc/components/connections/ConnectionListForm';
+import HouseholdInvitationList from 'clientSrc/components/household/HouseholdInvitationList';
 import { SettingsForm } from 'clientSrc/components/settings/SettingsForm';
 import { CATEGORIES, TABS } from 'shared/constants/settingTypes';
 import { FORM } from 'shared/constants/localeMessages';
@@ -41,5 +42,10 @@ export const settingsRenderers = {
       renderConnectionListForm(CONNECTION_STATE_TYPE.WAITING, FORM.NO_CONNECTION_REQUESTS, TABS.PENDING),
     [TABS.BLOCKED]:
       renderConnectionListForm(CONNECTION_STATE_TYPE.BLOCKED, FORM.NO_BLOCKED_CONNECTIONS, TABS.BLOCKED, 220),
+  },
+  [CATEGORIES.HOUSEHOLDS]: {
+    tabModifiers: data => tab => tab === TABS.INVITATIONS && ` (${data.invitations?.length || 0})`,
+    [TABS.NEW_HOUSEHOLD]: '',
+    [TABS.INVITATIONS]: (data, setData) => <HouseholdInvitationList invitations={data.invitations || []} setData={setData} />,
   },
 };

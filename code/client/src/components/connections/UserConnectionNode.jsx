@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { ChevronLeft } from '@material-ui/icons';
 
-import { getConnectionsButtonConfig } from 'clientSrc/helpers/connectionButtons';
+import { useConnectionButtons } from 'clientSrc/helpers/connectionButtons';
 import { ToggleInputIcon } from 'clientSrc/styles/blocks/form';
+import {
+  AppendMessage, UserButtonsBox, UserInfoBox, UserName, UserNode, UserPhotoBox, UserPhoto,
+} from 'clientSrc/styles/blocks/users';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import * as InputTypes from 'shared/constants/inputTypes';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
 import { COMMON } from 'shared/constants/localeMessages';
 
+import { TABS } from 'shared/constants/settingTypes';
 import { PrimaryButton, TextInput } from '../forms';
 import LocaleText from '../common/LocaleText';
 
-const UserConnectionNode = ({ tab, size, user, userData, setData, addNotification }) => {
+const UserConnectionNode = ({ tab, size, user, setData, addNotification }) => {
   const [buttons, setButtons] = useState({});
   const [connectMessage, setConnectMessage] = useState(null);
 
   useEffect(() => setButtons(
-    getConnectionsButtonConfig(tab, user, userData, setData, setButtons, addNotification)
-  ), [userData]);
+    useConnectionButtons(tab, user, setData, setButtons, addNotification)
+  ), [setData]);
 
   const { id, nickname, photo, state, message: userMessage } = user;
   return (
@@ -48,7 +51,7 @@ const UserConnectionNode = ({ tab, size, user, userData, setData, addNotificatio
             </>
           )
         )}
-        {state && userMessage && state === CONNECTION_STATE_TYPE.WAITING && (
+        {(tab === TABS.FIND_CONNECTION || tab === TABS.PENDING) && state === CONNECTION_STATE_TYPE.WAITING && userMessage && (
           <AppendMessage>
             {userMessage}
           </AppendMessage>
@@ -90,7 +93,6 @@ UserConnectionNode.propTypes = {
     message: PropTypes.string,
     state: PropTypes.string,
   }).isRequired,
-  userData: PropTypes.object.isRequired,
   setData: PropTypes.func.isRequired,
   addNotification: PropTypes.func.isRequired,
 };
@@ -102,57 +104,3 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(null, mapDispatchToProps)(UserConnectionNode);
-
-const UserNode = styled.div`
-  display: inline-flex;
-  width: ${props => props.size ?? 420}px;
-  min-width: ${props => props.size ?? 420}px;
-  min-height: 100px;
-  padding: 10px;
-`;
-
-const UserPhotoBox = styled.div`
-  display: inline-block;
-`;
-
-const UserPhoto = styled.img`
-  border-radius: 50%;
-  width: 80px;
-  height: 80px;
-  margin: 10px;
-`;
-
-const UserInfoBox = styled.div`
-  display: inline-block;
-  width: 100%;
-`;
-
-const UserName = styled.div`
-  width: 100%;
-  font-weight: 500;
-  font-size: 1.4em;
-  margin: 10px 0;
-`;
-
-const AppendMessage = styled.div`
-  display: block;
-  width: max-content;
-  opacity: ${props => props.reactive ? '0.6' : '0.8'};
-  font-style: italic;
-  font-weight: ${props => props.reactive ? 300 : 400};
-  font-size: 1.1em;
-  
-  ${props => props.reactive && `
-    &:hover {
-      cursor: pointer;
-      font-weight: 400;
-      opacity: 0.8;
-    }`
-}
-`;
-
-const UserButtonsBox = styled.div`
-  width: 100%;
-  margin-top: 5px;
-  font-size: 14px;
-`;

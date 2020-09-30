@@ -62,6 +62,7 @@ export const FORM = {
   SELECT_PHOTO: 'form.selectPhoto',
   SAVE: 'form.save',
   NO_DATA: 'form.noData',
+  NO_HOUSEHOLD_REQUESTS: 'form.noHouseholdRequests',
   NO_BLOCKED_CONNECTIONS: 'form.noBLockedConnections',
   NO_CONNECTION_REQUESTS: 'form.noConnectionRequests',
   NO_CONNECTIONS: 'form.noConnections',
@@ -86,6 +87,8 @@ export const SETTINGS = {
   [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.PENDING}`]: 'settings.tabPending',
   [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.BLOCKED}`]: 'settings.tabBlocked',
   [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.FIND_CONNECTION}`]: 'settings.tabFindConnection',
+
+  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NEW_HOUSEHOLD}`]: 'settings.newHousehold',
 };
 
 export const SUCCESS = {

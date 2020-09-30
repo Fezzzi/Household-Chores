@@ -65,26 +65,26 @@ export const findConnectedUsers = async (userId: number): Promise<{
 export const approveConnection = async (currentId: number, targetId: number): Promise<boolean> =>
   database.query(`
     UPDATE ${tName} SET ${tabState}='${CONNECTION_STATE_TYPE.APPROVED}', ${tabDateCreated}=NOW() 
-    WHERE ${tabIDFrom}=${targetId} AND ${tabIDTo}=${currentId}
-  `);
+    WHERE ${tabIDFrom}=? AND ${tabIDTo}=${currentId}
+  `, [targetId]);
 
 export const createConnection = async (currentId: number, targetId: number, message: string | null | undefined): Promise<boolean> =>
   database.query(`
     INSERT INTO ${tName} (${tabIDFrom}, ${tabIDTo}, ${tabMessage}, ${tabState}, ${tabDateCreated})
-    VALUES (${currentId}, ${targetId}, ${message ? `'${message}'` : 'NULL'}, '${CONNECTION_STATE_TYPE.WAITING}', NOW())
-  `);
+    VALUES (${currentId}, ?, ${message ? '?' : 'NULL'}, '${CONNECTION_STATE_TYPE.WAITING}', NOW())
+  `, [targetId, message]);
 
 export const removeConnection = async (currentId: number, targetId: number): Promise<boolean> =>
   database.query(`
     DELETE FROM ${tName}
-    WHERE (${tabIDFrom}=${targetId} AND ${tabIDTo}=${currentId})
-    OR (${tabState}='${CONNECTION_STATE_TYPE.APPROVED}' AND ${tabIDFrom}=${currentId} AND ${tabIDTo}=${targetId})
-  `);
+    WHERE (${tabIDFrom}=? AND ${tabIDTo}=${currentId})
+    OR (${tabState}='${CONNECTION_STATE_TYPE.APPROVED}' AND ${tabIDFrom}=${currentId} AND ${tabIDTo}=?)
+  `, [targetId, targetId]);
 
 export const blockConnection = async (currentId: number, targetId: number): Promise<boolean> =>
   database.query(`
     UPDATE ${tName}
-    SET ${tabState}='${CONNECTION_STATE_TYPE.BLOCKED}', ${tabDateCreated}=NOW(), ${tabIDFrom}=${targetId}, ${tabIDTo}=${currentId}
-    WHERE (${tabIDFrom}=${targetId} AND ${tabIDTo}=${currentId})
-      OR (${tabIDFrom}=${currentId} AND ${tabIDTo}=${targetId} AND ${tabState}='${CONNECTION_STATE_TYPE.APPROVED}')
-  `);
+    SET ${tabState}='${CONNECTION_STATE_TYPE.BLOCKED}', ${tabDateCreated}=NOW(), ${tabIDFrom}=?, ${tabIDTo}=${currentId}
+    WHERE (${tabIDFrom}=? AND ${tabIDTo}=${currentId})
+      OR (${tabIDFrom}=${currentId} AND ${tabIDTo}=? AND ${tabState}='${CONNECTION_STATE_TYPE.APPROVED}')
+  `, [targetId, targetId, targetId]);

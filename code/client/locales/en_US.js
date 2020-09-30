@@ -54,6 +54,7 @@ export default {
   [FORM.THEME]: 'Theme',
   [FORM.OLD_PASSWORD]: 'Old password',
   [FORM.NEW_PASSWORD]: 'New password',
+  [FORM.NO_HOUSEHOLD_REQUESTS]: 'You have no household invitations.',
   [FORM.NO_BLOCKED_CONNECTIONS]: 'You have no blocked users.',
   [FORM.NO_CONNECTION_REQUESTS]: 'You have no connection requests.',
   [FORM.NO_CONNECTIONS]: 'You have no connections.',
@@ -78,6 +79,8 @@ export default {
   [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.PENDING}`]]: 'Requests',
   [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.BLOCKED}`]]: 'Blocked',
   [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.FIND_CONNECTION}`]]: 'Find connection',
+  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NEW_HOUSEHOLD}`]]: 'Create household',
+  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.INVITATIONS}`]]: 'Invitations',
 
   [SUCCESS.RESET_LINK]: 'A reset link has been sent to your email address.',
 };

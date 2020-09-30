@@ -2,7 +2,7 @@ import express, { NextFunction } from 'express';
 import path from 'path';
 
 import {
-  AUTH_PREFIX, CONNECTIONS_PREFIX, LOAD_PREFIX, RESOURCES_PREFIX, SETTINGS_PREFIX,
+  AUTH_PREFIX, CONNECTIONS_PREFIX, HOUSEHOLDS_PREFIX, LOAD_PREFIX, RESOURCES_PREFIX, SETTINGS_PREFIX,
 } from 'shared/constants/api';
 
 import LoadRouter from './load';
@@ -10,6 +10,7 @@ import AuthRouter from './auth';
 import ResourceRouter from './resources';
 import SettingsRouter from './settings';
 import ConnectionsRouter from './connections';
+import HouseholdsRouter from './households';
 
 // Middleware function to check for logged-in users
 const sessionChecker = (req: any, res: any, next: NextFunction) => {
@@ -38,6 +39,7 @@ export default () => {
   router.use(`/${RESOURCES_PREFIX}`, ResourceRouter());
   router.use(`/${SETTINGS_PREFIX}`, sessionChecker, SettingsRouter());
   router.use(`/${CONNECTIONS_PREFIX}`, sessionChecker, ConnectionsRouter());
+  router.use(`/${HOUSEHOLDS_PREFIX}`, sessionChecker, HouseholdsRouter());
 
   router.all(/.*/, (_req, res) => {
     res.status(404).send('Not Found');

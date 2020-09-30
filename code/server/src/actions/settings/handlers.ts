@@ -2,6 +2,7 @@ import * as SettingTypes from 'shared/constants/settingTypes';
 
 import { getCategoryList, getTabList } from 'serverSrc/helpers/settings';
 import { findConnectedUsers } from 'serverSrc/database/models/connections';
+import { findUserHouseholds } from 'serverSrc/database/models/households';
 
 const getTabData = async (req: any, category: string, tab: string) => {
   switch (category) {
@@ -13,7 +14,7 @@ const getTabData = async (req: any, category: string, tab: string) => {
         email: 'test@test.com',
       };
     case SettingTypes.CATEGORIES.HOUSEHOLDS:
-      return {};
+      return findUserHouseholds(req.session.user);
     case SettingTypes.CATEGORIES.CONNECTIONS:
       return findConnectedUsers(req.session.user);
     default:
@@ -22,15 +23,18 @@ const getTabData = async (req: any, category: string, tab: string) => {
 };
 
 export const handleSettingsDataFetch = async (category: string, tab: string, req: any, res: any): Promise<void> => {
-  const { categories, messages: categoryMessages } = getCategoryList();
-  const { tabs, messages: tabMessages } = getTabList(category);
+  const data = await getTabData(req, category, tab);
+  const { categories, messages: categoryMessages, types: categoryTypes } = getCategoryList(data);
+  const { tabs, messages: tabMessages, types: tabTypes } = getTabList(data, category);
   res.status(200).send({
     categories,
     tabs,
-    data: await getTabData(req, category, tab),
+    data,
     messages: {
       ...categoryMessages,
       ...tabMessages,
     },
+    categoryTypes,
+    tabTypes,
   });
 };

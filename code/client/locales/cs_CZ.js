@@ -54,6 +54,7 @@ export default {
   [FORM.THEME]: 'Prostředí',
   [FORM.OLD_PASSWORD]: 'Staré heslo',
   [FORM.NEW_PASSWORD]: 'Nové heslo',
+  [FORM.NO_HOUSEHOLD_REQUESTS]: 'Nemáte žádné pozvánky do domácností.',
   [FORM.NO_BLOCKED_CONNECTIONS]: 'Nemáte blokované žádné uživatele.',
   [FORM.NO_CONNECTION_REQUESTS]: 'Nemáte žádné žádosti o spojení.',
   [FORM.NO_CONNECTIONS]: 'Nemáte zatím žádná spojení.',
@@ -78,6 +79,8 @@ export default {
   [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.PENDING}`]]: 'Žádosti',
   [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.BLOCKED}`]]: 'Blokování',
   [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.FIND_CONNECTION}`]]: 'Hledat spojení',
+  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NEW_HOUSEHOLD}`]]: 'Vytvořit domácnost',
+  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.INVITATIONS}`]]: 'Pozvánky',
 
   [SUCCESS.RESET_LINK]: 'Link pro obnovu hesla byl úspěšně zaslán na Vaši emailovou adresu.',
 };
