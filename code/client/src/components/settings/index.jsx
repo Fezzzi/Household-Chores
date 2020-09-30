@@ -1,15 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import * as SettingTypes from 'shared/constants/settingTypes';
-import * as NotificationTypes from 'shared/constants/notificationTypes';
-import { ERROR } from 'shared/constants/localeMessages';
 import { ContentColumn, SettingsWrapper } from 'clientSrc/styles/blocks/settings';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
-import { loadSettings } from 'clientSrc/effects/settingsEffects';
 import { settingsRenderers } from 'clientSrc/constants/settingsRenderers';
 import { CATEGORY_ICONS, TAB_ICONS } from 'clientSrc/constants/settingIcons';
+import { useContentRendererKeys, useSettingsLoader } from 'clientSrc/helpers/settings';
 
 import Column from './Column';
 
@@ -19,57 +17,55 @@ const Settings = ({ categoryId, tabId, addNotification, history }) => {
     category: categoryId,
     tabs: SettingTypes.TAB_ROWS[categoryId],
     tab: tabId || SettingTypes.TAB_ROWS[categoryId][0],
-    renderedTabs: SettingTypes.TAB_ROWS[categoryId],
     messages: {},
     categoryTypes: {},
     tabTypes: {},
   });
+  const { category, tab, categories, tabs, messages, categoryTypes, tabTypes } = state;
+
+  const [renderedTabs, setRenderedTabs] = useState(SettingTypes.TAB_ROWS[categoryId]);
   const [data, setData] = useState({});
-  const ref = useRef(categoryId);
-
-  const changeCategory = category => setState(prevState => ({
-    ...prevState,
-    category,
-    tab: SettingTypes.TAB_ROWS[category] && SettingTypes.TAB_ROWS[category][0],
-  }));
-
-  const changeTab = tab => setState(prevState => ({
-    ...prevState,
-    tab,
-  }));
-
-  const { category, tab } = state;
+  const settingsLoader = useSettingsLoader();
 
   useEffect(() => {
-    loadSettings(category, tab)
-      .then(({ data: { categories, tabs, messages, categoryTypes, tabTypes, data: newData } }) => {
-        setState(prevState => ({
-          ...prevState,
-          categories,
-          tabs,
-          renderedTabs: tabs,
-          messages,
-          categoryTypes,
-          tabTypes,
-        }));
-        setData(newData);
-      })
-      .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR));
+    settingsLoader(category, tab, setState, setData, setRenderedTabs, addNotification)
+  }, []);
 
-    if (category !== ref.current) {
-      ref.current = category;
-      history.push({
-        pathname: category,
-        search: `?tab=${tab}`,
-      });
-    } else {
-      history.push({
-        search: `?tab=${tab}`,
-      });
-    }
-  }, [category, tab]);
+  const { categoryKey, tabKey } = useMemo(() =>
+    useContentRendererKeys(category, tab, categoryTypes, tabTypes)
+    , [category, tab, categoryTypes, tabTypes]
+  );
 
-  const { categories, tabs, renderedTabs, messages, categoryTypes, tabTypes } = state;
+  const changeCategory = useCallback(newCategory => {
+    const newTab = SettingTypes.TAB_ROWS[newCategory]
+      ? SettingTypes.TAB_ROWS[newCategory][0]
+      : SettingTypes.TAB_ROWS[categoryTypes[newCategory]][0];
+
+    setState(prevState => ({
+      ...prevState,
+      category: newCategory,
+      tab: newTab
+    }));
+
+    history.push({
+      pathname: newCategory,
+      search: `?tab=${newTab}`,
+    });
+    settingsLoader(newCategory, newTab, setState, setData, addNotification)
+  }, [categoryTypes, setState, setData, addNotification]);
+
+  const changeTab = useCallback(newTab => {
+    setState(prevState => ({
+      ...prevState,
+      tab: newTab,
+    }));
+
+    history.push({
+      search: `?tab=${newTab}`,
+    });
+    settingsLoader(category, newTab, setState, setData, addNotification)
+  }, [category, setState, setData, addNotification]);
+
   return (
     <SettingsWrapper>
       <Column
@@ -82,10 +78,9 @@ const Settings = ({ categoryId, tabId, addNotification, history }) => {
         messages={messages}
         types={categoryTypes}
         changeSelection={changeCategory}
-        peekSelection={(peekCategory, enter) => setState({
-          ...state,
-          renderedTabs: (enter && SettingTypes.TAB_ROWS[peekCategory]) || tabs,
-        })}
+        peekSelection={useCallback((peekCategory, enter) => setRenderedTabs(
+          (enter && SettingTypes.TAB_ROWS[peekCategory]) || tabs
+        ), [tabs, setRenderedTabs])}
       />
       <Column
         type={SettingTypes.COLUMNS.TAB}
@@ -100,10 +95,7 @@ const Settings = ({ categoryId, tabId, addNotification, history }) => {
         modifiers={settingsRenderers[category].tabModifiers && settingsRenderers[category].tabModifiers(data)}
       />
       <ContentColumn>
-        {settingsRenderers[category] && settingsRenderers[category][tab] && settingsRenderers[category][tab](
-          data,
-          setData,
-        )}
+        {categoryKey && tabKey && settingsRenderers[categoryKey][tabKey](data, setData, tab, category)}
       </ContentColumn>
     </SettingsWrapper>
   );

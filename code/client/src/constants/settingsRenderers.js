@@ -8,6 +8,7 @@ import { FORM } from 'shared/constants/localeMessages';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
 
 import { settingsConfiguration } from './settingsConfiguration';
+import HouseholdModificaionForm from 'clientSrc/components/household/HouseholdModificationForm';
 
 const renderFormFromConfig = (category, tab, settings) => data =>
   <SettingsForm category={category} tab={tab} settings={settings} data={data} />;
@@ -46,6 +47,9 @@ export const settingsRenderers = {
   [CATEGORIES.HOUSEHOLDS]: {
     tabModifiers: data => tab => tab === TABS.INVITATIONS && ` (${data.invitations?.length || 0})`,
     [TABS.NEW_HOUSEHOLD]: '',
-    [TABS.INVITATIONS]: (data, setData) => <HouseholdInvitationList invitations={data.invitations || []} setData={setData} />,
+    [TABS.INVITATIONS]: (data, setData) =>
+      <HouseholdInvitationList invitations={data.invitations || []} setData={setData} />,
+    [TABS._HOUSEHOLD]: (data, setData, tab) =>
+      <HouseholdModificaionForm household={data.households?.find(({ key }) => key === tab) || {}} tab={tab} setData={setData} />
   },
 };

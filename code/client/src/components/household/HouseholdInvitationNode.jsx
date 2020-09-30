@@ -34,7 +34,7 @@ const HouseholdInvitationNode = ({ invitation, setData, addNotification }) => {
         </UserInfoBox>
       </UserNode>
       <UserNodeSeparator>
-        <ChevronRight fontSize="medium" />
+        <ChevronRight />
       </UserNodeSeparator>
       <UserNode size={320}>
         <UserPhotoBox><UserPhoto src={photo} /></UserPhotoBox>

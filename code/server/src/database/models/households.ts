@@ -54,6 +54,7 @@ export const findUserHouseholds = async (currentUser: number): Promise<{
   const households = [{
     [tabID]: 1,
     [tabName]: 'household 1',
+    key: 'household-1',
     [tabDateCreated]: '21.6. 2020 18:56:42',
     [tabPhoto]: 'https://www.fondation-louisbonduelle.org/wp-content/uploads/2016/09/melon_194841866.png',
     members: [
@@ -72,6 +73,7 @@ export const findUserHouseholds = async (currentUser: number): Promise<{
   }, {
     [tabID]: 2,
     [tabName]: 'household 2',
+    key: 'household-2',
     [tabDateCreated]: '21.6. 2021 18:56:42',
     [tabPhoto]: 'https://www.johnnyseeds.com/dw/image/v2/BBBW_PRD/on/demandware.static/-/Sites-jss-master/default/dw22620c58/images/products/vegetables/00053_01_brilliantfield.jpg?sw=387&cx=226&cy=0&cw=1196&ch=1196',
     members: [
@@ -90,6 +92,7 @@ export const findUserHouseholds = async (currentUser: number): Promise<{
   }, {
     [tabID]: 3,
     [tabName]: 'household 3',
+    key: 'household-3',
     [tabDateCreated]: '21.6. 2022 18:56:42',
     [tabPhoto]: 'https://www.rareseeds.com/media/catalog/product/cache/4f71e30e38ffe1b90b59b74efe76a4b8/m/e/melon-tigger-lss-dsc_3440.jpg',
     members: [

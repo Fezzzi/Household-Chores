@@ -20,17 +20,17 @@ export const getTabList = (data: any, category: string): { tabs: string[]; messa
     case CATEGORIES.HOUSEHOLDS: return {
       tabs: [
         ...SettingTypes.TAB_ROWS[category],
-        ...data.households.map((household: any) => `${TABS._HOUSEHOLD}-${household[HOUSEHOLDS_TABLE.columns.id]}`),
+        ...data.households.map((household: any) => household.key),
       ],
       messages: Object.fromEntries(
         data.households.map((household: any) => [
-          `${TABS._HOUSEHOLD}-${household[HOUSEHOLDS_TABLE.columns.id]}`,
+          household.key,
           household[HOUSEHOLDS_TABLE.columns.name],
         ]),
       ),
       types: Object.fromEntries(
         data.households.map((household: any) => [
-          `${TABS._HOUSEHOLD}-${household[HOUSEHOLDS_TABLE.columns.id]}`,
+          household.key,
           TABS._HOUSEHOLD,
         ]),
       ),
