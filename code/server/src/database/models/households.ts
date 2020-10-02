@@ -1,5 +1,5 @@
 import { database } from 'serverSrc/database';
-import HOUSEHOLD_ROLE_TYPE from 'serverSrc/constants/householdRoleType';
+import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
 
 import HOUSEHOLDS_TABLE from './tables/households';
 import HOUSEHOLD_INVITATIONS_TABLE from './tables/household_invitations';
@@ -58,8 +58,8 @@ export const findUserHouseholds = async (currentUser: number): Promise<{
     [tabDateCreated]: '21.6. 2020 18:56:42',
     [tabPhoto]: 'https://www.fondation-louisbonduelle.org/wp-content/uploads/2016/09/melon_194841866.png',
     members: [
-      { [tabUsersID]: 1, [tabUsersNickname]: 'Uzivatel 1', [tabUsersPhoto]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
-      { [tabUsersID]: 1, [tabUsersNickname]: 'Uzivatel 1', [tabUsersPhoto]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
+      { [tabHouseMemRole]: HOUSEHOLD_ROLE_TYPE.ADMIN, [tabHouseInvDateJoined]: '21. 1. 2020 16:32:58',[tabUsersID]: 1, [tabUsersNickname]: 'Uzivatel 1', [tabUsersPhoto]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
+      { [tabHouseMemRole]: HOUSEHOLD_ROLE_TYPE.MEMBER, [tabHouseInvDateJoined]: '21. 1. 2020 16:32:58',[tabUsersID]: 1, [tabUsersNickname]: 'Uzivatel 1', [tabUsersPhoto]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
     ],
     invitations: [{
       from: { [tabUsersID]: 1, [tabUsersNickname]: 'Uzivatel 1', [tabUsersPhoto]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
@@ -77,8 +77,8 @@ export const findUserHouseholds = async (currentUser: number): Promise<{
     [tabDateCreated]: '21.6. 2021 18:56:42',
     [tabPhoto]: 'https://www.johnnyseeds.com/dw/image/v2/BBBW_PRD/on/demandware.static/-/Sites-jss-master/default/dw22620c58/images/products/vegetables/00053_01_brilliantfield.jpg?sw=387&cx=226&cy=0&cw=1196&ch=1196',
     members: [
-      { [tabUsersID]: 1, [tabUsersNickname]: 'Uzivatel 1', [tabUsersPhoto]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
-      { [tabUsersID]: 1, [tabUsersNickname]: 'Uzivatel 1', [tabUsersPhoto]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
+      { [tabHouseMemRole]: HOUSEHOLD_ROLE_TYPE.ADMIN, [tabHouseInvDateJoined]: '21. 1. 2020 16:32:58', [tabUsersID]: 1, [tabUsersNickname]: 'Uzivatel 1', [tabUsersPhoto]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
+      { [tabHouseMemRole]: HOUSEHOLD_ROLE_TYPE.MEMBER, [tabHouseInvDateJoined]: '21. 1. 2020 16:32:58',[tabUsersID]: 1, [tabUsersNickname]: 'Uzivatel 1', [tabUsersPhoto]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
     ],
     invitations: [{
       from: { [tabUsersID]: 1, [tabUsersNickname]: 'Uzivatel 1', [tabUsersPhoto]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
@@ -96,8 +96,8 @@ export const findUserHouseholds = async (currentUser: number): Promise<{
     [tabDateCreated]: '21.6. 2022 18:56:42',
     [tabPhoto]: 'https://www.rareseeds.com/media/catalog/product/cache/4f71e30e38ffe1b90b59b74efe76a4b8/m/e/melon-tigger-lss-dsc_3440.jpg',
     members: [
-      { [tabUsersID]: 1, [tabUsersNickname]: 'Uzivatel 1', [tabUsersPhoto]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
-      { [tabUsersID]: 1, [tabUsersNickname]: 'Uzivatel 1', [tabUsersPhoto]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
+      { [tabHouseMemRole]: HOUSEHOLD_ROLE_TYPE.ADMIN, [tabHouseInvDateJoined]: '21. 1. 2020 16:32:58',[tabUsersID]: 1, [tabUsersNickname]: 'Uzivatel 1', [tabUsersPhoto]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
+      { [tabHouseMemRole]: HOUSEHOLD_ROLE_TYPE.MEMBER, [tabHouseInvDateJoined]: '21. 1. 2020 16:32:58',[tabUsersID]: 1, [tabUsersNickname]: 'Uzivatel 1', [tabUsersPhoto]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
     ],
     invitations: [{
       from: { [tabUsersID]: 1, [tabUsersNickname]: 'Uzivatel 1', [tabUsersPhoto]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },

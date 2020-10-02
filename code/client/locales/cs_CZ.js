@@ -1,4 +1,4 @@
-import { AUTH, COMMON, ERROR, FORM, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
+import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
 import * as SettingTypes from 'shared/constants/settingTypes';
 
 export default {
@@ -69,6 +69,11 @@ export default {
   [FORM.CONNECTION_IGNORE]: 'Ignorovat',
   [FORM.CONNECTION_REMOVE]: 'Odstranit',
   [FORM.CONNECTION_SENT]: 'Žádost odeslána',
+
+  [HOUSEHOLD.LEAVE]: 'Opustit domácnost',
+  [HOUSEHOLD.DELETE]: 'Vymazat domácnost',
+  [HOUSEHOLD.MEMBER]: 'člen',
+  [HOUSEHOLD.MEMBERS]: 'členů',
 
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]]: 'Profil',
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.CONNECTIONS}`]]: 'Spojení',

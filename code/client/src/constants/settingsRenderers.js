@@ -50,6 +50,6 @@ export const settingsRenderers = {
     [TABS.INVITATIONS]: (data, setData) =>
       <HouseholdInvitationList invitations={data.invitations || []} setData={setData} />,
     [TABS._HOUSEHOLD]: (data, setData, tab) =>
-      <HouseholdModificaionForm household={data.households?.find(({ key }) => key === tab) || {}} tab={tab} setData={setData} />
+      <HouseholdModificaionForm household={data.households?.find(({ key }) => key === tab)} tab={tab} setData={setData} />
   },
 };

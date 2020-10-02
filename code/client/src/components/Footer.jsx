@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PageFooter, FooterWrapper, CopyrightRow } from 'clientSrc/styles/blocks/footer';
+import { PageFooter, FooterWrapper, CopyrightRow } from 'clientSrc/styles/blocks';
 
 export default () => (
   <PageFooter>

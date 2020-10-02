@@ -76,6 +76,13 @@ export const FORM = {
   CONNECTION_SENT: 'form.connectionSent',
 };
 
+export const HOUSEHOLD = {
+  LEAVE: 'household.leave',
+  DELETE: 'household.delete',
+  MEMBER: 'common.member',
+  MEMBERS: 'common.members',
+};
+
 export const SETTINGS = {
   [`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]: 'settings.categoryProfile',
   [`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.CONNECTIONS}`]: 'settings.categoryConnections',

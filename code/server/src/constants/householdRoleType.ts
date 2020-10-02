@@ -1,7 +1,0 @@
-enum HOUSEHOLD_ROLE_TYPE {
-  ADMIN = 'ADMIN',
-  MANAGER = 'MANAGER',
-  MEMBER = 'MEMBER',
-}
-
-export default HOUSEHOLD_ROLE_TYPE;

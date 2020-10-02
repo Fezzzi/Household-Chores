@@ -134,3 +134,9 @@ export const LocaleLabel = styled.span`
   font-size: 13px;
   color: var(--cFont);
 `;
+
+export const SectionHeadline = styled.h2`
+  font-size: 2em;
+  font-weight: 700;
+  margin: 50px 50px 25px;
+`;

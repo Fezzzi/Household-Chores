@@ -1,4 +1,4 @@
-import { AUTH, COMMON, ERROR, FORM, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
+import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD,  SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
 import * as SettingTypes from 'shared/constants/settingTypes';
 
 export default {
@@ -69,6 +69,11 @@ export default {
   [FORM.CONNECTION_IGNORE]: 'Ignore',
   [FORM.CONNECTION_REMOVE]: 'Remove',
   [FORM.CONNECTION_SENT]: 'Request sent',
+
+  [HOUSEHOLD.LEAVE]: 'Leave household',
+  [HOUSEHOLD.DELETE]: 'Delete household',
+  [HOUSEHOLD.MEMBER]: 'member',
+  [HOUSEHOLD.MEMBERS]: 'members',
 
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]]: 'Profile',
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.CONNECTIONS}`]]: 'Connections',

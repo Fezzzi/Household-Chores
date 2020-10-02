@@ -1,6 +1,7 @@
 import { invitationApprove, invitationIgnore } from 'clientSrc/effects/householdEffects';
-import { ERROR } from 'shared/constants/localeMessages';
 import * as NotificationTypes from 'shared/constants/notificationTypes';
+import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
+import { ERROR } from 'shared/constants/localeMessages';
 
 export const useHouseholdButtonHandlers = (householdId, fromId, setData, addNotification) => {
   const approveHandler = () => invitationApprove({ householdId, fromId, photo: '' })
@@ -21,3 +22,10 @@ export const useHouseholdButtonHandlers = (householdId, fromId, setData, addNoti
     removeHandler,
   };
 };
+
+export const getLabelColors = role => role === HOUSEHOLD_ROLE_TYPE.ADMIN
+  ? { background: 'var(--cBluePrimary)', color: 'var(--cThemeBack)' }
+  : role === HOUSEHOLD_ROLE_TYPE.MANAGER
+    ? { background: 'var(--cYellowPrimary)', color: 'var(--cThemeBack)' }
+    : { background: 'var(--cGreenPrimary)', color: 'var(--cThemeBack)' };
+

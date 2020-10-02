@@ -1,8 +1,8 @@
+import { migrateWithQueries } from "serverSrc/helpers/migrations";
 import HOUSEHOLDS_TABLE from 'serverSrc/database/models/tables/households';
 import HOUSEHOLD_MEMBERS_TABLE from 'serverSrc/database/models/tables/household_members';
 import HOUSEHOLD_INVITATIONS_TABLE from 'serverSrc/database/models/tables/household_invitations';
-import HOUSEHOLD_ROLE_TYPE from 'serverSrc/constants/householdRoleType';
-import { migrateWithQueries } from "serverSrc/helpers/migrations";
+import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
 
 const { columns: householdColumns } = HOUSEHOLDS_TABLE;
 const { columns: memberColumns } = HOUSEHOLD_MEMBERS_TABLE;
