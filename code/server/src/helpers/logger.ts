@@ -14,7 +14,7 @@ const formatMessage = (message: string): string => {
     + `${padLeft(date.getHours())}:${padLeft(date.getMinutes())}:${padLeft(date.getSeconds())}.${date.getMilliseconds()}] ${message}`;
 };
 
-const padLeft = (datePart: number): string => datePart.toString().length === 1 ? `0${datePart}` : `${datePart}`;
+const padLeft = (datePart: number): string => datePart >= 10 ? datePart.toString() : `0${datePart}`;
 
 export const ErrorLogger = async (message: string): Promise<void> => {
   const msg = formatMessage(message);
