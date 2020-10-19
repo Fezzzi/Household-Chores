@@ -10,8 +10,11 @@ const LOGS_PATH = path.join(path.resolve('./code/server'), process.env.LOGS_PATH
 
 const formatMessage = (message: string): string => {
   const date = new Date();
-  return `[${date.toLocaleString('cs-CZ')}.${date.getMilliseconds()}] ${message}`;
+  return `[${padLeft(date.getDate())}.${padLeft(date.getMonth() + 1)}.${date.getFullYear()}, `
+    + `${padLeft(date.getHours())}:${padLeft(date.getMinutes())}:${padLeft(date.getSeconds())}.${date.getMilliseconds()}] ${message}`;
 };
+
+const padLeft = (datePart: number): string => datePart >= 10 ? datePart.toString() : `0${datePart}`;
 
 export const ErrorLogger = async (message: string): Promise<void> => {
   const msg = formatMessage(message);
