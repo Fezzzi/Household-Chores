@@ -1,5 +1,11 @@
 import styled from 'styled-components';
 
+export const ThemeWrapper = styled.div`
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+`;
+
 export const PageWrapper = styled.section`
   background-color: var(--cThemeBack);
   color: var(--cFont);
@@ -13,6 +19,12 @@ export const PageContent = styled.main`
   order: 4;
   display: flex;
   flex-grow: 1;
+`;
+
+export const PortalAnchor = styled.div`
+  height: 0;
+  width: 100%;
+  position: relative;
 `;
 
 export const PageFooter = styled.footer`

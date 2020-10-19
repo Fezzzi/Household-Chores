@@ -61,6 +61,7 @@ export const FORM = {
   NEW_PASSWORD: 'form.newPassword',
   SELECT_PHOTO: 'form.selectPhoto',
   SAVE: 'form.save',
+  SAVING: 'form.saving',
   NO_DATA: 'form.noData',
   NO_HOUSEHOLD_REQUESTS: 'form.noHouseholdRequests',
   NO_BLOCKED_CONNECTIONS: 'form.noBLockedConnections',
@@ -79,8 +80,16 @@ export const FORM = {
 export const HOUSEHOLD = {
   LEAVE: 'household.leave',
   DELETE: 'household.delete',
-  MEMBER: 'common.member',
-  MEMBERS: 'common.members',
+  MEMBER: 'household.member',
+  MEMBERS: 'household.members',
+  MEMBERS_SECTION: 'household.membersSection',
+  CHANGE_ROLE: 'household.changeRole',
+  REMOVE_USER: 'household.removeUser',
+  INVITATIONS: 'household.invitations',
+  INVITE_USER: 'household.inviteUser',
+  INVITE: 'household.invite',
+  MODULES: 'household.modules',
+  ADD_MODULE: 'household.addModule',
 };
 
 export const SETTINGS = {
@@ -96,6 +105,8 @@ export const SETTINGS = {
   [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.FIND_CONNECTION}`]: 'settings.tabFindConnection',
 
   [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NEW_HOUSEHOLD}`]: 'settings.newHousehold',
+  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.INVITATIONS}`]: 'settings.invitations',
+  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS._HOUSEHOLD}`]: 'settings.household',
 };
 
 export const SUCCESS = {

@@ -29,11 +29,9 @@ const HouseholdInvitationList = ({ invitations, setData }) => invitations?.lengt
 HouseholdInvitationList.propTypes = {
   invitations: PropTypes.arrayOf(
     PropTypes.shape({
-      from: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        nickname: PropTypes.string.isRequired,
-        photo: PropTypes.string.isRequired,
-      }).isRequired,
+      fromId: PropTypes.number.isRequired,
+      fromNickname: PropTypes.string.isRequired,
+      fromPhoto: PropTypes.string.isRequired,
       id_household: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       message: PropTypes.string,

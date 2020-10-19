@@ -86,6 +86,7 @@ export const UserName = styled.div`
   display: flex;
   width: fit-content;
   padding: 10px;
+  word-break: break-all;
 `;
 
 export const RoleLabel = styled.div`
@@ -95,6 +96,38 @@ export const RoleLabel = styled.div`
   border-radius: 3px;
   text-transform: lowercase;
   width: fit-content;
-  line-height: 22px;
-      margin: auto;
+  line-height: 20px;
+  height: 20px;
+  margin: 0 auto;
+`;
+
+export const InvitationFormWrapper = styled.div`
+  display: flex;
+  margin: 0 50px;
+  min-width: 550px;
+`;
+
+export const InvitationFormNode = styled.div`
+  display: inline-block;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+`;
+
+export const InvitationFormNodePhoto = styled.img`
+  width: 50px;
+  height: 50px;
+  margin: auto;
+  border-radius: 100%;
+  display: flex;
+`;
+
+export const InvitationFormNodeName = styled.div`
+  margin: auto;
+  font-weight: 600;
+  font-size: 1.4em;
+  display: flex;
+  width: fit-content;
+  padding: 10px;
+  word-break: break-all;
 `;

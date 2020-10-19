@@ -46,7 +46,7 @@ export const SwitchInputWrapper = styled.div`
 `;
 
 export const TextInputBox = styled.label`
-  height: 36px;
+  height: ${props => props.lineHeight ?? 36}px;
   padding: 0;
   position: relative;
   margin: 0;
@@ -94,9 +94,9 @@ export const SwitchInputBox = styled.label`
 export const TextInputLabel = styled.span`
   color: var(--cGreyPrimary);
   font-size: 12px;
-  height: 36px;
+  height: ${props => props.lineHeight ?? 36}px;
   left: 8px;
-  line-height: 36px;
+  line-height: ${props => props.lineHeight ?? 36}px;
   overflow: hidden;
   pointer-events: none;
   position: absolute;
@@ -106,8 +106,7 @@ export const TextInputLabel = styled.span`
   transition: transform ease-out .1s, -webkit-transform ease-out .1s;
   
   ${props => props.shrunken && {
-    WebkitTransform: 'scale(.83333) translateY(-10px)',
-    transform: 'scale(.83333) translateY(-10px)',
+    transform: 'scale(.83333) translateY(-11px)',
   }}
 `;
 
@@ -147,7 +146,7 @@ export const TextInputField = styled.input`
   background: var(--cThemeBack);
   color: var(--cFont);
   overflow: hidden;
-  padding: ${props => props.shrunken ? '14px 0 2px 8px' : '9px 0 7px 8px'};
+  padding: ${props => props.shrunken ? '12px 0 2px 8px' : '9px 0 7px 8px'};
   text-overflow: ellipsis;
   margin: 0;
   border: 0;
@@ -269,6 +268,11 @@ export const FormButton = styled.button`
   width: 100%;
   max-width: 400px;
   height: 32px;
+  
+  ${props => props.disabled && `
+    opacity: .4;
+    pointer-events: none;
+  `}
 
   &:active {
     opacity: .7;
@@ -281,11 +285,17 @@ export const FormButton = styled.button`
   &:hover {
     background-color: ${props => props.backgroundHover};
   }
+`;
 
-  ${props => props.disabled
-    ? css`opacity: .4; pointer-events: none;`
-    : ''
-};
+export const MiniFormButtonWrapper = styled.div`
+  margin: ${props => props.margin || '0 auto'};
+  display: ${props => props.inline ? 'inline-block' : 'block'};
+  width: fit-content;
+  align-content: stretch;
+`;
+
+export const MiniFormButton = styled(FormButton)`
+  height: 24px;
 `;
 
 export const FormButtonContentWrapper = styled.span`

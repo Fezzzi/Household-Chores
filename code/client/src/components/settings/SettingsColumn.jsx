@@ -2,15 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { SETTINGS } from 'shared/constants/localeMessages';
-import { SettingsColumnWrapper, SettingIcon, SettingText, SettingsColumn, SettingRow } from 'clientSrc/styles/blocks/settings';
+import { ColumnWrapper, SettingIcon, SettingText, Column, SettingRow } from 'clientSrc/styles/blocks/settings';
 import LocaleText from 'clientSrc/components/common/LocaleText';
 
-const Column = ({
+const SettingsColumn = ({
   type, rows, primary, icons, width, selected,
   messages, types, modifiers, changeSelection, peekSelection,
 }) => (
-  <SettingsColumnWrapper width={width}>
-    <SettingsColumn>
+  <ColumnWrapper width={width}>
+    <Column>
       {rows.map(row => (
         <SettingRow
           primary={primary}
@@ -34,17 +34,17 @@ const Column = ({
         </SettingRow>
       )
       )}
-    </SettingsColumn>
-  </SettingsColumnWrapper>
+    </Column>
+  </ColumnWrapper>
 );
 
-Column.defaultProps = {
+SettingsColumn.defaultProps = {
   messages: {},
   peekSelection: () => {},
   modifiers: () => '',
 };
 
-Column.propTypes = {
+SettingsColumn.propTypes = {
   type: PropTypes.string.isRequired,
   rows: PropTypes.arrayOf(PropTypes.string).isRequired,
   primary: PropTypes.bool.isRequired,
@@ -58,4 +58,4 @@ Column.propTypes = {
   peekSelection: PropTypes.func,
 };
 
-export default Column;
+export default SettingsColumn;

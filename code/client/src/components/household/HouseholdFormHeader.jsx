@@ -8,15 +8,17 @@ import {
   RoleLabel, UserName, UserPhoto,
 } from 'clientSrc/styles/blocks/households';
 import { FormButtonContentWrapper } from 'clientSrc/styles/blocks/form';
-import { getLabelColors}  from 'clientSrc/helpers/household';
-import { HOUSEHOLD } from 'shared/constants/localeMessages';
+import { getLabelColors } from 'clientSrc/helpers/household';
+import * as InputTypes from 'shared/constants/inputTypes';
+import { FORM, HOUSEHOLD } from 'shared/constants/localeMessages';
 import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
 
+import EditableField from 'clientSrc/components/common/EditableField';
 import { LocaleText } from '../common';
 import { PrimaryButton } from '../forms';
 
-//todo: Use members.find to find current user data by id from global store
-const HouseholdFormHeader = ({ photo, name, membersCount }) => {
+const HouseholdFormHeader = ({ photo, name, membersCount, setFormState }) => {
+  // todo: Use members.find to find current user data by id from global store
   const currentUser = {
     photo: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
     name: 'USER USER',
@@ -29,8 +31,19 @@ const HouseholdFormHeader = ({ photo, name, membersCount }) => {
   return (
     <HouseholdHeader>
       <CurrentUserBlock>
-        <UserPhoto src={currentUser.photo} />
-        <UserName>{currentUser.name}</UserName>
+        <EditableField
+          name="userPhoto"
+          type={InputTypes.PHOTO}
+          placeholder={currentUser.photo}
+          setFormState={setFormState}
+          iconRight={10}
+          centered={false}
+        >
+          <UserPhoto src={currentUser.photo} />
+        </EditableField>
+        <EditableField name="userName" type={InputTypes.TEXT} placeholder={currentUser.name} setFormState={setFormState}>
+          <UserName>{currentUser.name}</UserName>
+        </EditableField>
         <RoleLabel {...getLabelColors(currentUser.role)}>{currentUser.role}</RoleLabel>
       </CurrentUserBlock>
 
@@ -69,13 +82,14 @@ const HouseholdFormHeader = ({ photo, name, membersCount }) => {
         </PrimaryButton>
       </CriticalButtonsBlock>
     </HouseholdHeader>
-  )
+  );
 };
 
 HouseholdFormHeader.propTypes = {
   name: PropTypes.string.isRequired,
   photo: PropTypes.string.isRequired,
   membersCount: PropTypes.number.isRequired,
+  setFormState: PropTypes.func.isRequired,
 };
 
 export default HouseholdFormHeader;

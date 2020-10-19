@@ -18,8 +18,8 @@ export const useContentRendererKeys = (category, tab, categoryTypes, tabTypes) =
 
   return {
     categoryKey,
-    tabKey
-  }
+    tabKey,
+  };
 };
 
 export const useSettingsLoader = () => (category, tab, setState, setData, setRenderedTabs, addNotification) =>

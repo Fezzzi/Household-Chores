@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 
 export const TableBox = styled.div`
-  max-height: 420px;
-  height: max-content;
-  overflow: auto;
   margin: 0 50px;
   min-width: 550px;
 `;
@@ -24,14 +21,37 @@ export const TableHeaderCell = styled.div`
   ${props => props.growing ? 'margin-right: auto' : 'flex-shrink: 0'};
 `;
 
+export const TableRowBox = styled.div`
+  height: max-content;
+  max-height: 300px;
+  overflow: auto;
+`;
+
 export const TableRow = styled.div`
   padding: 5px 6px;
   display: flex;
 `;
 
+export const TableRowIcon = styled.span`
+  color: ${props => props.color || 'var(--cFont)'};
+  opacity: ${props => props.clickable ? 0.6 : 0.8};
+  
+  ${props => props.clickable && `
+    :hover {
+      cursor: pointer;
+      opacity: 1;
+    }
+    
+    :focus, :active {
+      opacity: 0.9;
+    }
+  `}
+`;
+
 export const TableCell = styled.div`
   display: flex;
   line-height: 20px;
+  height: 20px;
   color: var(--cFont);
   font-weight: ${props => props.boldKey ? 700 : 400};
   font-size: ${props => props.boldKey ? 1.1 : props.fadeKey ? 0.9 : 1}em;
@@ -40,11 +60,16 @@ export const TableCell = styled.div`
   margin-right: 6px;
   
   ${props => props.growing ? 'margin-right: auto' : 'flex-shrink: 0'};
+  
+  svg {
+    height: 20px;
+  }
 `;
 
 export const TablePhoto = styled.img`
   width: 20px;
   height: 20px;
+  
   border-radius: 100%;
   object-fit: cover;
 `;
@@ -56,7 +81,7 @@ export const TableSorterIcon = styled.span`
   margin-right: 8px;
   position: relative;
   top: 5px;
-  opacity: ${props => props.selected ? 1 : .8};
+  opacity: ${props => props.selected ? 1 : 0.8};
   color: var(--${props => props.selected ? 'cBluePrimary' : 'cFont'});
   
   svg {

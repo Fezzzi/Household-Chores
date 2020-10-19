@@ -36,7 +36,7 @@ class TextInput extends Component {
   };
 
   getInputBody() {
-    const { name, message, label, placeholder, type, inputError } = this.props;
+    const { name, message, label, placeholder, type, reference, inputError } = this.props;
     const { inputTextLength, showPassword, inputActive, inputShown } = this.state;
 
     return (
@@ -50,6 +50,7 @@ class TextInput extends Component {
               <TextInputField
                 name={name}
                 type={type === TYPES.PASSWORD && showPassword ? TYPES.TEXT : type}
+                ref={reference}
                 onChange={this.handleInputChange}
                 onFocus={() => this.setState({ inputActive: true })}
                 onBlur={() => this.setState({ inputActive: false })}
@@ -114,6 +115,7 @@ TextInput.propTypes = {
   fixedProps: PropTypes.object,
   placeholder: PropTypes.string,
   type: PropTypes.string.isRequired,
+  reference: PropTypes.object,
   inputError: PropTypes.string,
   updateInput: PropTypes.func,
 };

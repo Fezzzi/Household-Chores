@@ -1,23 +1,43 @@
 import styled from 'styled-components';
 
-export const HoverTooltip = styled.div`
-  top: -3px;
-  right: 110%;
-  width: max-content;
-  background-color: var(--cThemeFront);
-  border: 1px solid var(--cBorder);
-  position: absolute;
-  border-radius: 4px;
-  padding: 4px 6px;
-  z-index: 1;
+export const MiniInputWrapper = styled.div`
+  background: var(--cThemeBack);
+  align-items: center;
+  border: 1px solid var(--${props => props.active ? 'cBorderActive' : 'cBorder'});
+  border-radius: 3px;
+  box-sizing: border-box;
+  color: var(--cFont);
+  font-size: 14px;
+  position: relative;
+  max-width: 400px;
+  display: inline-flex;
+  flex-direction: row;
+  height: 29px;
   
-  &::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 100%;
-    margin-top: -5px;
-    border: 5px solid;
-    border-color: transparent transparent transparent var(--cBorder);;
+  &input {
+    font-size: .9em;
+  }
+`;
+
+export const EditableFieldWrapper = styled.div`
+  position: relative;
+  
+  :hover {
+    cursor: pointer;
+  }
+`;
+
+export const EditableFieldIcon = styled.div`
+  position: absolute;
+  top: 0;
+  right: ${props => props.iconRight ?? -10}px;
+  width: 18px;
+  height: ${props => props.centered ? '100%' : '18px'};
+  color: var(--cFont);
+  opacity: .4; 
+  
+  svg {
+    width: 100%;
+    height: 100%;
   }
 `;

@@ -62,6 +62,7 @@ export default {
   [FORM.NO_CONNECTIONS_FOUND]: 'Nebyli nalezeni žádní uživatelé.',
   [FORM.SELECT_PHOTO]: 'Nahrajte nebo přetáhněte obrázek',
   [FORM.SAVE]: 'Uložit',
+  [FORM.SAVING]: 'Ukládám',
   [FORM.CONNECTION_APPROVE]: 'Schválit',
   [FORM.CONNECTION_BLOCK]: 'Zablokovat',
   [FORM.CONNECTION_UNBLOCK]: 'Odblokovat',
@@ -74,6 +75,14 @@ export default {
   [HOUSEHOLD.DELETE]: 'Vymazat domácnost',
   [HOUSEHOLD.MEMBER]: 'člen',
   [HOUSEHOLD.MEMBERS]: 'členů',
+  [HOUSEHOLD.MEMBERS_SECTION]: 'členové',
+  [HOUSEHOLD.CHANGE_ROLE]: 'Změnit roli',
+  [HOUSEHOLD.REMOVE_USER]: 'Smazat uživatele',
+  [HOUSEHOLD.INVITATIONS]: 'pozvánky',
+  [HOUSEHOLD.INVITE_USER]: 'pozvat člena',
+  [HOUSEHOLD.INVITE]: 'pozvat',
+  [HOUSEHOLD.MODULES]: 'moduly',
+  [HOUSEHOLD.ADD_MODULE]: 'přidat modul',
 
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]]: 'Profil',
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.CONNECTIONS}`]]: 'Spojení',
@@ -86,6 +95,7 @@ export default {
   [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.FIND_CONNECTION}`]]: 'Hledat spojení',
   [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NEW_HOUSEHOLD}`]]: 'Vytvořit domácnost',
   [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.INVITATIONS}`]]: 'Pozvánky',
+  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS._HOUSEHOLD}`]]: 'Domácnost',
 
   [SUCCESS.RESET_LINK]: 'Link pro obnovu hesla byl úspěšně zaslán na Vaši emailovou adresu.',
 };

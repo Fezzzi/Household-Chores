@@ -28,4 +28,3 @@ export const getLabelColors = role => role === HOUSEHOLD_ROLE_TYPE.ADMIN
   : role === HOUSEHOLD_ROLE_TYPE.MANAGER
     ? { background: 'var(--cYellowPrimary)', color: 'var(--cThemeBack)' }
     : { background: 'var(--cGreenPrimary)', color: 'var(--cThemeBack)' };
-

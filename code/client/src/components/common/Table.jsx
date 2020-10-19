@@ -1,59 +1,53 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
+import { Search } from '@material-ui/icons';
 
-import { TableBox, TableHeaderBox, TableHeaderCell, TableRow, TableCell, TableSorterIcon } from 'clientSrc/styles/blocks/table';
+import {
+  TableBox, TableHeaderBox, TableHeaderCell, TableRow, TableCell, TableSorterIcon, TableRowBox,
+} from 'clientSrc/styles/blocks/table';
+import MiniTextInput from 'clientSrc/components/forms/inputs/MiniTextInput';
+import { COMMON } from 'shared/constants/localeMessages';
+import { useTableLogic } from 'clientSrc/helpers/table';
 
-const Table = ({ rows, keys, sortingConfig }) => {
-  const [state, setState] = useState({
-    sorter: 1,
-    orderedRows: rows,
-  });
+const Table = ({ rows, keys, sortConfig, filterKey }) => {
+  const {
+    processedRows,
+    setQuery,
+    sorters,
+  } = useTableLogic(rows, sortConfig, filterKey);
 
-  useEffect(() => setState(prevState => ({
-    ...prevState,
-    orderedRows: rows
-  })), [rows]);
+  const textInputRef = useRef(null);
 
-  const sortRows = useCallback((key, index) => setState(({ sorter, orderedRows }) => {
-    const newSorter = Math.abs(sorter) === index + 1 ? -sorter : index + 1;
-
-    orderedRows.sort((e1, e2) => {
-      const order = newSorter > 0 ? 1 : -1;
-      return (e1[key] > e2[key]) ? order : (e1[key] < e2[key] ? -order : 0);
-    });
-
-    console.log('sorted', orderedRows);
-    return {
-      sorter: newSorter,
-      orderedRows,
-    }
-  }), [setState]);
-
-  const sorters = useMemo(() => sortingConfig.map(({ key, icon }, index) => (
-    <TableSorterIcon
-      key={index}
-      selected={Math.abs(state.sorter) === index + 1}
-      onClick={() => sortRows(key, index)}
-    >{icon}</TableSorterIcon>
-  )), [sortingConfig, state]);
-
-  const { orderedRows } = state;
-
+  // todo: Hard to say how would (and should) the table behave with more rows
   return (
     <TableBox>
       <TableHeaderBox>
-        <TableHeaderCell growing={true}>{sorters}</TableHeaderCell>
-        <TableHeaderCell>Header</TableHeaderCell>
+        {sortConfig && <TableHeaderCell growing>{sorters}</TableHeaderCell>}
+        {filterKey && (
+          <TableHeaderCell>
+            <TableSorterIcon onClick={() => textInputRef.current.focus()}>
+              <Search />
+            </TableSorterIcon>
+            <MiniTextInput
+              reference={textInputRef}
+              name="table-filter"
+              message={COMMON.SEARCH}
+              handleChange={setQuery}
+            />
+          </TableHeaderCell>
+        )}
       </TableHeaderBox>
-      {orderedRows.map((row, index) => (
-        <TableRow key={index}>
-          {keys.map(({ name, bold, fading, growing }) => row[name] && (
-            <TableCell key={`${index}-${name}`} boldKey={bold} fadeKey={fading} growing={growing}>{row[name]}</TableCell>
-          ))}
-        </TableRow>
-      ))}
+      <TableRowBox>
+        {processedRows.map((row, index) => (
+          <TableRow key={index}>
+            {keys.map(({ name, bold, fading, growing }) => row[name] && (
+              <TableCell key={`${index}-${name}`} boldKey={bold} fadeKey={fading} growing={growing}>{row[name]}</TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableRowBox>
     </TableBox>
-  )
+  );
 };
 
 Table.defaultProps = {
@@ -70,10 +64,11 @@ Table.propTypes = {
     growing: PropTypes.bool,
     link: PropTypes.string,
   })).isRequired,
-  sortingConfig: PropTypes.arrayOf(PropTypes.shape({
+  sortConfig: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string.isRequired,
     icon: PropTypes.element.isRequired,
   })),
+  filterKey: PropTypes.string,
 };
 
 export default Table;

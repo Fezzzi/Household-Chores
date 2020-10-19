@@ -1,8 +1,8 @@
 import * as SettingTypes from 'shared/constants/settingTypes';
 
 import { getCategoryList, getTabList } from 'serverSrc/helpers/settings';
-import { findConnectedUsers } from 'serverSrc/database/models/connections';
-import { findUserHouseholds } from 'serverSrc/database/models/households';
+import { findApprovedConnections, findConnections } from 'serverSrc/database/models/connections';
+import { findUserHouseholds, findUserInvitations } from 'serverSrc/database/models/households';
 
 const getTabData = async (req: any, category: string, tab: string) => {
   switch (category) {
@@ -14,9 +14,13 @@ const getTabData = async (req: any, category: string, tab: string) => {
         email: 'test@test.com',
       };
     case SettingTypes.CATEGORIES.HOUSEHOLDS:
-      return findUserHouseholds(req.session.user);
+      return {
+        invitations: await findUserInvitations(req.session.user),
+        households: await findUserHouseholds(req.session.user),
+        connections: await findApprovedConnections(req.session.user),
+      };
     case SettingTypes.CATEGORIES.CONNECTIONS:
-      return findConnectedUsers(req.session.user);
+      return findConnections(req.session.user);
     default:
       return {};
   }

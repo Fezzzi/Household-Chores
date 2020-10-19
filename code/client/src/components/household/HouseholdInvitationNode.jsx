@@ -15,7 +15,7 @@ import LocaleText from '../common/LocaleText';
 
 const HouseholdInvitationNode = ({ invitation, setData, addNotification }) => {
   const {
-    from: { id: fromId, nickname: fromNickname, photo: fromPhoto },
+    fromId, fromNickname, fromPhoto,
     id_household: householdId, name, message: invitationMessage, photo,
   } = invitation;
   const { approveHandler, removeHandler } = useHouseholdButtonHandlers(householdId, fromId, setData, addNotification);
@@ -69,11 +69,9 @@ const HouseholdInvitationNode = ({ invitation, setData, addNotification }) => {
 
 HouseholdInvitationNode.propTypes = {
   invitation: PropTypes.shape({
-    from: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      nickname: PropTypes.string.isRequired,
-      photo: PropTypes.string.isRequired,
-    }).isRequired,
+    fromId: PropTypes.number.isRequired,
+    fromNickname: PropTypes.string.isRequired,
+    fromPhoto: PropTypes.string.isRequired,
     id_household: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     message: PropTypes.string,

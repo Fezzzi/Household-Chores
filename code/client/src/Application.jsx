@@ -3,13 +3,14 @@ import createSagaMiddleware from 'redux-saga';
 import { Provider } from 'react-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 
-import { PageContent } from 'clientSrc/styles/blocks';
+import { PageContent, PageWrapper, PortalAnchor } from 'clientSrc/styles/blocks';
+import * as PortalType from 'clientSrc/constants/portalType';
 
 import rootReducer from './reducers/rootReducer';
 import { rootSaga } from './sagas/rootSaga';
 import Notifications from './components/notifications';
 import Router from './components/Router';
-import PageWrapper from './components/PageWrapper';
+import PageTheme from './components/PageTheme';
 import Footer from './components/Footer';
 
 export default () => {
@@ -24,13 +25,18 @@ export default () => {
 
   return (
     <Provider store={store}>
-      <PageWrapper>
-        <PageContent>
-          <Notifications />
-          <Router />
-        </PageContent>
-        <Footer />
-      </PageWrapper>
+      <PageTheme>
+        <PortalAnchor id={PortalType.FLOATING_UI} />
+        <PageWrapper id="pageWrapper">
+          <PortalAnchor id={PortalType.TOOLTIPS} />
+          <div id={PortalType.MODALS} />
+          <PageContent>
+            <Notifications />
+            <Router />
+          </PageContent>
+          <Footer />
+        </PageWrapper>
+      </PageTheme>
     </Provider>
   );
 };

@@ -70,5 +70,5 @@ export const settingsConfiguration = {
       ],
     ],
   },
-  'new-category': { [SettingTypes.TABS.GENERAL]: [[]] }
+  'new-category': { [SettingTypes.TABS.GENERAL]: [[]] },
 };

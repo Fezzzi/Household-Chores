@@ -8,7 +8,7 @@ export const SettingsWrapper = styled.div`
   padding: 15px 0 15px 20px;
 `;
 
-export const SettingsColumnWrapper = styled.div`
+export const ColumnWrapper = styled.div`
   min-width: ${props => props.width};
   max-width: ${props => props.width};
   height: calc(100% - 30px);;
@@ -34,7 +34,7 @@ export const SettingText = styled.div`
   display: inline-block;
 `;
 
-export const SettingsColumn = styled.div`
+export const Column = styled.div`
   width: 100%;
   max-height: calc(100% - 58px);
   overflow-y: auto;
@@ -139,4 +139,5 @@ export const SectionHeadline = styled.h2`
   font-size: 2em;
   font-weight: 700;
   margin: 50px 50px 25px;
+  text-transform: capitalize;
 `;

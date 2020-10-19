@@ -1,4 +1,4 @@
-import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD,  SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
+import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
 import * as SettingTypes from 'shared/constants/settingTypes';
 
 export default {
@@ -62,6 +62,7 @@ export default {
   [FORM.NO_CONNECTIONS_FOUND]: 'No users found.',
   [FORM.SELECT_PHOTO]: 'Upload or drop photo',
   [FORM.SAVE]: 'Save',
+  [FORM.SAVING]: 'Saving',
   [FORM.CONNECTION_APPROVE]: 'Approve',
   [FORM.CONNECTION_BLOCK]: 'Block',
   [FORM.CONNECTION_UNBLOCK]: 'Unblock',
@@ -74,6 +75,14 @@ export default {
   [HOUSEHOLD.DELETE]: 'Delete household',
   [HOUSEHOLD.MEMBER]: 'member',
   [HOUSEHOLD.MEMBERS]: 'members',
+  [HOUSEHOLD.MEMBERS_SECTION]: 'members',
+  [HOUSEHOLD.CHANGE_ROLE]: 'Change role',
+  [HOUSEHOLD.REMOVE_USER]: 'Remove user',
+  [HOUSEHOLD.INVITATIONS]: 'invitations',
+  [HOUSEHOLD.INVITE_USER]: 'invite user',
+  [HOUSEHOLD.INVITE]: 'invite',
+  [HOUSEHOLD.MODULES]: 'modules',
+  [HOUSEHOLD.ADD_MODULE]: 'add module',
 
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]]: 'Profile',
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.CONNECTIONS}`]]: 'Connections',
@@ -86,6 +95,7 @@ export default {
   [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.FIND_CONNECTION}`]]: 'Find connection',
   [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NEW_HOUSEHOLD}`]]: 'Create household',
   [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.INVITATIONS}`]]: 'Invitations',
+  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS._HOUSEHOLD}`]]: 'Household',
 
   [SUCCESS.RESET_LINK]: 'A reset link has been sent to your email address.',
 };

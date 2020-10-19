@@ -38,7 +38,7 @@ export const SettingsForm = ({ category, tab, settings, data }) => {
       errors: {},
     })), [category, tab]);
 
-  useEffect(() => () => clearTimeout(timer));
+  useEffect(() => () => timer && clearTimeout(timer), []);
 
   const handleClick = handlerWrapper(() => {
     setState(prevState => ({

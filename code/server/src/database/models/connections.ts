@@ -18,19 +18,21 @@ const {
   },
 } = USERS_TABLE;
 
-export const findConnections = async (userId: number): Promise<Array<object>> =>
-  database.query(`
-    SELECT ${tabIDFrom}, ${tabIDTo} FROM ${tName}
-    WHERE ${tabIDFrom}=${userId} OR ${tabIDTo}=${userId}
-  `);
-
 export const findBlockedConnections = async (userId: number): Promise<Array<number>> =>
   database.query(`
     SELECT ${tabIDFrom} FROM ${tName}
     WHERE ${tabIDTo}=${userId} AND ${tabState}='${CONNECTION_STATE_TYPE.BLOCKED}'
   `);
 
-export const findConnectedUsers = async (userId: number): Promise<{
+export const findApprovedConnections = async (userId: number): Promise<Array<number>> =>
+  database.query(`
+    SELECT users.${tabUsersID}, users.${tabUsersNickname}, users.${tabUsersPhoto}, ${tabDateCreated} FROM ${tName}
+    INNER JOIN ${tUsersName} AS users
+      ON (users.${tabUsersID}=${tabIDFrom} AND ${tabIDTo}=${userId}) OR (users.${tabUsersID}=${tabIDTo} AND ${tabIDFrom}=${userId})
+    WHERE (${tabIDTo}=${userId} OR ${tabIDFrom}=${userId}) AND ${tabState}='${CONNECTION_STATE_TYPE.APPROVED}'
+  `);
+
+export const findConnections = async (userId: number): Promise<{
   [CONNECTION_STATE_TYPE.APPROVED]: Array<object>;
   [CONNECTION_STATE_TYPE.BLOCKED]: Array<object>;
   [CONNECTION_STATE_TYPE.WAITING]: Array<object>;
