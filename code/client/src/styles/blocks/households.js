@@ -101,10 +101,8 @@ export const RoleLabel = styled.div`
   margin: 0 auto;
 `;
 
-export const InvitationFormWrapper = styled.div`
-  display: flex;
-  margin: 0 50px;
-  min-width: 550px;
+export const InvitationNodesWrapper = styled.div`
+  width: max-content;
 `;
 
 export const InvitationFormNode = styled.div`
@@ -112,6 +110,7 @@ export const InvitationFormNode = styled.div`
   justify-content: center;
   align-items: center;
   width: 80px;
+  padding: 5px 3px;
 `;
 
 export const InvitationFormNodePhoto = styled.img`

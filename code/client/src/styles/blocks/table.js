@@ -21,9 +21,15 @@ export const TableHeaderCell = styled.div`
   ${props => props.growing ? 'margin-right: auto' : 'flex-shrink: 0'};
 `;
 
-export const TableRowBox = styled.div`
+export const TableSingleRowBox = styled.div`
+  height: ${props => props.height};
+  max-height: ${props => props.height};
+  overflow-x: auto;
+`;
+
+export const TableRowsBox = styled.div`
   height: max-content;
-  max-height: 300px;
+  max-height: 270px;
   overflow: auto;
 `;
 

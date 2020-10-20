@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Search } from '@material-ui/icons';
 
 import {
-  TableBox, TableHeaderBox, TableHeaderCell, TableRow, TableCell, TableSorterIcon, TableRowBox,
+  TableBox, TableHeaderBox, TableHeaderCell, TableRow, TableCell, TableSorterIcon, TableRowsBox,
 } from 'clientSrc/styles/blocks/table';
 import MiniTextInput from 'clientSrc/components/forms/inputs/MiniTextInput';
 import { COMMON } from 'shared/constants/localeMessages';
@@ -18,7 +18,6 @@ const Table = ({ rows, keys, sortConfig, filterKey }) => {
 
   const textInputRef = useRef(null);
 
-  // todo: Hard to say how would (and should) the table behave with more rows
   return (
     <TableBox>
       <TableHeaderBox>
@@ -37,7 +36,7 @@ const Table = ({ rows, keys, sortConfig, filterKey }) => {
           </TableHeaderCell>
         )}
       </TableHeaderBox>
-      <TableRowBox>
+      <TableRowsBox>
         {processedRows.map((row, index) => (
           <TableRow key={index}>
             {keys.map(({ name, bold, fading, growing }) => row[name] && (
@@ -45,7 +44,7 @@ const Table = ({ rows, keys, sortConfig, filterKey }) => {
             ))}
           </TableRow>
         ))}
-      </TableRowBox>
+      </TableRowsBox>
     </TableBox>
   );
 };

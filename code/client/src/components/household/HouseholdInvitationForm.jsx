@@ -1,13 +1,15 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Search, SortByAlpha } from '@material-ui/icons';
 
 import {
   InvitationFormNode,
   InvitationFormNodeName,
-  InvitationFormNodePhoto,
+  InvitationFormNodePhoto, InvitationNodesWrapper,
 } from 'clientSrc/styles/blocks/households';
-import { TableBox, TableHeaderBox, TableHeaderCell, TableRowBox, TableSorterIcon } from 'clientSrc/styles/blocks/table';
+import {
+  TableBox, TableHeaderBox, TableHeaderCell, TableSingleRowBox, TableSorterIcon,
+} from 'clientSrc/styles/blocks/table';
 import { useTableLogic } from 'clientSrc/helpers/table';
 import { COMMON, HOUSEHOLD } from 'shared/constants/localeMessages';
 
@@ -39,18 +41,20 @@ const HouseholdInvitationForm = ({ connections }) => {
           />
         </TableHeaderCell>
       </TableHeaderBox>
-      <TableRowBox>
-        {processedRows.map(({ id, nickname, photo }) => (
-          <InvitationFormNode key={`connection-${id}`}>
-            <InvitationFormNodePhoto src={photo} />
-            <InvitationFormNodeName>{nickname}</InvitationFormNodeName>
-            {/* todo: Add real invitation logic */}
-            <MiniButton margin={0} clickHandler={() => console.log('sent invitation to user', id)}>
-              <LocaleText message={HOUSEHOLD.INVITE} />
-            </MiniButton>
-          </InvitationFormNode>
-        ))}
-      </TableRowBox>
+      <TableSingleRowBox height={'130px'}>
+        <InvitationNodesWrapper>
+          {processedRows.map(({ id, nickname, photo }) => (
+            <InvitationFormNode key={`connection-${id}`}>
+              <InvitationFormNodePhoto src={photo} />
+              <InvitationFormNodeName>{nickname}</InvitationFormNodeName>
+              {/* todo: Add real invitation logic */}
+              <MiniButton margin={0} clickHandler={() => console.log('sent invitation to user', id)}>
+                <LocaleText message={HOUSEHOLD.INVITE} />
+              </MiniButton>
+            </InvitationFormNode>
+          ))}
+        </InvitationNodesWrapper>
+      </TableSingleRowBox>
     </TableBox>
   );
 };

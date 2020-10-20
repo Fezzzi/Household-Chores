@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { MoreVert, SortByAlpha, CalendarToday, Grade, Save, Delete, ChevronRight } from '@material-ui/icons';
+import { Save } from '@material-ui/icons';
 
-import { RoleLabel } from 'clientSrc/styles/blocks/households';
 import { SectionHeadline } from 'clientSrc/styles/blocks/settings';
-import { TablePhoto, TableRowIcon } from 'clientSrc/styles/blocks/table';
-import { getLabelColors } from 'clientSrc/helpers/household';
 import { handlerWrapper } from 'clientSrc/helpers/form';
+import { useMemberListProps, useInvitationListProps } from 'clientSrc/helpers/household';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
-import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
 import { FORM, HOUSEHOLD } from 'shared/constants/localeMessages';
 
 import HouseholdFormHeader from './HouseholdFormHeader';
 import HouseholdInvitationForm from './HouseholdInvitationForm';
-import { LocaleText, OptionsTooltip, Table } from '../common';
+import { LocaleText, Table } from '../common';
 import { SimpleFloatingElement } from '../portals';
 
 const HouseholdModificationForm = ({ household, connections, tab, setData }) => {
@@ -44,6 +41,9 @@ const HouseholdModificationForm = ({ household, connections, tab, setData }) => 
       })), SUBMIT_TIMEOUT));
   });
 
+  const memberTableProps = useMemberListProps(members)
+  const invitationTableProps = useInvitationListProps(invitations)
+
   const { inputs, errors, isFormSending, submitMessage } = state;
 
   return (
@@ -61,47 +61,7 @@ const HouseholdModificationForm = ({ household, connections, tab, setData }) => 
       <SectionHeadline>
         <LocaleText message={HOUSEHOLD.MEMBERS_SECTION} />
       </SectionHeadline>
-      {/* todo: Add real clickHandlers */}
-      <Table
-        rows={members.map(member => ({
-          ...member,
-          photo: <TablePhoto src={member.photo} />,
-          role: <RoleLabel {...getLabelColors(member.role)}>{member.role}</RoleLabel>,
-          roleString: member.role,
-          delimiter: 'since',
-          more: <OptionsTooltip
-            icon={<MoreVert />}
-            options={[
-              {
-                content: HOUSEHOLD.CHANGE_ROLE,
-                nestedOptions: Object.values(HOUSEHOLD_ROLE_TYPE).map(role => ({
-                  content: <RoleLabel {...getLabelColors(role)}>{role}</RoleLabel>,
-                  clickHandler: role !== member.role
-                    ? () => console.log('changing role to: ', role)
-                    : null,
-                })),
-              }, {
-                content: HOUSEHOLD.REMOVE_USER,
-                clickHandler: () => console.log('removing user'),
-              },
-            ]}
-          />,
-        }))}
-        keys={[
-          { name: 'photo' },
-          { name: 'nickname', bold: true, growing: true },
-          { name: 'role' },
-          { name: 'delimiter', fading: true },
-          { name: 'date_joined', fading: true },
-          { name: 'more' },
-        ]}
-        sortConfig={[
-          { key: 'nickname', icon: <SortByAlpha /> },
-          { key: 'roleString', icon: <Grade /> },
-          { key: 'date_joined', icon: <CalendarToday /> },
-        ]}
-        filterKey="nickname"
-      />
+      <Table {...memberTableProps} />
 
       <SectionHeadline>
         <LocaleText message={HOUSEHOLD.INVITE_USER} />
@@ -112,29 +72,7 @@ const HouseholdModificationForm = ({ household, connections, tab, setData }) => 
         <LocaleText message={HOUSEHOLD.INVITATIONS} />
       </SectionHeadline>
       {/* todo: Add real clickHandlers */}
-      <Table
-        rows={invitations.map(invitation => ({
-          ...invitation,
-          fromPhoto: <TablePhoto src={invitation.fromPhoto} />,
-          delimiter: <TableRowIcon><ChevronRight /></TableRowIcon>,
-          toPhoto: <TablePhoto src={invitation.toPhoto} />,
-          delete: <TableRowIcon color="var(--cRedSecondary)" clickable onClick={() => console.log('clicked')}><Delete /></TableRowIcon>,
-        }))}
-        keys={[
-          { name: 'fromPhoto' },
-          { name: 'fromNickname' },
-          { name: 'delimiter' },
-          { name: 'toPhoto' },
-          { name: 'toNickname', bold: true, growing: true },
-          { name: 'dateCreated', fading: true },
-          { name: 'delete' },
-        ]}
-        sortConfig={[
-          { key: 'toNickname', icon: <SortByAlpha /> },
-          { key: 'dateCreated', icon: <CalendarToday /> },
-        ]}
-        filterKey="toNickname"
-      />
+      <Table {...invitationTableProps} />
 
       <SectionHeadline>
         <LocaleText message={HOUSEHOLD.MODULES} />

@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 export const ThemeWrapper = styled.div`
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const PageWrapper = styled.section`
@@ -13,6 +13,28 @@ export const PageWrapper = styled.section`
   overflow: auto;
   display: flex;
   flex-direction: column;
+  scrollbar-color: var(--cGreyPrimary) transparent;
+  scrollbar-width: thin;
+  
+  > * div {
+    scrollbar-width: thin;
+  }
+  
+  > * img {
+    user-select: none;
+  }
+  
+  > * ::-webkit-scrollbar, ::-webkit-scrollbar {
+    appearance: none;
+    width: 4px;
+    height: 4px;
+  }
+  
+  > * ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb {
+    appearance: none;
+    background-color: var(--cGreyPrimary);
+    border-radius: 5px;
+  }
 `;
 
 export const PageContent = styled.main`
