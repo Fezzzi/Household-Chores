@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { HoverTooltip, TooltipWrapper } from 'clientSrc/styles/blocks/portals';
+import { Tooltip, TooltipWrapper } from 'clientSrc/styles/blocks/portals';
 import LocaleText from 'clientSrc/components/common/LocaleText';
 
 const InfoTooltip = ({ icon, text }) => {
@@ -13,9 +13,9 @@ const InfoTooltip = ({ icon, text }) => {
         {icon}
       </span>
       {hovered && (
-        <HoverTooltip withArrow>
+        <Tooltip withArrow withHover>
           <LocaleText message={text} />
-        </HoverTooltip>
+        </Tooltip>
       )}
     </TooltipWrapper>
   );

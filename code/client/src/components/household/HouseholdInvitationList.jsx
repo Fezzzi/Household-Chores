@@ -1,30 +1,73 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
+import { Search } from '@material-ui/icons';
 
-import { UserList } from 'clientSrc/styles/blocks/users';
 import { InputRow } from 'clientSrc/styles/blocks/form';
-import { FORM } from 'shared/constants/localeMessages';
+import { UserList } from 'clientSrc/styles/blocks/users';
+import { SectionHeadline } from 'clientSrc/styles/blocks/settings';
+import { TableBox, TableHeaderBox, TableHeaderCell, TableSorterIcon } from 'clientSrc/styles/blocks/table';
+import { useTableLogic } from 'clientSrc/helpers/table';
+import { COMMON, FORM } from 'shared/constants/localeMessages';
 
 import HouseholdInvitationNode from './HouseholdInvitationNode';
 import LocaleText from '../common/LocaleText';
+import { MiniTextInput } from 'clientSrc/components/forms';
 
-const HouseholdInvitationList = ({ invitations, setData }) => invitations?.length
-  ? (
-    <UserList>
-      {invitations.map((invitation, index) => (
-        <HouseholdInvitationNode
-          key={`invitations-${index}`}
-          invitation={invitation}
-          setData={setData}
+const HouseholdInvitationList = ({ invitations, setData }) => {
+  const textInputRef = useRef(null);
+
+  const {
+    processedRows,
+    setQuery,
+  } = useTableLogic(invitations || [], [], 'name');
+
+  return (
+    <>
+      <SectionHeadline first>
+        <LocaleText
+          message={FORM.HOUSEHOLD_INVITATIONS}
+          modifierFunc={invitations?.length ? text => `${text} (${invitations.length})` : undefined}
         />
-      )
-      )}
-    </UserList>
-  ) : (
-    <InputRow>
-      <LocaleText message={FORM.NO_HOUSEHOLD_REQUESTS} />
-    </InputRow>
-  );
+      </SectionHeadline>
+      {invitations?.length
+        ? (
+          <>
+            <TableBox>
+              <TableHeaderBox>
+                <TableHeaderCell growing />
+                <TableHeaderCell>
+                  <TableSorterIcon onClick={() => textInputRef.current.focus()}>
+                    <Search />
+                  </TableSorterIcon>
+                  <MiniTextInput
+                    reference={textInputRef}
+                    name="table-filter"
+                    message={COMMON.SEARCH}
+                    handleChange={setQuery}
+                  />
+                </TableHeaderCell>
+              </TableHeaderBox>
+            </TableBox>
+            <UserList>
+              {processedRows.map((invitation, index) => (
+                  <HouseholdInvitationNode
+                    key={`invitations-${index}`}
+                    invitation={invitation}
+                    setData={setData}
+                  />
+                )
+              )}
+            </UserList>
+          </>
+        ) : (
+          <InputRow>
+            <LocaleText message={FORM.NO_HOUSEHOLD_REQUESTS}/>
+          </InputRow>
+        )
+      }
+    </>
+  )
+}
 
 HouseholdInvitationList.propTypes = {
   invitations: PropTypes.arrayOf(

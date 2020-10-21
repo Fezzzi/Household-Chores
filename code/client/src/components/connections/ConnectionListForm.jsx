@@ -1,82 +1,80 @@
-import React, { useCallback, useState } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { Search } from '@material-ui/icons';
 
 import { InputRow } from 'clientSrc/styles/blocks/form';
 import { UserList } from 'clientSrc/styles/blocks/users';
-import { findUsers } from 'clientSrc/effects/conectionEffects';
-import * as NotificationActions from 'clientSrc/actions/notificationActions';
-import * as NotificationTypes from 'shared/constants/notificationTypes';
-import { ERROR, FORM } from 'shared/constants/localeMessages';
-import { TABS } from 'shared/constants/settingTypes';
+import { SectionHeadline } from 'clientSrc/styles/blocks/settings';
+import { TableBox, TableHeaderBox, TableHeaderCell, TableSorterIcon } from 'clientSrc/styles/blocks/table';
+import { useTableLogic } from 'clientSrc/helpers/table';
+import { COMMON } from 'shared/constants/localeMessages';
 
 import UserConnectionNode from './UserConnectionNode';
 import LocaleText from '../common/LocaleText';
-import { Separator, SearchBar } from '../forms/common';
+import { MiniTextInput } from '../forms/inputs';
 
-const ConnectionListForm = ({ tab, size, data, setData, dataKey, emptyMessage, addNotification }) => {
-  const [emptyResultMessage, setEmptyResultMessage] = useState(null);
+const ConnectionListForm = ({ tab, data, setData, dataKey, emptyMessage, headlineMessage }) => {
+  const textInputRef = useRef(null);
 
-  const searchQuery = useCallback(query => findUsers(query)
-    .then(({ data: newData }) => {
-      setEmptyResultMessage(FORM.NO_CONNECTIONS_FOUND);
-      setData(prevState => ({
-        ...prevState,
-        ...newData,
-      }));
-    })
-    .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR)),
-  [setEmptyResultMessage, setData, addNotification]);
+  const {
+    processedRows,
+    setQuery,
+  } = useTableLogic(data[dataKey] || [], [], 'nickname');
 
   return (
     <>
-      {tab === TABS.FIND_CONNECTION && (
-        <>
-          <SearchBar searchQuery={searchQuery} />
-          <Separator />
-        </>
-      )}
+      <SectionHeadline first>
+        <LocaleText
+          message={headlineMessage}
+          modifierFunc={data[dataKey]?.length ? text => `${text} (${data[dataKey].length})` : undefined}
+        />
+      </SectionHeadline>
       {data[dataKey]?.length
         ? (
-          <UserList size={size}>
-            {data[dataKey].map((user, index) => (
-              <UserConnectionNode
-                key={`${dataKey}-${index}`}
-                user={user}
-                setData={setData}
-                tab={tab}
-                size={size}
-              />
-            )
-            )}
-          </UserList>
+          <>
+            <TableBox>
+              <TableHeaderBox>
+                <TableHeaderCell growing />
+                <TableHeaderCell>
+                  <TableSorterIcon onClick={() => textInputRef.current.focus()}>
+                    <Search />
+                  </TableSorterIcon>
+                  <MiniTextInput
+                    reference={textInputRef}
+                    name="table-filter"
+                    message={COMMON.SEARCH}
+                    handleChange={setQuery}
+                  />
+                </TableHeaderCell>
+              </TableHeaderBox>
+            </TableBox>
+            <UserList>
+              {processedRows.map((user, index) => (
+                <UserConnectionNode
+                  key={`${dataKey}-${index}`}
+                  user={user}
+                  setData={setData}
+                  tab={tab}
+                />
+              ))}
+            </UserList>
+          </>
         ) : (
           <InputRow>
-            <LocaleText message={emptyResultMessage || emptyMessage} />
+            <LocaleText message={emptyMessage} />
           </InputRow>
         )}
     </>
   );
 };
 
-ConnectionListForm.defaultProps = {
-  emptyMessage: '',
-};
-
 ConnectionListForm.propTypes = {
   tab: PropTypes.string.isRequired,
-  size: PropTypes.number,
   data: PropTypes.object,
   setData: PropTypes.func.isRequired,
   dataKey: PropTypes.string.isRequired,
-  emptyMessage: PropTypes.string,
-  addNotification: PropTypes.func.isRequired,
+  emptyMessage: PropTypes.string.isRequired,
+  headlineMessage: PropTypes.string.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  addNotification: (type, message) => dispatch(NotificationActions.addNotifications({
-    [type]: [message],
-  })),
-});
-
-export default connect(null, mapDispatchToProps)(ConnectionListForm);
+export default ConnectionListForm;

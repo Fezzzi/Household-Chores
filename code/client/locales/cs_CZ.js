@@ -70,6 +70,9 @@ export default {
   [FORM.CONNECTION_IGNORE]: 'Ignorovat',
   [FORM.CONNECTION_REMOVE]: 'Odstranit',
   [FORM.CONNECTION_SENT]: 'Žádost odeslána',
+  [FORM.PENDING_CONNECTIONS]: 'Žádosti o spojení',
+  [FORM.BLOCKED_CONNECTIONS]: 'Blokovaní uživatelé',
+  [FORM.HOUSEHOLD_INVITATIONS]: 'Pozvánky do domácností',
 
   [HOUSEHOLD.LEAVE]: 'Opustit domácnost',
   [HOUSEHOLD.DELETE]: 'Vymazat domácnost',

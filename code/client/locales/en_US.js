@@ -70,6 +70,9 @@ export default {
   [FORM.CONNECTION_IGNORE]: 'Ignore',
   [FORM.CONNECTION_REMOVE]: 'Remove',
   [FORM.CONNECTION_SENT]: 'Request sent',
+  [FORM.PENDING_CONNECTIONS]: 'Connection requests',
+  [FORM.BLOCKED_CONNECTIONS]: 'Blocked users',
+  [FORM.HOUSEHOLD_INVITATIONS]: 'Household invitations',
 
   [HOUSEHOLD.LEAVE]: 'Leave household',
   [HOUSEHOLD.DELETE]: 'Delete household',

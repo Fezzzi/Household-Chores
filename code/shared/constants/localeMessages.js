@@ -75,6 +75,9 @@ export const FORM = {
   CONNECTION_IGNORE: 'form.connectionIgnore',
   CONNECTION_REMOVE: 'form.connectionRemove',
   CONNECTION_SENT: 'form.connectionSent',
+  PENDING_CONNECTIONS: 'form.pendingConnections',
+  BLOCKED_CONNECTIONS: 'form.blockedConnections',
+  HOUSEHOLD_INVITATIONS: 'form.householdInvitations',
 };
 
 export const HOUSEHOLD = {

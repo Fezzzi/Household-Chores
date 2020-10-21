@@ -138,6 +138,11 @@ export const LocaleLabel = styled.span`
 export const SectionHeadline = styled.h2`
   font-size: 2em;
   font-weight: 700;
-  margin: 50px 50px 25px;
+  margin: ${props => props.first ? 25 : 50}px 50px 25px;
   text-transform: capitalize;
+`;
+
+export const SearchBarWrapper = styled.div`
+  display: flex;
+  margin: 0 auto;
 `;

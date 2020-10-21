@@ -6,7 +6,7 @@ export const TableBox = styled.div`
 `;
 
 export const TableHeaderBox = styled.div`
-  height: 32px;
+  height: ${props => props.isBigger ? 42 : 32}px;
   border-bottom: 1px solid var(--cBorder);
   margin-bottom: 10px;
   display: flex;

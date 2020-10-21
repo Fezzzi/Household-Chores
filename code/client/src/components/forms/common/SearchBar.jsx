@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { InputRow } from 'clientSrc/styles/blocks/form';
-import LocaleText from 'clientSrc/components/common/LocaleText';
+import { SearchBarWrapper } from 'clientSrc/styles/blocks/settings';
+import { handlerWrapper } from 'clientSrc/helpers/form';
+import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
+import { COMMON } from 'shared/constants/localeMessages';
 import * as InputTypes from 'shared/constants/inputTypes';
 
-import { handlerWrapper } from 'clientSrc/helpers/form';
-import { COMMON } from 'shared/constants/localeMessages';
-import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
+import { LocaleText } from '../../common';
 import PrimaryButton from './PrimaryButton';
 import Input from './Input';
 
@@ -32,20 +32,23 @@ const SearchBar = ({ searchQuery }) => {
   });
 
   return (
-    <>
-      <InputRow>
-        <Input
-          type={InputTypes.TEXT}
-          name="query"
-          updateInput={(_, value) => setQuery(value)}
-          inline
-          message={COMMON.SEARCH}
-        />
-        <PrimaryButton disabled={query.length === 0 || isSearching} inline clickHandler={handleClick} margin="3px 5px">
-          <LocaleText message={submitMessage} />
-        </PrimaryButton>
-      </InputRow>
-    </>
+    <SearchBarWrapper>
+      <Input
+        type={InputTypes.TEXT}
+        name="query"
+        updateInput={(_, value) => setQuery(value)}
+        inline
+        message={COMMON.SEARCH}
+      />
+      <PrimaryButton
+        disabled={query.length === 0 || isSearching}
+        inline
+        clickHandler={handleClick}
+        margin="3px 5px 3px -10px"
+      >
+        <LocaleText message={submitMessage} />
+      </PrimaryButton>
+    </SearchBarWrapper>
   );
 };
 

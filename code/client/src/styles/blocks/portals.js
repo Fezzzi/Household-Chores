@@ -23,9 +23,9 @@ export const TooltipAnchor = styled.div`
   left: ${props => props.position?.x ?? 1400}px;
 `;
 
-export const HoverTooltip = styled.div`
+export const Tooltip = styled.div`
   top: -3px;
-  right: 125%;
+  right: ${props => props.withHover ? 150 : 125}%;
   width: max-content;
   background-color: var(--cThemeFront);
   border: 1px solid var(--cBorder);
@@ -51,7 +51,7 @@ export const HoverTooltip = styled.div`
   }
 `;
 
-export const HoverTooltipRow = styled.div`
+export const TooltipRow = styled.div`
   padding: 6px 11px;
   margin-bottom: -4px;
   opacity: ${props => props.clickable ? 0.85 : 0.5};

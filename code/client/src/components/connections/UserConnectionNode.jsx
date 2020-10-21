@@ -1,25 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ChevronLeft } from '@material-ui/icons';
+import { ChevronLeft, Message } from '@material-ui/icons';
 
 import { useConnectionButtons } from 'clientSrc/helpers/connectionButtons';
 import { ToggleInputIcon } from 'clientSrc/styles/blocks/form';
 import {
-  AppendMessage, UserButtonsBox, UserInfoBox, UserName, UserNode, UserPhotoBox, UserPhoto,
+  AppendMessage,
+  UserButtonsBox,
+  UserInfoBox,
+  UserName,
+  UserNode,
+  UserPhotoBox,
+  UserPhoto,
+  WrapperBox,
+  AppendMessageAnchor, AppendMessageIcon,
 } from 'clientSrc/styles/blocks/users';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
-import * as InputTypes from 'shared/constants/inputTypes';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
-import { COMMON } from 'shared/constants/localeMessages';
-
 import { TABS } from 'shared/constants/settingTypes';
-import { PrimaryButton, TextInput } from '../forms';
-import LocaleText from '../common/LocaleText';
 
-const UserConnectionNode = ({ tab, size, user, setData, addNotification }) => {
+import { PrimaryButton } from '../forms';
+import { InfoTooltip, LocaleText } from '../common';
+
+const UserConnectionNode = ({ tab, user, setData, addNotification }) => {
   const [buttons, setButtons] = useState({});
-  const [connectMessage, setConnectMessage] = useState(null);
 
   useEffect(() => setButtons(
     useConnectionButtons(tab, user, setData, setButtons, addNotification)
@@ -27,35 +32,20 @@ const UserConnectionNode = ({ tab, size, user, setData, addNotification }) => {
 
   const { id, nickname, photo, state, message: userMessage } = user;
   return (
-    <UserNode size={size}>
-      <UserPhotoBox><UserPhoto src={photo} /></UserPhotoBox>
-      <UserInfoBox>
-        <UserName>{nickname}</UserName>
-        {!state && (connectMessage === null
-          ? (
-            <AppendMessage reactive>
-              <LocaleText message={COMMON.ADD_MESSAGE} clickHandler={() => setConnectMessage('')} />
-            </AppendMessage>
-          ) : (
-            <>
-              <TextInput
-                name="message"
-                message={COMMON.MESSAGE}
-                updateInput={(_, value) => setConnectMessage(value)}
-                type={InputTypes.TEXT}
-                inline
+    <WrapperBox>
+      <UserNode>
+        <UserPhotoBox>
+          <UserPhoto src={photo} />
+          {(tab === TABS.FIND_CONNECTION || tab === TABS.PENDING) && state === CONNECTION_STATE_TYPE.WAITING && userMessage && (
+            <AppendMessageAnchor>
+              <InfoTooltip
+                icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
+                text={userMessage}
               />
-              <ToggleInputIcon left={-20}>
-                <ChevronLeft onClick={() => setConnectMessage(null)} />
-              </ToggleInputIcon>
-            </>
-          )
-        )}
-        {(tab === TABS.FIND_CONNECTION || tab === TABS.PENDING) && state === CONNECTION_STATE_TYPE.WAITING && userMessage && (
-          <AppendMessage>
-            {userMessage}
-          </AppendMessage>
-        )}
+            </AppendMessageAnchor>
+          )}
+        </UserPhotoBox>
+        <UserName>{nickname}</UserName>
         <UserButtonsBox>
           {Object.keys(buttons).map(label => {
             const {
@@ -65,9 +55,9 @@ const UserConnectionNode = ({ tab, size, user, setData, addNotification }) => {
               <PrimaryButton
                 key={`${id}-${label}`}
                 disabled={disabled}
-                clickHandler={clickHandler(connectMessage)}
-                inline
-                margin="3px 5px 3px 0"
+                /* todo: Implement connection messages and pass it here */
+                clickHandler={clickHandler('')}
+                margin="0 0 6px"
                 color={color}
                 background={background}
                 backgroundHover={backgroundHover}
@@ -77,14 +67,13 @@ const UserConnectionNode = ({ tab, size, user, setData, addNotification }) => {
             );
           })}
         </UserButtonsBox>
-      </UserInfoBox>
-    </UserNode>
+      </UserNode>
+    </WrapperBox>
   );
 };
 
 UserConnectionNode.propTypes = {
   tab: PropTypes.string.isRequired,
-  size: PropTypes.number,
   user: PropTypes.shape({
     id: PropTypes.number.isRequired,
     nickname: PropTypes.string.isRequired,

@@ -2,19 +2,28 @@ import React from 'react';
 
 import ConnectionListForm from 'clientSrc/components/connections/ConnectionListForm';
 import HouseholdInvitationList from 'clientSrc/components/household/HouseholdInvitationList';
+import ConnectionSearchForm from 'clientSrc/components/connections/ConnectionSearchForm';
+import HouseholdModificationForm from 'clientSrc/components/household/HouseholdModificationForm';
 import { SettingsForm } from 'clientSrc/components/settings/SettingsForm';
 import { CATEGORIES, TABS } from 'shared/constants/settingTypes';
-import { FORM } from 'shared/constants/localeMessages';
+import { FORM, SETTINGS } from 'shared/constants/localeMessages';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
+import * as SettingTypes from 'shared/constants/settingTypes';
 
-import HouseholdModificationForm from 'clientSrc/components/household/HouseholdModificationForm';
 import { settingsConfiguration } from './settingsConfiguration';
 
 const renderFormFromConfig = (category, tab, settings) => data =>
   <SettingsForm category={category} tab={tab} settings={settings} data={data} />;
 
-const renderConnectionListForm = (dataKey, emptyMessage, tab, size) => (data, setData) =>
-  <ConnectionListForm data={data} setData={setData} dataKey={dataKey} emptyMessage={emptyMessage} tab={tab} size={size} />;
+const renderConnectionListForm = (dataKey, emptyMessage, tab, headlineMessage) => (data, setData) =>
+  <ConnectionListForm
+    data={data}
+    setData={setData}
+    dataKey={dataKey}
+    emptyMessage={emptyMessage}
+    headlineMessage={headlineMessage}
+    tab={tab}
+  />;
 
 export const settingsRenderers = {
   ...Object.fromEntries(
@@ -35,20 +44,38 @@ export const settingsRenderers = {
         default: return '';
       }
     },
-    [TABS.MY_CONNECTIONS]:
-      renderConnectionListForm(CONNECTION_STATE_TYPE.APPROVED, FORM.NO_CONNECTIONS, TABS.MY_CONNECTIONS, 320),
-    [TABS.FIND_CONNECTION]:
-      renderConnectionListForm(CONNECTION_STATE_TYPE.FOUND, '', TABS.FIND_CONNECTION),
-    [TABS.PENDING]:
-      renderConnectionListForm(CONNECTION_STATE_TYPE.WAITING, FORM.NO_CONNECTION_REQUESTS, TABS.PENDING),
-    [TABS.BLOCKED]:
-      renderConnectionListForm(CONNECTION_STATE_TYPE.BLOCKED, FORM.NO_BLOCKED_CONNECTIONS, TABS.BLOCKED, 220),
+    [TABS.MY_CONNECTIONS]: renderConnectionListForm(
+      CONNECTION_STATE_TYPE.APPROVED,
+      FORM.NO_CONNECTIONS,
+      TABS.MY_CONNECTIONS,
+      SETTINGS[`${SettingTypes.COLUMNS.TAB}_${TABS.MY_CONNECTIONS}`],
+    ),
+    [TABS.FIND_CONNECTION]: (data, setData) => (
+      <ConnectionSearchForm
+        data={data}
+        setData={setData}
+        dataKey={CONNECTION_STATE_TYPE.FOUND}
+        headlineMessage={SETTINGS[`${SettingTypes.COLUMNS.TAB}_${TABS.FIND_CONNECTION}`]}
+        tab={TABS.FIND_CONNECTION}
+      />
+    ),
+    [TABS.PENDING]: renderConnectionListForm(
+      CONNECTION_STATE_TYPE.WAITING,
+      FORM.NO_CONNECTION_REQUESTS,
+      TABS.PENDING,
+      FORM.PENDING_CONNECTIONS,
+    ),
+    [TABS.BLOCKED]: renderConnectionListForm(
+      CONNECTION_STATE_TYPE.BLOCKED,
+      FORM.NO_BLOCKED_CONNECTIONS,
+      TABS.BLOCKED,
+      FORM.BLOCKED_CONNECTIONS,
+    ),
   },
   [CATEGORIES.HOUSEHOLDS]: {
     tabModifiers: data => tab => tab === TABS.INVITATIONS && ` (${data.invitations?.length || 0})`,
     [TABS.NEW_HOUSEHOLD]: '',
-    [TABS.INVITATIONS]: (data, setData) =>
-      <HouseholdInvitationList invitations={data.invitations || []} setData={setData} />,
+    [TABS.INVITATIONS]: (data, setData) => <HouseholdInvitationList invitations={data.invitations || []} setData={setData} />,
     [TABS._HOUSEHOLD]: (data, setData, tab) => (
       <HouseholdModificationForm
         household={data.households?.find(({ key }) => key === tab)}
@@ -56,5 +83,6 @@ export const settingsRenderers = {
         tab={tab}
         setData={setData}
       />
-    ) },
+    ),
+  },
 };

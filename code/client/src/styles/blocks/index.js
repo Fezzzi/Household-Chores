@@ -35,6 +35,10 @@ export const PageWrapper = styled.section`
     background-color: var(--cGreyPrimary);
     border-radius: 5px;
   }
+  
+  > * input:-webkit-autofill {
+    background-color: inherit;
+  }
 `;
 
 export const PageContent = styled.main`

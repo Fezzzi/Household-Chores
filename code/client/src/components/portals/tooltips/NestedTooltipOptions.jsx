@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 import {
-  HoverTooltip, HoverTooltipRow, TooltipAnchor,
+  Tooltip, TooltipRow, TooltipAnchor,
 } from 'clientSrc/styles/blocks/portals';
 import { useElementPosition } from 'clientSrc/helpers/dom';
 import * as PortalType from 'clientSrc/constants/portalType';
@@ -41,7 +41,7 @@ const NestedOptionsTooltip = ({ position, options, withArrow, blurHandler }) => 
   const tooltipRoot = document.getElementById(PortalType.TOOLTIPS);
   return ReactDOM.createPortal((
     <TooltipAnchor position={position}>
-      <HoverTooltip
+      <Tooltip
         hasRows
         tabIndex={1}
         ref={thisRef}
@@ -49,7 +49,7 @@ const NestedOptionsTooltip = ({ position, options, withArrow, blurHandler }) => 
       >
         {options.map(({ content, clickHandler, nestedOptions }, index) => (
           <Fragment key={`nestedTooltip-${index}`}>
-            <HoverTooltipRow
+            <TooltipRow
               key={`option-${index}`}
               withArrow={!!withArrow}
               clickable={!!clickHandler || (nestedOptions && state.visible !== index)}
@@ -59,7 +59,7 @@ const NestedOptionsTooltip = ({ position, options, withArrow, blurHandler }) => 
               {typeof content === 'string'
                 ? <LocaleText message={content} />
                 : content}
-            </HoverTooltipRow>
+            </TooltipRow>
             {state.visible === index && (
               <NestedOptionsTooltip
                 position={state.position}
@@ -70,7 +70,7 @@ const NestedOptionsTooltip = ({ position, options, withArrow, blurHandler }) => 
             )}
           </Fragment>
         ))}
-      </HoverTooltip>
+      </Tooltip>
     </TooltipAnchor>
   ), tooltipRoot);
 };

@@ -1,17 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ChevronRight } from '@material-ui/icons';
+import { Message } from '@material-ui/icons';
 
 import { useHouseholdButtonHandlers } from 'clientSrc/helpers/household';
 import {
-  AppendMessage, UserButtonsBox, UserInfoBox, UserName, UserNode, UserPhotoBox, UserPhoto, InvitationBox, UserNodeSeparator,
+  UserButtonsBox, UserName, UserNode, UserPhotoBox, UserPhoto, AppendMessageIcon, WrapperBox,
+  AppendMessageAnchor, UserPhotoMoreBox, MiniUserName, MiniUserPhoto, UserFloatingNameBox,
 } from 'clientSrc/styles/blocks/users';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { FORM } from 'shared/constants/localeMessages';
 
 import { PrimaryButton } from '../forms';
-import LocaleText from '../common/LocaleText';
+import { InfoTooltip, LocaleText } from '../common';
 
 const HouseholdInvitationNode = ({ invitation, setData, addNotification }) => {
   const {
@@ -21,49 +22,47 @@ const HouseholdInvitationNode = ({ invitation, setData, addNotification }) => {
   const { approveHandler, removeHandler } = useHouseholdButtonHandlers(householdId, fromId, setData, addNotification);
 
   return (
-    <InvitationBox>
-      <UserNode size={220}>
-        <UserPhotoBox><UserPhoto src={fromPhoto} /></UserPhotoBox>
-        <UserInfoBox>
-          <UserName>{fromNickname}</UserName>
+    <WrapperBox>
+      <UserNode>
+        <UserPhotoBox>
+          <UserPhotoMoreBox>
+            <UserFloatingNameBox>
+              <MiniUserName title={fromNickname}>{fromNickname}</MiniUserName>
+            </UserFloatingNameBox>
+            <MiniUserPhoto src={fromPhoto} />
+          </UserPhotoMoreBox>
+          <UserPhoto src={photo} />
           {invitationMessage && (
-            <AppendMessage>
-              {invitationMessage}
-            </AppendMessage>
+            <AppendMessageAnchor>
+              <InfoTooltip
+                icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
+                text={invitationMessage}
+              />
+            </AppendMessageAnchor>
           )}
-        </UserInfoBox>
+        </UserPhotoBox>
+        <UserName>{name}</UserName>
+        <UserButtonsBox>
+          <PrimaryButton
+            clickHandler={approveHandler}
+            margin="0 0 6px"
+            background="var(--cBluePrimary)"
+            backgroundHover="var(--cBlueSecondary)"
+          >
+            <LocaleText message={FORM.CONNECTION_APPROVE} />
+          </PrimaryButton>
+          <PrimaryButton
+            clickHandler={removeHandler}
+            margin="0 0 6px"
+            color="var(--cFont)"
+            background="var(--cLightPrimary)"
+            backgroundHover="var(--cLightSecondary)"
+          >
+            <LocaleText message={FORM.CONNECTION_IGNORE} />
+          </PrimaryButton>
+        </UserButtonsBox>
       </UserNode>
-      <UserNodeSeparator>
-        <ChevronRight />
-      </UserNodeSeparator>
-      <UserNode size={320}>
-        <UserPhotoBox><UserPhoto src={photo} /></UserPhotoBox>
-        <UserInfoBox>
-          <UserName>{name}</UserName>
-          <UserButtonsBox>
-            <PrimaryButton
-              clickHandler={approveHandler}
-              inline
-              margin="3px 5px 3px 0"
-              background="var(--cBluePrimary)"
-              backgroundHover="var(--cBlueSecondary)"
-            >
-              <LocaleText message={FORM.CONNECTION_APPROVE} />
-            </PrimaryButton>
-            <PrimaryButton
-              clickHandler={removeHandler}
-              inline
-              margin="3px 5px 3px 0"
-              color="var(--cFont)"
-              background="var(--cLightPrimary)"
-              backgroundHover="var(--cLightSecondary)"
-            >
-              <LocaleText message={FORM.CONNECTION_IGNORE} />
-            </PrimaryButton>
-          </UserButtonsBox>
-        </UserInfoBox>
-      </UserNode>
-    </InvitationBox>
+    </WrapperBox>
   );
 };
 
