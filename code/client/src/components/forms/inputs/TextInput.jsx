@@ -12,6 +12,7 @@ import {
 
 import TextInputSider from './TextInputSider';
 import LocaleText from '../../common/LocaleText';
+import * as InputTypes from 'shared/constants/inputTypes';
 
 class TextInput extends Component {
   constructor(props) {
@@ -39,6 +40,9 @@ class TextInput extends Component {
     const { name, message, label, placeholder, type, reference, inputError } = this.props;
     const { inputTextLength, showPassword, inputActive, inputShown } = this.state;
 
+    const showPassButton= type === InputTypes.PASSWORD && inputTextLength > 0
+    const showError = !inputActive && inputError
+
     return (
       <>
         {(inputShown === true || (inputShown === null && !placeholder)) && (
@@ -58,14 +62,15 @@ class TextInput extends Component {
                 noValidate
               />
             </TextInputBox>
-            <TextInputSider
-              inputTextLength={inputTextLength}
-              type={type}
-              inputError={inputError}
-              updateInputState={this.setState.bind(this)}
-              showPassword={showPassword}
-              inputActive={inputActive}
-            />
+            {(showPassButton || showError) && (
+              <TextInputSider
+                showPassButton={showPassButton}
+                showError={showError}
+                inputError={inputError}
+                updateInputState={this.setState.bind(this)}
+                passwordVisible={showPassword}
+              />
+            )}
           </InputWrapper>
         )}
         {placeholder && (

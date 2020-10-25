@@ -8,7 +8,6 @@ import {OptionsTooltip} from "clientSrc/components/portals/tooltips/OptionsToolt
 import * as NotificationTypes from 'shared/constants/notificationTypes';
 import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
 import {ERROR, HOUSEHOLD} from 'shared/constants/localeMessages';
-import {Table} from "clientSrc/components/common";
 
 export const useHouseholdButtonHandlers = (householdId, fromId, setData, addNotification) => {
   const approveHandler = () => invitationApprove({ householdId, fromId, photo: '' })

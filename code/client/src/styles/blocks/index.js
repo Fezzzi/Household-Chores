@@ -22,6 +22,7 @@ export const PageWrapper = styled.section`
   
   > * img {
     user-select: none;
+    object-fit: cover;
   }
   
   > * ::-webkit-scrollbar, ::-webkit-scrollbar {

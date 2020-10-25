@@ -35,6 +35,14 @@ export const InputWrapper = styled.div`
   flex-direction: row;
 `;
 
+export const PhotoInputWrapper = styled(InputWrapper)`
+  width: ${props => props.size}px;
+  height: ${props => props.size}px;
+  margin: auto;
+  display: flex;
+  margin-bottom: ${props => props.size / 8}px;
+`;
+
 export const SwitchInputWrapper = styled.div`
   position: relative;
   background-color: var(--cThemeFront);
@@ -51,15 +59,16 @@ export const TextInputBox = styled.label`
   position: relative;
   margin: 0;
   min-width: 0;
+  font-weight: 400;
   flex: 1 0 0;
   display: flex;
-  width: max-content;
 `;
 
 export const FileInputBox = styled.label`
-  height: 150px;
+  height: 100%;
   width: 100%;
   position; relative;
+  display: flex;
   padding: 0;
   margin: 0;
   min-width: 0;
@@ -105,20 +114,19 @@ export const TextInputLabel = styled.span`
   user-select: none;
   transition: transform ease-out .1s, -webkit-transform ease-out .1s;
   
-  ${props => props.shrunken && {
-    transform: 'scale(.83333) translateY(-11px)',
-  }}
+  ${props => props.shrunken && (props.miniInput
+    ? {display: 'none'}
+    : {transform: 'scale(.83333) translateY(-13px)'}
+  )}
 `;
 
-export const FileInputLabel = styled.span`
-  position: absolute;
+export const FileInputLabel = styled.div`
   width: 100%;
-  font-weight: 600px;
   user-select: none;
-  display: grid;
-  margin: auto;
+  display: flex;
+  flex-flow: column;
   text-align: center;
-  padding-top: 35px;
+  align-self: center;
   
   & svg {
     margin: auto;
@@ -146,7 +154,7 @@ export const TextInputField = styled.input`
   background: var(--cThemeBack);
   color: var(--cFont);
   overflow: hidden;
-  padding: ${props => props.shrunken ? '12px 0 2px 8px' : '9px 0 7px 8px'};
+  padding: ${props => props.shrunken && !props.miniInput ? '12px 8px 2px' : '9px 8px 7px'};
   text-overflow: ellipsis;
   margin: 0;
   border: 0;
@@ -198,10 +206,10 @@ export const SwitchInputField = styled.input`
   }
 `;
 
-export const TextInputSider = styled.div`
+export const InputSiderWrapper = styled.div`
   align-items: center;
   height: 100%;
-  padding-right: 8px;
+  margin-right: 8px;
   vertical-align: middle;
   display: flex;
 `;
@@ -349,7 +357,6 @@ export const ErrorSpan = styled.span`
   stroke: var(--cError);
   height: 22px;
   width: 22px;
-  padding-left: 8px;
   display: block;
   position: relative;
 `;
@@ -405,11 +412,11 @@ export const RemoveFileButton = styled.div`
 `;
 
 export const PhotoPreviewBlock = styled.div`
-  width: 150px;
-  height: 150px;
-  margin: 0 25px;
-  top: 0;
-  display: inline-block;
+  position: absolute;
+  bottom: -${props => props.size / 3}px;
+  right: -${props => props.size / 2}px;
+  width: ${props => props.size}px;
+  height: ${props => props.size}px;
   border-radius: 100%;
   border: 1px solid var(--cBorder);
   overflow: hidden;
@@ -418,4 +425,5 @@ export const PhotoPreviewBlock = styled.div`
 export const PhotoPreview = styled.img`
   height: 100%;
   width: 100%;
+  background-color: var(--cThemeFront)
 `;

@@ -6,7 +6,6 @@ export const useTableLogic = (rows, sortConfig, filterKey) => {
   const [sorter, setSorter] = useState(1);
   const [query, setQuery] = useState('');
 
-  console.log(rows)
   const processedRows = useMemo(() => {
     const newRows = filterKey && query !== ''
       ? rows.filter(row => new RegExp(query, 'i').test(row[filterKey]))

@@ -23,10 +23,18 @@ export const HouseholdTitle = styled.h1`
   font-weight: 800;
   font-size: 2.2em;
   display: flex;
-  margin: 15px 5px;
+  width: 250px;
+  margin: 15px 5px 0;
+  justify-content: center;
+  align-content: center;
+  
+  > * input {
+    width: 250px;
+  }
 `;
 
 export const HouseholdSubtitle = styled.div`
+  margin-top: 15px;
   opacity: 0.6;
   font-size: 0.9em;
   display: flex;
@@ -53,7 +61,7 @@ export const ButtonIconSpan = styled.span`
   display: inline-block;
   margin-right: 8px;
   position: relative;
-  top: 3px;
+  top: 4px;
   overflow: hidden;
   
   svg {
@@ -68,7 +76,7 @@ export const CurrentUserBlock = styled.div`
   top: 0;
   justify-content: center;
   align-items: center;
-  width: 175px;
+  width: 200px;
 `;
 
 export const UserPhoto = styled.img`
@@ -96,7 +104,7 @@ export const RoleLabel = styled.div`
   border-radius: 3px;
   text-transform: lowercase;
   width: fit-content;
-  line-height: 20px;
+  line-height: 18px;
   height: 20px;
   margin: 0 auto;
 `;

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DeleteForever, MeetingRoom } from '@material-ui/icons';
+import { DeleteForever, MeetingRoom, Add } from '@material-ui/icons';
 
 import {
   ButtonIconSpan, CriticalButtonsBlock, CurrentUserBlock, HouseholdHeader,
@@ -10,76 +10,71 @@ import {
 import { FormButtonContentWrapper } from 'clientSrc/styles/blocks/form';
 import { getLabelColors } from 'clientSrc/helpers/household';
 import * as InputTypes from 'shared/constants/inputTypes';
-import { FORM, HOUSEHOLD } from 'shared/constants/localeMessages';
-import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
+import { HOUSEHOLD } from 'shared/constants/localeMessages';
 
-import EditableField from 'clientSrc/components/common/EditableField';
+import EditableTextField from 'clientSrc/components/common/EditableTextField';
 import { LocaleText } from '../common';
 import { PrimaryButton } from '../forms';
+import EditablePhotoField from 'clientSrc/components/common/EditablePhotoField';
 
-const HouseholdFormHeader = ({ photo, name, membersCount, setFormState }) => {
-  // todo: Use members.find to find current user data by id from global store
-  const currentUser = {
-    photo: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
-    name: 'USER USER',
-    role: HOUSEHOLD_ROLE_TYPE.MANAGER,
-  };
-
-  const leaveHandler = () => console.log('leaving...');
-  const deleteHandler = () => console.log('deleting...');
+const HouseholdFormHeader = ({
+  photo, name, currentUser, membersCount, setFormState, onLeaveHousehold, onDeleteHousehold, onCreateHousehold
+}) => {
+  const criticalButton = (handleClick, color, message, icon) => (
+    <PrimaryButton
+      background={color}
+      backgroundHover={color}
+      margin="0 0 15px"
+      clickHandler={handleClick}
+    >
+      <FormButtonContentWrapper>
+        <ButtonIconSpan>
+          {icon}
+        </ButtonIconSpan>
+        <LocaleText message={message} />
+      </FormButtonContentWrapper>
+    </PrimaryButton>
+  )
 
   return (
     <HouseholdHeader>
       <CurrentUserBlock>
-        <EditableField
+        <EditablePhotoField
           name="userPhoto"
-          type={InputTypes.PHOTO}
           placeholder={currentUser.photo}
           setFormState={setFormState}
-          iconRight={10}
-          centered={false}
+          size={100}
+          iconRight={40}
         >
           <UserPhoto src={currentUser.photo} />
-        </EditableField>
-        <EditableField name="userName" type={InputTypes.TEXT} placeholder={currentUser.name} setFormState={setFormState}>
-          <UserName>{currentUser.name}</UserName>
-        </EditableField>
+        </EditablePhotoField>
+        <UserName>
+          <EditableTextField name="userName" placeholder={currentUser.name} setFormState={setFormState}>
+            {currentUser.name}
+          </EditableTextField>
+        </UserName>
+
         <RoleLabel {...getLabelColors(currentUser.role)}>{currentUser.role}</RoleLabel>
       </CurrentUserBlock>
 
-      <HouseholdPhoto src={photo} />
-      <HouseholdTitle>{name}</HouseholdTitle>
-      <HouseholdSubtitle>
-        <LocaleText message={HOUSEHOLD.MEMBERS} modifierFunc={text => `${membersCount} ${text}`} />
-      </HouseholdSubtitle>
+      <EditablePhotoField name="householdPhoto" placeholder={photo} setFormState={setFormState}>
+        <HouseholdPhoto src={photo} />
+      </EditablePhotoField>
+      <HouseholdTitle>
+        <EditableTextField name="householdName" type={InputTypes.TEXT} placeholder={name} setFormState={setFormState}>
+          {name}
+        </EditableTextField>
+      </HouseholdTitle>
+      {membersCount > 0 && (
+        <HouseholdSubtitle>
+          <LocaleText message={HOUSEHOLD.MEMBERS} modifierFunc={text => `${membersCount} ${text}`} />
+        </HouseholdSubtitle>
+      )}
 
       <CriticalButtonsBlock>
-        <PrimaryButton
-          background="var(--cRedPrimary)"
-          backgroundHover="var(--cRedPrimary)"
-          margin="0 0 15px"
-          clickHandler={leaveHandler}
-        >
-          <FormButtonContentWrapper>
-            <ButtonIconSpan>
-              <MeetingRoom />
-            </ButtonIconSpan>
-            <LocaleText message={HOUSEHOLD.LEAVE} />
-          </FormButtonContentWrapper>
-        </PrimaryButton>
-        <PrimaryButton
-          background="var(--cRedSecondary)"
-          backgroundHover="var(--cRedSecondary)"
-          margin="0 0 15px"
-          clickHandler={deleteHandler}
-        >
-          <FormButtonContentWrapper>
-            <ButtonIconSpan>
-              <DeleteForever />
-            </ButtonIconSpan>
-            <LocaleText message={HOUSEHOLD.DELETE} />
-          </FormButtonContentWrapper>
-        </PrimaryButton>
+        {onLeaveHousehold && criticalButton(onLeaveHousehold, 'var(--cRedPrimary)', HOUSEHOLD.LEAVE, <MeetingRoom />)}
+        {onDeleteHousehold && criticalButton(onDeleteHousehold, 'var(--cRedSecondary)', HOUSEHOLD.DELETE, <DeleteForever />)}
+        {onCreateHousehold && criticalButton(onCreateHousehold, 'var(--cGreenSecondary)', HOUSEHOLD.CREATE, <Add />)}
       </CriticalButtonsBlock>
     </HouseholdHeader>
   );
@@ -88,8 +83,16 @@ const HouseholdFormHeader = ({ photo, name, membersCount, setFormState }) => {
 HouseholdFormHeader.propTypes = {
   name: PropTypes.string.isRequired,
   photo: PropTypes.string.isRequired,
+  currentUser: PropTypes.shape({
+    photo: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired,
+  }).isRequired,
   membersCount: PropTypes.number.isRequired,
   setFormState: PropTypes.func.isRequired,
+  onLeaveHousehold: PropTypes.func,
+  onDeleteHousehold: PropTypes.func,
+  onCreateHousehold: PropTypes.func,
 };
 
 export default HouseholdFormHeader;

@@ -29,10 +29,10 @@ export const EditableFieldWrapper = styled.div`
 
 export const EditableFieldIcon = styled.div`
   position: absolute;
-  top: 0;
-  right: ${props => props.iconRight ?? -10}px;
-  width: 18px;
-  height: ${props => props.centered ? '100%' : '18px'};
+  top: -10px;
+  right: ${props => props.iconRight ?? -22}px;
+  width: 15px;
+  height: ${props => props.centered ? '100%' : '15px'};
   color: var(--cFont);
   opacity: .4; 
   

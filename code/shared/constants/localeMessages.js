@@ -49,6 +49,7 @@ export const ERROR = {
 
 export const FORM = {
   DROP_PHOTO_HERE: 'form.dropPhotoHere',
+  CLICK_TO_UPLOAD: 'form.clickToUpload',
   EMAIL: 'form.email',
   LANGUAGE: 'form.language',
   NEW_EMAIL: 'form.newEmail',
@@ -83,16 +84,17 @@ export const FORM = {
 export const HOUSEHOLD = {
   LEAVE: 'household.leave',
   DELETE: 'household.delete',
+  CREATE: 'household.create',
   MEMBER: 'household.member',
   MEMBERS: 'household.members',
   MEMBERS_SECTION: 'household.membersSection',
   CHANGE_ROLE: 'household.changeRole',
   REMOVE_USER: 'household.removeUser',
   INVITATIONS: 'household.invitations',
-  INVITE_USER: 'household.inviteUser',
+  INVITE_USERS: 'household.inviteUser',
   INVITE: 'household.invite',
   MODULES: 'household.modules',
-  ADD_MODULE: 'household.addModule',
+  ADD_MODULES: 'household.addModule',
 };
 
 export const SETTINGS = {

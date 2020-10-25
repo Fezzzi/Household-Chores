@@ -23,7 +23,7 @@ const MiniTextInput = ({ name, reference, message, handleChange }) => {
   return (
     <MiniInputWrapper active={inputActive}>
       <TextInputBox htmlFor={name} lineHeight={26}>
-        <TextInputLabel shrunken={inputTextLength !== 0} lineHeight={26}>
+        <TextInputLabel shrunken={inputTextLength !== 0} lineHeight={26} miniInput>
           <LocaleText message={message} />
         </TextInputLabel>
         <TextInputField
@@ -36,6 +36,7 @@ const MiniTextInput = ({ name, reference, message, handleChange }) => {
           onBlur={() => setInputActive(false)}
           shrunken={inputTextLength !== 0}
           noValidate
+          miniInput
         />
       </TextInputBox>
     </MiniInputWrapper>

@@ -44,6 +44,7 @@ export default {
   [ERROR.VALUE_TOO_SHORT]: 'Value is too short.',
 
   [FORM.DROP_PHOTO_HERE]: 'Drop photo here',
+  [FORM.CLICK_TO_UPLOAD]: 'Click to upload photo',
   [FORM.EMAIL]: 'Email',
   [FORM.LANGUAGE]: 'Language',
   [FORM.NEW_EMAIL]: 'New email',
@@ -76,16 +77,17 @@ export default {
 
   [HOUSEHOLD.LEAVE]: 'Leave household',
   [HOUSEHOLD.DELETE]: 'Delete household',
+  [HOUSEHOLD.CREATE]: 'Create household',
   [HOUSEHOLD.MEMBER]: 'member',
   [HOUSEHOLD.MEMBERS]: 'members',
   [HOUSEHOLD.MEMBERS_SECTION]: 'members',
   [HOUSEHOLD.CHANGE_ROLE]: 'Change role',
   [HOUSEHOLD.REMOVE_USER]: 'Remove user',
   [HOUSEHOLD.INVITATIONS]: 'invitations',
-  [HOUSEHOLD.INVITE_USER]: 'invite user',
+  [HOUSEHOLD.INVITE_USERS]: 'invite users',
   [HOUSEHOLD.INVITE]: 'invite',
   [HOUSEHOLD.MODULES]: 'modules',
-  [HOUSEHOLD.ADD_MODULE]: 'add module',
+  [HOUSEHOLD.ADD_MODULES]: 'add modules',
 
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]]: 'Profile',
   [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.CONNECTIONS}`]]: 'Connections',

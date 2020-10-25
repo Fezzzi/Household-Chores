@@ -1,9 +1,10 @@
 import React from 'react';
 
 import ConnectionListForm from 'clientSrc/components/connections/ConnectionListForm';
-import HouseholdInvitationList from 'clientSrc/components/household/HouseholdInvitationList';
 import ConnectionSearchForm from 'clientSrc/components/connections/ConnectionSearchForm';
+import HouseholdCreateForm from 'clientSrc/components/household/HouseholdCreateForm';
 import HouseholdModificationForm from 'clientSrc/components/household/HouseholdModificationForm';
+import HouseholdInvitationList from 'clientSrc/components/household/HouseholdInvitationList';
 import { SettingsForm } from 'clientSrc/components/settings/SettingsForm';
 import { CATEGORIES, TABS } from 'shared/constants/settingTypes';
 import { FORM, SETTINGS } from 'shared/constants/localeMessages';
@@ -74,13 +75,12 @@ export const settingsRenderers = {
   },
   [CATEGORIES.HOUSEHOLDS]: {
     tabModifiers: data => tab => tab === TABS.INVITATIONS && ` (${data.invitations?.length || 0})`,
-    [TABS.NEW_HOUSEHOLD]: '',
+    [TABS.NEW_HOUSEHOLD]: (data, setData) => <HouseholdCreateForm connections={data.connections} setData={setData} />,
     [TABS.INVITATIONS]: (data, setData) => <HouseholdInvitationList invitations={data.invitations || []} setData={setData} />,
     [TABS._HOUSEHOLD]: (data, setData, tab) => (
       <HouseholdModificationForm
         household={data.households?.find(({ key }) => key === tab)}
         connections={data.connections}
-        tab={tab}
         setData={setData}
       />
     ),

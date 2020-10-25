@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -7,8 +7,17 @@ import { Publish, HighlightOff } from '@material-ui/icons';
 import { isInputValid } from 'shared/helpers/validation';
 import { ERROR, FORM } from 'shared/constants/localeMessages';
 import {
-  InputRow, InputWrapper, FileInputBox, FileInputLabel, FileImagePreview,
-  FileInputField, FileInputPreview, RemoveFileButton, PhotoPreviewBlock, PhotoPreview,
+  InputRow,
+  InputWrapper,
+  FileInputBox,
+  FileInputLabel,
+  FileImagePreview,
+  FileInputField,
+  FileInputPreview,
+  RemoveFileButton,
+  PhotoPreviewBlock,
+  PhotoPreview,
+  PhotoInputWrapper,
 } from 'clientSrc/styles/blocks/form';
 
 import * as NotificationTypes from 'shared/constants/notificationTypes';
@@ -16,22 +25,17 @@ import * as InputTypes from 'shared/constants/inputTypes';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import LocaleText from '../../common/LocaleText';
 
-class PhotoInputComponent extends Component {
-  constructor(props) {
-    super(props);
+const PhotoInputComponent = ({
+  name, message, size, closable, reference, updateInput, onFileRemove, addNotification
+}) => {
+  const [file, setFile] = useState(null)
+  const [inputActive, setInputActive] = useState(false)
+  const [dragActive, setDragActive] = useState(false)
 
-    this.state = {
-      file: null,
-      inputActive: false,
-      dragActive: false,
-    };
-  }
-
-  handleInputChange = ({ target: { files } }) => {
+  const handleInputChange = useCallback(({ target: { files } }) => {
     if (!files[0]) {
       return;
     }
-    const { updateInput, addNotification } = this.props;
     const { valid, message } = isInputValid(InputTypes.PHOTO, files);
     if (!valid) {
       addNotification(NotificationTypes.WARNINGS, message || ERROR.IMAGE_INVALID);
@@ -39,74 +43,78 @@ class PhotoInputComponent extends Component {
     }
     const reader = new FileReader();
     reader.onload = ({ target: { result } }) => {
-      this.setState({
-        file: result,
-      });
-
+      setFile(result);
       updateInput(valid, result);
     };
     reader.readAsDataURL(files[0]);
-  };
+  }, []);
 
-  removeFileHandler() {
-    const { updateInput } = this.props;
-
-    this.setState({ file: null });
+  const handleFileRemove = e => {
+    setFile(null);
     updateInput(true, '');
+    onFileRemove && onFileRemove(e);
   }
 
-  render() {
-    const { name, placeholder, message } = this.props;
-    const { file, inputActive, dragActive } = this.state;
+  useEffect(() => reference && reference.current && reference.current.click(), [reference]);
 
-    return (
-      <InputRow>
-        <InputWrapper active={inputActive}>
-          {file && (
-            <RemoveFileButton onClick={this.removeFileHandler.bind(this)}>
-              <HighlightOff />
-            </RemoveFileButton>
-          )}
-          <FileInputBox htmlFor={name}>
-            {file && !dragActive
-              ? (
-                <FileInputPreview>
-                  <FileImagePreview src={file} />
-                </FileInputPreview>
-              )
-              : (
-                <FileInputLabel>
-                  <Publish />
-                  <LocaleText message={dragActive ? FORM.DROP_PHOTO_HERE : message} />
-                </FileInputLabel>
-              )}
-            <FileInputField
-              name={name}
-              type="file"
-              onChange={this.handleInputChange}
-              onFocus={() => this.setState({ inputActive: true })}
-              onBlur={() => this.setState({ inputActive: false })}
-              onDrop={() => this.setState({ dragActive: false })}
-              onDragEnter={() => this.setState({ dragActive: true })}
-              onDragLeave={() => this.setState({ dragActive: false })}
-              noValidate
-            />
-          </FileInputBox>
-        </InputWrapper>
-        <PhotoPreviewBlock>
-          {(file || placeholder) && <PhotoPreview src={file ?? placeholder} />}
-        </PhotoPreviewBlock>
-      </InputRow>
-    );
-  }
+  return (
+    <InputRow>
+      <PhotoInputWrapper active={inputActive} size={size}>
+        {(file || closable) && (
+          <RemoveFileButton onClick={handleFileRemove}>
+            <HighlightOff />
+          </RemoveFileButton>
+        )}
+        <FileInputBox htmlFor={name}>
+          {file && !dragActive
+            ? (
+              <FileInputPreview>
+                <FileImagePreview src={file} />
+              </FileInputPreview>
+            )
+            : (
+              <FileInputLabel>
+                <Publish />
+                <LocaleText message={dragActive ? FORM.DROP_PHOTO_HERE : FORM.CLICK_TO_UPLOAD} />
+              </FileInputLabel>
+            )}
+          <FileInputField
+            name={name}
+            type="file"
+            ref={reference}
+            onChange={handleInputChange}
+            onFocus={() => setInputActive(true)}
+            onBlur={() => setInputActive(false)}
+            onDrop={() => setDragActive(false)}
+            onDragEnter={() => setDragActive(true)}
+            onDragLeave={() => setDragActive(false)}
+            noValidate
+          />
+        </FileInputBox>
+        {message && (
+          <PhotoPreviewBlock size={size / 3}>
+            <PhotoPreview src={message} />
+          </PhotoPreviewBlock>
+        )}
+      </PhotoInputWrapper>
+    </InputRow>
+  );
+}
+
+PhotoInputComponent.defaultProps = {
+  closable: false,
+  size: 150,
 }
 
 PhotoInputComponent.propTypes = {
   name: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
+  message: PropTypes.string,
+  closable: PropTypes.bool,
+  size: PropTypes.number,
   updateInput: PropTypes.func,
+  onFileRemove: PropTypes.func,
   addNotification: PropTypes.func.isRequired,
+  reference: PropTypes.object,
 };
 
 const mapDispatchToProps = dispatch => ({
