@@ -5,17 +5,27 @@ export const COLUMNS = {
 
 export const CATEGORIES = {
   PROFILE: 'profile',
-  GROUPS: 'groups',
+  CONNECTIONS: 'connections',
+  HOUSEHOLDS: 'households',
 };
 
 export const TABS = {
   GENERAL: 'general',
-  CONNECTIONS: 'connections',
   NOTIFICATIONS: 'notifications',
-  _GROUP: 'group',
+
+  MY_CONNECTIONS: 'myConnections',
+  FIND_CONNECTION: 'findConnection',
+  PENDING: 'pending',
+  BLOCKED: 'blocked',
+
+  NEW_HOUSEHOLD: 'newHousehold',
+  INVITATIONS: 'invitations',
+  _HOUSEHOLD: 'household',
 };
 
 export const TAB_ROWS = {
-  [CATEGORIES.PROFILE]: [TABS.GENERAL, TABS.CONNECTIONS, TABS.NOTIFICATIONS],
-  [CATEGORIES.GROUPS]: [TABS.GENERAL],
+  [CATEGORIES.PROFILE]: [TABS.GENERAL, TABS.NOTIFICATIONS],
+  [CATEGORIES.CONNECTIONS]: [TABS.MY_CONNECTIONS, TABS.FIND_CONNECTION, TABS.PENDING, TABS.BLOCKED],
+  [CATEGORIES.HOUSEHOLDS]: [TABS.INVITATIONS, TABS.NEW_HOUSEHOLD],
+  'new-category': [TABS.GENERAL],
 };

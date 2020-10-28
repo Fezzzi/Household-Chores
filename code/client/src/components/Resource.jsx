@@ -75,7 +75,7 @@ class Resource extends Component {
   }
 }
 
-Resource.propTypes = ({
+Resource.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       resourceId: PropTypes.string.isRequired,
@@ -83,7 +83,7 @@ Resource.propTypes = ({
   }),
   history: PropTypes.object.isRequired,
   locale: PropTypes.string.isRequired,
-});
+};
 
 const mapStateToProps = ({ locale: { locale } }) => ({
   locale,

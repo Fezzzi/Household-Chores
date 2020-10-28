@@ -29,6 +29,35 @@ export const updateInput = (
   });
 };
 
+export const updateHandler = (name, setFormState, formValidFunc, placeholder) => (isValid, value, errorMessage) => {
+  setFormState(prevState => {
+    const newInputs = { ...prevState.inputs };
+    if (value !== '' && (placeholder === undefined || value !== placeholder)) {
+      newInputs[name] = value;
+    } else {
+      delete newInputs[name];
+    }
+
+    const newErrors = { ...prevState.errors };
+    if (!isValid && value) {
+      newErrors[name] = errorMessage;
+    } else {
+      delete newErrors[name];
+    }
+
+    const isFormValid = formValidFunc
+      ? formValidFunc(newInputs)
+      : Object.values(newErrors).length === 0;
+
+    return {
+      ...prevState,
+      isFormValid,
+      inputs: newInputs,
+      errors: newErrors,
+    };
+  });
+};
+
 export const handlerWrapper = handlerFunc => e => {
   e.preventDefault();
   handlerFunc();

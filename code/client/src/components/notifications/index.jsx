@@ -28,13 +28,13 @@ const NotificationsComponent = ({ errors, warnings, messages, successes, removeN
   );
 };
 
-NotificationsComponent.propTypes = ({
+NotificationsComponent.propTypes = {
   errors: PropTypes.arrayOf(PropTypes.string),
   messages: PropTypes.arrayOf(PropTypes.string),
   warnings: PropTypes.arrayOf(PropTypes.string),
   successes: PropTypes.arrayOf(PropTypes.string),
   removeNotification: PropTypes.func,
-});
+};
 
 const mapStateToProps = ({ notifications }) => notifications;
 

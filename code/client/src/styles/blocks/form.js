@@ -1,13 +1,57 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import FacebookIcon from '~/static/social/facebook-icon-white.png';
 import GoogleIcon from '~/static/social/google-icon.svg';
 
+export const FormHeader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px 0;
+  padding: 0 50px;
+  flex-direction: column;
+  min-width: 550px;
+  position: relative
+`;
+
+export const FormHeaderPhoto = styled.img`
+  object-fit: cover;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  border-radius: 100%;
+`;
+
+export const FormHeaderTitle = styled.h1`
+  font-weight: 800;
+  font-size: 2.2em;
+  display: flex;
+  width: 250px;
+  margin: 15px 5px 0;
+  justify-content: center;
+  align-content: center;
+  
+  > * input {
+    width: 250px;
+  }
+`;
+
+export const FormHeaderLeftPanel = styled.div`
+  position: absolute;
+  left: 50px;
+  top: 0;
+`;
+
+export const FormHeaderRightPanel = styled.div`
+  position: absolute;
+  right: 50px;
+  top: 0;
+`;
+
 export const InputRow = styled.div`
-  margin: 0 40px 6px;
+  margin: 0 ${props => props.fixedPadding ? '42px' : 'auto'} 6px;
   position: relative;
   min-height: 38px;
-  max-width: 650px;
 `;
 
 export const FixedInputBlock = styled.div`
@@ -35,7 +79,93 @@ export const InputWrapper = styled.div`
   flex-direction: row;
 `;
 
-export const SwitchInputWrapper = styled.div`
+export const TextInputBox = styled.label`
+  height: ${props => props.lineHeight ?? 36}px;
+  padding: 0;
+  position: relative;
+  margin: 0;
+  min-width: 0;
+  font-weight: 400;
+  flex: 1 0 0;
+  display: flex;
+`;
+
+export const TextInputLabel = styled.span`
+  color: var(--cGreyPrimary);
+  font-size: 12px;
+  height: ${props => props.lineHeight ?? 36}px;
+  left: 8px;
+  line-height: ${props => props.lineHeight ?? 36}px;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  transform-origin: left;
+  right: 0;
+  user-select: none;
+  transition: transform ease-out .1s, -webkit-transform ease-out .1s;
+  
+  ${props => props.shrunken && (props.miniInput
+    ? { display: 'none' }
+    : { transform: 'scale(.83333) translateY(-13px)' }
+  )}
+`;
+
+export const TextInputField = styled.input`
+  background: var(--cThemeBack);
+  color: var(--cFont);
+  overflow: hidden;
+  padding: ${props => props.shrunken && !props.miniInput ? '12px 8px 2px' : '9px 8px 7px'};
+  text-overflow: ellipsis;
+  margin: 0;
+  border: 0;
+  width: 100%;
+  
+  &:active, &:focus {
+    outline: 0;
+  }
+`;
+
+export const InputSiderWrapper = styled.div`
+  align-items: center;
+  height: 100%;
+  margin-right: 8px;
+  vertical-align: middle;
+  display: flex;
+`;
+
+export const ShowPassWrapper = styled.div`
+  margin-left: 8px;
+  align-items: stretch;
+`;
+
+export const ShowPassButton = styled.button`
+  outline: 0;
+  border: 0;
+  background-color: transparent;
+  color: var(--cFont);
+  display: inline;
+  padding: 0;
+  position: relative;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  user-select: none;
+  width: auto;
+  
+  &:active {
+    opacity: .7;
+  };
+`;
+
+export const PhotoInputWrapper = styled(InputWrapper)`
+  width: ${props => props.size}px;
+  height: ${props => props.size}px;
+  margin: auto;
+  display: flex;
+  margin-bottom: ${props => props.size / 8}px;
+`;
+
+export const PaddedInputWrapper = styled.div`
   position: relative;
   background-color: var(--cThemeFront);
   border: 1px solid var(--cBorder);
@@ -45,35 +175,7 @@ export const SwitchInputWrapper = styled.div`
   float: right;
 `;
 
-export const TextInputBox = styled.label`
-  height: 36px;
-  padding: 0;
-  position: relative;
-  margin: 0;
-  min-width: 0;
-  flex: 1 0 0;
-  display: flex;
-  width: max-content;
-`;
-
-export const FileInputBox = styled.label`
-  height: 150px;
-  width: 100%;
-  position; relative;
-  padding: 0;
-  margin: 0;
-  min-width: 0;
-  
-  &:hover svg {
-    color: var(--cBlueSecondary);
-  }
-  
-  &:active svg {
-    opacity: .7;
-  }
-`;
-
-export const SwitchInputBox = styled.label`
+export const BoolInputBox = styled.label`
   height: 36px;
   width: 36px;
   padding: 0;
@@ -91,44 +193,7 @@ export const SwitchInputBox = styled.label`
   }
 `;
 
-export const TextInputLabel = styled.span`
-  color: var(--cGreyPrimary);
-  font-size: 12px;
-  height: 36px;
-  left: 8px;
-  line-height: 36px;
-  overflow: hidden;
-  pointer-events: none;
-  position: absolute;
-  transform-origin: left;
-  right: 0;
-  user-select: none;
-  transition: transform ease-out .1s, -webkit-transform ease-out .1s;
-  
-  ${props => props.shrunken && {
-    WebkitTransform: 'scale(.83333) translateY(-10px)',
-    transform: 'scale(.83333) translateY(-10px)',
-  }}
-`;
-
-export const FileInputLabel = styled.span`
-  position: absolute;
-  width: 100%;
-  font-weight: 600px;
-  user-select: none;
-  display: grid;
-  margin: auto;
-  text-align: center;
-  padding-top: 35px;
-  
-  & svg {
-    margin: auto;
-    font-size: 50px;
-    color: var(--cBluePrimary);
-  }
-`;
-
-export const SwitchInputLabel = styled.span`
+export const BoolInputLabel = styled.span`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -143,18 +208,52 @@ export const SwitchInputLabel = styled.span`
   }
 `;
 
-export const TextInputField = styled.input`
-  background: var(--cThemeBack);
-  color: var(--cFont);
-  overflow: hidden;
-  padding: ${props => props.shrunken ? '14px 0 2px 8px' : '9px 0 7px 8px'};
-  text-overflow: ellipsis;
+export const BoolInputField = styled.input`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  opacity: 0;
+  padding: 0;
   margin: 0;
   border: 0;
-  width: 100%;
   
   &:active, &:focus {
     outline: 0;
+  }
+`;
+
+export const FileInputBox = styled.label`
+  height: 100%;
+  width: 100%;
+  position; relative;
+  display: flex;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  
+  &:hover svg {
+    color: var(--cBlueSecondary);
+  }
+  
+  &:active svg {
+    opacity: .7;
+  }
+`;
+
+
+export const FileInputLabel = styled.div`
+  width: 100%;
+  user-select: none;
+  display: flex;
+  flex-flow: column;
+  text-align: center;
+  align-self: center;
+  
+  & svg {
+    margin: auto;
+    font-size: 50px;
+    color: var(--cBluePrimary);
   }
 `;
 
@@ -184,29 +283,6 @@ export const FileInputField = styled.input`
   }
 `;
 
-export const SwitchInputField = styled.input`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  outline: none;
-  opacity: 0;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  
-  &:active, &:focus {
-    outline: 0;
-  }
-`;
-
-export const TextInputSider = styled.div`
-  align-items: center;
-  height: 100%;
-  padding-right: 8px;
-  vertical-align: middle;
-  display: flex;
-`;
-
 export const FileInputPreview = styled.div`
   position: absolute;
   width: 100%;
@@ -222,32 +298,71 @@ export const FileImagePreview = styled.img`
   display: block;
 `;
 
-export const ShowPassWrapper = styled.div`
-  margin-left: 8px;
-  align-items: stretch;
-`;
-
-export const ShowPassButton = styled.button`
-  outline: 0;
-  border: 0;
-  background-color: transparent;
-  color: var(--cFont);
-  display: inline;
+export const SwitchInputBox = styled.label`
+  height: 36px;
+  width: fit-content;
   padding: 0;
   position: relative;
-  font-weight: 600;
-  cursor: pointer;
-  text-align: center;
+  margin: 0;
+  min-width: 0;
+  flex: 1 0 0;
+  display: flex;
+  background-color: var(--cThemeBack);
+`;
+
+export const SwitchInputLabel = styled.div`
+  display: flex;
+  height: 100%;
   user-select: none;
-  width: auto;
+`;
+
+export const SwitchInputValue = styled.span`
+  display: flex;
+  flex-flow: row;
+  font-size: 1em;
+  padding: 0 15px;
+  height: 100%;
+  align-items: center;
+  text-transform: uppercase;
+  ${props => props.selected
+    ? `
+      background-color: var(--cGreenSecondary);
+      color: var(--cThemeFront);
+      opacity: 1;
+      font-weight: 500;
+    ` : `
+      opacity: 0.5;
+      
+      :hover {
+        cursor: pointer;
+      }
+    `
+}
   
-  &:active {
-    opacity: .7;
-  };
+  :not(:last-child) {
+    border-right: 1px solid var(--cBorder);
+  }
+`;
+
+export const SwitchInputField = styled.input`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  
+  &:active, &:focus {
+    outline: 0;
+  }
 `;
 
 export const FormButtonWrapper = styled.div`
   margin: ${props => props.margin};
+  display: ${props => props.inline ? 'inline-block' : 'block'};
+  min-width: 100px;
   align-content: stretch;
 `;
 
@@ -267,6 +382,11 @@ export const FormButton = styled.button`
   width: 100%;
   max-width: 400px;
   height: 32px;
+  
+  ${props => props.disabled && `
+    opacity: .4;
+    pointer-events: none;
+  `}
 
   &:active {
     opacity: .7;
@@ -279,11 +399,17 @@ export const FormButton = styled.button`
   &:hover {
     background-color: ${props => props.backgroundHover};
   }
+`;
 
-  ${props => props.disabled
-    ? css`opacity: .4; pointer-events: none;`
-    : ''
-};
+export const MiniFormButtonWrapper = styled.div`
+  margin: ${props => props.margin || '0 auto'};
+  display: ${props => props.inline ? 'inline-block' : 'block'};
+  width: fit-content;
+  align-content: stretch;
+`;
+
+export const MiniFormButton = styled(FormButton)`
+  height: 24px;
 `;
 
 export const FormButtonContentWrapper = styled.span`
@@ -337,7 +463,6 @@ export const ErrorSpan = styled.span`
   stroke: var(--cError);
   height: 22px;
   width: 22px;
-  padding-left: 8px;
   display: block;
   position: relative;
 `;
@@ -346,7 +471,7 @@ export const InputLabel = styled.span`
   font-weight: 500;
   padding-top: 10px;
   display: inline-block;
-  font-size: 1.1em;
+  font-size: 1.2em;
   vertical-align: top;
 `;
 
@@ -361,7 +486,7 @@ export const InputPlaceholder = styled.span`
 export const ToggleInputIcon = styled.span`
   height: 20px;
   position: absolute;
-  margin-left: 10px;
+  margin-left: ${props => props.left || 10}px;
   color: var(--cFont);
   opacity: .8;
   
@@ -393,11 +518,11 @@ export const RemoveFileButton = styled.div`
 `;
 
 export const PhotoPreviewBlock = styled.div`
-  width: 150px;
-  height: 150px;
-  margin: 0 25px;
-  top: 0;
-  display: inline-block;
+  position: absolute;
+  bottom: -${props => props.size / 3}px;
+  right: -${props => props.size / 2}px;
+  width: ${props => props.size}px;
+  height: ${props => props.size}px;
   border-radius: 100%;
   border: 1px solid var(--cBorder);
   overflow: hidden;
@@ -406,4 +531,5 @@ export const PhotoPreviewBlock = styled.div`
 export const PhotoPreview = styled.img`
   height: 100%;
   width: 100%;
+  background-color: var(--cThemeFront)
 `;

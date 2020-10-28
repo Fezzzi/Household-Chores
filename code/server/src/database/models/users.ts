@@ -1,16 +1,26 @@
 import { database } from 'serverSrc/database';
-
 import { encryptPass, checkPass, generatePass } from 'serverSrc/helpers/passwords';
-import TABLE from './tables/users';
+import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
+import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
+
+import USERS_TABLE from './tables/users';
+import CONNECTIONS_TABLE from './tables/connections';
 
 const {
   name: tName,
   columns: {
     id: tabID, email: tabEmail, nickname: tabNickname, password: tabPassword, photo: tabPhoto,
-    google_id: tabGoogleID, facebook_id: tabFacebookID,
+    visibility: tabVisibility, google_id: tabGoogleID, facebook_id: tabFacebookID,
     date_registered: tabDateRegistered, date_last_active: tabDateLastActive,
   },
-} = TABLE;
+} = USERS_TABLE;
+
+const {
+  name: tConnectionsName,
+  columns: {
+    id_from: tabConnectionsIDFrom, id_to: tabConnectionsIDTo, state: tabConnectionsState, message: tabConnectionsMessage,
+  },
+} = CONNECTIONS_TABLE;
 
 export const findUser = async (email: string): Promise<number> => {
   const result = await database.query(
@@ -85,3 +95,37 @@ export const assignUserProvider = async (userId: number, googleId: string, faceb
   }
   return false;
 };
+
+export const queryUsers = async (query: string, userId: number): Promise<Array<object>> =>
+  database.query(`
+    SELECT users.${tabID}, users.${tabNickname}, users.${tabPhoto}, connections.${tabConnectionsState}, connections.${tabConnectionsMessage}
+    FROM ${tName} AS users
+    LEFT JOIN ${tConnectionsName} AS connections
+      ON connections.${tabConnectionsIDFrom}=${userId} AND connections.${tabConnectionsIDTo}=users.${tabID}
+        AND connections.${tabConnectionsState}='${CONNECTION_STATE_TYPE.WAITING}'
+    WHERE (users.${tabNickname} LIKE '%${query}%' OR users.${tabEmail} LIKE '%${query}%')
+      AND users.${tabID}!=${userId}
+      AND NOT EXISTS (
+        SELECT * FROM ${tConnectionsName}
+        WHERE (${tabConnectionsIDFrom}=${userId} AND ${tabConnectionsIDTo}=users.${tabID}
+            AND ${tabConnectionsState}!='${CONNECTION_STATE_TYPE.WAITING}')
+          OR (${tabConnectionsIDFrom}=users.${tabID} AND ${tabConnectionsIDTo}=${userId})
+      )
+      AND (${tabVisibility}='${USER_VISIBILITY_TYPE.ALL}'
+        OR EXISTS (
+          SELECT * FROM (
+            SELECT ${tabConnectionsIDFrom} AS id FROM ${tConnectionsName}
+            WHERE ${tabConnectionsIDTo}=users.${tabID} AND ${tabConnectionsState}='${CONNECTION_STATE_TYPE.APPROVED}'
+            UNION
+            SELECT ${tabConnectionsIDTo} AS id FROM ${tConnectionsName}
+            WHERE ${tabConnectionsIDFrom}=users.${tabID} AND ${tabConnectionsState}='${CONNECTION_STATE_TYPE.APPROVED}'
+          ) AS userFriends INNER JOIN (
+            SELECT ${tabConnectionsIDFrom} AS id FROM ${tConnectionsName}
+            WHERE ${tabConnectionsIDTo}=${userId} AND ${tabConnectionsState}='${CONNECTION_STATE_TYPE.APPROVED}'
+            UNION
+            SELECT ${tabConnectionsIDTo} AS id FROM ${tConnectionsName}
+            WHERE ${tabConnectionsIDFrom}=${userId} AND ${tabConnectionsState}='${CONNECTION_STATE_TYPE.APPROVED}'
+          ) AS targetFriends ON userFriends.id=targetFriends.id
+        )
+      )
+  `);

@@ -7,7 +7,7 @@ const webpackAliases = require('./webpack-aliases.config');
 
 module.exports = {
   // Enable sourcemaps for debugging webpack's output.
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   target: 'node',
   externals: [nodeExternals()],
 

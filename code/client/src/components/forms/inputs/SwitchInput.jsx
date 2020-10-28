@@ -1,85 +1,58 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Check } from '@material-ui/icons';
-
 import {
-  InputRow, SwitchInputWrapper, SwitchInputBox, SwitchInputField,
-  InputLabel, SwitchInputLabel, FixedInputBlock,
+  InputRow, PaddedInputWrapper, SwitchInputBox,
+  InputLabel, SwitchInputLabel, SwitchInputValue,
 } from 'clientSrc/styles/blocks/form';
+import { FORM } from 'shared/constants/localeMessages';
 
 import LocaleText from '../../common/LocaleText';
 
-class SwitchInputComponent extends Component {
-  constructor(props) {
-    super(props);
+const SwitchInput = ({ name, label, values, placeholder, updateInput }) => {
+  const [selectedValue, setSelectedValue] = useState(null);
 
-    this.state = {
-      inputActive: false,
-      isOn: props.placeholder !== '' || false,
-    };
-  }
+  const handleChange = value => {
+    if (value === selectedValue) {
+      return;
+    }
 
-  handleInputChange = () => {
-    const { updateInput } = this.props;
-    const { isOn } = this.state;
-
-    this.setState({
-      isOn: !isOn,
-    });
-
-    updateInput(true, !isOn);
+    setSelectedValue(value);
+    updateInput(true, value);
   };
 
-  getInputBody() {
-    const { name, label, fixedProps } = this.props;
-    const { isOn, inputActive } = this.state;
-
-    return (
-      <FixedInputBlock {...fixedProps}>
-        <InputLabel>
-          <LocaleText message={label} />
-        </InputLabel>
-        <SwitchInputWrapper active={inputActive}>
-          <SwitchInputBox htmlFor={name}>
-            <SwitchInputLabel>
-              {isOn && <Check />}
-            </SwitchInputLabel>
-            <SwitchInputField
-              name={name}
-              type="checkbox"
-              onChange={this.handleInputChange}
-              onFocus={() => this.setState({ inputActive: true })}
-              onBlur={() => this.setState({ inputActive: false })}
-              noValidate
-            />
-          </SwitchInputBox>
-        </SwitchInputWrapper>
-      </FixedInputBlock>
-    );
-  }
-
-  render() {
-    const { inline } = this.props;
-    const body = this.getInputBody();
-
-    return inline
-      ? body
-      : (
-        <InputRow>
-          {body}
-        </InputRow>
-      );
-  }
-}
-
-SwitchInputComponent.propTypes = {
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
-  inline: PropTypes.bool,
-  fixedProps: PropTypes.object,
-  updateInput: PropTypes.func,
+  return (
+    <InputRow>
+      <InputLabel>
+        <LocaleText message={label} />
+      </InputLabel>
+      <PaddedInputWrapper>
+        <SwitchInputBox>
+          <SwitchInputLabel>
+            {values.map(value => (
+              <SwitchInputValue
+                key={`${name}-${value}`}
+                selected={value === (selectedValue ?? placeholder)}
+                onClick={() => handleChange(value)}
+              >
+                {FORM[value]
+                  ? <LocaleText message={FORM[value]} />
+                  : value}
+              </SwitchInputValue>
+            ))}
+          </SwitchInputLabel>
+        </SwitchInputBox>
+      </PaddedInputWrapper>
+    </InputRow>
+  );
 };
 
-export default SwitchInputComponent;
+SwitchInput.propTypes = {
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  values: PropTypes.arrayOf(PropTypes.string).isRequired,
+  placeholder: PropTypes.string,
+  updateInput: PropTypes.func.isRequired,
+};
+
+export default SwitchInput;

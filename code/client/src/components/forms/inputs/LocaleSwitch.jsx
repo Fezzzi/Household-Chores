@@ -59,11 +59,11 @@ class LocaleSwitchComponent extends Component {
   }
 }
 
-LocaleSwitchComponent.propTypes = ({
+LocaleSwitchComponent.propTypes = {
   locale: PropTypes.string,
   availableLocales: PropTypes.arrayOf(PropTypes.string),
   switchLocale: PropTypes.func,
-});
+};
 
 const mapStateToProps = ({ locale: { locale, availableLocales } }) => ({
   locale,

@@ -1,4 +1,5 @@
 import USERS_TABLE from 'serverSrc/database/models/tables/users';
+import { migrateWithQueries } from 'serverSrc/helpers/migrations';
 
 const { columns: {
   id, google_id, facebook_id, email, nickname, password,
@@ -6,7 +7,7 @@ const { columns: {
 } } = USERS_TABLE;
 
 module.exports = {
-  up: (conn, cb) => {
+  up: (conn, cb) => migrateWithQueries(cb,
     conn.query(`
       CREATE TABLE ${USERS_TABLE.name} (
         ${id} INT AUTO_INCREMENT PRIMARY KEY,
@@ -20,13 +21,12 @@ module.exports = {
         ${date_registered} DATETIME NOT NULL,
         ${date_last_active} DATETIME
       )
-    `);
-    conn.query(`
+    `)
+    && conn.query(`
       INSERT INTO ${USERS_TABLE.name} (
         ${email}, ${nickname}, ${password}, ${confirmed}, ${date_registered}
       ) VALUES ('test@test.cz', 'test', '$2y$12$917uKopA7bPqkCDlHCyavO5fAch/CFYre7aANyqxnUqZZrNnQQQOy', 1, NOW())
-    `);
-    cb();
-  },
-  down: `DROP TABLE ${USERS_TABLE.name}`,
-};
+    `)
+  ),
+  down: (conn, cb) => migrateWithQueries(cb, conn.query(`DROP TABLE ${USERS_TABLE.name}`)),
+}

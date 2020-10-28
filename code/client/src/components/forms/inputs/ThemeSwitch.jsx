@@ -26,10 +26,10 @@ const ThemeSwitchComponent = ({ theme, switchTheme }) => (
   </IconButtonWrapper>
 );
 
-ThemeSwitchComponent.propTypes = ({
+ThemeSwitchComponent.propTypes = {
   theme: PropTypes.string,
   switchTheme: PropTypes.func,
-});
+};
 
 const mapStateToProps = ({ theme: { theme } }) => ({
   theme,

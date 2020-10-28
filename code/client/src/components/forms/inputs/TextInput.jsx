@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import { Edit, ChevronLeft } from '@material-ui/icons';
 
-import * as TYPES from 'shared/constants/inputTypes';
-import { isInputValid } from 'shared/helpers/validation';
 import {
-  InputRow, TextInputField, InputWrapper, TextInputBox, TextInputLabel,
-  InputPlaceholder, ToggleInputIcon, InputLabel, FixedInputBlock,
+  InputRow, TextInputField, InputWrapper, TextInputBox, TextInputLabel, InputPlaceholder,
+  ToggleInputIcon, InputLabel, FixedInputBlock, ErrorSpan, ShowPassWrapper,
+  ShowPassButton, InputSiderWrapper,
 } from 'clientSrc/styles/blocks/form';
+import { InfoTooltip } from 'clientSrc/components/portals';
+import * as InputTypes from 'shared/constants/inputTypes';
+import { COMMON } from 'shared/constants/localeMessages';
+import { isInputValid } from 'shared/helpers/validation';
 
-import TextInputSider from './TextInputSider';
+import InputErrorIcon from '~/static/icons/input-error-icon.svgr';
+
 import LocaleText from '../../common/LocaleText';
 
 class TextInput extends Component {
@@ -36,8 +39,11 @@ class TextInput extends Component {
   };
 
   getInputBody() {
-    const { name, message, label, placeholder, type, inputError } = this.props;
+    const { name, message, label, placeholder, type, reference, inputError } = this.props;
     const { inputTextLength, showPassword, inputActive, inputShown } = this.state;
+
+    const showPassButton = type === InputTypes.PASSWORD && inputTextLength > 0;
+    const showError = !inputActive && !!inputError;
 
     return (
       <>
@@ -49,7 +55,8 @@ class TextInput extends Component {
               </TextInputLabel>
               <TextInputField
                 name={name}
-                type={type === TYPES.PASSWORD && showPassword ? TYPES.TEXT : type}
+                type={type === InputTypes.PASSWORD && showPassword ? InputTypes.TEXT : type}
+                ref={reference}
                 onChange={this.handleInputChange}
                 onFocus={() => this.setState({ inputActive: true })}
                 onBlur={() => this.setState({ inputActive: false })}
@@ -57,14 +64,26 @@ class TextInput extends Component {
                 noValidate
               />
             </TextInputBox>
-            <TextInputSider
-              inputTextLength={inputTextLength}
-              type={type}
-              inputError={inputError}
-              updateInputState={this.setState.bind(this)}
-              showPassword={showPassword}
-              inputActive={inputActive}
-            />
+            {(showPassButton || showError) && (
+              <InputSiderWrapper>
+                {showError && (
+                  <ErrorSpan>
+                    <InfoTooltip icon={<InputErrorIcon />} text={inputError} />
+                  </ErrorSpan>
+                )}
+                {showPassButton && (
+                  <ShowPassWrapper>
+                    <ShowPassButton onClick={e => {
+                      e.preventDefault();
+                      this.setState({ showPassword: !showPassword });
+                    }}
+                    >
+                      <LocaleText message={showPassword ? COMMON.HIDE : COMMON.SHOW} />
+                    </ShowPassButton>
+                  </ShowPassWrapper>
+                )}
+              </InputSiderWrapper>
+            )}
           </InputWrapper>
         )}
         {placeholder && (
@@ -89,7 +108,7 @@ class TextInput extends Component {
   }
 
   render() {
-    const { inline, fixedProps } = this.props;
+    const { inline, fixedPadding, fixedProps } = this.props;
     const body = this.getInputBody();
 
     return inline
@@ -98,7 +117,7 @@ class TextInput extends Component {
           {body}
         </FixedInputBlock>
       ) : (
-        <InputRow>
+        <InputRow fixedPadding={fixedPadding}>
           {body}
         </InputRow>
       );
@@ -110,10 +129,12 @@ TextInput.propTypes = {
   message: PropTypes.string.isRequired,
   label: PropTypes.string,
   inline: PropTypes.bool,
+  fixedPadding: PropTypes.bool,
   fixedProps: PropTypes.object,
   placeholder: PropTypes.string,
   type: PropTypes.string.isRequired,
-  inputError: PropTypes.string.isRequired,
+  reference: PropTypes.object,
+  inputError: PropTypes.string,
   updateInput: PropTypes.func,
 };
 
