@@ -1,4 +1,4 @@
 import InfoTooltip from './InfoTooltip';
-import { OptionsTooltip } from './OptionsTooltip';
+import OptionsTooltip from './OptionsTooltip';
 
 export { InfoTooltip, OptionsTooltip };

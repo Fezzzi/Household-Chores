@@ -7,10 +7,10 @@ import { editableFieldProps } from 'clientSrc/helpers/editableField';
 import { updateHandler } from 'clientSrc/helpers/form';
 import * as InputTypes from 'shared/constants/inputTypes';
 
-import { Input } from '../forms/index';
+import Input from '../forms/common/Input';
 
 const EditablePhotoField = ({
-  name, size, iconRight, placeholder, error, setFormState, isFormValidFunc, children
+  name, size, iconRight, placeholder, error, setFormState, isFormValidFunc, children,
 }) => {
   const [hovering, setHovering] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -18,7 +18,7 @@ const EditablePhotoField = ({
   const handleUpdate = updateHandler(name, setFormState, isFormValidFunc, placeholder);
 
   const handleFileRemove = e => {
-    setEditing(false)
+    setEditing(false);
     e.stopPropagation();
   };
 
@@ -27,8 +27,8 @@ const EditablePhotoField = ({
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
       onClick={() => {
-        !editing && setEditing(true);
-        hovering && setHovering(false);
+        setEditing(true);
+        setHovering(false);
       }}
     >
       {editing
@@ -40,7 +40,7 @@ const EditablePhotoField = ({
             inputError={error}
             updateInput={handleUpdate}
             onFileRemove={handleFileRemove}
-            closable={true}
+            closable
             size={size}
             reference={inputRef}
           />
@@ -60,7 +60,7 @@ const EditablePhotoField = ({
 
 EditablePhotoField.defaultProps = {
   iconRight: 15,
-}
+};
 
 EditablePhotoField.propTypes = {
   ...editableFieldProps,

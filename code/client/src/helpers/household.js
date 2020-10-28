@@ -1,13 +1,13 @@
-import React from "react";
-import {CalendarToday, ChevronRight, Delete, Grade, MoreVert, SortByAlpha} from "@material-ui/icons";
+import React from 'react';
+import { CalendarToday, ChevronRight, Delete, Grade, MoreVert, SortByAlpha } from '@material-ui/icons';
 
 import { invitationApprove, invitationIgnore } from 'clientSrc/effects/householdEffects';
-import {TablePhoto, TableRowIcon} from "clientSrc/styles/blocks/table";
-import {RoleLabel} from "clientSrc/styles/blocks/households";
-import {OptionsTooltip} from "clientSrc/components/portals/tooltips/OptionsTooltip";
+import { TablePhoto, TableRowIcon } from 'clientSrc/styles/blocks/table';
+import { RoleLabel } from 'clientSrc/styles/blocks/households';
+import OptionsTooltip from 'clientSrc/components/portals/tooltips/OptionsTooltip';
 import * as NotificationTypes from 'shared/constants/notificationTypes';
 import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
-import {ERROR, HOUSEHOLD} from 'shared/constants/localeMessages';
+import { ERROR, HOUSEHOLD } from 'shared/constants/localeMessages';
 
 export const useHouseholdButtonHandlers = (householdId, fromId, setData, addNotification) => {
   const approveHandler = () => invitationApprove({ householdId, fromId, photo: '' })
@@ -75,8 +75,8 @@ export const useMemberListProps = members => {
     keys,
     sortConfig,
     filterKey,
-  }
-}
+  };
+};
 
 export const useInvitationListProps = invitations => {
   const rows = invitations.map(invitation => ({
@@ -106,8 +106,8 @@ export const useInvitationListProps = invitations => {
     keys,
     sortConfig,
     filterKey,
-  }
-}
+  };
+};
 
 export const getLabelColors = role => role === HOUSEHOLD_ROLE_TYPE.ADMIN
   ? { background: 'var(--cBluePrimary)', color: 'var(--cThemeBack)' }

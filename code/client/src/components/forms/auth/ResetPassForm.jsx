@@ -2,21 +2,23 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
-import * as InputTypes from 'shared/constants/inputTypes';
-import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages';
-import * as AuthActions from 'clientSrc/actions/authActions';
 import { MessageBlock, LinkRow } from 'clientSrc/styles/blocks/auth';
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/form';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
+import * as AuthActions from 'clientSrc/actions/authActions';
+import * as InputTypes from 'shared/constants/inputTypes';
+import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages';
 
-import { Separator, TextInput, PrimaryButton } from '../index';
+import TextInput from '../inputs/TextInput';
+import Separator from '../common/Separator';
+import PrimaryButton from '../common/PrimaryButton';
 import LocaleText from '../../common/LocaleText';
 
 const inputConfig = [
   { name: 'email', message: FORM.EMAIL, type: InputTypes.EMAIL },
 ];
 
-export class ResetPassForm extends Component {
+class ResetPassForm extends Component {
   constructor(props) {
     super(props);
 

@@ -12,7 +12,7 @@ export const CriticalButtonsBlock = styled(FormHeaderRightPanel)`
   width: max-content;
   
   button {
-    opacity: 0.4;
+    opacity: 0.7;
   }
   
   button:hover {

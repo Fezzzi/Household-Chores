@@ -11,8 +11,8 @@ import {
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import { FORM } from 'shared/constants/localeMessages';
 
-import { PrimaryButton } from '../index';
-import { LocaleText } from '../../common';
+import PrimaryButton from '../common/PrimaryButton';
+import LocaleText from '../../common/LocaleText';
 import { InfoTooltip } from '../../portals';
 
 const HouseholdInvitationNode = ({ invitation, setData, addNotification }) => {

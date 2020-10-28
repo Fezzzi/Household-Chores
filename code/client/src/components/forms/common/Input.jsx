@@ -2,7 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import * as InputTypes from 'shared/constants/inputTypes';
-import { TextInput, PhotoInput, BoolInput, SwitchInput } from '../inputs';
+
+import TextInput from '../inputs/TextInput';
+import PhotoInput from '../inputs/PhotoInput';
+import BoolInput from '../inputs/BoolInput';
+import SwitchInput from '../inputs/SwitchInput';
 
 const Input = ({ type, ...props }) => {
   switch (type) {

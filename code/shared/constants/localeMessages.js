@@ -92,8 +92,11 @@ export const FORM = {
 
 export const HOUSEHOLD = {
   LEAVE: 'household.leave',
+  LEAVING: 'household.leaving',
   DELETE: 'household.delete',
+  DELETING: 'household.deleting',
   CREATE: 'household.create',
+  CREATING: 'household.creating',
   MEMBER: 'household.member',
   MEMBERS: 'household.members',
   MEMBERS_SECTION: 'household.membersSection',

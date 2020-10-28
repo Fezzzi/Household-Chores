@@ -7,7 +7,7 @@ import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 import { COMMON } from 'shared/constants/localeMessages';
 import * as InputTypes from 'shared/constants/inputTypes';
 
-import { LocaleText } from '../../common';
+import LocaleText from '../../common/LocaleText';
 import PrimaryButton from './PrimaryButton';
 import Input from './Input';
 

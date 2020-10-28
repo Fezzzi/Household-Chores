@@ -8,11 +8,12 @@ import { useMemberListProps, useInvitationListProps } from 'clientSrc/helpers/ho
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 import { FORM, HOUSEHOLD } from 'shared/constants/localeMessages';
 
+import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
 import HouseholdFormHeader from './HouseholdFormHeader';
 import HouseholdInvitationForm from './HouseholdInvitationForm';
-import { LocaleText, Table } from '../../common';
+import LocaleText from '../../common/LocaleText';
+import Table from '../../common/Table';
 import { SimpleFloatingElement } from '../../portals';
-import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
 
 const HouseholdModificationForm = ({ household, connections, setData }) => {
   const [timer, setTimer] = useState(null);
@@ -23,6 +24,7 @@ const HouseholdModificationForm = ({ household, connections, setData }) => {
     inputs: {},
     errors: {},
   });
+  const [sendingField, setSendingField] = useState(null);
 
   useEffect(() => () => timer && clearTimeout(timer), []);
 
@@ -34,16 +36,23 @@ const HouseholdModificationForm = ({ household, connections, setData }) => {
     }));
 
     setTimer(setTimeout(
-      () => setState && setState(prevState => ({
-        ...prevState,
-        isFormSending: false,
-        submitMessage: FORM.SAVE,
-      })), SUBMIT_TIMEOUT));
+      () => {
+        if (setState) {
+          setState(prevState => ({
+            ...prevState,
+            isFormSending: false,
+            submitMessage: FORM.SAVE,
+          }));
+        }
+        if (setSendingField) {
+          setSendingField(null);
+        }
+      }, SUBMIT_TIMEOUT));
   });
 
   const { photo, name, members, invitations } = household;
-  const memberTableProps = useMemberListProps(members)
-  const invitationTableProps = useInvitationListProps(invitations)
+  const memberTableProps = useMemberListProps(members);
+  const invitationTableProps = useInvitationListProps(invitations);
 
   const { inputs, errors, isFormSending, isFormValid, submitMessage } = state;
 
@@ -54,8 +63,17 @@ const HouseholdModificationForm = ({ household, connections, setData }) => {
     role: HOUSEHOLD_ROLE_TYPE.MANAGER,
   };
 
-  const handleLeaveHousehold = () => console.log('leaving...');
-  const handleDeleteHousehold = () => console.log('deleting...');
+  const handleLeaveHousehold = e => {
+    setSendingField({ [HOUSEHOLD.LEAVE]: HOUSEHOLD.LEAVING });
+    handleSubmit(e);
+    console.log('leaving...');
+  };
+
+  const handleDeleteHousehold = e => {
+    setSendingField({ [HOUSEHOLD.DELETE]: HOUSEHOLD.DELETING });
+    handleSubmit(e);
+    console.log('deleting...');
+  };
 
   return (
     <>
@@ -76,6 +94,7 @@ const HouseholdModificationForm = ({ household, connections, setData }) => {
         membersCount={members.length}
         setFormState={setState}
         currentUser={currentUser}
+        sendingField={sendingField}
         onLeaveHousehold={handleLeaveHousehold}
         onDeleteHousehold={handleDeleteHousehold}
       />
@@ -137,12 +156,12 @@ HouseholdModificationForm.propTypes = {
       toPhoto: PropTypes.string.isRequired,
       dateCreated: PropTypes.string.isRequired,
     })),
-  }).isRequired,
+  }),
   connections: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     nickname: PropTypes.string.isRequired,
     photo: PropTypes.string,
-  })).isRequired,
+  })),
   setData: PropTypes.func.isRequired,
 };
 

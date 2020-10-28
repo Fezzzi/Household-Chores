@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Search } from '@material-ui/icons';
 
-import { InputRow } from 'clientSrc/styles/blocks/form';
 import { UserList } from 'clientSrc/styles/blocks/users';
 import { FormBody, SectionHeadline } from 'clientSrc/styles/blocks/settings';
 import { TableBox, TableHeaderBox, TableHeaderCell, TableSorterIcon } from 'clientSrc/styles/blocks/table';
@@ -10,8 +9,8 @@ import { useTableLogic } from 'clientSrc/helpers/table';
 import { COMMON } from 'shared/constants/localeMessages';
 
 import UserConnectionNode from './UserConnectionNode';
+import MiniTextInput from '../inputs/MiniTextInput';
 import LocaleText from '../../common/LocaleText';
-import { MiniTextInput } from '../inputs';
 
 const ConnectionListForm = ({ tab, data, setData, dataKey, emptyMessage, headlineMessage }) => {
   const textInputRef = useRef(null);

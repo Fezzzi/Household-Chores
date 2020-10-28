@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import FacebookIcon from '~/static/social/facebook-icon-white.png';
 import GoogleIcon from '~/static/social/google-icon.svg';
@@ -105,8 +105,8 @@ export const TextInputLabel = styled.span`
   transition: transform ease-out .1s, -webkit-transform ease-out .1s;
   
   ${props => props.shrunken && (props.miniInput
-    ? {display: 'none'}
-    : {transform: 'scale(.83333) translateY(-13px)'}
+    ? { display: 'none' }
+    : { transform: 'scale(.83333) translateY(-13px)' }
   )}
 `;
 
@@ -308,13 +308,13 @@ export const SwitchInputBox = styled.label`
   flex: 1 0 0;
   display: flex;
   background-color: var(--cThemeBack);
-`
+`;
 
 export const SwitchInputLabel = styled.div`
   display: flex;
   height: 100%;
   user-select: none;
-`
+`;
 
 export const SwitchInputValue = styled.span`
   display: flex;
@@ -337,12 +337,12 @@ export const SwitchInputValue = styled.span`
         cursor: pointer;
       }
     `
-  }
+}
   
   :not(:last-child) {
     border-right: 1px solid var(--cBorder);
   }
-`
+`;
 
 export const SwitchInputField = styled.input`
   position: absolute;
@@ -357,7 +357,7 @@ export const SwitchInputField = styled.input`
   &:active, &:focus {
     outline: 0;
   }
-`
+`;
 
 export const FormButtonWrapper = styled.div`
   margin: ${props => props.margin};

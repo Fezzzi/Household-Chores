@@ -2,16 +2,13 @@ import React, { Fragment, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-import {
-  Tooltip, TooltipRow, TooltipAnchor,
-} from 'clientSrc/styles/blocks/portals';
+import { Tooltip, TooltipRow, TooltipAnchor } from 'clientSrc/styles/blocks/portals';
 import { useElementPosition } from 'clientSrc/helpers/dom';
 import * as PortalType from 'clientSrc/constants/portalType';
 
-import { LocaleText } from '../../common';
-import { optionsShape } from './OptionsTooltip'
+import LocaleText from '../../common/LocaleText';
 
-const NestedOptionsTooltip = ({ position, options, withArrow, blurHandler }) => {
+export const NestedTooltipOptions = ({ position, options, withArrow, blurHandler }) => {
   const [state, setState] = useState({
     visible: null,
     position: null,
@@ -28,10 +25,11 @@ const NestedOptionsTooltip = ({ position, options, withArrow, blurHandler }) => 
 
   const onBlur = e => {
     // Styled components generate classnames uniquely for each Component, thus classname equality => same Components
-    if ((!e.relatedTarget || e.relatedTarget.className !== e.currentTarget.className
+    if (blurHandler && (
+      !e.relatedTarget
+      || e.relatedTarget.className !== e.currentTarget.className
       || (e.relatedTarget.parentNode && e.relatedTarget.parentNode.nextSibling && e.relatedTarget !== e.currentTarget)
-      && blurHandler)
-    ) {
+    )) {
       blurHandler();
     }
   };
@@ -44,7 +42,7 @@ const NestedOptionsTooltip = ({ position, options, withArrow, blurHandler }) => 
     <TooltipAnchor position={position}>
       <Tooltip
         hasRows
-        tabIndex={1}
+        tabIndex={-1}
         ref={thisRef}
         onBlur={onBlur}
       >
@@ -62,7 +60,7 @@ const NestedOptionsTooltip = ({ position, options, withArrow, blurHandler }) => 
                 : content}
             </TooltipRow>
             {state.visible === index && (
-              <NestedOptionsTooltip
+              <NestedTooltipOptions
                 position={state.position}
                 options={nestedOptions}
                 withArrow
@@ -76,7 +74,16 @@ const NestedOptionsTooltip = ({ position, options, withArrow, blurHandler }) => 
   ), tooltipRoot);
 };
 
-NestedOptionsTooltip.propTypes = {
+export const optionsShape = PropTypes.shape({
+  content: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]).isRequired,
+  clickHandler: PropTypes.func,
+});
+optionsShape.nestedOptions = PropTypes.arrayOf(optionsShape);
+
+NestedTooltipOptions.propTypes = {
   position: PropTypes.shape({
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
@@ -85,5 +92,3 @@ NestedOptionsTooltip.propTypes = {
   withArrow: PropTypes.bool,
   blurHandler: PropTypes.func,
 };
-
-export default NestedOptionsTooltip;

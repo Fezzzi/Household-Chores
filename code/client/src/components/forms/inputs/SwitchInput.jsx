@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  InputRow, PaddedInputWrapper, SwitchInputBox, SwitchInputField,
+  InputRow, PaddedInputWrapper, SwitchInputBox,
   InputLabel, SwitchInputLabel, SwitchInputValue,
 } from 'clientSrc/styles/blocks/form';
-
-import { LocaleText } from '../../common';
 import { FORM } from 'shared/constants/localeMessages';
 
+import LocaleText from '../../common/LocaleText';
+
 const SwitchInput = ({ name, label, values, placeholder, updateInput }) => {
-  const [selectedValue, setSelectedValue] = useState(null)
+  const [selectedValue, setSelectedValue] = useState(null);
 
   const handleChange = value => {
-   if (value === selectedValue) {
-     return;
-   }
+    if (value === selectedValue) {
+      return;
+    }
 
     setSelectedValue(value);
     updateInput(true, value);
@@ -37,16 +37,15 @@ const SwitchInput = ({ name, label, values, placeholder, updateInput }) => {
               >
                 {FORM[value]
                   ? <LocaleText message={FORM[value]} />
-                  : value
-                }
+                  : value}
               </SwitchInputValue>
             ))}
           </SwitchInputLabel>
         </SwitchInputBox>
       </PaddedInputWrapper>
     </InputRow>
-  )
-}
+  );
+};
 
 SwitchInput.propTypes = {
   name: PropTypes.string.isRequired,

@@ -8,10 +8,10 @@ import { COMMON, FORM } from 'shared/constants/localeMessages';
 import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
 import * as InputTypes from 'shared/constants/inputTypes';
 
+import { FormBody } from 'clientSrc/styles/blocks/settings';
 import { SimpleFloatingElement } from '../../portals';
 import ProfileFormHeader from './ProfileFormHeader';
-import { Input } from '../common';
-import { FormBody } from 'clientSrc/styles/blocks/settings';
+import Input from '../common/Input';
 
 const ProfileForm = ({ data }) => {
   const [timer, setTimer] = useState(null);

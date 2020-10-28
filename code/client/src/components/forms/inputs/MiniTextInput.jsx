@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  TextInputBox,
-  TextInputField,
-  TextInputLabel,
-} from 'clientSrc/styles/blocks/form';
+import { TextInputBox, TextInputField, TextInputLabel } from 'clientSrc/styles/blocks/form';
 import { MiniInputWrapper } from 'clientSrc/styles/blocks/common';
-import { LocaleText } from 'clientSrc/components/common';
 import * as TYPES from 'shared/constants/inputTypes';
 
+import LocaleText from '../../common/LocaleText';
 
 const MiniTextInput = ({ name, reference, message, handleChange }) => {
   const [inputTextLength, setInputTextLength] = useState(0);

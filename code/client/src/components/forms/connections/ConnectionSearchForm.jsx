@@ -13,26 +13,26 @@ import { ERROR, FORM } from 'shared/constants/localeMessages';
 
 import UserConnectionNode from './UserConnectionNode';
 import LocaleText from '../../common/LocaleText';
-import { SearchBar } from '../common';
+import SearchBar from '../common/SearchBar';
 
-const ConnectionSearchForm = ({ tab, size, data, setData, dataKey, emptyMessage, headlineMessage, addNotification }) => {
+const ConnectionSearchForm = ({ tab, data, setData, dataKey, emptyMessage, headlineMessage, addNotification }) => {
   const [emptyResultMessage, setEmptyResultMessage] = useState(emptyMessage);
 
   const searchQuery = useCallback(query => findUsers(query)
-      .then(({ data: newData }) => {
-        setEmptyResultMessage(FORM.NO_CONNECTIONS_FOUND);
-        setData(prevState => ({
-          ...prevState,
-          ...newData,
-        }));
-      })
-      .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR)),
-    [setEmptyResultMessage, setData, addNotification]);
+    .then(({ data: newData }) => {
+      setEmptyResultMessage(FORM.NO_CONNECTIONS_FOUND);
+      setData(prevState => ({
+        ...prevState,
+        ...newData,
+      }));
+    })
+    .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR)),
+  [setEmptyResultMessage, setData, addNotification]);
 
   return (
     <>
       <SectionHeadline first>
-        <LocaleText message={headlineMessage}/>
+        <LocaleText message={headlineMessage} />
       </SectionHeadline>
       <TableBox>
         <TableHeaderBox isBigger>

@@ -9,7 +9,7 @@ import { FORM, SETTINGS } from 'shared/constants/localeMessages';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
 import * as SettingTypes from 'shared/constants/settingTypes';
 
-const renderConnectionListForm = (dataKey, emptyMessage, tab, headlineMessage) => (data, setData) =>
+const renderConnectionListForm = (dataKey, emptyMessage, tab, headlineMessage) => (data, setData) => (
   <ConnectionListForm
     data={data}
     setData={setData}
@@ -17,14 +17,15 @@ const renderConnectionListForm = (dataKey, emptyMessage, tab, headlineMessage) =
     emptyMessage={emptyMessage}
     headlineMessage={headlineMessage}
     tab={tab}
-  />;
+  />
+);
 
 export const settingsRenderers = {
   [CATEGORIES.PROFILE]: {
-    [TABS.GENERAL]: (data, setData) => (
+    [TABS.GENERAL]: data => (
       <ProfileForm data={data} />
     ),
-    [TABS.NOTIFICATIONS]: (data, setData) => (
+    [TABS.NOTIFICATIONS]: data => (
       <NotificationForm data={data} />
     ),
   },

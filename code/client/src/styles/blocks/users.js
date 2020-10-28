@@ -48,7 +48,7 @@ export const MiniUserPhoto = styled.img`
 export const UserInfoBox = styled.div`
   display: inline-block;
   position: relative;
-`
+`;
 
 export const UserButtonsBox = styled.div`
   display: inline-block;

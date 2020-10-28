@@ -12,8 +12,8 @@ import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
 import { TABS } from 'shared/constants/settingTypes';
 
-import { PrimaryButton } from '../index';
-import { LocaleText } from '../../common';
+import PrimaryButton from '../common/PrimaryButton';
+import LocaleText from '../../common/LocaleText';
 import { InfoTooltip } from '../../portals';
 
 const UserConnectionNode = ({ tab, user, setData, addNotification }) => {

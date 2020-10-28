@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { AUTH } from 'shared/constants/localeMessages';
 import { AuthContent, InputsBlock, LogoBlock, LogoTopBlock } from 'clientSrc/styles/blocks/auth';
 import * as TABS from 'clientSrc/constants/authTabs';
+import { AUTH } from 'shared/constants/localeMessages';
 import LogoTop from '~/static/logo-top.svgr';
 
 import LogInForm from './LogInForm';

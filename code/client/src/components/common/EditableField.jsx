@@ -1,12 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Edit } from '@material-ui/icons';
 
 import { EditableFieldIcon, EditableFieldWrapper } from 'clientSrc/styles/blocks/common';
-import { editableFieldProps, useEditableFieldLogic } from 'clientSrc/helpers/editableField';
-import * as InputTypes from 'shared/constants/inputTypes';
-
-import { Input } from '../forms/index';
 
 const EditableField = ({ input, editing, setEditing, children }) => {
   const [hovering, setHovering] = useState(false);
@@ -16,8 +12,8 @@ const EditableField = ({ input, editing, setEditing, children }) => {
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
       onClick={() => {
-        !editing && setEditing(true);
-        hovering && setHovering(false);
+        setEditing(true);
+        setHovering(false);
       }}
     >
       {editing
@@ -25,10 +21,9 @@ const EditableField = ({ input, editing, setEditing, children }) => {
         : (
           <>
             {children}
-            {hovering && <EditableFieldIcon centered={true}><Edit /></EditableFieldIcon>}
+            {hovering && <EditableFieldIcon centered><Edit /></EditableFieldIcon>}
           </>
-        )
-      }
+        )}
     </EditableFieldWrapper>
   );
 };

@@ -84,8 +84,11 @@ export default {
   [FORM[USER_VISIBILITY_TYPE.ALL]]: 'all',
 
   [HOUSEHOLD.LEAVE]: 'Leave household',
+  [HOUSEHOLD.LEAVING]: 'Leaving',
   [HOUSEHOLD.DELETE]: 'Delete household',
+  [HOUSEHOLD.DELETING]: 'Deleting',
   [HOUSEHOLD.CREATE]: 'Create household',
+  [HOUSEHOLD.CREATING]: 'Creating',
   [HOUSEHOLD.MEMBER]: 'member',
   [HOUSEHOLD.MEMBERS]: 'members',
   [HOUSEHOLD.MEMBERS_SECTION]: 'members',

@@ -110,7 +110,7 @@ export const SimpleFloatingElementWrapper = styled.div`
   }
   
   ${props => props.enabled && `:hover {
-    background-color: ${props => props.backgroundHovered};
+    background-color: ${props.backgroundHovered};
     cursor: pointer;
   }`}
   

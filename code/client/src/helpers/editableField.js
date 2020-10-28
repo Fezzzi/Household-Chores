@@ -9,6 +9,6 @@ export const editableFieldProps = {
   isFormValidFunc: PropTypes.func,
   children: PropTypes.oneOfType([
     PropTypes.element,
-    PropTypes.string
+    PropTypes.string,
   ]),
 };

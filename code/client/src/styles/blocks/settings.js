@@ -178,7 +178,7 @@ export const ProfilePasswordBlock = styled(FormHeaderLeftPanel)`
   > * input {
     width: 235px;
   }
-`
+`;
 
 export const ProfilePasswordInputs = styled.div`
   margin: 15px 10px 0;
@@ -211,7 +211,7 @@ export const ProfilePasswordTitle = styled.div`
   font-size: 1.4em;
   font-weight: 500;
   margin: 15px 0;
-`
+`;
 
 export const ProfileSwitchesBlock = styled(FormHeaderRightPanel)`
   flex-flow: column;

@@ -51,7 +51,7 @@ const Table = ({ rows, keys, sortConfig, filterKey }) => {
 
 Table.defaultProps = {
   rows: [],
-  sorters: [],
+  sortConfig: [],
 };
 
 Table.propTypes = {

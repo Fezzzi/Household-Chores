@@ -21,7 +21,7 @@ export const useTableLogic = (rows, sortConfig, filterKey) => {
     return newRows;
   }, [rows, sortConfig, sorter, query]);
 
-  const sorters = useMemo(() => sortConfig.map(({ key, icon }, index) => (
+  const sorters = useMemo(() => sortConfig.map(({ icon }, index) => (
     <TableSorterIcon
       key={index}
       selected={Math.abs(sorter) === index + 1}

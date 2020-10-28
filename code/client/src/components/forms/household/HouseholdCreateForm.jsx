@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { SectionHeadline } from 'clientSrc/styles/blocks/settings';
+import { handlerWrapper } from 'clientSrc/helpers/form';
+import { useInvitationListProps } from 'clientSrc/helpers/household';
+import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
+import { HOUSEHOLD } from 'shared/constants/localeMessages';
+import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
+
 // todo: Replace with some branded Logo-like placeholder
 import newHouseholdIcon from '~/static/resources/icons/new-household.svg';
 
-import { SectionHeadline } from 'clientSrc/styles/blocks/settings';
-import { handlerWrapper } from 'clientSrc/helpers/form';
-import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
-import { FORM, HOUSEHOLD } from 'shared/constants/localeMessages';
-
+import HouseholdFormHeader from './HouseholdFormHeader';
 import HouseholdInvitationForm from './HouseholdInvitationForm';
-import { LocaleText, Table } from '../../common';
-import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
-import { useInvitationListProps } from 'clientSrc/helpers/household';
-import HouseholdFormHeader from 'clientSrc/components/forms/household/HouseholdFormHeader';
+import LocaleText from '../../common/LocaleText';
+import Table from '../../common/Table';
 
 const HouseholdCreateForm = ({ connections, setData }) => {
   const [timer, setTimer] = useState(null);
   const [state, setState] = useState({
-    submitMessage: FORM.SAVE,
     isFormSending: false,
     inputs: {},
     errors: {},
   });
-  const [invitations, setInvitations] = useState([])
+  const [invitations, setInvitations] = useState([]);
 
   useEffect(() => () => timer && clearTimeout(timer), []);
 
@@ -31,18 +31,16 @@ const HouseholdCreateForm = ({ connections, setData }) => {
     setState(prevState => ({
       ...prevState,
       isFormSending: true,
-      submitMessage: FORM.SAVING,
     }));
 
     setTimer(setTimeout(
       () => setState && setState(prevState => ({
         ...prevState,
         isFormSending: false,
-        submitMessage: FORM.SAVE,
       })), SUBMIT_TIMEOUT));
   });
 
-  const invitationTableProps = useInvitationListProps(invitations)
+  const invitationTableProps = useInvitationListProps(invitations);
 
   const { inputs, errors, isFormSending, submitMessage } = state;
 
@@ -53,7 +51,10 @@ const HouseholdCreateForm = ({ connections, setData }) => {
     role: HOUSEHOLD_ROLE_TYPE.ADMIN,
   };
 
-  const handleCreateHousehold = () => console.log('creating...');
+  const handleCreateHousehold = e => {
+    handleSubmit(e);
+    console.log('creating...');
+  };
 
   return (
     <>
@@ -65,6 +66,7 @@ const HouseholdCreateForm = ({ connections, setData }) => {
         currentUser={currentUser}
         setFormState={setState}
         membersCount={0}
+        sendingField={isFormSending ? { [HOUSEHOLD.CREATE]: HOUSEHOLD.CREATING } : null}
         onCreateHousehold={handleCreateHousehold}
       />
 
@@ -95,7 +97,7 @@ HouseholdCreateForm.propTypes = {
     id: PropTypes.number.isRequired,
     nickname: PropTypes.string.isRequired,
     photo: PropTypes.string,
-  })).isRequired,
+  })),
   setData: PropTypes.func.isRequired,
 };
 

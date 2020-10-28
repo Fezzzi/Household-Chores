@@ -13,13 +13,13 @@ import { getLabelColors } from 'clientSrc/helpers/household';
 import { HOUSEHOLD } from 'shared/constants/localeMessages';
 
 import EditableTextField from 'clientSrc/components/common/EditableTextField';
-import { LocaleText } from '../../common';
-import { PrimaryButton } from '../index';
 import EditablePhotoField from 'clientSrc/components/common/EditablePhotoField';
+import LocaleText from '../../common/LocaleText';
+import PrimaryButton from '../common/PrimaryButton';
 
 const HouseholdFormHeader = ({
   photo, name, inputs, errors, currentUser, membersCount, setFormState,
-  onLeaveHousehold, onDeleteHousehold, onCreateHousehold
+  sendingField, onLeaveHousehold, onDeleteHousehold, onCreateHousehold,
 }) => {
   const criticalButton = (handleClick, color, message, icon) => (
     <PrimaryButton
@@ -27,24 +27,25 @@ const HouseholdFormHeader = ({
       backgroundHover={color}
       margin="0 0 15px"
       clickHandler={handleClick}
+      disabled={sendingField !== null}
     >
       <FormButtonContentWrapper>
         <ButtonIconSpan>
           {icon}
         </ButtonIconSpan>
-        <LocaleText message={message} />
+        <LocaleText message={sendingField?.[message] ?? message} />
       </FormButtonContentWrapper>
     </PrimaryButton>
-  )
+  );
 
   return (
     <FormHeader>
       <CurrentUserBlock>
         <EditablePhotoField
           name="userPhoto"
-          edited={inputs['userPhoto']}
+          edited={inputs.userPhoto}
           placeholder={currentUser.photo}
-          error={errors['userPhoto']}
+          error={errors.userPhoto}
           setFormState={setFormState}
           size={100}
           iconRight={40}
@@ -54,9 +55,9 @@ const HouseholdFormHeader = ({
         <UserName>
           <EditableTextField
             name="userName"
-            edited={inputs['userName']}
+            edited={inputs.userName}
             placeholder={currentUser.name}
-            error={errors['userName']}
+            error={errors.userName}
             setFormState={setFormState}
           >
             {currentUser.name}
@@ -69,7 +70,7 @@ const HouseholdFormHeader = ({
       <EditablePhotoField
         name="householdPhoto"
         placeholder={photo}
-        error={errors['householdPhoto']}
+        error={errors.householdPhoto}
         setFormState={setFormState}
       >
         <FormHeaderPhoto src={photo} />
@@ -78,7 +79,7 @@ const HouseholdFormHeader = ({
         <EditableTextField
           name="householdName"
           placeholder={name}
-          error={errors['householdName']}
+          error={errors.householdName}
           setFormState={setFormState}
         >
           {name}
@@ -111,6 +112,7 @@ HouseholdFormHeader.propTypes = {
   errors: PropTypes.object.isRequired,
   membersCount: PropTypes.number.isRequired,
   setFormState: PropTypes.func.isRequired,
+  sendingField: PropTypes.object,
   onLeaveHousehold: PropTypes.func,
   onDeleteHousehold: PropTypes.func,
   onCreateHousehold: PropTypes.func,

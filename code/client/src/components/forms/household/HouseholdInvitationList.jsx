@@ -9,9 +9,9 @@ import { TableBox, TableHeaderBox, TableHeaderCell, TableSorterIcon } from 'clie
 import { useTableLogic } from 'clientSrc/helpers/table';
 import { COMMON, FORM } from 'shared/constants/localeMessages';
 
+import MiniTextInput from '../inputs/MiniTextInput';
 import HouseholdInvitationNode from './HouseholdInvitationNode';
 import LocaleText from '../../common/LocaleText';
-import { MiniTextInput } from 'clientSrc/components/forms';
 
 const HouseholdInvitationList = ({ invitations, setData }) => {
   const textInputRef = useRef(null);
@@ -50,24 +50,23 @@ const HouseholdInvitationList = ({ invitations, setData }) => {
             </TableBox>
             <UserList>
               {processedRows.map((invitation, index) => (
-                  <HouseholdInvitationNode
-                    key={`invitations-${index}`}
-                    invitation={invitation}
-                    setData={setData}
-                  />
-                )
+                <HouseholdInvitationNode
+                  key={`invitations-${index}`}
+                  invitation={invitation}
+                  setData={setData}
+                />
+              )
               )}
             </UserList>
           </>
         ) : (
           <InputRow>
-            <LocaleText message={FORM.NO_HOUSEHOLD_REQUESTS}/>
+            <LocaleText message={FORM.NO_HOUSEHOLD_REQUESTS} />
           </InputRow>
-        )
-      }
+        )}
     </>
-  )
-}
+  );
+};
 
 HouseholdInvitationList.propTypes = {
   invitations: PropTypes.arrayOf(

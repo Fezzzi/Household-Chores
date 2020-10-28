@@ -7,7 +7,7 @@ import {
   SimpleFloatingElementWrapper, FloatingElementIcon, FloatingElementText,
 } from 'clientSrc/styles/blocks/portals';
 
-import { LocaleText } from '../../common';
+import LocaleText from '../../common/LocaleText';
 
 const SimpleFloatingElement = ({ message, sending, enabled, background, backgroundHovered, icon, onClick }) => {
   const [hovered, setHovered] = useState(false);

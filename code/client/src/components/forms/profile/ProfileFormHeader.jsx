@@ -8,14 +8,18 @@ import {
   ProfileHeaderSubtitle,
   ProfilePasswordBlock, ProfilePasswordClose, ProfilePasswordIcon, ProfilePasswordInputs,
   ProfilePasswordTitle,
-  ProfileSwitchesBlock
+  ProfileSwitchesBlock,
 } from 'clientSrc/styles/blocks/settings';
 import * as InputTypes from 'shared/constants/inputTypes';
 import { FORM } from 'shared/constants/localeMessages';
 
-import { LocaleSwitch, ThemeSwitch } from '../inputs';
-import { EditableField, EditablePhotoField, EditableTextField, LocaleText } from '../../common';
-import { Input } from 'clientSrc/components/forms';
+import LocaleSwitch from '../inputs/LocaleSwitch';
+import ThemeSwitch from '../inputs/ThemeSwitch';
+import Input from '../common/Input';
+import EditableField from '../../common/EditableField';
+import EditablePhotoField from '../../common/EditablePhotoField';
+import EditableTextField from '../../common/EditableTextField';
+import LocaleText from '../../common/LocaleText';
 
 const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState }) => {
   const [passwordEditing, setPasswordEditing] = useState(false);
@@ -28,7 +32,7 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
       delete newInputs['old-password'];
       delete newInputs['new-password'];
 
-      const newErrors = { ... prevState.errors };
+      const newErrors = { ...prevState.errors };
       delete newErrors['old-password'];
       delete newErrors['new-password'];
 
@@ -36,9 +40,9 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
         ...prevState,
         inputs: newInputs,
         errors: newErrors,
-      }
-    })
-  }
+      };
+    });
+  };
 
   return (
     <FormHeader>
@@ -81,17 +85,17 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
         name="photo"
         placeholder={photo}
         setFormState={setFormState}
-        error={errors['photo']}
+        error={errors.photo}
       >
         <FormHeaderPhoto src={photo} />
       </EditablePhotoField>
       <FormHeaderTitle>
         <EditableTextField
           name="name"
-          edited={inputs['name']}
+          edited={inputs.name}
           placeholder={name}
           setFormState={setFormState}
-          error={errors['name']}
+          error={errors.name}
         >
           {name}
         </EditableTextField>
@@ -99,11 +103,11 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
       <ProfileHeaderSubtitle>
         <EditableTextField
           name="email"
-          edited={inputs['email']}
+          edited={inputs.email}
           placeholder={email}
           isEmail
           setFormState={setFormState}
-          error={errors['email']}
+          error={errors.email}
         >
           {email}
         </EditableTextField>
@@ -115,7 +119,7 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
       </ProfileSwitchesBlock>
     </FormHeader>
   );
-}
+};
 
 ProfileFormHeader.propTypes = {
   photo: PropTypes.string,

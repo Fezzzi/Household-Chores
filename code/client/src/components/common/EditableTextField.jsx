@@ -4,13 +4,13 @@ import { Edit } from '@material-ui/icons';
 
 import { EditableFieldIcon, EditableFieldWrapper } from 'clientSrc/styles/blocks/common';
 import { editableFieldProps } from 'clientSrc/helpers/editableField';
+import { updateHandler } from 'clientSrc/helpers/form';
 import * as InputTypes from 'shared/constants/inputTypes';
 
-import { Input } from '../forms/index';
-import { updateHandler } from 'clientSrc/helpers/form';
+import Input from '../forms/common/Input';
 
 const EditableTextField = ({
-  name, edited, placeholder, error, setFormState, isEmail, isFormValidFunc, children
+  name, edited, placeholder, error, setFormState, isEmail, isFormValidFunc, children,
 }) => {
   const [hovering, setHovering] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -19,7 +19,7 @@ const EditableTextField = ({
 
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.focus()
+      inputRef.current.focus();
     }
   }, [editing]);
 
@@ -28,8 +28,8 @@ const EditableTextField = ({
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
       onClick={() => {
-        !editing && setEditing(true);
-        hovering && setHovering(false);
+        setEditing(true);
+        setHovering(false);
       }}
       onBlur={() => !edited && setEditing(false)}
     >
@@ -46,7 +46,7 @@ const EditableTextField = ({
         ) : (
           <>
             {children}
-            {hovering && <EditableFieldIcon centered={true}><Edit /></EditableFieldIcon>}
+            {hovering && <EditableFieldIcon centered><Edit /></EditableFieldIcon>}
           </>
         )}
     </EditableFieldWrapper>
@@ -56,11 +56,12 @@ const EditableTextField = ({
 EditableTextField.defaultProps = {
   isEmail: false,
   edited: false,
-}
+};
 
 EditableTextField.propTypes = {
   ...editableFieldProps,
   isEmail: PropTypes.bool,
+  edited: PropTypes.bool,
 };
 
 export default EditableTextField;

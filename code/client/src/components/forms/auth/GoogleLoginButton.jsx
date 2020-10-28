@@ -7,8 +7,8 @@ import { AUTH } from 'shared/constants/localeMessages';
 import * as AuthActions from 'clientSrc/actions/authActions';
 import { GoogleIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/blocks/form';
 
-import { PrimaryButton } from '../index';
 import LocaleText from '../../common/LocaleText';
+import PrimaryButton from '../common/PrimaryButton';
 
 const GoogleButtonComponent = ({ handleError, logInGoogle }) => (
   <GoogleLogin

@@ -1,31 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import { Edit, ChevronLeft } from '@material-ui/icons';
 
-import * as TYPES from 'shared/constants/inputTypes';
-import { isInputValid } from 'shared/helpers/validation';
 import {
-  InputRow,
-  TextInputField,
-  InputWrapper,
-  TextInputBox,
-  TextInputLabel,
-  InputPlaceholder,
-  ToggleInputIcon,
-  InputLabel,
-  FixedInputBlock,
-  ErrorSpan,
-  ShowPassWrapper,
-  ShowPassButton,
-  InputSiderWrapper,
+  InputRow, TextInputField, InputWrapper, TextInputBox, TextInputLabel, InputPlaceholder,
+  ToggleInputIcon, InputLabel, FixedInputBlock, ErrorSpan, ShowPassWrapper,
+  ShowPassButton, InputSiderWrapper,
 } from 'clientSrc/styles/blocks/form';
+import { InfoTooltip } from 'clientSrc/components/portals';
+import * as InputTypes from 'shared/constants/inputTypes';
+import { COMMON } from 'shared/constants/localeMessages';
+import { isInputValid } from 'shared/helpers/validation';
+
+import InputErrorIcon from '~/static/icons/input-error-icon.svgr';
 
 import LocaleText from '../../common/LocaleText';
-import * as InputTypes from 'shared/constants/inputTypes';
-import { InfoTooltip } from 'clientSrc/components/portals';
-import InputErrorIcon from '~/static/icons/input-error-icon.svgr';
-import { COMMON } from 'shared/constants/localeMessages';
 
 class TextInput extends Component {
   constructor(props) {
@@ -53,8 +42,8 @@ class TextInput extends Component {
     const { name, message, label, placeholder, type, reference, inputError } = this.props;
     const { inputTextLength, showPassword, inputActive, inputShown } = this.state;
 
-    const showPassButton= type === InputTypes.PASSWORD && inputTextLength > 0
-    const showError = !inputActive && !!inputError
+    const showPassButton = type === InputTypes.PASSWORD && inputTextLength > 0;
+    const showError = !inputActive && !!inputError;
 
     return (
       <>
@@ -66,7 +55,7 @@ class TextInput extends Component {
               </TextInputLabel>
               <TextInputField
                 name={name}
-                type={type === TYPES.PASSWORD && showPassword ? TYPES.TEXT : type}
+                type={type === InputTypes.PASSWORD && showPassword ? InputTypes.TEXT : type}
                 ref={reference}
                 onChange={this.handleInputChange}
                 onFocus={() => this.setState({ inputActive: true })}

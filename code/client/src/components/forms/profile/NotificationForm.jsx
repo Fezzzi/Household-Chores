@@ -4,14 +4,14 @@ import { Save } from '@material-ui/icons';
 
 import { handlerWrapper, updateHandler } from 'clientSrc/helpers/form';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
-import { COMMON, FORM } from 'shared/constants/localeMessages';
-import * as InputTypes from 'shared/constants/inputTypes';
-
-import { SimpleFloatingElement } from '../../portals';
-import { Input } from '../common';
 import { NotificationGroupBox, SectionHeadline } from 'clientSrc/styles/blocks/settings';
 import LocaleText from 'clientSrc/components/common/LocaleText';
 import { TableBox, TableHeaderBox, TableHeaderCell } from 'clientSrc/styles/blocks/table';
+import { COMMON, FORM } from 'shared/constants/localeMessages';
+import * as InputTypes from 'shared/constants/inputTypes';
+
+import Input from '../common/Input';
+import { SimpleFloatingElement } from '../../portals';
 
 const NotificationForm = ({ data }) => {
   const [timer, setTimer] = useState(null);
@@ -66,7 +66,7 @@ const NotificationForm = ({ data }) => {
         </NotificationGroupBox>
       </TableBox>
     </>
-  )
+  );
 
   return (
     <>

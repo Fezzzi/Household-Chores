@@ -84,8 +84,11 @@ export default {
   [FORM[USER_VISIBILITY_TYPE.ALL]]: 'všichni',
 
   [HOUSEHOLD.LEAVE]: 'Opustit domácnost',
+  [HOUSEHOLD.LEAVING]: 'Opouštím',
   [HOUSEHOLD.DELETE]: 'Vymazat domácnost',
+  [HOUSEHOLD.DELETING]: 'Vymazávám',
   [HOUSEHOLD.CREATE]: 'Vytvořit domácnost',
+  [HOUSEHOLD.CREATING]: 'Vytvářím',
   [HOUSEHOLD.MEMBER]: 'člen',
   [HOUSEHOLD.MEMBERS]: 'členů',
   [HOUSEHOLD.MEMBERS_SECTION]: 'členové',

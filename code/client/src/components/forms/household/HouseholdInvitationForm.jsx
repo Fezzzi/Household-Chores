@@ -13,8 +13,9 @@ import {
 import { useTableLogic } from 'clientSrc/helpers/table';
 import { COMMON, HOUSEHOLD } from 'shared/constants/localeMessages';
 
-import { MiniTextInput, MiniButton } from '../index';
-import { LocaleText } from '../../common';
+import MiniTextInput from '../inputs/MiniTextInput';
+import MiniButton from '../common/MiniButton';
+import LocaleText from '../../common/LocaleText';
 
 const HouseholdInvitationForm = ({ connections }) => {
   const {
@@ -41,7 +42,7 @@ const HouseholdInvitationForm = ({ connections }) => {
           />
         </TableHeaderCell>
       </TableHeaderBox>
-      <TableSingleRowBox height={'130px'}>
+      <TableSingleRowBox height="130px">
         <InvitationNodesWrapper>
           {processedRows.map(({ id, nickname, photo }) => (
             <InvitationFormNode key={`connection-${id}`}>

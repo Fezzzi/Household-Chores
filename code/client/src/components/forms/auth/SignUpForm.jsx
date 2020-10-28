@@ -14,7 +14,9 @@ import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 
 import FacebookLoginButton from './FacebookLoginButton';
 import GoogleLoginButton from './GoogleLoginButton';
-import { TextInput, Separator, PrimaryButton } from '../index';
+import TextInput from '../inputs/TextInput';
+import Separator from '../common/Separator';
+import PrimaryButton from '../common/PrimaryButton';
 import LocaleText from '../../common/LocaleText';
 
 const inputConfig = [
@@ -23,7 +25,7 @@ const inputConfig = [
   { name: 'password', message: FORM.PASSWORD, type: InputTypes.PASSWORD },
 ];
 
-export class SignUpForm extends Component {
+class SignUpForm extends Component {
   constructor(props) {
     super(props);
 

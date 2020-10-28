@@ -1,49 +1,40 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
 import { Publish, HighlightOff } from '@material-ui/icons';
 
-import { isInputValid } from 'shared/helpers/validation';
-import { ERROR, FORM } from 'shared/constants/localeMessages';
 import {
-  InputRow,
-  FileInputBox,
-  FileInputLabel,
-  FileImagePreview,
-  FileInputField,
-  FileInputPreview,
-  RemoveFileButton,
-  PhotoPreviewBlock,
-  PhotoPreview,
-  PhotoInputWrapper,
+  InputRow, FileInputBox, FileInputLabel, FileImagePreview, FileInputField,
+  FileInputPreview, RemoveFileButton, PhotoPreviewBlock, PhotoPreview, PhotoInputWrapper,
 } from 'clientSrc/styles/blocks/form';
-
+import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import * as NotificationTypes from 'shared/constants/notificationTypes';
 import * as InputTypes from 'shared/constants/inputTypes';
-import * as NotificationActions from 'clientSrc/actions/notificationActions';
+import { ERROR, FORM } from 'shared/constants/localeMessages';
+import { isInputValid } from 'shared/helpers/validation';
+
 import LocaleText from '../../common/LocaleText';
 
 const PhotoInputComponent = ({
-  name, message, size, closable, reference, updateInput, onFileRemove, addNotification
+  name, message, size, closable, reference, updateInput, onFileRemove, addNotification,
 }) => {
-  const [file, setFile] = useState(null)
-  const [inputActive, setInputActive] = useState(false)
-  const [dragActive, setDragActive] = useState(false)
+  const [file, setFile] = useState(null);
+  const [inputActive, setInputActive] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
 
   const handleInputChange = useCallback(({ target: { files } }) => {
     if (!files[0]) {
       return;
     }
-    const { valid, message } = isInputValid(InputTypes.PHOTO, files);
-    if (!valid) {
-      addNotification(NotificationTypes.WARNINGS, message || ERROR.IMAGE_INVALID);
+    const { valid: inputValid, message: inputMessage } = isInputValid(InputTypes.PHOTO, files);
+    if (!inputValid) {
+      addNotification(NotificationTypes.WARNINGS, inputMessage || ERROR.IMAGE_INVALID);
       return;
     }
     const reader = new FileReader();
     reader.onload = ({ target: { result } }) => {
       setFile(result);
-      updateInput(valid, result);
+      updateInput(inputValid, result);
     };
     reader.readAsDataURL(files[0]);
   }, []);
@@ -51,8 +42,11 @@ const PhotoInputComponent = ({
   const handleFileRemove = e => {
     setFile(null);
     updateInput(true, '');
-    onFileRemove && onFileRemove(e);
-  }
+
+    if (onFileRemove) {
+      onFileRemove(e);
+    }
+  };
 
   useEffect(() => reference && reference.current && reference.current.click(), [reference]);
 
@@ -98,12 +92,12 @@ const PhotoInputComponent = ({
       </PhotoInputWrapper>
     </InputRow>
   );
-}
+};
 
 PhotoInputComponent.defaultProps = {
   closable: false,
   size: 150,
-}
+};
 
 PhotoInputComponent.propTypes = {
   name: PropTypes.string.isRequired,
