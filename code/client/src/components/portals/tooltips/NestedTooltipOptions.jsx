@@ -8,7 +8,8 @@ import {
 import { useElementPosition } from 'clientSrc/helpers/dom';
 import * as PortalType from 'clientSrc/constants/portalType';
 
-import { LocaleText, optionsShape } from '../../common';
+import { LocaleText } from '../../common';
+import { optionsShape } from './OptionsTooltip'
 
 const NestedOptionsTooltip = ({ position, options, withArrow, blurHandler }) => {
   const [state, setState] = useState({

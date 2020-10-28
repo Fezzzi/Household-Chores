@@ -12,8 +12,8 @@ import * as NotificationTypes from 'shared/constants/notificationTypes';
 import { ERROR, FORM } from 'shared/constants/localeMessages';
 
 import UserConnectionNode from './UserConnectionNode';
-import LocaleText from '../common/LocaleText';
-import { SearchBar } from '../forms/common';
+import LocaleText from '../../common/LocaleText';
+import { SearchBar } from '../common';
 
 const ConnectionSearchForm = ({ tab, size, data, setData, dataKey, emptyMessage, headlineMessage, addNotification }) => {
   const [emptyResultMessage, setEmptyResultMessage] = useState(emptyMessage);

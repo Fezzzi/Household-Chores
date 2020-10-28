@@ -33,6 +33,7 @@ export const Tooltip = styled.div`
   padding: ${props => props.hasRows ? 0 : '4px 6px'};
   z-index: 10;
   user-select: none;
+  font-weight: 400;
   
   ${props => props.withArrow && `
     ::after {

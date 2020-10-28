@@ -8,7 +8,6 @@ import { isInputValid } from 'shared/helpers/validation';
 import { ERROR, FORM } from 'shared/constants/localeMessages';
 import {
   InputRow,
-  InputWrapper,
   FileInputBox,
   FileInputLabel,
   FileImagePreview,

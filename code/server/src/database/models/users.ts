@@ -1,6 +1,6 @@
 import { database } from 'serverSrc/database';
 import { encryptPass, checkPass, generatePass } from 'serverSrc/helpers/passwords';
-import USER_VISIBILITY_TYPE from 'serverSrc/constants/userVisibilityType';
+import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
 
 import USERS_TABLE from './tables/users';

@@ -5,14 +5,9 @@ import { CATEGORIES, TABS } from 'shared/constants/settingTypes';
 export const getCategoryList = (data: object): { categories: string[]; messages: object; types: object } => ({
   categories: [
     ...Object.values(SettingTypes.CATEGORIES),
-    'new-category',
   ],
-  messages: {
-    'new-category': 'NEW CATEGORY',
-  },
-  types: {
-    'new-category': CATEGORIES.PROFILE,
-  },
+  messages: {},
+  types: {},
 });
 
 export const getTabList = (data: any, category: string): { tabs: string[]; messages: object; types: object } => {

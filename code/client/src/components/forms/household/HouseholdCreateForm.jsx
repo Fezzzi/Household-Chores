@@ -10,10 +10,10 @@ import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 import { FORM, HOUSEHOLD } from 'shared/constants/localeMessages';
 
 import HouseholdInvitationForm from './HouseholdInvitationForm';
-import { LocaleText, Table } from '../common';
+import { LocaleText, Table } from '../../common';
 import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
 import { useInvitationListProps } from 'clientSrc/helpers/household';
-import HouseholdFormHeader from 'clientSrc/components/household/HouseholdFormHeader';
+import HouseholdFormHeader from 'clientSrc/components/forms/household/HouseholdFormHeader';
 
 const HouseholdCreateForm = ({ connections, setData }) => {
   const [timer, setTimer] = useState(null);
@@ -60,6 +60,8 @@ const HouseholdCreateForm = ({ connections, setData }) => {
       <HouseholdFormHeader
         name="New Household"
         photo={newHouseholdIcon}
+        errors={errors}
+        inputs={inputs}
         currentUser={currentUser}
         setFormState={setState}
         membersCount={0}

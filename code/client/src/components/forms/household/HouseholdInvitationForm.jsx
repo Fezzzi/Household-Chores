@@ -13,8 +13,8 @@ import {
 import { useTableLogic } from 'clientSrc/helpers/table';
 import { COMMON, HOUSEHOLD } from 'shared/constants/localeMessages';
 
-import { MiniTextInput, MiniButton } from '../forms';
-import { LocaleText } from '../common';
+import { MiniTextInput, MiniButton } from '../index';
+import { LocaleText } from '../../common';
 
 const HouseholdInvitationForm = ({ connections }) => {
   const {

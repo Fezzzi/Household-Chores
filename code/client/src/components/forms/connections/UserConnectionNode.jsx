@@ -1,27 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ChevronLeft, Message } from '@material-ui/icons';
+import { Message } from '@material-ui/icons';
 
 import { useConnectionButtons } from 'clientSrc/helpers/connectionButtons';
-import { ToggleInputIcon } from 'clientSrc/styles/blocks/form';
 import {
-  AppendMessage,
-  UserButtonsBox,
-  UserInfoBox,
-  UserName,
-  UserNode,
-  UserPhotoBox,
-  UserPhoto,
-  WrapperBox,
-  AppendMessageAnchor, AppendMessageIcon,
+  UserButtonsBox, UserName, UserNode, UserPhotoBox,
+  UserPhoto, WrapperBox, AppendMessageAnchor, AppendMessageIcon,
 } from 'clientSrc/styles/blocks/users';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
 import { TABS } from 'shared/constants/settingTypes';
 
-import { PrimaryButton } from '../forms';
-import { InfoTooltip, LocaleText } from '../common';
+import { PrimaryButton } from '../index';
+import { LocaleText } from '../../common';
+import { InfoTooltip } from '../../portals';
 
 const UserConnectionNode = ({ tab, user, setData, addNotification }) => {
   const [buttons, setButtons] = useState({});

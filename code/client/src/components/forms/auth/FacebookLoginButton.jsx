@@ -8,7 +8,7 @@ import * as AuthActions from 'clientSrc/actions/authActions';
 import { FacebookIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/blocks/form';
 
 import LocaleText from 'clientSrc/components/common/LocaleText';
-import { PrimaryButton } from '../forms';
+import { PrimaryButton } from '../index';
 
 const FacebookButtonComponent = ({ locale, handleError, logInFacebook }) => (
   <FacebookProvider appId="694001678055824" language={locale}>

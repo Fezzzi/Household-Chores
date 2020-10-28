@@ -6,12 +6,12 @@ import { AuthContent, InputsBlock, LogoBlock, LogoTopBlock } from 'clientSrc/sty
 import * as TABS from 'clientSrc/constants/authTabs';
 import LogoTop from '~/static/logo-top.svgr';
 
-import { Login } from './Login';
-import { Signup } from './Signup';
-import { ResetPass } from './ResetPass';
+import LogInForm from './LogInForm';
+import SignUpForm from './SignUpForm';
+import ResetPassForm from './ResetPassForm';
 import BottomBlock from './BottomBlock';
 
-export default class Auth extends Component {
+export default class AuthForm extends Component {
   constructor(props) {
     super(props);
 
@@ -23,9 +23,9 @@ export default class Auth extends Component {
 
   renderTab = () => {
     switch (this.state.tab) {
-      case TABS.SIGNUP_TAB: return <Signup />;
-      case TABS.RESET_TAB: return <ResetPass switchTab={() => this.switchTab(TABS.SIGNUP_TAB)} />;
-      default: return <Login switchTab={() => this.switchTab(TABS.RESET_TAB)} />;
+      case TABS.SIGNUP_TAB: return <SignUpForm />;
+      case TABS.RESET_TAB: return <ResetPassForm switchTab={() => this.switchTab(TABS.SIGNUP_TAB)} />;
+      default: return <LogInForm switchTab={() => this.switchTab(TABS.RESET_TAB)} />;
     }
   };
 
@@ -98,7 +98,7 @@ export default class Auth extends Component {
   }
 }
 
-Auth.propTypes = {
+AuthForm.propTypes = {
   tab: PropTypes.string.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,

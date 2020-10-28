@@ -1,23 +1,22 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Edit } from '@material-ui/icons';
 
 import { EditableFieldIcon, EditableFieldWrapper } from 'clientSrc/styles/blocks/common';
-import { EditableFieldProps, useEditableFieldLogic } from 'clientSrc/helpers/editableField';
+import { editableFieldProps } from 'clientSrc/helpers/editableField';
 import * as InputTypes from 'shared/constants/inputTypes';
 
 import { Input } from '../forms/index';
+import { updateHandler } from 'clientSrc/helpers/form';
 
-const EditableTextField = ({ name, placeholder, setFormState, children }) => {
-  const {
-    editing,
-    setEditing,
-    edited,
-    hovering,
-    setHovering,
-    updateHandler,
-  } = useEditableFieldLogic(placeholder, setFormState);
-
+const EditableTextField = ({
+  name, edited, placeholder, error, setFormState, isEmail, isFormValidFunc, children
+}) => {
+  const [hovering, setHovering] = useState(false);
+  const [editing, setEditing] = useState(false);
   const inputRef = useRef(null);
+  const handleUpdate = updateHandler(name, setFormState, isFormValidFunc, placeholder);
+
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus()
@@ -38,9 +37,10 @@ const EditableTextField = ({ name, placeholder, setFormState, children }) => {
         ? (
           <Input
             name={name}
-            type={InputTypes.TEXT}
+            type={isEmail ? InputTypes.EMAIL : InputTypes.TEXT}
             message={placeholder}
-            updateInput={updateHandler}
+            inputError={error}
+            updateInput={handleUpdate}
             reference={inputRef}
           />
         ) : (
@@ -53,6 +53,14 @@ const EditableTextField = ({ name, placeholder, setFormState, children }) => {
   );
 };
 
-EditableTextField.propTypes = EditableFieldProps;
+EditableTextField.defaultProps = {
+  isEmail: false,
+  edited: false,
+}
+
+EditableTextField.propTypes = {
+  ...editableFieldProps,
+  isEmail: PropTypes.bool,
+};
 
 export default EditableTextField;

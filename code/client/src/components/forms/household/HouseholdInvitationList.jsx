@@ -10,7 +10,7 @@ import { useTableLogic } from 'clientSrc/helpers/table';
 import { COMMON, FORM } from 'shared/constants/localeMessages';
 
 import HouseholdInvitationNode from './HouseholdInvitationNode';
-import LocaleText from '../common/LocaleText';
+import LocaleText from '../../common/LocaleText';
 import { MiniTextInput } from 'clientSrc/components/forms';
 
 const HouseholdInvitationList = ({ invitations, setData }) => {

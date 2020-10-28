@@ -4,13 +4,12 @@ import PropTypes from 'prop-types';
 
 import * as PortalType from 'clientSrc/constants/portalType';
 import {
-  SimpleFloatingElementWrapper,
-  FloatingElementIcon, FloatingElementText,
+  SimpleFloatingElementWrapper, FloatingElementIcon, FloatingElementText,
 } from 'clientSrc/styles/blocks/portals';
 
 import { LocaleText } from '../../common';
 
-const SimpleFloatingElement = ({ message, enabled, background, backgroundHovered, icon, onClick }) => {
+const SimpleFloatingElement = ({ message, sending, enabled, background, backgroundHovered, icon, onClick }) => {
   const [hovered, setHovered] = useState(false);
 
   const floatingUIRoot = document.getElementById(PortalType.FLOATING_UI);
@@ -20,10 +19,10 @@ const SimpleFloatingElement = ({ message, enabled, background, backgroundHovered
       onMouseLeave={() => setHovered(false)}
       background={background}
       backgroundHovered={backgroundHovered}
-      enabled={enabled}
-      onClick={e => enabled && onClick(e)}
+      enabled={!sending && enabled}
+      onClick={e => !sending && enabled && onClick(e)}
     >
-      {(hovered || !enabled)
+      {(hovered || sending)
         ? icon
           ? (
             <>
@@ -45,6 +44,7 @@ const SimpleFloatingElement = ({ message, enabled, background, backgroundHovered
 SimpleFloatingElement.defaultProps = {
   background: 'var(--cBluePrimary)',
   backgroundHover: 'var(--cBlueSecondary)',
+  sending: false,
   enabled: true,
   onClick: () => {},
 };
@@ -54,6 +54,7 @@ SimpleFloatingElement.propTypes = {
   background: PropTypes.string,
   backgroundHover: PropTypes.string,
   enabled: PropTypes.bool,
+  sending: PropTypes.bool,
   icon: PropTypes.element,
   onClick: PropTypes.func,
 };

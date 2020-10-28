@@ -10,17 +10,16 @@ import { FORM, HOUSEHOLD } from 'shared/constants/localeMessages';
 
 import HouseholdFormHeader from './HouseholdFormHeader';
 import HouseholdInvitationForm from './HouseholdInvitationForm';
-import { LocaleText, Table } from '../common';
-import { SimpleFloatingElement } from '../portals';
+import { LocaleText, Table } from '../../common';
+import { SimpleFloatingElement } from '../../portals';
 import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
 
 const HouseholdModificationForm = ({ household, connections, setData }) => {
-  const { photo, name, members, invitations } = household;
-
   const [timer, setTimer] = useState(null);
   const [state, setState] = useState({
     submitMessage: FORM.SAVE,
     isFormSending: false,
+    isFormValid: true,
     inputs: {},
     errors: {},
   });
@@ -42,10 +41,11 @@ const HouseholdModificationForm = ({ household, connections, setData }) => {
       })), SUBMIT_TIMEOUT));
   });
 
+  const { photo, name, members, invitations } = household;
   const memberTableProps = useMemberListProps(members)
   const invitationTableProps = useInvitationListProps(invitations)
 
-  const { inputs, errors, isFormSending, submitMessage } = state;
+  const { inputs, errors, isFormSending, isFormValid, submitMessage } = state;
 
   // todo: Use members.find to find current user data by id from global store
   const currentUser = {
@@ -62,7 +62,8 @@ const HouseholdModificationForm = ({ household, connections, setData }) => {
       {Object.keys(inputs).length > 0 && (
         <SimpleFloatingElement
           message={submitMessage}
-          enabled={!isFormSending}
+          sending={isFormSending}
+          enabled={isFormValid}
           icon={<Save />}
           onClick={handleSubmit}
         />
@@ -70,6 +71,8 @@ const HouseholdModificationForm = ({ household, connections, setData }) => {
       <HouseholdFormHeader
         name={name}
         photo={photo}
+        errors={errors}
+        inputs={inputs}
         membersCount={members.length}
         setFormState={setState}
         currentUser={currentUser}

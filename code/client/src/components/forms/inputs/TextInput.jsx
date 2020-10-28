@@ -6,13 +6,26 @@ import { Edit, ChevronLeft } from '@material-ui/icons';
 import * as TYPES from 'shared/constants/inputTypes';
 import { isInputValid } from 'shared/helpers/validation';
 import {
-  InputRow, TextInputField, InputWrapper, TextInputBox, TextInputLabel,
-  InputPlaceholder, ToggleInputIcon, InputLabel, FixedInputBlock,
+  InputRow,
+  TextInputField,
+  InputWrapper,
+  TextInputBox,
+  TextInputLabel,
+  InputPlaceholder,
+  ToggleInputIcon,
+  InputLabel,
+  FixedInputBlock,
+  ErrorSpan,
+  ShowPassWrapper,
+  ShowPassButton,
+  InputSiderWrapper,
 } from 'clientSrc/styles/blocks/form';
 
-import TextInputSider from './TextInputSider';
 import LocaleText from '../../common/LocaleText';
 import * as InputTypes from 'shared/constants/inputTypes';
+import { InfoTooltip } from 'clientSrc/components/portals';
+import InputErrorIcon from '~/static/icons/input-error-icon.svgr';
+import { COMMON } from 'shared/constants/localeMessages';
 
 class TextInput extends Component {
   constructor(props) {
@@ -41,7 +54,7 @@ class TextInput extends Component {
     const { inputTextLength, showPassword, inputActive, inputShown } = this.state;
 
     const showPassButton= type === InputTypes.PASSWORD && inputTextLength > 0
-    const showError = !inputActive && inputError
+    const showError = !inputActive && !!inputError
 
     return (
       <>
@@ -63,13 +76,24 @@ class TextInput extends Component {
               />
             </TextInputBox>
             {(showPassButton || showError) && (
-              <TextInputSider
-                showPassButton={showPassButton}
-                showError={showError}
-                inputError={inputError}
-                updateInputState={this.setState.bind(this)}
-                passwordVisible={showPassword}
-              />
+              <InputSiderWrapper>
+                {showError && (
+                  <ErrorSpan>
+                    <InfoTooltip icon={<InputErrorIcon />} text={inputError} />
+                  </ErrorSpan>
+                )}
+                {showPassButton && (
+                  <ShowPassWrapper>
+                    <ShowPassButton onClick={e => {
+                      e.preventDefault();
+                      this.setState({ showPassword: !showPassword });
+                    }}
+                    >
+                      <LocaleText message={showPassword ? COMMON.HIDE : COMMON.SHOW} />
+                    </ShowPassButton>
+                  </ShowPassWrapper>
+                )}
+              </InputSiderWrapper>
             )}
           </InputWrapper>
         )}

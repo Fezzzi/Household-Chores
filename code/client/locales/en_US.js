@@ -1,5 +1,6 @@
 import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
 import * as SettingTypes from 'shared/constants/settingTypes';
+import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
 
 export default {
   [AUTH.BACK_TO_LOGIN]: 'Back to Login',
@@ -51,10 +52,15 @@ export default {
   [FORM.NICKNAME]: 'Nickname',
   [FORM.NEW_NICKNAME]: 'New nickname',
   [FORM.NOTIFICATIONS]: 'Notifications',
+  [FORM.CONNECTIONS]: 'Connections',
+  [FORM.HOUSEHOLDS]: 'Households',
+  [FORM.EMAIL_NOTIFICATIONS]: 'Email notifications',
   [FORM.PASSWORD]: 'Password',
   [FORM.THEME]: 'Theme',
   [FORM.OLD_PASSWORD]: 'Old password',
   [FORM.NEW_PASSWORD]: 'New password',
+  [FORM.USER_VISIBILITY]: 'Visibility',
+  [FORM.CHANGE_PASSWORD]: 'Change password',
   [FORM.NO_HOUSEHOLD_REQUESTS]: 'You have no household invitations.',
   [FORM.NO_BLOCKED_CONNECTIONS]: 'You have no blocked users.',
   [FORM.NO_CONNECTION_REQUESTS]: 'You have no connection requests.',
@@ -74,6 +80,8 @@ export default {
   [FORM.PENDING_CONNECTIONS]: 'Connection requests',
   [FORM.BLOCKED_CONNECTIONS]: 'Blocked users',
   [FORM.HOUSEHOLD_INVITATIONS]: 'Household invitations',
+  [FORM[USER_VISIBILITY_TYPE.FOF]]: 'friends of friends',
+  [FORM[USER_VISIBILITY_TYPE.ALL]]: 'all',
 
   [HOUSEHOLD.LEAVE]: 'Leave household',
   [HOUSEHOLD.DELETE]: 'Delete household',

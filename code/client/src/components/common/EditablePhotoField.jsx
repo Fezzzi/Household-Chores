@@ -1,22 +1,21 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Edit } from '@material-ui/icons';
 
 import { EditableFieldIcon, EditableFieldWrapper } from 'clientSrc/styles/blocks/common';
-import { EditableFieldProps, useEditableFieldLogic } from 'clientSrc/helpers/editableField';
+import { editableFieldProps } from 'clientSrc/helpers/editableField';
+import { updateHandler } from 'clientSrc/helpers/form';
 import * as InputTypes from 'shared/constants/inputTypes';
 
 import { Input } from '../forms/index';
 
-const EditablePhotoField = ({ name, size, iconRight, placeholder, setFormState, children }) => {
-  const {
-    editing,
-    setEditing,
-    hovering,
-    setHovering,
-    inputRef,
-    updateHandler,
-  } = useEditableFieldLogic(placeholder, setFormState);
+const EditablePhotoField = ({
+  name, size, iconRight, placeholder, error, setFormState, isFormValidFunc, children
+}) => {
+  const [hovering, setHovering] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const inputRef = useRef(null);
+  const handleUpdate = updateHandler(name, setFormState, isFormValidFunc, placeholder);
 
   const handleFileRemove = e => {
     setEditing(false)
@@ -38,7 +37,8 @@ const EditablePhotoField = ({ name, size, iconRight, placeholder, setFormState, 
             name={name}
             type={InputTypes.PHOTO}
             message={placeholder}
-            updateInput={updateHandler}
+            inputError={error}
+            updateInput={handleUpdate}
             onFileRemove={handleFileRemove}
             closable={true}
             size={size}
@@ -63,7 +63,7 @@ EditablePhotoField.defaultProps = {
 }
 
 EditablePhotoField.propTypes = {
-  ...EditableFieldProps,
+  ...editableFieldProps,
   size: PropTypes.number,
   iconRight: PropTypes.number,
 };

@@ -9,7 +9,7 @@ import * as TABS from 'clientSrc/constants/authTabs';
 
 import Home from './Home';
 import Resource from './Resource';
-import Auth from './auth';
+import AuthForm from './forms/auth/AuthForm';
 import Settings from './settings';
 
 const getTabQuery = queries =>
@@ -34,15 +34,15 @@ const RouterComponent = ({ loggedUser }) => (
           <Switch>
             <Route
               path={`/${TABS.LOGIN_TAB}`}
-              render={props => <Auth {...props} tab={TABS.LOGIN_TAB} />}
+              render={props => <AuthForm {...props} tab={TABS.LOGIN_TAB} />}
             />
             <Route
               path={`/${TABS.SIGNUP_TAB}`}
-              render={props => <Auth {...props} tab={TABS.SIGNUP_TAB} />}
+              render={props => <AuthForm {...props} tab={TABS.SIGNUP_TAB} />}
             />
             <Route
               path={`/${TABS.RESET_TAB}`}
-              render={props => <Auth {...props} tab={TABS.RESET_TAB} />}
+              render={props => <AuthForm {...props} tab={TABS.RESET_TAB} />}
             />
             <Route path="/*">
               <Redirect to={`/${TABS.LOGIN_TAB}`} />

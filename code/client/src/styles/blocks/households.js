@@ -1,37 +1,5 @@
 import styled from 'styled-components';
-
-export const HouseholdHeader = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 15px 0;
-  padding: 0 50px;
-  flex-direction: column;
-  min-width: 550px;
-  position: relative
-`;
-
-export const HouseholdPhoto = styled.img`
-  object-fit: cover;
-  width: 150px;
-  height: 150px;
-  display: flex;
-  border-radius: 100%;
-`;
-
-export const HouseholdTitle = styled.h1`
-  font-weight: 800;
-  font-size: 2.2em;
-  display: flex;
-  width: 250px;
-  margin: 15px 5px 0;
-  justify-content: center;
-  align-content: center;
-  
-  > * input {
-    width: 250px;
-  }
-`;
+import { FormHeaderLeftPanel, FormHeaderRightPanel } from 'clientSrc/styles/blocks/form';
 
 export const HouseholdSubtitle = styled.div`
   margin-top: 15px;
@@ -40,10 +8,7 @@ export const HouseholdSubtitle = styled.div`
   display: flex;
 `;
 
-export const CriticalButtonsBlock = styled.div`
-  position: absolute;
-  right: 50px;
-  top: 0;
+export const CriticalButtonsBlock = styled(FormHeaderRightPanel)`
   width: max-content;
   
   button {
@@ -70,10 +35,7 @@ export const ButtonIconSpan = styled.span`
   }
 `;
 
-export const CurrentUserBlock = styled.div`
-  position: absolute;
-  left: 50px;
-  top: 0;
+export const CurrentUserBlock = styled(FormHeaderLeftPanel)`
   justify-content: center;
   align-items: center;
   width: 200px;

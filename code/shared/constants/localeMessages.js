@@ -1,4 +1,5 @@
 import * as SettingTypes from 'shared/constants/settingTypes';
+import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
 
 export const AUTH = {
   BACK_TO_LOGIN: 'auth.backToLogin',
@@ -50,16 +51,21 @@ export const ERROR = {
 export const FORM = {
   DROP_PHOTO_HERE: 'form.dropPhotoHere',
   CLICK_TO_UPLOAD: 'form.clickToUpload',
+  CONNECTIONS: 'form.connections',
   EMAIL: 'form.email',
   LANGUAGE: 'form.language',
   NEW_EMAIL: 'form.newEmail',
   NICKNAME: 'form.nickname',
   NEW_NICKNAME: 'form.newNickname',
+  USER_VISIBILITY: 'form.userVisibility',
   NOTIFICATIONS: 'form.notifications',
+  HOUSEHOLDS: 'form.households',
+  EMAIL_NOTIFICATIONS: 'form.emailNotifications',
   PASSWORD: 'form.password',
   THEME: 'form.theme',
   OLD_PASSWORD: 'form.oldPassword',
   NEW_PASSWORD: 'form.newPassword',
+  CHANGE_PASSWORD: 'form.changePassword',
   SELECT_PHOTO: 'form.selectPhoto',
   SAVE: 'form.save',
   SAVING: 'form.saving',
@@ -79,6 +85,9 @@ export const FORM = {
   PENDING_CONNECTIONS: 'form.pendingConnections',
   BLOCKED_CONNECTIONS: 'form.blockedConnections',
   HOUSEHOLD_INVITATIONS: 'form.householdInvitations',
+
+  [USER_VISIBILITY_TYPE.FOF]: 'form.userVisibilityFOF',
+  [USER_VISIBILITY_TYPE.ALL]: 'form.userVisibilityALL',
 };
 
 export const HOUSEHOLD = {

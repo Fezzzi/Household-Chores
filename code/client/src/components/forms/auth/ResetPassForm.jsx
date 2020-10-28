@@ -9,14 +9,14 @@ import { MessageBlock, LinkRow } from 'clientSrc/styles/blocks/auth';
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/form';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 
-import { Separator, TextInput, PrimaryButton } from '../forms';
-import LocaleText from '../common/LocaleText';
+import { Separator, TextInput, PrimaryButton } from '../index';
+import LocaleText from '../../common/LocaleText';
 
 const inputConfig = [
   { name: 'email', message: FORM.EMAIL, type: InputTypes.EMAIL },
 ];
 
-export class ResetPassComponent extends Component {
+export class ResetPassForm extends Component {
   constructor(props) {
     super(props);
 
@@ -76,7 +76,7 @@ export class ResetPassComponent extends Component {
   }
 }
 
-ResetPassComponent.propTypes = {
+ResetPassForm.propTypes = {
   switchTab: PropTypes.func,
   resetPass: PropTypes.func,
 };
@@ -85,4 +85,4 @@ const mapDispatchToProps = dispatch => ({
   resetPass: values => dispatch(AuthActions.resetPass(values)),
 });
 
-export const ResetPass = connect(null, mapDispatchToProps)(ResetPassComponent);
+export default connect(null, mapDispatchToProps)(ResetPassForm);

@@ -1,20 +1,13 @@
 import React from 'react';
 
-import ConnectionListForm from 'clientSrc/components/connections/ConnectionListForm';
-import ConnectionSearchForm from 'clientSrc/components/connections/ConnectionSearchForm';
-import HouseholdCreateForm from 'clientSrc/components/household/HouseholdCreateForm';
-import HouseholdModificationForm from 'clientSrc/components/household/HouseholdModificationForm';
-import HouseholdInvitationList from 'clientSrc/components/household/HouseholdInvitationList';
-import { SettingsForm } from 'clientSrc/components/settings/SettingsForm';
+import {
+  ConnectionListForm, ConnectionSearchForm, HouseholdCreateForm, HouseholdModificationForm,
+  HouseholdInvitationList, ProfileForm, NotificationForm,
+} from 'clientSrc/components/forms';
 import { CATEGORIES, TABS } from 'shared/constants/settingTypes';
 import { FORM, SETTINGS } from 'shared/constants/localeMessages';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
 import * as SettingTypes from 'shared/constants/settingTypes';
-
-import { settingsConfiguration } from './settingsConfiguration';
-
-const renderFormFromConfig = (category, tab, settings) => data =>
-  <SettingsForm category={category} tab={tab} settings={settings} data={data} />;
 
 const renderConnectionListForm = (dataKey, emptyMessage, tab, headlineMessage) => (data, setData) =>
   <ConnectionListForm
@@ -27,15 +20,14 @@ const renderConnectionListForm = (dataKey, emptyMessage, tab, headlineMessage) =
   />;
 
 export const settingsRenderers = {
-  ...Object.fromEntries(
-    Object.keys(settingsConfiguration).map(category =>
-      [category, Object.fromEntries(
-        Object.keys(settingsConfiguration[category]).map(tab =>
-          [tab, renderFormFromConfig(category, tab, settingsConfiguration[category][tab])]
-        )
-      )]
-    )
-  ),
+  [CATEGORIES.PROFILE]: {
+    [TABS.GENERAL]: (data, setData) => (
+      <ProfileForm data={data} />
+    ),
+    [TABS.NOTIFICATIONS]: (data, setData) => (
+      <NotificationForm data={data} />
+    ),
+  },
   [CATEGORIES.CONNECTIONS]: {
     tabModifiers: data => tab => {
       switch (tab) {

@@ -21,6 +21,7 @@ export const MiniInputWrapper = styled.div`
 
 export const EditableFieldWrapper = styled.div`
   position: relative;
+  max-width: 100%;
   
   :hover {
     cursor: pointer;

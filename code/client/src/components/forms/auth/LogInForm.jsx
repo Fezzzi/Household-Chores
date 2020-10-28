@@ -13,15 +13,15 @@ import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 
 import FacebookLoginButton from './FacebookLoginButton';
 import GoogleLoginButton from './GoogleLoginButton';
-import { TextInput, Separator, PrimaryButton } from '../forms';
-import LocaleText from '../common/LocaleText';
+import { TextInput, Separator, PrimaryButton } from '../index';
+import LocaleText from '../../common/LocaleText';
 
 const inputConfig = [
   { name: 'email', message: FORM.EMAIL, type: InputTypes.EMAIL },
   { name: 'password', message: FORM.PASSWORD, type: InputTypes.PASSWORD },
 ];
 
-export class LoginComponent extends Component {
+export class LogInForm extends Component {
   constructor(props) {
     super(props);
 
@@ -82,7 +82,7 @@ export class LoginComponent extends Component {
   }
 }
 
-LoginComponent.propTypes = {
+LogInForm.propTypes = {
   switchTab: PropTypes.func,
   logIn: PropTypes.func,
   addNotification: PropTypes.func,
@@ -95,4 +95,4 @@ const mapDispatchToProps = dispatch => ({
   })),
 });
 
-export const Login = connect(null, mapDispatchToProps)(LoginComponent);
+export default connect(null, mapDispatchToProps)(LogInForm);

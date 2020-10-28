@@ -1,5 +1,4 @@
 import InfoTooltip from './InfoTooltip';
-import OptionsTooltip from './OptionsTooltip';
-import NestedTooltipOptions from './NestedTooltipOptions';
+import { OptionsTooltip } from './OptionsTooltip';
 
-export { InfoTooltip, OptionsTooltip, NestedTooltipOptions };
+export { InfoTooltip, OptionsTooltip };

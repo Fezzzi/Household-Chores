@@ -3,22 +3,23 @@ import PropTypes from 'prop-types';
 import { DeleteForever, MeetingRoom, Add } from '@material-ui/icons';
 
 import {
-  ButtonIconSpan, CriticalButtonsBlock, CurrentUserBlock, HouseholdHeader,
-  HouseholdPhoto, HouseholdSubtitle, HouseholdTitle,
-  RoleLabel, UserName, UserPhoto,
+  ButtonIconSpan, CriticalButtonsBlock, CurrentUserBlock,
+  HouseholdSubtitle, RoleLabel, UserName, UserPhoto,
 } from 'clientSrc/styles/blocks/households';
-import { FormButtonContentWrapper } from 'clientSrc/styles/blocks/form';
+import {
+  FormHeader, FormButtonContentWrapper, FormHeaderPhoto, FormHeaderTitle,
+} from 'clientSrc/styles/blocks/form';
 import { getLabelColors } from 'clientSrc/helpers/household';
-import * as InputTypes from 'shared/constants/inputTypes';
 import { HOUSEHOLD } from 'shared/constants/localeMessages';
 
 import EditableTextField from 'clientSrc/components/common/EditableTextField';
-import { LocaleText } from '../common';
-import { PrimaryButton } from '../forms';
+import { LocaleText } from '../../common';
+import { PrimaryButton } from '../index';
 import EditablePhotoField from 'clientSrc/components/common/EditablePhotoField';
 
 const HouseholdFormHeader = ({
-  photo, name, currentUser, membersCount, setFormState, onLeaveHousehold, onDeleteHousehold, onCreateHousehold
+  photo, name, inputs, errors, currentUser, membersCount, setFormState,
+  onLeaveHousehold, onDeleteHousehold, onCreateHousehold
 }) => {
   const criticalButton = (handleClick, color, message, icon) => (
     <PrimaryButton
@@ -37,11 +38,13 @@ const HouseholdFormHeader = ({
   )
 
   return (
-    <HouseholdHeader>
+    <FormHeader>
       <CurrentUserBlock>
         <EditablePhotoField
           name="userPhoto"
+          edited={inputs['userPhoto']}
           placeholder={currentUser.photo}
+          error={errors['userPhoto']}
           setFormState={setFormState}
           size={100}
           iconRight={40}
@@ -49,7 +52,13 @@ const HouseholdFormHeader = ({
           <UserPhoto src={currentUser.photo} />
         </EditablePhotoField>
         <UserName>
-          <EditableTextField name="userName" placeholder={currentUser.name} setFormState={setFormState}>
+          <EditableTextField
+            name="userName"
+            edited={inputs['userName']}
+            placeholder={currentUser.name}
+            error={errors['userName']}
+            setFormState={setFormState}
+          >
             {currentUser.name}
           </EditableTextField>
         </UserName>
@@ -57,14 +66,24 @@ const HouseholdFormHeader = ({
         <RoleLabel {...getLabelColors(currentUser.role)}>{currentUser.role}</RoleLabel>
       </CurrentUserBlock>
 
-      <EditablePhotoField name="householdPhoto" placeholder={photo} setFormState={setFormState}>
-        <HouseholdPhoto src={photo} />
+      <EditablePhotoField
+        name="householdPhoto"
+        placeholder={photo}
+        error={errors['householdPhoto']}
+        setFormState={setFormState}
+      >
+        <FormHeaderPhoto src={photo} />
       </EditablePhotoField>
-      <HouseholdTitle>
-        <EditableTextField name="householdName" type={InputTypes.TEXT} placeholder={name} setFormState={setFormState}>
+      <FormHeaderTitle>
+        <EditableTextField
+          name="householdName"
+          placeholder={name}
+          error={errors['householdName']}
+          setFormState={setFormState}
+        >
           {name}
         </EditableTextField>
-      </HouseholdTitle>
+      </FormHeaderTitle>
       {membersCount > 0 && (
         <HouseholdSubtitle>
           <LocaleText message={HOUSEHOLD.MEMBERS} modifierFunc={text => `${membersCount} ${text}`} />
@@ -76,7 +95,7 @@ const HouseholdFormHeader = ({
         {onDeleteHousehold && criticalButton(onDeleteHousehold, 'var(--cRedSecondary)', HOUSEHOLD.DELETE, <DeleteForever />)}
         {onCreateHousehold && criticalButton(onCreateHousehold, 'var(--cGreenSecondary)', HOUSEHOLD.CREATE, <Add />)}
       </CriticalButtonsBlock>
-    </HouseholdHeader>
+    </FormHeader>
   );
 };
 
@@ -88,6 +107,8 @@ HouseholdFormHeader.propTypes = {
     name: PropTypes.string.isRequired,
     role: PropTypes.string.isRequired,
   }).isRequired,
+  inputs: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
   membersCount: PropTypes.number.isRequired,
   setFormState: PropTypes.func.isRequired,
   onLeaveHousehold: PropTypes.func,

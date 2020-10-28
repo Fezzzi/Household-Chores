@@ -14,8 +14,8 @@ import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 
 import FacebookLoginButton from './FacebookLoginButton';
 import GoogleLoginButton from './GoogleLoginButton';
-import { TextInput, Separator, PrimaryButton } from '../forms';
-import LocaleText from '../common/LocaleText';
+import { TextInput, Separator, PrimaryButton } from '../index';
+import LocaleText from '../../common/LocaleText';
 
 const inputConfig = [
   { name: 'email', message: FORM.EMAIL, type: InputTypes.EMAIL },
@@ -23,7 +23,7 @@ const inputConfig = [
   { name: 'password', message: FORM.PASSWORD, type: InputTypes.PASSWORD },
 ];
 
-export class SignupComponent extends Component {
+export class SignUpForm extends Component {
   constructor(props) {
     super(props);
 
@@ -86,7 +86,7 @@ export class SignupComponent extends Component {
   }
 }
 
-SignupComponent.propTypes = {
+SignUpForm.propTypes = {
   signUp: PropTypes.func,
   addNotification: PropTypes.func,
 };
@@ -98,4 +98,4 @@ const mapDispatchToProps = dispatch => ({
   })),
 });
 
-export const Signup = connect(null, mapDispatchToProps)(SignupComponent);
+export default connect(null, mapDispatchToProps)(SignUpForm);

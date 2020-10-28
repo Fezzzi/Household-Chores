@@ -1,5 +1,6 @@
 import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
 import * as SettingTypes from 'shared/constants/settingTypes';
+import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
 
 export default {
   [AUTH.BACK_TO_LOGIN]: 'Zpět na přihlášení',
@@ -50,11 +51,16 @@ export default {
   [FORM.NEW_EMAIL]: 'Nový email',
   [FORM.NICKNAME]: 'Jméno',
   [FORM.NOTIFICATIONS]: 'Notifikace',
+  [FORM.CONNECTIONS]: 'Spojení',
+  [FORM.HOUSEHOLDS]: 'Domácnosti',
+  [FORM.EMAIL_NOTIFICATIONS]: 'Emailové notifikace',
   [FORM.NEW_NICKNAME]: 'Nové jméno',
   [FORM.PASSWORD]: 'Heslo',
   [FORM.THEME]: 'Prostředí',
   [FORM.OLD_PASSWORD]: 'Staré heslo',
   [FORM.NEW_PASSWORD]: 'Nové heslo',
+  [FORM.USER_VISIBILITY]: 'Viditelnost',
+  [FORM.CHANGE_PASSWORD]: 'Změnit heslo',
   [FORM.NO_HOUSEHOLD_REQUESTS]: 'Nemáte žádné pozvánky do domácností.',
   [FORM.NO_BLOCKED_CONNECTIONS]: 'Nemáte blokované žádné uživatele.',
   [FORM.NO_CONNECTION_REQUESTS]: 'Nemáte žádné žádosti o spojení.',
@@ -74,6 +80,8 @@ export default {
   [FORM.PENDING_CONNECTIONS]: 'Žádosti o spojení',
   [FORM.BLOCKED_CONNECTIONS]: 'Blokovaní uživatelé',
   [FORM.HOUSEHOLD_INVITATIONS]: 'Pozvánky do domácností',
+  [FORM[USER_VISIBILITY_TYPE.FOF]]: 'přátelé přátel',
+  [FORM[USER_VISIBILITY_TYPE.ALL]]: 'všichni',
 
   [HOUSEHOLD.LEAVE]: 'Opustit domácnost',
   [HOUSEHOLD.DELETE]: 'Vymazat domácnost',

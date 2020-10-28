@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { TooltipWrapper, OptionsTooltipIcon } from 'clientSrc/styles/blocks/portals';
 
 import { useElementPosition } from 'clientSrc/helpers/dom';
-import { NestedTooltipOptions } from '../../common';
+import NestedTooltipOptions from './NestedTooltipOptions';
 
 export const OptionsTooltip = ({ icon, options }) => {
   const [state, setState] = useState({
