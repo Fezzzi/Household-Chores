@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Message } from '@material-ui/icons';
 
 import { useConnectionButtons } from 'clientSrc/helpers/connectionButtons';
@@ -8,7 +7,6 @@ import {
   UserButtonsBox, UserName, UserNode, UserPhotoBox,
   UserPhoto, WrapperBox, AppendMessageAnchor, AppendMessageIcon,
 } from 'clientSrc/styles/blocks/users';
-import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
 import { TABS } from 'shared/constants/settingTypes';
 
@@ -16,12 +14,13 @@ import PrimaryButton from '../common/PrimaryButton';
 import LocaleText from '../../common/LocaleText';
 import { InfoTooltip } from '../../portals';
 
-const UserConnectionNode = ({ tab, user, setData, addNotification }) => {
-  const [buttons, setButtons] = useState({});
+const UserConnectionNode = ({ tab, user }) => {
+  const buttons = useConnectionButtons(tab, user);
 
-  useEffect(() => setButtons(
-    useConnectionButtons(tab, user, setData, setButtons, addNotification)
-  ), [setData]);
+  const handleClick = clickHandler => () => {
+    /* todo: Implement connection messages and pass it here */
+    clickHandler();
+  };
 
   const { id, nickname, photo, state, message: userMessage } = user;
   return (
@@ -48,8 +47,7 @@ const UserConnectionNode = ({ tab, user, setData, addNotification }) => {
               <PrimaryButton
                 key={`${id}-${label}`}
                 disabled={disabled}
-                /* todo: Implement connection messages and pass it here */
-                clickHandler={clickHandler('')}
+                clickHandler={handleClick(clickHandler)}
                 margin="0 0 6px"
                 color={color}
                 background={background}
@@ -75,14 +73,6 @@ UserConnectionNode.propTypes = {
     message: PropTypes.string,
     state: PropTypes.string,
   }).isRequired,
-  setData: PropTypes.func.isRequired,
-  addNotification: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  addNotification: (type, message) => dispatch(NotificationActions.addNotifications({
-    [type]: [message],
-  })),
-});
-
-export default connect(null, mapDispatchToProps)(UserConnectionNode);
+export default UserConnectionNode;

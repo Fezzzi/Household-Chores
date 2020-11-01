@@ -1,3 +1,9 @@
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+
+import * as SettingsActions from 'clientSrc/actions/settingsActions';
+import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
+
 export const updateInput = (
   setState,
   input,
@@ -56,6 +62,29 @@ export const updateHandler = (name, setFormState, formValidFunc, placeholder) =>
       errors: newErrors,
     };
   });
+};
+
+export const getSubmitHandler = (category, tab) => (inputs, setFormState, submitMessage, submittingMessage) => {
+  const [timer, setTimer] = useState(0);
+  const dispatch = useDispatch();
+
+  useEffect(() => () => timer && clearTimeout(timer), []);
+
+  return useCallback(() => {
+    setFormState(prevState => ({
+      ...prevState,
+      isFormSending: true,
+      submitMessage: submittingMessage,
+    }));
+
+    dispatch(SettingsActions.editSettings({ category, tab, inputs }));
+    setTimer(setTimeout(
+      () => setFormState && setFormState(prevState => ({
+        ...prevState,
+        isFormSending: false,
+        submitMessage,
+      })), SUBMIT_TIMEOUT));
+  }, [dispatch]);
 };
 
 export const handlerWrapper = handlerFunc => e => {

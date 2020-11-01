@@ -10,7 +10,7 @@ import * as TABS from 'clientSrc/constants/authTabs';
 import Home from './Home';
 import Resource from './Resource';
 import AuthForm from './forms/auth/AuthForm';
-import Settings from './settings';
+import Settings from './settings/Settings';
 
 const getTabQuery = queries =>
   queries.split(/\?&/)?.find(query => query.match(/tab=.+/))?.split('=')[1];

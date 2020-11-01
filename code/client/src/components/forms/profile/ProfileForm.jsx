@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Save } from '@material-ui/icons';
 
-import { handlerWrapper, updateHandler } from 'clientSrc/helpers/form';
-import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
-import { COMMON, FORM } from 'shared/constants/localeMessages';
+import { updateHandler } from 'clientSrc/helpers/form';
+import { FORM } from 'shared/constants/localeMessages';
 import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
 import * as InputTypes from 'shared/constants/inputTypes';
 
@@ -13,8 +12,7 @@ import { SimpleFloatingElement } from '../../portals';
 import ProfileFormHeader from './ProfileFormHeader';
 import Input from '../common/Input';
 
-const ProfileForm = ({ data }) => {
-  const [timer, setTimer] = useState(null);
+const ProfileForm = ({ data, submitHandler }) => {
   const [state, setState] = useState({
     submitMessage: FORM.SAVE,
     isFormValid: true,
@@ -23,26 +21,10 @@ const ProfileForm = ({ data }) => {
     errors: {},
   });
 
-  useEffect(() => () => timer && clearTimeout(timer), []);
-
-  // todo: Replace all those handleClick all around with some handy helper function
-  const handleClick = handlerWrapper(() => {
-    setState(prevState => ({
-      ...prevState,
-      isFormSending: true,
-      submitMessage: COMMON.SENDING,
-    }));
-
-    setTimer(setTimeout(
-      () => setState && setState(prevState => ({
-        ...prevState,
-        isFormSending: false,
-        submitMessage: FORM.SAVE,
-      })), SUBMIT_TIMEOUT));
-  });
-
   const { photo, name, email, visibility } = data;
   const { submitMessage, errors, isFormValid, isFormSending, inputs } = state;
+
+  const handleSubmit = submitHandler(inputs, setState, FORM.SAVE, FORM.SAVING);
 
   return (
     <>
@@ -52,7 +34,7 @@ const ProfileForm = ({ data }) => {
           sending={isFormSending}
           enabled={isFormValid}
           icon={<Save />}
-          onClick={handleClick}
+          onClick={handleSubmit}
         />
       )}
       <ProfileFormHeader
@@ -85,6 +67,7 @@ ProfileForm.propTypes = {
     email: PropTypes.string,
     visibility: PropTypes.string,
   }).isRequired,
+  submitHandler: PropTypes.func.isRequired,
 };
 
 export default ProfileForm;

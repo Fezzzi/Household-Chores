@@ -20,7 +20,12 @@ const SimpleFloatingElement = ({ message, sending, enabled, background, backgrou
       background={background}
       backgroundHovered={backgroundHovered}
       enabled={!sending && enabled}
-      onClick={e => !sending && enabled && onClick(e)}
+      onClick={e => {
+        if (sending || !enabled) {
+          return;
+        }
+        onClick(e);
+      }}
     >
       {(hovered || sending)
         ? icon

@@ -1,4 +1,4 @@
-import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
+import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
 import * as SettingTypes from 'shared/constants/settingTypes';
 import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
 
@@ -28,6 +28,9 @@ export default {
   [COMMON.TERMS_AND_CONDITIONS]: 'Terms and Conditions',
 
   [ERROR.CONNECTION_ERROR]: 'Connection error, please try again later.',
+  [ERROR.CONNECTION_REQUEST_ERROR]: 'Connection request failed, please try again later.',
+  [ERROR.INVALID_REQUEST]: 'Invalid request.',
+  [ERROR.ACTION_ERROR]: 'Requested action failed, please try again later.',
   [ERROR.GOOGLE_API_INIT_ERROR]: 'Google API initialization error.',
   [ERROR.IMAGE_INVALID]: 'Invalid photo, please verify that the file uploaded is an image with size under 1MB.',
   [ERROR.INCORRECT_PASS]: 'Incorrect password.',
@@ -43,6 +46,8 @@ export default {
   [ERROR.SMTH_BROKE_LOGIN]: 'Something broke, please try to log in with different method.',
   [ERROR.VALUE_TOO_LONG]: 'Value is too long.',
   [ERROR.VALUE_TOO_SHORT]: 'Value is too short.',
+
+  [INFO.NOTHING_TO_UPDATE]: 'Nothing to update.',
 
   [FORM.DROP_PHOTO_HERE]: 'Drop photo here',
   [FORM.CLICK_TO_UPLOAD]: 'Click to upload photo',
@@ -114,4 +119,5 @@ export default {
   [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS._HOUSEHOLD}`]]: 'Household',
 
   [SUCCESS.RESET_LINK]: 'A reset link has been sent to your email address.',
+  [SUCCESS.SETTINGS_UPDATED]: 'Settings have been successfully updated.',
 };

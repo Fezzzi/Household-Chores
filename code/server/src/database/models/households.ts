@@ -153,7 +153,7 @@ export const findUserHouseholds = async (currentUser: number): Promise<Array<obj
   `); */
 ;
 
-export const ignoreInvitation = async (
+export const deleteInvitation = async (
   currentId: number,
   { fromId, householdId }: { fromId: number; householdId: number },
 ): Promise<boolean> =>

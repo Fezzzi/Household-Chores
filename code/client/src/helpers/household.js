@@ -1,33 +1,11 @@
 import React from 'react';
 import { CalendarToday, ChevronRight, Delete, Grade, MoreVert, SortByAlpha } from '@material-ui/icons';
 
-import { invitationApprove, invitationIgnore } from 'clientSrc/effects/householdEffects';
+import OptionsTooltip from 'clientSrc/components/portals/tooltips/OptionsTooltip';
 import { TablePhoto, TableRowIcon } from 'clientSrc/styles/blocks/table';
 import { RoleLabel } from 'clientSrc/styles/blocks/households';
-import OptionsTooltip from 'clientSrc/components/portals/tooltips/OptionsTooltip';
-import * as NotificationTypes from 'shared/constants/notificationTypes';
 import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
-import { ERROR, HOUSEHOLD } from 'shared/constants/localeMessages';
-
-export const useHouseholdButtonHandlers = (householdId, fromId, setData, addNotification) => {
-  const approveHandler = () => invitationApprove({ householdId, fromId, photo: '' })
-    .then(({ data: { success, data } }) => success && setData(data))
-    .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR));
-
-  const removeHandler = () => invitationIgnore({ householdId, fromId })
-    .then(({ data: { success } }) => success && setData(prevData => ({
-      ...prevData,
-      invitations: prevData.invitations.filter(({ id_household: idHousehold, from: { id } }) =>
-        idHousehold !== householdId && id !== fromId
-      ),
-    })))
-    .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR));
-
-  return {
-    approveHandler,
-    removeHandler,
-  };
-};
+import { HOUSEHOLD } from 'shared/constants/localeMessages';
 
 // todo: Add real clickHandlers
 export const useMemberListProps = members => {
@@ -84,7 +62,15 @@ export const useInvitationListProps = invitations => {
     fromPhoto: <TablePhoto src={invitation.fromPhoto} />,
     delimiter: <TableRowIcon><ChevronRight /></TableRowIcon>,
     toPhoto: <TablePhoto src={invitation.toPhoto} />,
-    delete: <TableRowIcon color="var(--cRedSecondary)" clickable onClick={() => console.log('clicked')}><Delete /></TableRowIcon>,
+    delete: (
+      <TableRowIcon
+        color="var(--cRedSecondary)"
+        clickable
+        onClick={() => console.log('clicked')}
+      >
+        <Delete />
+      </TableRowIcon>
+    ),
   }));
   const keys = [
     { name: 'fromPhoto' },

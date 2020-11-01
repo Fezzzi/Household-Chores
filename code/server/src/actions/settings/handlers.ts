@@ -5,7 +5,7 @@ import { getCategoryList, getTabList } from 'serverSrc/helpers/settings';
 import { findApprovedConnections, findConnections } from 'serverSrc/database/models/connections';
 import { findUserHouseholds, findUserInvitations } from 'serverSrc/database/models/households';
 
-const getTabData = async (req: any, category: string, tab: string) => {
+const getTabData = async (category: string, tab: string, req: any) => {
   switch (category) {
     case SettingTypes.CATEGORIES.PROFILE:
       return {
@@ -29,7 +29,7 @@ const getTabData = async (req: any, category: string, tab: string) => {
 };
 
 export const handleSettingsDataFetch = async (category: string, tab: string, req: any, res: any): Promise<void> => {
-  const data = await getTabData(req, category, tab);
+  const data = await getTabData(category, tab, req);
   const { categories, messages: categoryMessages, types: categoryTypes } = getCategoryList(data);
   const { tabs, messages: tabMessages, types: tabTypes } = getTabList(data, category);
   res.status(200).send({

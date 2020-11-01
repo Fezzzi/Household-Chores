@@ -1,6 +1,12 @@
-import { useConnectionButtonHandlers } from 'clientSrc/helpers/connection';
-import { FORM } from 'shared/constants/localeMessages';
+import { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+
+import {
+  connectionApprove, connectionBlock, connectionIgnore, connectionRemove, connectionUnblock,
+} from 'clientSrc/effects/conectionEffects';
+import * as SettingsActions from 'clientSrc/actions/settingsActions';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
+import { FORM } from 'shared/constants/localeMessages';
 import { TABS } from 'shared/constants/settingTypes';
 
 const tabButtons = {
@@ -10,14 +16,25 @@ const tabButtons = {
   [TABS.BLOCKED]: [FORM.CONNECTION_UNBLOCK],
 };
 
-export const useConnectionButtons = (tab, user, setData, setButtons, addNotification) => {
-  const requestSent = user.state && user.state === CONNECTION_STATE_TYPE.WAITING;
+export const useConnectionButtons = (tab, { state, id: targetId }) => {
+  const requestSent = state && state === CONNECTION_STATE_TYPE.WAITING;
 
   const isButtonActive = label => Boolean(tabButtons[tab].find(btn => btn === label));
 
-  const {
-    connectHandler, approveHandler, blockHandler, ignoreHandler, removeHandler, unblockHandler,
-  } = useConnectionButtonHandlers(user, setData, setButtons, addNotification);
+  const dispatch = useDispatch();
+
+  const connectHandler = useCallback(message =>
+    dispatch(SettingsActions.connectionRequest({ targetId, message })),
+  [dispatch]);
+
+  const getHandler = effect =>
+    useCallback(() => dispatch(SettingsActions.connectionAction({ effect, targetId })), [dispatch]);
+
+  const blockHandler = getHandler(connectionBlock);
+  const approveHandler = getHandler(connectionApprove);
+  const ignoreHandler = getHandler(connectionIgnore);
+  const unblockHandler = getHandler(connectionUnblock);
+  const removeHandler = getHandler(connectionRemove);
 
   // The order buttons are returned in decides the order they will be displayed in
   return {

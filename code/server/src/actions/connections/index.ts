@@ -2,13 +2,15 @@ import express from 'express';
 
 import { queryUsers } from 'serverSrc/database/models/users';
 import {
-  approveConnection, createConnection, blockConnection, removeConnection, findBlockedConnections,
+  approveConnection, createConnection, blockConnection, removeConnection, findBlockedConnections, findConnections,
 } from 'serverSrc/database/models/connections';
 import {
   CONNECTION_FIND, CONNECTION_REQUEST, CONNECTION_APPROVE,
   CONNECTION_BLOCK, CONNECTION_IGNORE, CONNECTION_REMOVE, CONNECTION_UNBLOCK,
 } from 'shared/constants/api';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
+import * as NotificationTypes from 'shared/constants/notificationTypes';
+import { ERROR } from 'shared/constants/localeMessages';
 
 const findUsers = async (req: any, res: any, { query }: { query: string }) => {
   const foundUsers = await queryUsers(query, req.session.user);
@@ -19,26 +21,36 @@ const findUsers = async (req: any, res: any, { query }: { query: string }) => {
 const performConnectionAction = async (
   req: any,
   res: any,
-  { id }: { id: number },
+  { targetId }: { targetId: number },
   action: (currentUser: number, targetUser: number) => Promise<boolean>
 ) => {
-  const success = await action(req.session.user, id);
-  res.status(200).send({ success });
+  const success = await action(req.session.user, targetId);
+  if (success) {
+    const data = await findConnections(req.session.user);
+    res.status(200).send({ ...data });
+  } else {
+    res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.ACTION_ERROR] });
+  }
   return true;
 };
 
 const handleConnectionRequest = async (
   req: any,
   res: any,
-  { id, message }: { id: number; message: string | null },
+  { targetId, message }: { targetId: number; message: string | null },
 ) => {
   const currentUser = req.session.user;
-  const isRequestValid = !(await findBlockedConnections(id)).find(blockedUser => blockedUser === currentUser);
-  let success = false;
+  const isRequestValid = !(await findBlockedConnections(targetId)).find(blockedUser => blockedUser === currentUser);
   if (isRequestValid) {
-    success = await createConnection(currentUser, id, message || null);
+    const success = await createConnection(currentUser, targetId, message || null);
+    if (success) {
+      res.status(200).send({ targetId });
+    } else {
+      res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] });
+    }
+  } else {
+    res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.INVALID_REQUEST] });
   }
-  res.status(200).send({ success });
   return true;
 };
 
@@ -56,9 +68,7 @@ export default () => {
       case CONNECTION_BLOCK:
         return performConnectionAction(req, res, body, blockConnection);
       case CONNECTION_IGNORE:
-        return performConnectionAction(req, res, body, removeConnection);
       case CONNECTION_REMOVE:
-        return performConnectionAction(req, res, body, removeConnection);
       case CONNECTION_UNBLOCK:
         return performConnectionAction(req, res, body, removeConnection);
       default:

@@ -12,7 +12,7 @@ import UserConnectionNode from './UserConnectionNode';
 import MiniTextInput from '../inputs/MiniTextInput';
 import LocaleText from '../../common/LocaleText';
 
-const ConnectionListForm = ({ tab, data, setData, dataKey, emptyMessage, headlineMessage }) => {
+const ConnectionListForm = ({ tab, data, dataKey, emptyMessage, headlineMessage }) => {
   const textInputRef = useRef(null);
 
   const {
@@ -52,7 +52,6 @@ const ConnectionListForm = ({ tab, data, setData, dataKey, emptyMessage, headlin
                 <UserConnectionNode
                   key={`${dataKey}-${index}`}
                   user={user}
-                  setData={setData}
                   tab={tab}
                 />
               ))}
@@ -70,7 +69,6 @@ const ConnectionListForm = ({ tab, data, setData, dataKey, emptyMessage, headlin
 ConnectionListForm.propTypes = {
   tab: PropTypes.string.isRequired,
   data: PropTypes.object,
-  setData: PropTypes.func.isRequired,
   dataKey: PropTypes.string.isRequired,
   emptyMessage: PropTypes.string.isRequired,
   headlineMessage: PropTypes.string.isRequired,

@@ -15,7 +15,7 @@ import LocaleText from '../../common/LocaleText';
 import Table from '../../common/Table';
 import { SimpleFloatingElement } from '../../portals';
 
-const HouseholdModificationForm = ({ household, connections, setData }) => {
+const HouseholdModificationForm = ({ household, connections }) => {
   const [timer, setTimer] = useState(null);
   const [state, setState] = useState({
     submitMessage: FORM.SAVE,
@@ -162,7 +162,6 @@ HouseholdModificationForm.propTypes = {
     nickname: PropTypes.string.isRequired,
     photo: PropTypes.string,
   })),
-  setData: PropTypes.func.isRequired,
 };
 
 export default HouseholdModificationForm;

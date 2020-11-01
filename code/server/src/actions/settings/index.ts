@@ -12,9 +12,10 @@ export default () => {
   router.get(/.*/, (req: { query: { category: string; tab: string }}, res) => {
     const { query: { category, tab } } = req;
     if (Object.values(SettingTypes.CATEGORIES).find(cat => cat === category) !== null) {
-      handleSettingsDataFetch(category, tab, req, res);
+      return handleSettingsDataFetch(category, tab, req, res);
     } else {
       res.status(200).send([]);
+      return true;
     }
   });
 

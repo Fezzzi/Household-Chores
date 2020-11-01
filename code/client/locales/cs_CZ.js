@@ -1,4 +1,4 @@
-import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
+import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
 import * as SettingTypes from 'shared/constants/settingTypes';
 import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
 
@@ -27,7 +27,10 @@ export default {
   [COMMON.SHOW]: 'Zobrazit',
   [COMMON.TERMS_AND_CONDITIONS]: 'podmínky použití',
 
-  [ERROR.CONNECTION_ERROR]: 'Chyba spojení, zkuste to prosím později',
+  [ERROR.CONNECTION_ERROR]: 'Chyba spojení, zkuste to prosím později.',
+  [ERROR.CONNECTION_REQUEST_ERROR]: 'Žádost o spojení se nezdařila, zkuste to prosím později.',
+  [ERROR.INVALID_REQUEST]: 'Požadovanou akci nelze provést.',
+  [ERROR.ACTION_ERROR]: 'Požadovaná akce se nezdařila, zkuste to prosím později.',
   [ERROR.GOOGLE_API_INIT_ERROR]: 'Chyba inicializace Google API.',
   [ERROR.IMAGE_INVALID]: 'Neplatný obrázek, prosím zkonrolujte zdali se jedná o obrázek s velikostí do 1MB',
   [ERROR.INCORRECT_PASS]: 'Špatné heslo.',
@@ -43,6 +46,8 @@ export default {
   [ERROR.SMTH_BROKE_LOGIN]: 'Něco se porouchalo, zkuste prosím jinou metodu přihlášení.',
   [ERROR.VALUE_TOO_LONG]: 'Hodnota je příliš dlouhá.',
   [ERROR.VALUE_TOO_SHORT]: 'Hodnota je příliš krátká',
+
+  [INFO.NOTHING_TO_UPDATE]: 'Žádné pole nebylo změněno.',
 
   [FORM.DROP_PHOTO_HERE]: 'Přetáhněte obrázek sem',
   [FORM.CLICK_TO_UPLOAD]: 'Klikněte pro nahrání obrázku',
@@ -114,4 +119,5 @@ export default {
   [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS._HOUSEHOLD}`]]: 'Domácnost',
 
   [SUCCESS.RESET_LINK]: 'Link pro obnovu hesla byl úspěšně zaslán na Vaši emailovou adresu.',
+  [SUCCESS.SETTINGS_UPDATED]: 'Nastavaní bylo úspěšně upraveno.',
 };

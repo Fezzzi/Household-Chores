@@ -13,7 +13,7 @@ import MiniTextInput from '../inputs/MiniTextInput';
 import HouseholdInvitationNode from './HouseholdInvitationNode';
 import LocaleText from '../../common/LocaleText';
 
-const HouseholdInvitationList = ({ invitations, setData }) => {
+const HouseholdInvitationList = ({ invitations }) => {
   const textInputRef = useRef(null);
 
   const {
@@ -53,7 +53,6 @@ const HouseholdInvitationList = ({ invitations, setData }) => {
                 <HouseholdInvitationNode
                   key={`invitations-${index}`}
                   invitation={invitation}
-                  setData={setData}
                 />
               )
               )}
@@ -80,7 +79,6 @@ HouseholdInvitationList.propTypes = {
       photo: PropTypes.string,
     })
   ).isRequired,
-  setData: PropTypes.func.isRequired,
 };
 
 export default HouseholdInvitationList;

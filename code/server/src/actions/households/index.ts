@@ -1,29 +1,42 @@
 import express from 'express';
 
 import {
-  approveInvitation, ignoreInvitation, findUserHouseholds,
+  approveInvitation, deleteInvitation, findUserHouseholds, findUserInvitations,
 } from 'serverSrc/database/models/households';
 import {
   INVITATION_APPROVE, INVITATION_IGNORE,
 } from 'shared/constants/api';
-
-const respond = (res: any, status = 200, success = true, data: any = {}): boolean => {
-  res.status(status).send({ success, data });
-  return true;
-};
+import * as NotificationTypes from 'shared/constants/notificationTypes';
+import { ERROR } from 'shared/constants/localeMessages';
 
 export default () => {
   const router = express.Router();
-  router.post('/:action', (req, res) => {
+  router.post('/:action', async (req, res) => {
     const { params: { action }, body } = req;
     const userId = req.session!.user;
     switch (action) {
-      case INVITATION_APPROVE:
-        return ignoreInvitation(userId, body)
-          && approveInvitation(userId, body)
-          && respond(res, 200, true, findUserHouseholds(userId));
-      case INVITATION_IGNORE:
-        return ignoreInvitation(userId, body) && respond(res);
+      case INVITATION_APPROVE: {
+        // todo: Use transaction there
+        const success = await deleteInvitation(userId, body) && await approveInvitation(userId, body);
+        if (success) {
+          res.status(200).send({
+            invitations: await findUserInvitations(userId),
+            households: await findUserHouseholds(userId),
+          });
+        } else {
+          res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.ACTION_ERROR] });
+        }
+        return true;
+      }
+      case INVITATION_IGNORE: {
+        const success = await deleteInvitation(userId, body);
+        if (success) {
+          res.status(200).send(body);
+        } else {
+          res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.ACTION_ERROR] });
+        }
+        return true;
+      }
       default:
         res.status(404).send('Not Found');
         return false;

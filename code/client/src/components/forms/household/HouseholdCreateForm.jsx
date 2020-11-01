@@ -16,7 +16,7 @@ import HouseholdInvitationForm from './HouseholdInvitationForm';
 import LocaleText from '../../common/LocaleText';
 import Table from '../../common/Table';
 
-const HouseholdCreateForm = ({ connections, setData }) => {
+const HouseholdCreateForm = ({ connections }) => {
   const [timer, setTimer] = useState(null);
   const [state, setState] = useState({
     isFormSending: false,
@@ -98,7 +98,6 @@ HouseholdCreateForm.propTypes = {
     nickname: PropTypes.string.isRequired,
     photo: PropTypes.string,
   })),
-  setData: PropTypes.func.isRequired,
 };
 
 export default HouseholdCreateForm;

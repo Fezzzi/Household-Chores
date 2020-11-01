@@ -53,6 +53,7 @@ module.exports = {
     'no-console': [1, { allow: ['warn', 'error'] }],
     'no-await-in-loop': 1,
     'no-bitwise': 0,
+    'func-names': 0,
     'no-plusplus': 0,
     'no-else-return': 0,
     'global-require': 0,

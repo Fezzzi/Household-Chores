@@ -22,7 +22,8 @@ export const useContentRendererKeys = (category, tab, categoryTypes, tabTypes) =
   };
 };
 
-export const useSettingsLoader = () => (category, tab, setState, setData, setRenderedTabs, addNotification) =>
+export const useSettingsLoader = loadSettingss => (category, tab, setState, setData, setRenderedTabs, addNotification) => {
+  loadSettingss(category, tab);
   loadSettings(category, tab)
     .then(({ data: { tabs: newTabs, data: newData, ...otherData } }) => {
       setState(prevState => ({
@@ -34,3 +35,4 @@ export const useSettingsLoader = () => (category, tab, setState, setData, setRen
       setRenderedTabs(newTabs);
     })
     .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR));
+};

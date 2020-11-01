@@ -1,26 +1,31 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Message } from '@material-ui/icons';
 
-import { useHouseholdButtonHandlers } from 'clientSrc/helpers/household';
 import {
   UserButtonsBox, UserName, UserNode, UserPhotoBox, UserPhoto, AppendMessageIcon, WrapperBox,
   AppendMessageAnchor, UserPhotoMoreBox, MiniUserName, MiniUserPhoto, UserFloatingNameBox,
 } from 'clientSrc/styles/blocks/users';
-import * as NotificationActions from 'clientSrc/actions/notificationActions';
+import * as SettingsActions from 'clientSrc/actions/settingsActions';
 import { FORM } from 'shared/constants/localeMessages';
 
 import PrimaryButton from '../common/PrimaryButton';
 import LocaleText from '../../common/LocaleText';
 import { InfoTooltip } from '../../portals';
 
-const HouseholdInvitationNode = ({ invitation, setData, addNotification }) => {
-  const {
-    fromId, fromNickname, fromPhoto,
-    id_household: householdId, name, message: invitationMessage, photo,
-  } = invitation;
-  const { approveHandler, removeHandler } = useHouseholdButtonHandlers(householdId, fromId, setData, addNotification);
+const HouseholdInvitationNode = ({ invitation: {
+  fromId, fromNickname, fromPhoto, id_household: householdId, name, message: invitationMessage, photo,
+} }) => {
+  const dispatch = useDispatch();
+
+  const approveHandler = useCallback(() =>
+    dispatch(SettingsActions.approveInvitation({ householdId, fromId, photo: '' })),
+  [dispatch]);
+
+  const removeHandler = useCallback(() =>
+    dispatch(SettingsActions.ignoreInvitation({ householdId, fromId })),
+  [dispatch]);
 
   return (
     <WrapperBox>
@@ -77,14 +82,6 @@ HouseholdInvitationNode.propTypes = {
     message: PropTypes.string,
     photo: PropTypes.string,
   }).isRequired,
-  setData: PropTypes.func.isRequired,
-  addNotification: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  addNotification: (type, message) => dispatch(NotificationActions.addNotifications({
-    [type]: [message],
-  })),
-});
-
-export default connect(null, mapDispatchToProps)(HouseholdInvitationNode);
+export default HouseholdInvitationNode;

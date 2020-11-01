@@ -31,6 +31,9 @@ export const COMMON = {
 
 export const ERROR = {
   CONNECTION_ERROR: 'error.connectionError',
+  CONNECTION_REQUEST_ERROR: 'error.connectionRequestError',
+  ACTION_ERROR: 'error.actionError',
+  INVALID_REQUEST: 'error.invalidRequest',
   GOOGLE_API_INIT_ERROR: 'error.googleAPIInitError',
   IMAGE_INVALID: 'error.imageInvalid',
   INCORRECT_PASS: 'error.incorrectPass',
@@ -46,6 +49,10 @@ export const ERROR = {
   SMTH_BROKE_LOGIN: 'error.smthBrokeLogIn',
   VALUE_TOO_SHORT: 'error.valueTooShort',
   VALUE_TOO_LONG: 'error.valueTooLong',
+};
+
+export const INFO = {
+  NOTHING_TO_UPDATE: 'info.nothingToUpdate',
 };
 
 export const FORM = {
@@ -128,4 +135,5 @@ export const SETTINGS = {
 
 export const SUCCESS = {
   RESET_LINK: 'success.resetLink',
+  SETTINGS_UPDATED: 'success.settingsUpdated',
 };
