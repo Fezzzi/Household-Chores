@@ -77,7 +77,7 @@ export const SignUpUser = async (
   photo: string|null,
   googleId: string,
   facebookId: string,
-): Promise<number> => {
+): Promise<{ insertId: number }> => {
   const pass = await encryptPass(password || generatePass());
 
   return database.query(`

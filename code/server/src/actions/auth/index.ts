@@ -6,7 +6,7 @@ import { ERROR, SUCCESS } from 'shared/constants/localeMessages';
 import { RESET_PASSWORD } from 'serverSrc/constants/mails';
 import { sendEmails } from 'serverSrc/helpers/mailer';
 import { logInUser, SignUpUser, findUser } from 'serverSrc/database/models/users';
-import { handleAction, setUserCookie } from 'serverSrc/helpers/auth';
+import { handleAction, setSession } from 'serverSrc/helpers/auth';
 
 import { validateLoginData, validateResetData, validateSignupData } from './validation';
 import { getProvidersUserId, handleProvidersLogIn, logInWithIds } from './providers';
@@ -35,7 +35,7 @@ const getLogInFunc = (req: any, res: any, { email: { value: email }, password: {
     };
   }
 
-  setUserCookie(req, res, loggedUserId);
+  setSession(req, res, loggedUserId);
   return {};
 };
 
@@ -61,17 +61,17 @@ const getSignUpFunc = (req: any, res: any, body: any) => async () => {
     return getLogInFunc(req, res, body)();
   }
 
-  const signedUp = await SignUpUser(
+  const { insertId } = await SignUpUser(
     email, nickname,
     (password && password.value) || null,
     photo || null,
     googleId, facebookId,
   );
-  if (signedUp) {
-    setUserCookie(req, res, signedUp);
+  if (insertId) {
+    setSession(req, res, insertId);
   }
   return {
-    [NotificationTypes.ERRORS]: signedUp ? [] : [ERROR.SIGN_UP_ERROR],
+    [NotificationTypes.ERRORS]: insertId ? [] : [ERROR.SIGN_UP_ERROR],
   };
 };
 
