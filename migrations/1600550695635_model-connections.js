@@ -27,3 +27,4 @@ module.exports = {
     && conn.query(`ALTER TABLE ${USERS_TABLE.name} DROP COLUMN ${USERS_TABLE.columns.visibility}`)
   ),
 }
+
