@@ -7,9 +7,9 @@ import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
 const { columns: { id_from, id_to, message, state, date_created } } = CONNECTIONS_TABLE;
 
 module.exports = {
-    up: (conn, cb) => migrateWithQueries(cb,
-        conn.query(`
-      CREATE TABLE ${CONNECTIONS_TABLE.name} (
+  up: (conn, cb) => migrateWithQueries(cb,
+    conn.query(`
+        CREATE TABLE ${CONNECTIONS_TABLE.name} (
         ${id_from} INT NOT NULL,
         ${id_to} INT NOT NULL,
         ${message} VARCHAR(255) DEFAULT NULL,
@@ -17,13 +17,13 @@ module.exports = {
         ${date_created} DATETIME NOT NULL,
         PRIMARY KEY (${id_from}, ${id_to})
       )
-    `) &&
-        conn.query(`
+    `) 
+    && conn.query(`
       ALTER TABLE ${USERS_TABLE.name} ADD ${USERS_TABLE.columns.visibility} ENUM('${USER_VISIBILITY_TYPE.ALL}', '${USER_VISIBILITY_TYPE.FOF}') NOT NULL DEFAULT '${USER_VISIBILITY_TYPE.ALL}'
     `)
-    ),
-    down: (conn, cb) => migrateWithQueries(cb,
-        conn.query(`DROP TABLE ${CONNECTIONS_TABLE.name}`) &&
-        conn.query(`ALTER TABLE ${USERS_TABLE.name} DROP COLUMN ${USERS_TABLE.columns.visibility}`)
-    ),
+  ),
+  down: (conn, cb) => migrateWithQueries(cb,
+    conn.query(`DROP TABLE ${CONNECTIONS_TABLE.name}`)
+    && conn.query(`ALTER TABLE ${USERS_TABLE.name} DROP COLUMN ${USERS_TABLE.columns.visibility}`)
+  ),
 }
