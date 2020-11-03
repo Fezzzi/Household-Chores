@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import * as NotificationTypes from 'shared/constants/notificationTypes';
 import { ERROR } from 'shared/constants/localeMessages';
 import { findFacebookUser, findGoogleUser, assignUserProvider, updateLoginTime } from 'serverSrc/database/models/users';
-import { setUserCookie } from 'serverSrc/helpers/auth';
+import { setSession } from 'serverSrc/helpers/auth';
 
 const config = dotenv.config();
 
@@ -44,7 +44,7 @@ const logInWithProvider = async (req: any, res: any, condition: boolean, getID: 
     const userId = await getID();
     if (userId !== -1) {
       updateLoginTime(userId);
-      setUserCookie(req, res, userId);
+      setSession(req, res, userId);
       return true;
     }
   }
@@ -85,6 +85,6 @@ export const logInWithIds = async (req: any, res: any, userId: number, googleId:
     return false;
   }
   updateLoginTime(userId);
-  setUserCookie(req, res, userId);
+  setSession(req, res, userId);
   return true;
 };
