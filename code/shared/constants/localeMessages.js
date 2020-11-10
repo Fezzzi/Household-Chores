@@ -39,6 +39,8 @@ export const ERROR = {
   INCORRECT_PASS: 'error.incorrectPass',
   INVALID_DATA: 'error.invalidData',
   INVALID_EMAIL: 'error.invalidEmail',
+  UPLOADING_ERROR: 'error.uploadingError',
+  EMAIL_USED: 'error.emailUsed',
   INVALID_FACEBOOK_DATA: 'error.invalidFacebookData',
   INVALID_GOOGLE_DATA: 'error.invalidGoogleData',
   LOG_IN_ERROR: 'error.logInError',

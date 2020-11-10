@@ -24,18 +24,14 @@ const getResetPassFunc = ({ email: { value: email } }: any) => async () => {
 };
 
 const getLogInFunc = (req: any, res: any, { email: { value: email }, password: { value: password } }: any) => async () => {
-  const loggedUserId = await logInUser(email, password);
-  if (loggedUserId === -1) {
+  const result = await logInUser(email, password);
+  if (result === null) {
     return {
       [NotificationTypes.ERRORS]: [ERROR.INCORRECT_PASS],
     };
-  } else if (loggedUserId === 0) {
-    return {
-      [NotificationTypes.ERRORS]: [ERROR.LOG_IN_ERROR],
-    };
   }
 
-  setSession(req, res, loggedUserId);
+  setSession(req, res, result.userId, result.fsKey);
   return {};
 };
 
@@ -47,10 +43,10 @@ const getSignUpFunc = (req: any, res: any, body: any) => async () => {
     return result;
   }
 
-  const userId = await findUser(email);
-  if (userId !== -1) {
+  const user = await findUser(email);
+  if (user !== null) {
     if (googleId || facebookId) {
-      if (await logInWithIds(req, res, userId, googleId, facebookId)) {
+      if (await logInWithIds(req, res, user.userId, googleId, facebookId, user.fsKey)) {
         return {};
       } else {
         return {
@@ -61,14 +57,14 @@ const getSignUpFunc = (req: any, res: any, body: any) => async () => {
     return getLogInFunc(req, res, body)();
   }
 
-  const { insertId } = await SignUpUser(
+  const { insertId, fsKey } = await SignUpUser(
     email, nickname,
     (password && password.value) || null,
     photo || null,
     googleId, facebookId,
   );
   if (insertId) {
-    setSession(req, res, insertId);
+    setSession(req, res, insertId, fsKey);
   }
   return {
     [NotificationTypes.ERRORS]: insertId ? [] : [ERROR.SIGN_UP_ERROR],

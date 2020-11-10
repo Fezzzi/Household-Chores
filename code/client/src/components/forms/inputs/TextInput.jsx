@@ -73,7 +73,7 @@ class TextInput extends Component {
                 )}
                 {showPassButton && (
                   <ShowPassWrapper>
-                    <ShowPassButton onClick={e => {
+                    <ShowPassButton tabIndex={-1} onClick={e => {
                       e.preventDefault();
                       this.setState({ showPassword: !showPassword });
                     }}

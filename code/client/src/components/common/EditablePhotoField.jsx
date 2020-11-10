@@ -19,6 +19,7 @@ const EditablePhotoField = ({
 
   const handleFileRemove = e => {
     setEditing(false);
+    setHovering(false);
     e.stopPropagation();
   };
 

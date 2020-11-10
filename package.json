@@ -84,6 +84,7 @@
     "mysql": "^2.18.1",
     "nodemailer": "^6.4.8",
     "react-scripts": "^3.4.1",
+    "rimraf": "^3.0.2",
     "ts-loader": "^8.0.2",
     "ts-node": "^8.10.2",
     "tsconfig-paths": "^3.9.0",
@@ -102,6 +103,7 @@
     "lint-fix": "eslint --fix --cache -c config/eslintrc.js . --ext .js,.jsx,.ts",
     "mocha": "mocha -r ts-node/register -r tsconfig-paths/register -r ./config/mocha-env-config.js \"tests/**/*.spec.ts\"",
     "migrate": "ts-node -r tsconfig-paths/register config/migration.js",
+    "clean-fs": "ts-node -r tsconfig-paths/register bin/clean-uploads.js",
     "configure": "cp config/git-hooks/pre-push .git/hooks/pre-push"
   },
   "browserslist": {

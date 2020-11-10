@@ -3,16 +3,17 @@ import PropTypes from 'prop-types';
 import { Save } from '@material-ui/icons';
 
 import { updateHandler } from 'clientSrc/helpers/form';
-import { FORM } from 'shared/constants/localeMessages';
-import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
-import * as InputTypes from 'shared/constants/inputTypes';
-
 import { FormBody } from 'clientSrc/styles/blocks/settings';
+import * as InputTypes from 'shared/constants/inputTypes';
+import { FORM } from 'shared/constants/localeMessages';
+import { PROFILE } from 'shared/constants/settingsDataKeys';
+import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
+
 import { SimpleFloatingElement } from '../../portals';
 import ProfileFormHeader from './ProfileFormHeader';
 import Input from '../common/Input';
 
-const ProfileForm = ({ data, submitHandler }) => {
+const ProfileForm = ({ data, onSubmit }) => {
   const [state, setState] = useState({
     submitMessage: FORM.SAVE,
     isFormValid: true,
@@ -21,10 +22,8 @@ const ProfileForm = ({ data, submitHandler }) => {
     errors: {},
   });
 
-  const { photo, name, email, visibility } = data;
+  const { [PROFILE.PHOTO]: photo, [PROFILE.NAME]: name, [PROFILE.EMAIL]: email, [PROFILE.CONNECTION_VISIBILITY]: visibility } = data;
   const { submitMessage, errors, isFormValid, isFormSending, inputs } = state;
-
-  const handleSubmit = submitHandler(inputs, setState, FORM.SAVE, FORM.SAVING);
 
   return (
     <>
@@ -34,7 +33,7 @@ const ProfileForm = ({ data, submitHandler }) => {
           sending={isFormSending}
           enabled={isFormValid}
           icon={<Save />}
-          onClick={handleSubmit}
+          onClick={() => onSubmit(inputs, setState, FORM.SAVE, FORM.SAVING)}
         />
       )}
       <ProfileFormHeader
@@ -48,12 +47,12 @@ const ProfileForm = ({ data, submitHandler }) => {
 
       <FormBody>
         <Input
-          name="connection-visibility"
+          name={PROFILE.CONNECTION_VISIBILITY}
           type={InputTypes.SWITCH}
           label={FORM.USER_VISIBILITY}
           values={[USER_VISIBILITY_TYPE.FOF, USER_VISIBILITY_TYPE.ALL]}
           placeholder={visibility}
-          updateInput={updateHandler('connection-visibility', setState, undefined, visibility)}
+          updateInput={updateHandler(PROFILE.CONNECTION_VISIBILITY, setState, undefined, visibility)}
         />
       </FormBody>
     </>
@@ -62,12 +61,12 @@ const ProfileForm = ({ data, submitHandler }) => {
 
 ProfileForm.propTypes = {
   data: PropTypes.shape({
-    photo: PropTypes.string,
-    name: PropTypes.string,
-    email: PropTypes.string,
-    visibility: PropTypes.string,
+    [PROFILE.PHOTO]: PropTypes.string,
+    [PROFILE.NAME]: PropTypes.string,
+    [PROFILE.EMAIL]: PropTypes.string,
+    [PROFILE.CONNECTION_VISIBILITY]: PropTypes.string,
   }).isRequired,
-  submitHandler: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ProfileForm;

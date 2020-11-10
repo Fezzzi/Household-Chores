@@ -5,13 +5,13 @@ import { findUser } from 'serverSrc/database/models/users';
 
 export const validateResetData = async ({ email: { valid, value } }: any): Promise<boolean|number> =>
   valid && isInputValid(InputTypes.EMAIL, value).valid
-  && findUser(value);
+  && await findUser(value) !== null;
 
 export const validateLoginData = async ({ email, password }: any): Promise<boolean|number> =>
   email.valid && password.valid
   && isInputValid(InputTypes.EMAIL, email.value).valid
   && isInputValid(InputTypes.PASSWORD, password.value).valid
-  && findUser(email.value);
+  && await findUser(email.value) !== null;
 
 export const validateSignupData = async ({ email, nickname, password, googleToken, facebook }: any): Promise<boolean> =>
   email.valid && nickname.valid

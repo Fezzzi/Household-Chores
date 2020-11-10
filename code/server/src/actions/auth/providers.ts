@@ -39,12 +39,17 @@ export const getProvidersUserId = async (googleToken: string, facebook: any): Pr
   facebookId: (facebook && facebook.signedRequest && getFacebookUserId(facebook)) || null,
 });
 
-const logInWithProvider = async (req: any, res: any, condition: boolean, getID: () => Promise<number>): Promise<boolean> => {
+const logInWithProvider = async (
+  req: any,
+  res: any,
+  condition: boolean,
+  getID: () => Promise<{ userId: number, fsKey: string } | null>,
+): Promise<boolean> => {
   if (condition) {
-    const userId = await getID();
-    if (userId !== -1) {
-      updateLoginTime(userId);
-      setSession(req, res, userId);
+    const result = await getID();
+    if (result !== null) {
+      updateLoginTime(result.userId);
+      setSession(req, res, result.userId, result.fsKey);
       return true;
     }
   }
@@ -56,7 +61,7 @@ export const handleProvidersLogIn = async (
   googleId: string|-1,
   facebookId: string|-1,
   googleToken: string,
-  facebook: any
+  facebook: any,
 ): Promise<object|false> => {
   if (googleId === -1) {
     return {
@@ -79,12 +84,19 @@ export const handleProvidersLogIn = async (
   return false;
 };
 
-export const logInWithIds = async (req: any, res: any, userId: number, googleId: string, facebookId: string): Promise<boolean> => {
+export const logInWithIds = async (
+  req: any,
+  res: any,
+  userId: number,
+  googleId: string,
+  facebookId: string,
+  fsKey: string,
+): Promise<boolean> => {
   const success = await assignUserProvider(userId, googleId, facebookId);
   if (!success) {
     return false;
   }
   updateLoginTime(userId);
-  setSession(req, res, userId);
+  setSession(req, res, userId, fsKey);
   return true;
 };

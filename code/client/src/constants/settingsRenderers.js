@@ -9,7 +9,7 @@ import { FORM, SETTINGS } from 'shared/constants/localeMessages';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
 import * as SettingTypes from 'shared/constants/settingTypes';
 
-const renderConnectionListForm = (dataKey, emptyMessage, tab, headlineMessage) => (data, submitHandler) => (
+const renderConnectionListForm = (dataKey, emptyMessage, tab, headlineMessage) => (data, handleSubmit) => (
   <ConnectionListForm
     data={data}
     dataKey={dataKey}
@@ -21,8 +21,8 @@ const renderConnectionListForm = (dataKey, emptyMessage, tab, headlineMessage) =
 
 export const settingsRenderers = {
   [CATEGORIES.PROFILE]: {
-    [TABS.GENERAL]: (data, submitHandler) => (
-      <ProfileForm data={data} submitHandler={submitHandler} />
+    [TABS.GENERAL]: (data, handleSubmit) => (
+      <ProfileForm data={data} onSubmit={handleSubmit} />
     ),
     [TABS.NOTIFICATIONS]: data => (
       <NotificationForm data={data} />
@@ -43,7 +43,7 @@ export const settingsRenderers = {
       TABS.MY_CONNECTIONS,
       SETTINGS[`${SettingTypes.COLUMNS.TAB}_${TABS.MY_CONNECTIONS}`],
     ),
-    [TABS.FIND_CONNECTION]: (data, submitHandler) => (
+    [TABS.FIND_CONNECTION]: (data, handleSubmit) => (
       <ConnectionSearchForm
         data={data}
         dataKey={CONNECTION_STATE_TYPE.FOUND}
@@ -66,9 +66,9 @@ export const settingsRenderers = {
   },
   [CATEGORIES.HOUSEHOLDS]: {
     tabModifiers: data => tab => tab === TABS.INVITATIONS && ` (${data.invitations?.length || 0})`,
-    [TABS.NEW_HOUSEHOLD]: (data, submitHandler) => <HouseholdCreateForm connections={data.connections} />,
-    [TABS.INVITATIONS]: (data, submitHandler) => <HouseholdInvitationList invitations={data.invitations || []} />,
-    [TABS._HOUSEHOLD]: (data, submitHandler, tab) => (
+    [TABS.NEW_HOUSEHOLD]: (data, handleSubmit) => <HouseholdCreateForm connections={data.connections} />,
+    [TABS.INVITATIONS]: (data, handleSubmit) => <HouseholdInvitationList invitations={data.invitations || []} />,
+    [TABS._HOUSEHOLD]: (data, handleSubmit, tab) => (
       <HouseholdModificationForm
         household={data.households?.find(({ key }) => key === tab)}
         connections={data.connections}

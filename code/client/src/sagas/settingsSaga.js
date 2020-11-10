@@ -28,15 +28,16 @@ function* editSettingsSaga({ payload: { category, tab, inputs } }) {
       yield put(NotificationActions.addNotifications({
         [NotificationTypes.ERRORS]: [INFO.NOTHING_TO_UPDATE],
       }));
-    }
-    const { data } = yield call(updateSettings, category, tab, inputs);
+    } else {
+      const { data } = yield call(updateSettings, category, tab, inputs);
 
-    yield call(handleResponse, data, function* (response) {
-      yield put(SettingsActions.loadSettingsSuccess(response));
-      yield put(NotificationActions.addNotifications({
-        [NotificationTypes.SUCCESSES]: [SUCCESS.SETTINGS_UPDATED],
-      }));
-    });
+      yield call(handleResponse, data, function* (response) {
+        yield put(SettingsActions.loadSettingsSuccess(response));
+        yield put(NotificationActions.addNotifications({
+          [NotificationTypes.SUCCESSES]: [SUCCESS.SETTINGS_UPDATED],
+        }));
+      });
+    }
   } catch (error) {
     yield put(NotificationActions.addNotifications({
       [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],

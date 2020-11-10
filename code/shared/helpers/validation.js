@@ -10,17 +10,18 @@ const isEmailValid = value => {
   };
 };
 
-const isImageValid = (files, maxImageSize = 1000000) => {
+const isImageValid = (file, maxImageSize = 2000000) => {
   const re = /^image\/.+$/;
   return {
-    valid: files[0]
-      && re.test(files[0].type)
-      && files[0].size < maxImageSize,
+    valid: file
+      && re.test(file.type)
+      && file.size < maxImageSize
+      && (!file.data || file.data.length < maxImageSize * 1.4),
     message: ERROR.IMAGE_INVALID,
   };
 };
 
-export const isInputValid = (type, value, maxFileSize) => {
+export const isInputValid = (type, value, constraints) => {
   switch (type) {
     case InputTypes.TEXT:
       return {
@@ -35,8 +36,14 @@ export const isInputValid = (type, value, maxFileSize) => {
     case InputTypes.EMAIL:
       return isEmailValid(value);
     case InputTypes.PHOTO:
-      return isImageValid(value, maxFileSize);
+      return isImageValid(value, constraints);
+    case InputTypes.SWITCH: {
+      return {
+        valid: constraints.indexOf(value) !== -1,
+        message: ERROR.INVALID_DATA
+      }
+    }
     default:
-      return { valid: false };
+      return { valid: false, message: '' };
   }
 };

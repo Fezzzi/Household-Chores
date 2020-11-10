@@ -5,13 +5,12 @@ import { HighlightOff, LockOpen } from '@material-ui/icons';
 import { updateHandler } from 'clientSrc/helpers/form';
 import { FormHeader, FormHeaderPhoto, FormHeaderTitle } from 'clientSrc/styles/blocks/form';
 import {
-  ProfileHeaderSubtitle,
-  ProfilePasswordBlock, ProfilePasswordClose, ProfilePasswordIcon, ProfilePasswordInputs,
-  ProfilePasswordTitle,
-  ProfileSwitchesBlock,
+  ProfileHeaderSubtitle, ProfilePasswordBlock, ProfilePasswordClose, ProfilePasswordIcon,
+  ProfilePasswordInputs, ProfilePasswordTitle, ProfileSwitchesBlock,
 } from 'clientSrc/styles/blocks/settings';
 import * as InputTypes from 'shared/constants/inputTypes';
 import { FORM } from 'shared/constants/localeMessages';
+import { PROFILE } from 'shared/constants/settingsDataKeys';
 
 import LocaleSwitch from '../inputs/LocaleSwitch';
 import ThemeSwitch from '../inputs/ThemeSwitch';
@@ -24,17 +23,18 @@ import LocaleText from '../../common/LocaleText';
 const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState }) => {
   const [passwordEditing, setPasswordEditing] = useState(false);
 
+  // todo: Fix input hiding
   const clearPasswords = () => {
     setPasswordEditing(false);
 
     setFormState(prevState => {
       const newInputs = { ...prevState.inputs };
-      delete newInputs['old-password'];
-      delete newInputs['new-password'];
+      delete newInputs[PROFILE.OLD_PASSWORD];
+      delete newInputs[PROFILE.NEW_PASSWORD];
 
       const newErrors = { ...prevState.errors };
-      delete newErrors['old-password'];
-      delete newErrors['new-password'];
+      delete newErrors[PROFILE.OLD_PASSWORD];
+      delete newErrors[PROFILE.NEW_PASSWORD];
 
       return {
         ...prevState,
@@ -42,7 +42,7 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
         errors: newErrors,
       };
     });
-  };
+  }
 
   return (
     <FormHeader>
@@ -50,24 +50,26 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
         <EditableField
           editing={passwordEditing}
           setEditing={setPasswordEditing}
+          iconRight={40}
+          centered={false}
           input={
             <ProfilePasswordInputs>
               <ProfilePasswordClose onClick={clearPasswords}>
                 <HighlightOff />
               </ProfilePasswordClose>
               <Input
-                name="old-password"
+                name={PROFILE.OLD_PASSWORD}
                 type={InputTypes.PASSWORD}
                 message={FORM.OLD_PASSWORD}
-                inputError={errors['old-password']}
-                updateInput={updateHandler('old-password', setFormState)}
+                inputError={errors[PROFILE.OLD_PASSWORD]}
+                updateInput={updateHandler(PROFILE.OLD_PASSWORD, setFormState)}
               />
               <Input
-                name="new-password"
+                name={PROFILE.NEW_PASSWORD}
                 type={InputTypes.PASSWORD}
                 message={FORM.NEW_PASSWORD}
-                inputError={errors['new-password']}
-                updateInput={updateHandler('new-password', setFormState)}
+                inputError={errors[PROFILE.NEW_PASSWORD]}
+                updateInput={updateHandler(PROFILE.NEW_PASSWORD, setFormState)}
               />
             </ProfilePasswordInputs>
           }
@@ -82,32 +84,32 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
       </ProfilePasswordBlock>
 
       <EditablePhotoField
-        name="photo"
+        name={PROFILE.PHOTO}
         placeholder={photo}
         setFormState={setFormState}
-        error={errors.photo}
+        error={errors[PROFILE.PHOTO]}
       >
         <FormHeaderPhoto src={photo} />
       </EditablePhotoField>
       <FormHeaderTitle>
         <EditableTextField
-          name="name"
-          edited={inputs.name}
+          name={PROFILE.NAME}
+          edited={!!inputs[PROFILE.NAME]}
           placeholder={name}
           setFormState={setFormState}
-          error={errors.name}
+          error={errors[PROFILE.NAME]}
         >
           {name}
         </EditableTextField>
       </FormHeaderTitle>
       <ProfileHeaderSubtitle>
         <EditableTextField
-          name="email"
-          edited={inputs.email}
+          name={PROFILE.EMAIL}
+          edited={!!inputs[PROFILE.EMAIL]}
           placeholder={email}
           isEmail
           setFormState={setFormState}
-          error={errors.email}
+          error={errors[PROFILE.EMAIL]}
         >
           {email}
         </EditableTextField>

@@ -20,8 +20,8 @@ dotenv.config();
 const app = express();
 
 // Get data from raw HTTP requests and json bodies to request object
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '3mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '3mb' }));
 
 // Initialize cookie-parser to allow us access the cookies stored in the browser.
 app.use(cookieParser());
@@ -68,6 +68,7 @@ app.options('*', cors());
 
 // Serve static assets
 app.use(express.static(path.resolve('./dist')));
+app.use(express.static(path.resolve('./uploads')));
 
 // Checks if user's cookie is still saved in the browser without associated user, then clears the cookie
 app.use((req, res, next) => {

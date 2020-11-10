@@ -64,13 +64,13 @@ export const updateHandler = (name, setFormState, formValidFunc, placeholder) =>
   });
 };
 
-export const getSubmitHandler = (category, tab) => (inputs, setFormState, submitMessage, submittingMessage) => {
+export const getSubmitHandler = (category, tab) => {
   const [timer, setTimer] = useState(0);
   const dispatch = useDispatch();
 
   useEffect(() => () => timer && clearTimeout(timer), []);
 
-  return useCallback(() => {
+  return useCallback((inputs, setFormState, submitMessage, submittingMessage) => {
     setFormState(prevState => ({
       ...prevState,
       isFormSending: true,
@@ -84,7 +84,7 @@ export const getSubmitHandler = (category, tab) => (inputs, setFormState, submit
         isFormSending: false,
         submitMessage,
       })), SUBMIT_TIMEOUT));
-  }, [dispatch]);
+  }, [category, tab, dispatch]);
 };
 
 export const handlerWrapper = handlerFunc => e => {

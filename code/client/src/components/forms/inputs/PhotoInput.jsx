@@ -26,7 +26,7 @@ const PhotoInputComponent = ({
     if (!files[0]) {
       return;
     }
-    const { valid: inputValid, message: inputMessage } = isInputValid(InputTypes.PHOTO, files);
+    const { valid: inputValid, message: inputMessage } = isInputValid(InputTypes.PHOTO, files[0]);
     if (!inputValid) {
       addNotification(NotificationTypes.WARNINGS, inputMessage || ERROR.IMAGE_INVALID);
       return;
@@ -34,7 +34,12 @@ const PhotoInputComponent = ({
     const reader = new FileReader();
     reader.onload = ({ target: { result } }) => {
       setFile(result);
-      updateInput(inputValid, result);
+      updateInput(inputValid, {
+        type: files[0].type,
+        size: files[0].size,
+        name: files[0].name,
+        data: result,
+      });
     };
     reader.readAsDataURL(files[0]);
   }, []);

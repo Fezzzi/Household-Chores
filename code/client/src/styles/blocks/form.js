@@ -26,7 +26,6 @@ export const FormHeaderTitle = styled.h1`
   font-weight: 800;
   font-size: 2.2em;
   display: flex;
-  width: 250px;
   margin: 15px 5px 0;
   justify-content: center;
   align-content: center;

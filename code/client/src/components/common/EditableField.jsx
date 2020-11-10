@@ -4,7 +4,7 @@ import { Edit } from '@material-ui/icons';
 
 import { EditableFieldIcon, EditableFieldWrapper } from 'clientSrc/styles/blocks/common';
 
-const EditableField = ({ input, editing, setEditing, children }) => {
+const EditableField = ({ input, editing, setEditing, iconRight, centered, children }) => {
   const [hovering, setHovering] = useState(false);
 
   return (
@@ -21,17 +21,24 @@ const EditableField = ({ input, editing, setEditing, children }) => {
         : (
           <>
             {children}
-            {hovering && <EditableFieldIcon centered><Edit /></EditableFieldIcon>}
+            {hovering && <EditableFieldIcon iconRight={iconRight} centered={centered}><Edit /></EditableFieldIcon>}
           </>
         )}
     </EditableFieldWrapper>
   );
 };
 
+EditableField.defaultProps = {
+  iconRight: 0,
+  centered: true,
+}
+
 EditableField.propTypes = {
   editing: PropTypes.bool.isRequired,
   setEditing: PropTypes.func.isRequired,
   input: PropTypes.element.isRequired,
+  iconRight: PropTypes.number,
+  centered: PropTypes.bool,
   children: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.node,

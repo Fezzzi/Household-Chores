@@ -1,7 +1,8 @@
 import { database } from 'serverSrc/database';
-import { encryptPass, checkPass, generatePass } from 'serverSrc/helpers/passwords';
-import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
+import {encryptPass, checkPass, generatePass, generateFsKey} from 'serverSrc/helpers/passwords';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
+import { PROFILE } from "shared/constants/settingsDataKeys";
+import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
 
 import USERS_TABLE from './tables/users';
 import CONNECTIONS_TABLE from './tables/connections';
@@ -11,7 +12,7 @@ const {
   columns: {
     id: tabID, email: tabEmail, nickname: tabNickname, password: tabPassword, photo: tabPhoto,
     visibility: tabVisibility, google_id: tabGoogleID, facebook_id: tabFacebookID,
-    date_registered: tabDateRegistered, date_last_active: tabDateLastActive,
+    date_registered: tabDateRegistered, date_last_active: tabDateLastActive, fs_key: tabFSKey,
   },
 } = USERS_TABLE;
 
@@ -22,53 +23,96 @@ const {
   },
 } = CONNECTIONS_TABLE;
 
-export const findUser = async (email: string): Promise<number> => {
+export const isCorrectPassword = async (password: string, userId: number): Promise<boolean> => {
   const result = await database.query(
-    `SELECT ${tabID} FROM ${tName} WHERE ${tabEmail}=?`, [email]
+    `SELECT ${tabPassword} FROM ${tName} WHERE ${tabID}=?`, [userId]
+  );
+
+  return result && result.length && await checkPass(password, result[0][tabPassword]);
+}
+export const findProfileData = async (userId: number): Promise<Record<string, string | number>> => {
+  const result = await database.query(`
+    SELECT ${tabNickname}, ${tabEmail}, ${tabPhoto}, ${tabVisibility} FROM ${tName} WHERE ${tabID}=${userId}
+  `);
+
+  return result[0] && {
+    [PROFILE.NAME]: result[0][tabNickname],
+    [PROFILE.EMAIL]: result[0][tabEmail],
+    [PROFILE.PHOTO]: result[0][tabPhoto],
+    [PROFILE.CONNECTION_VISIBILITY]: result[0][tabVisibility],
+  }
+}
+
+export const findUser = async (email: string): Promise<{ userId: number, fsKey: string } | null> => {
+  const result = await database.query(
+    `SELECT ${tabID}, ${tabFSKey} FROM ${tName} WHERE ${tabEmail}=?`, [email]
   );
 
   return result && result.length
-    ? result[0][tabID]
-    : -1;
+    ? result[0]
+    : null;
 };
 
-export const findGoogleUser = async (googleId: string): Promise<number> => {
+export const findGoogleUser = async (googleId: string): Promise<{ userId: number, fsKey: string } | null> => {
   const result = await database.query(
-    `SELECT ${tabID} FROM ${tName} WHERE ${tabGoogleID}=?`, [googleId]
+    `SELECT ${tabID}, ${tabFSKey} FROM ${tName} WHERE ${tabGoogleID}=?`, [googleId]
   );
 
   return result && result.length
-    ? result[0][tabID]
-    : -1;
+    ? result[0]
+    : null;
 };
 
-export const findFacebookUser = async (facebookId: string): Promise<number> => {
+export const findFacebookUser = async (facebookId: string): Promise<{ userId: number, fsKey: string } | null> => {
   const result = await database.query(
-    `SELECT ${tabID} FROM ${tName} WHERE ${tabFacebookID}=?`, [facebookId]
+    `SELECT ${tabID}, ${tabFSKey} FROM ${tName} WHERE ${tabFacebookID}=?`, [facebookId]
   );
 
   return result && result.length
-    ? result[0][tabID]
-    : -1;
+    ? result[0]
+    : null;
 };
 
-export const logInUser = async (email: string, password: string): Promise<number> => {
+export const logInUser = async (email: string, password: string): Promise<{ userId: number, fsKey: string } | null> => {
   const result = await database.query(
-    `SELECT ${tabPassword}, ${tabID} FROM ${tName} WHERE ${tabEmail}=?`, [email]
+    `SELECT ${tabPassword}, ${tabID}, ${tabFSKey} FROM ${tName} WHERE ${tabEmail}=?`, [email]
   );
 
   const validPass = result && result.length && await checkPass(password, result[0][tabPassword]);
   if (!validPass) {
-    return -1;
+    return null;
   }
 
   const userId = result[0][tabID];
   updateLoginTime(userId);
-  return userId;
+  return {
+    userId,
+    fsKey: result[0][tabFSKey],
+  };
 };
 
 export const updateLoginTime = (userId: number) =>
   database.query(`UPDATE ${tName} SET ${tabDateLastActive}=NOW() WHERE ${tabID}=?`, [userId]);
+
+export const updateUserData = async (data: Record<string, string | number>, userId: number): Promise<boolean> => {
+  const newPass = data[PROFILE.NEW_PASSWORD] && await encryptPass(data[PROFILE.NEW_PASSWORD] as string);
+  return database.query(
+    `UPDATE ${tName} SET
+      ${
+        [
+          data[PROFILE.NAME] && `${tabNickname}=?`,
+          data[PROFILE.EMAIL] && `${tabEmail}=?`,
+          data[PROFILE.PHOTO] && `${tabPhoto}=?`,
+          data[PROFILE.NEW_PASSWORD] && `${tabPassword}=?`,
+          data[PROFILE.CONNECTION_VISIBILITY] && `${tabVisibility}=?`,
+        ].filter(Boolean).join(',')
+      }
+      WHERE ${tabID}=${userId}
+    `, [
+      data[PROFILE.NAME], data[PROFILE.EMAIL], data[PROFILE.PHOTO], newPass, data[PROFILE.CONNECTION_VISIBILITY]
+    ].filter(Boolean)
+  );
+};
 
 export const SignUpUser = async (
   email: string,
@@ -77,14 +121,23 @@ export const SignUpUser = async (
   photo: string|null,
   googleId: string,
   facebookId: string,
-): Promise<{ insertId: number }> => {
+): Promise<{ insertId: number, fsKey: string }> => {
   const pass = await encryptPass(password || generatePass());
-
-  return database.query(`
+  const result = await database.query(`
     INSERT INTO ${tName} (
       ${tabEmail}, ${tabNickname}, ${tabPassword}, ${tabPhoto}, ${tabGoogleID}, ${tabFacebookID}, ${tabDateRegistered}, ${tabDateLastActive}
     ) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
   `, [email, nickname, pass, photo, googleId, facebookId], false);
+
+  if (result.insertId) {
+    const fsKey = generateFsKey(result.insertId);
+    await database.query(`UPDATE ${tName} SET ${tabFSKey}='${fsKey}' WHERE ${tabID}=${result.insertId}`);
+    return {
+      insertId: result.insertId,
+      fsKey,
+    };
+  }
+  return result;
 };
 
 export const assignUserProvider = async (userId: number, googleId: string, facebookId: string): Promise<boolean> => {
