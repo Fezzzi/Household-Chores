@@ -16,7 +16,7 @@ import { COMMON, FORM } from 'shared/constants/localeMessages';
 import EditorOverlay from '~/static/resources/editor-overlay.png';
 
 const MAX_SIZE = 3000000000;
-const WINDOW_SIZE = 150;
+const IMG_SIZE = 150;
 const CANVAS_SIZE = 250;
 
 const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
@@ -38,7 +38,6 @@ const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
   }, [photoBase, photoObj]);
 
   const dispatch = useDispatch();
-  const borderColor = getComputedStyle(document.getElementById('pageWrapper')).getPropertyValue(COLORS.BORDER);
 
   const canvasRef = useRef(null);
   const canvasContext = useMemo(() => canvasRef.current?.getContext('2d'), [canvasRef.current]);
@@ -46,22 +45,22 @@ const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
   useEffect(() => {
     // We postpone canvas drawing until canvas and overlay image are both properly loaded
     if (canvasContext && (editorOverlay.complete && editorOverlay.naturalWidth !== 0)) {
-      canvasContext.clearRect(0, 0, WINDOW_SIZE, WINDOW_SIZE);
+      canvasContext.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
       const zoomMultiple = zoom >= 100
         ? (zoom - 85) / 15
         : 1 / ((130 - zoom) / 30);
 
-      const windowSize = WINDOW_SIZE * zoomMultiple;
+      const windowSize = CANVAS_SIZE * zoomMultiple;
       const sx = ((photoObj.width / 2) - windowSize / 2) + offsets.x;
       const sy = ((photoObj.height / 2) - windowSize / 2) + offsets.y;
 
-      canvasContext.drawImage(photoObj, sx, sy, windowSize, windowSize, 0, 0, WINDOW_SIZE, WINDOW_SIZE);
+      canvasContext.drawImage(photoObj, sx, sy, windowSize, windowSize, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
       canvasContext.drawImage(editorOverlay, 0, 0);
       canvasContext.beginPath();
-      canvasContext.arc(WINDOW_SIZE / 2, WINDOW_SIZE / 2, WINDOW_SIZE / 2, 0, 2 * Math.PI);
+      canvasContext.arc(CANVAS_SIZE / 2, CANVAS_SIZE / 2, IMG_SIZE / 2, 0, 2 * Math.PI);
       canvasContext.lineWidth = 3;
-      canvasContext.strokeStyle = borderColor;
+      canvasContext.strokeStyle = '#FAFAFA';
       canvasContext.setLineDash([5, 5]);
       canvasContext.stroke();
     }
@@ -71,18 +70,18 @@ const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
 
   const cropPhoto = (photoObj, offsets, zoom) => {
     const canvas = document.createElement('canvas');
-    canvas.width = canvas.height = WINDOW_SIZE;
+    canvas.width = canvas.height = IMG_SIZE;
     const context = canvas.getContext('2d');
 
     const zoomMultiple = zoom >= 100
       ? (zoom - 85) / 15
       : 1 / ((130 - zoom) / 30);
 
-    const windowSize = WINDOW_SIZE * zoomMultiple;
+    const windowSize = IMG_SIZE * zoomMultiple;
     const sx = ((photoObj.width / 2) - windowSize / 2) + offsets.x;
     const sy = ((photoObj.height / 2) - windowSize / 2) + offsets.y;
 
-    context.drawImage(photoObj, sx, sy, windowSize, windowSize, 0, 0, WINDOW_SIZE, WINDOW_SIZE);
+    context.drawImage(photoObj, sx, sy, windowSize, windowSize, 0, 0, IMG_SIZE, IMG_SIZE);
     return canvas.toDataURL();
   };
 
@@ -130,8 +129,8 @@ const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
           <ModalPhotoWrapper>
             <ModalPhotoCanvas
               ref={canvasRef}
-              width={WINDOW_SIZE}
-              height={WINDOW_SIZE}
+              width={CANVAS_SIZE}
+              height={CANVAS_SIZE}
               onMouseDown={e => setDraggingStart({ x: e.pageX, y: e.pageY })}
             />
           </ModalPhotoWrapper>

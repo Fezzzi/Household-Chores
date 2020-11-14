@@ -62,9 +62,9 @@ export const ModalPhotoControls = styled.div`
 `;
 
 export const ModalPhotoWrapper = styled.div`
-  width: 150px;
-  height: 150px;
-  margin: 50px;
+  width: 250px;
+  height: 250px;
+  margin: 20px;
   display: flex;
   flex-flow: row;
 `;
@@ -88,13 +88,13 @@ export const ModalPhotoSliderWrapper = styled.div`
 
 export const ModalPhotoSlider = styled.input`
   height: 8px;
-  width: 198px;
+  width: 248px;
   background: var(--cThemeBack);
   border: 1px solid var(--cBorder);
   transform: rotate(90deg);
   appearance: none;
-  left: -90px;
-  top: 118px;
+  left: -120px;
+  top: 138px;
   position: absolute;
   
   :focus, :active {

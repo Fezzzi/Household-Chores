@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { HighlightOff, LockOpen } from '@material-ui/icons';
 
@@ -23,8 +23,8 @@ import LocaleText from '../../common/LocaleText';
 const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState }) => {
   const [passwordEditing, setPasswordEditing] = useState(false);
 
-  // todo: Fix input hiding
-  const clearPasswords = () => {
+  const clearPasswords = useCallback(e => {
+    e.stopPropagation();
     setPasswordEditing(false);
 
     setFormState(prevState => {
@@ -42,44 +42,50 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
         errors: newErrors,
       };
     });
-  };
+  }, [setPasswordEditing, setFormState])
 
   return (
     <FormHeader>
       <ProfilePasswordBlock>
+        {console.log('RERENDERING WITH', passwordEditing)}
         <EditableField
           editing={passwordEditing}
           setEditing={setPasswordEditing}
           iconRight={40}
           centered={false}
-          input={
-            <ProfilePasswordInputs>
-              <ProfilePasswordClose onClick={clearPasswords}>
-                <HighlightOff />
-              </ProfilePasswordClose>
-              <Input
-                name={PROFILE.OLD_PASSWORD}
-                type={InputTypes.PASSWORD}
-                message={FORM.OLD_PASSWORD}
-                inputError={errors[PROFILE.OLD_PASSWORD]}
-                updateInput={updateHandler(PROFILE.OLD_PASSWORD, setFormState)}
-              />
-              <Input
-                name={PROFILE.NEW_PASSWORD}
-                type={InputTypes.PASSWORD}
-                message={FORM.NEW_PASSWORD}
-                inputError={errors[PROFILE.NEW_PASSWORD]}
-                updateInput={updateHandler(PROFILE.NEW_PASSWORD, setFormState)}
-              />
-            </ProfilePasswordInputs>
-          }
         >
-          <ProfilePasswordIcon>
-            <LockOpen />
-          </ProfilePasswordIcon>
-          <ProfilePasswordTitle>
-            <LocaleText message={FORM.CHANGE_PASSWORD} />
-          </ProfilePasswordTitle>
+          {passwordEditing
+            ? (
+              <ProfilePasswordInputs>
+                <ProfilePasswordClose onClick={clearPasswords}>
+                  <HighlightOff />
+                </ProfilePasswordClose>
+                <Input
+                  name={PROFILE.OLD_PASSWORD}
+                  type={InputTypes.PASSWORD}
+                  message={FORM.OLD_PASSWORD}
+                  inputError={errors[PROFILE.OLD_PASSWORD]}
+                  updateInput={updateHandler(PROFILE.OLD_PASSWORD, setFormState)}
+                />
+                <Input
+                  name={PROFILE.NEW_PASSWORD}
+                  type={InputTypes.PASSWORD}
+                  message={FORM.NEW_PASSWORD}
+                  inputError={errors[PROFILE.NEW_PASSWORD]}
+                  updateInput={updateHandler(PROFILE.NEW_PASSWORD, setFormState)}
+                />
+              </ProfilePasswordInputs>
+            ) : (
+              <>
+                <ProfilePasswordIcon>
+                  <LockOpen />
+                </ProfilePasswordIcon>
+                <ProfilePasswordTitle>
+                <LocaleText message={FORM.CHANGE_PASSWORD} />
+                </ProfilePasswordTitle>
+              </>
+            )
+          }
         </EditableField>
       </ProfilePasswordBlock>
 
