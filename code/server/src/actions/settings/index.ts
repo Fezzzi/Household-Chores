@@ -4,9 +4,9 @@ import dotenv from 'dotenv';
 import * as SettingTypes from 'shared/constants/settingTypes';
 
 import { handleSettingsDataFetch, handleSettingsDataUpdate } from 'serverSrc/actions/settings/handlers';
-import * as NotificationTypes from "shared/constants/notificationTypes";
-import { ERROR, INFO } from "shared/constants/localeMessages";
-import { TAB_ROWS } from "shared/constants/settingTypes";
+import * as NotificationTypes from 'shared/constants/notificationTypes';
+import { ERROR, INFO } from 'shared/constants/localeMessages';
+import { TAB_ROWS } from 'shared/constants/settingTypes';
 
 dotenv.config();
 
@@ -32,7 +32,7 @@ export default () => {
           return handleSettingsDataFetch(category, tab, req, res);
         }
       } else {
-        res.status(200).send({[NotificationTypes.ERRORS]: [ERROR.INVALID_REQUEST]});
+        res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.INVALID_REQUEST] });
       }
     } else {
       res.status(200).send({ [NotificationTypes.ERRORS]: [INFO.NOTHING_TO_UPDATE] });

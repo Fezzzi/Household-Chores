@@ -7,11 +7,12 @@ import { PageContent, PageWrapper, PortalAnchor } from 'clientSrc/styles/blocks'
 import * as PortalType from 'clientSrc/constants/portalType';
 
 import rootReducer from './reducers/rootReducer';
-import { rootSaga } from './sagas/rootSaga';
+import rootSaga from './sagas/rootSaga';
 import Notifications from './components/notifications';
 import Router from './components/Router';
 import PageTheme from './components/PageTheme';
 import Footer from './components/Footer';
+import Modal from './components/modals/Modal';
 
 export default () => {
   const sagaMiddleware = createSagaMiddleware();
@@ -29,7 +30,7 @@ export default () => {
         <PortalAnchor id={PortalType.FLOATING_UI} />
         <PageWrapper id="pageWrapper">
           <PortalAnchor id={PortalType.TOOLTIPS} />
-          <div id={PortalType.MODALS} />
+          <Modal />
           <PageContent>
             <Notifications />
             <Router />

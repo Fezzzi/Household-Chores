@@ -7,7 +7,7 @@ import { settingsSaga } from 'clientSrc/sagas/settingsSaga';
 import { loadState } from 'clientSrc/effects/rootEffects';
 import * as RootActions from 'clientSrc/actions/rootActions';
 
-export function* rootSaga() {
+export default function* rootSaga() {
   yield all([
     fork(themeSaga),
     fork(localeSaga),

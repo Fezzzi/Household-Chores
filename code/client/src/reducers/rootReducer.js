@@ -7,6 +7,7 @@ import notificationsReducer from './notificationsReducer';
 import themeReducer from './themeReducer';
 import localeReducer from './localeReducer';
 import settingsReducer from './settingsReducer';
+import modalReducer from './modalReducer';
 
 const initialState = {
   debug: true,
@@ -36,4 +37,5 @@ export default combineReducers({
   theme: themeReducer,
   locale: localeReducer,
   settings: settingsReducer,
+  modal: modalReducer,
 });

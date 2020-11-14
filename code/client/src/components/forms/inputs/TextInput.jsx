@@ -73,10 +73,12 @@ class TextInput extends Component {
                 )}
                 {showPassButton && (
                   <ShowPassWrapper>
-                    <ShowPassButton tabIndex={-1} onClick={e => {
-                      e.preventDefault();
-                      this.setState({ showPassword: !showPassword });
-                    }}
+                    <ShowPassButton
+                      tabIndex={-1}
+                      onClick={e => {
+                        e.preventDefault();
+                        this.setState({ showPassword: !showPassword });
+                      }}
                     >
                       <LocaleText message={showPassword ? COMMON.HIDE : COMMON.SHOW} />
                     </ShowPassButton>

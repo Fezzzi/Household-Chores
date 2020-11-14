@@ -26,6 +26,7 @@ export default {
   [COMMON.SENDING]: 'Sending',
   [COMMON.SHOW]: 'Show',
   [COMMON.TERMS_AND_CONDITIONS]: 'Terms and Conditions',
+  [COMMON.PHOTO_SIZE]: 'photo size',
 
   [ERROR.CONNECTION_ERROR]: 'Connection error, please try again later.',
   [ERROR.CONNECTION_REQUEST_ERROR]: 'Connection request failed, please try again later.',

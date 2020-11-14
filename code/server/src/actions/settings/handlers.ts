@@ -1,14 +1,14 @@
 import * as SettingTypes from 'shared/constants/settingTypes';
 
 import { getCategoryList, getTabList, validateNotificationData, validateProfileData } from 'serverSrc/helpers/settings';
-import { uploadFiles } from "serverSrc/helpers/files.";
-import { findProfileData, updateUserData } from "serverSrc/database/models/users";
+import { uploadFiles } from 'serverSrc/helpers/files.';
+import { findProfileData, updateUserData } from 'serverSrc/database/models/users';
 import { findApprovedConnections, findConnections } from 'serverSrc/database/models/connections';
 import { findUserHouseholds, findUserInvitations } from 'serverSrc/database/models/households';
-import { CATEGORIES, TABS } from "shared/constants/settingTypes";
-import * as NotificationTypes from "shared/constants/notificationTypes";
-import { ERROR } from "shared/constants/localeMessages";
-import { PROFILE } from "shared/constants/settingsDataKeys";
+import { CATEGORIES, TABS } from 'shared/constants/settingTypes';
+import * as NotificationTypes from 'shared/constants/notificationTypes';
+import { ERROR } from 'shared/constants/localeMessages';
+import { PROFILE } from 'shared/constants/settingsDataKeys';
 
 const getTabData = async (category: string, tab: string, req: any) => {
   switch (category) {
@@ -50,23 +50,23 @@ export const handleSettingsDataUpdate = async (
   switch (category) {
     case CATEGORIES.PROFILE:
       if (tab === TABS.GENERAL) {
-        const valid = await validateProfileData(inputs, req, res)
+        const valid = await validateProfileData(inputs, req, res);
         if (!valid) {
           return true;
         }
         const [photo] = uploadFiles([inputs[PROFILE.PHOTO] as any], req.session.fsKey);
         if (photo === null) {
-          res.status(200).send({[NotificationTypes.ERRORS]: [ERROR.UPLOADING_ERROR]});
+          res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.UPLOADING_ERROR] });
           return true;
         }
-        return await updateUserData({ ...inputs, [PROFILE.PHOTO]: photo }, req.session.user)
+        return await updateUserData({ ...inputs, [PROFILE.PHOTO]: photo }, req.session.user);
       } else if (TABS.NOTIFICATIONS) {
-        return await validateNotificationData(inputs, req, res)
+        return await validateNotificationData(inputs, req, res);
       }
     case CATEGORIES.CONNECTIONS:
     case CATEGORIES.HOUSEHOLDS:
     default:
-      res.status(200).send({[NotificationTypes.ERRORS]: [ERROR.INVALID_REQUEST]});
+      res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.INVALID_REQUEST] });
       return false;
   }
-}
+};

@@ -32,4 +32,4 @@ export const setSession = (req: any, res: any, userId: number, fsKey: string) =>
   }
   req.session.user = userId;
   req.session.fsKey = fsKey;
-}
+};

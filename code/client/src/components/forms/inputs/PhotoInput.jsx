@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Publish, HighlightOff } from '@material-ui/icons';
 
@@ -7,6 +7,8 @@ import {
   InputRow, FileInputBox, FileInputLabel, FileImagePreview, FileInputField,
   FileInputPreview, RemoveFileButton, PhotoPreviewBlock, PhotoPreview, PhotoInputWrapper,
 } from 'clientSrc/styles/blocks/form';
+import { MODAL_TYPE } from 'clientSrc/constants/modalType';
+import * as ModalActions from 'clientSrc/actions/modalActions';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import * as NotificationTypes from 'shared/constants/notificationTypes';
 import * as InputTypes from 'shared/constants/inputTypes';
@@ -15,33 +17,63 @@ import { isInputValid } from 'shared/helpers/validation';
 
 import LocaleText from '../../common/LocaleText';
 
-const PhotoInputComponent = ({
-  name, message, size, closable, reference, updateInput, onFileRemove, addNotification,
+const PhotoInput = ({
+  name, message, size, closable, reference, updateInput, onFileRemove,
 }) => {
   const [file, setFile] = useState(null);
   const [inputActive, setInputActive] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const dispatch = useDispatch();
 
-  const handleInputChange = useCallback(({ target: { files } }) => {
+  const addNotification = useCallback((type, message) => dispatch(
+    NotificationActions.addNotifications({ [type]: [message] })
+  ), [dispatch]);
+
+  const openPhotoEditor = useCallback((photoBase, photoObj, onClose) => dispatch(
+    ModalActions.openModal({ type: MODAL_TYPE.PHOTO_EDITOR, data: { photoBase, photoObj, onClose } })
+  ), [dispatch]);
+
+  const handleInputChange = useCallback(event => {
+    const { target: { files } } = event;
     if (!files[0]) {
+      event.target.value = '';
       return;
     }
-    const { valid: inputValid, message: inputMessage } = isInputValid(InputTypes.PHOTO, files[0]);
+    const { valid: inputValid, message: inputMessage } = isInputValid(InputTypes.PHOTO, files[0], -1);
     if (!inputValid) {
       addNotification(NotificationTypes.WARNINGS, inputMessage || ERROR.IMAGE_INVALID);
+      event.target.value = '';
       return;
     }
+    const { type, name } = files[0];
     const reader = new FileReader();
     reader.onload = ({ target: { result } }) => {
-      setFile(result);
-      updateInput(inputValid, {
-        type: files[0].type,
-        size: files[0].size,
-        name: files[0].name,
-        data: result,
-      });
+      const img = new Image();
+      img.onload = () => {
+        if (type === 'image/gif') {
+          setFile(result);
+          updateInput(inputValid, {
+            type,
+            size: result.length,
+            name,
+            data: result,
+          });
+        } else {
+          openPhotoEditor(result, img, (editedPhoto, newSize) => {
+            setFile(editedPhoto);
+            updateInput(inputValid, {
+              type,
+              size: newSize,
+              name,
+              data: editedPhoto,
+            });
+          });
+        }
+      };
+      img.src = result;
     };
     reader.readAsDataURL(files[0]);
+    event.target.value = '';
   }, []);
 
   const handleFileRemove = e => {
@@ -99,26 +131,19 @@ const PhotoInputComponent = ({
   );
 };
 
-PhotoInputComponent.defaultProps = {
+PhotoInput.defaultProps = {
   closable: false,
   size: 150,
 };
 
-PhotoInputComponent.propTypes = {
+PhotoInput.propTypes = {
   name: PropTypes.string.isRequired,
   message: PropTypes.string,
   closable: PropTypes.bool,
   size: PropTypes.number,
   updateInput: PropTypes.func,
   onFileRemove: PropTypes.func,
-  addNotification: PropTypes.func.isRequired,
   reference: PropTypes.object,
 };
 
-const mapDispatchToProps = dispatch => ({
-  addNotification: (type, message) => dispatch(NotificationActions.addNotifications({
-    [type]: [message],
-  })),
-});
-
-export default connect(null, mapDispatchToProps)(PhotoInputComponent);
+export default PhotoInput;

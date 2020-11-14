@@ -1,7 +1,7 @@
 import { database } from 'serverSrc/database';
-import {encryptPass, checkPass, generatePass, generateFsKey} from 'serverSrc/helpers/passwords';
+import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
-import { PROFILE } from "shared/constants/settingsDataKeys";
+import { PROFILE } from 'shared/constants/settingsDataKeys';
 import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
 
 import USERS_TABLE from './tables/users';
@@ -29,7 +29,7 @@ export const isCorrectPassword = async (password: string, userId: number): Promi
   );
 
   return result && result.length && await checkPass(password, result[0][tabPassword]);
-}
+};
 export const findProfileData = async (userId: number): Promise<Record<string, string | number>> => {
   const result = await database.query(`
     SELECT ${tabNickname}, ${tabEmail}, ${tabPhoto}, ${tabVisibility} FROM ${tName} WHERE ${tabID}=${userId}
@@ -40,10 +40,10 @@ export const findProfileData = async (userId: number): Promise<Record<string, st
     [PROFILE.EMAIL]: result[0][tabEmail],
     [PROFILE.PHOTO]: result[0][tabPhoto],
     [PROFILE.CONNECTION_VISIBILITY]: result[0][tabVisibility],
-  }
-}
+  };
+};
 
-export const findUser = async (email: string): Promise<{ userId: number, fsKey: string } | null> => {
+export const findUser = async (email: string): Promise<{ userId: number; fsKey: string } | null> => {
   const result = await database.query(
     `SELECT ${tabID}, ${tabFSKey} FROM ${tName} WHERE ${tabEmail}=?`, [email]
   );
@@ -53,7 +53,7 @@ export const findUser = async (email: string): Promise<{ userId: number, fsKey: 
     : null;
 };
 
-export const findGoogleUser = async (googleId: string): Promise<{ userId: number, fsKey: string } | null> => {
+export const findGoogleUser = async (googleId: string): Promise<{ userId: number; fsKey: string } | null> => {
   const result = await database.query(
     `SELECT ${tabID}, ${tabFSKey} FROM ${tName} WHERE ${tabGoogleID}=?`, [googleId]
   );
@@ -63,7 +63,7 @@ export const findGoogleUser = async (googleId: string): Promise<{ userId: number
     : null;
 };
 
-export const findFacebookUser = async (facebookId: string): Promise<{ userId: number, fsKey: string } | null> => {
+export const findFacebookUser = async (facebookId: string): Promise<{ userId: number; fsKey: string } | null> => {
   const result = await database.query(
     `SELECT ${tabID}, ${tabFSKey} FROM ${tName} WHERE ${tabFacebookID}=?`, [facebookId]
   );
@@ -73,7 +73,7 @@ export const findFacebookUser = async (facebookId: string): Promise<{ userId: nu
     : null;
 };
 
-export const logInUser = async (email: string, password: string): Promise<{ userId: number, fsKey: string } | null> => {
+export const logInUser = async (email: string, password: string): Promise<{ userId: number; fsKey: string } | null> => {
   const result = await database.query(
     `SELECT ${tabPassword}, ${tabID}, ${tabFSKey} FROM ${tName} WHERE ${tabEmail}=?`, [email]
   );
@@ -99,17 +99,17 @@ export const updateUserData = async (data: Record<string, string | number>, user
   return database.query(
     `UPDATE ${tName} SET
       ${
-        [
-          data[PROFILE.NAME] && `${tabNickname}=?`,
-          data[PROFILE.EMAIL] && `${tabEmail}=?`,
-          data[PROFILE.PHOTO] && `${tabPhoto}=?`,
-          data[PROFILE.NEW_PASSWORD] && `${tabPassword}=?`,
-          data[PROFILE.CONNECTION_VISIBILITY] && `${tabVisibility}=?`,
-        ].filter(Boolean).join(',')
-      }
+  [
+    data[PROFILE.NAME] && `${tabNickname}=?`,
+    data[PROFILE.EMAIL] && `${tabEmail}=?`,
+    data[PROFILE.PHOTO] && `${tabPhoto}=?`,
+    data[PROFILE.NEW_PASSWORD] && `${tabPassword}=?`,
+    data[PROFILE.CONNECTION_VISIBILITY] && `${tabVisibility}=?`,
+  ].filter(Boolean).join(',')
+}
       WHERE ${tabID}=${userId}
     `, [
-      data[PROFILE.NAME], data[PROFILE.EMAIL], data[PROFILE.PHOTO], newPass, data[PROFILE.CONNECTION_VISIBILITY]
+      data[PROFILE.NAME], data[PROFILE.EMAIL], data[PROFILE.PHOTO], newPass, data[PROFILE.CONNECTION_VISIBILITY],
     ].filter(Boolean)
   );
 };
@@ -121,7 +121,7 @@ export const SignUpUser = async (
   photo: string|null,
   googleId: string,
   facebookId: string,
-): Promise<{ insertId: number, fsKey: string }> => {
+): Promise<{ insertId: number; fsKey: string }> => {
   const pass = await encryptPass(password || generatePass());
   const result = await database.query(`
     INSERT INTO ${tName} (

@@ -42,7 +42,7 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
         errors: newErrors,
       };
     });
-  }
+  };
 
   return (
     <FormHeader>

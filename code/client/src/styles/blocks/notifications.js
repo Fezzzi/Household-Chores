@@ -4,7 +4,7 @@ export const NotificationsBlock = styled.div`
   position: fixed;
   top: 50px;
   right: 50px;
-  z-index: 1100;
+  z-index: 100;
   overflow-y: hidden;
   list-style: none;
   margin: 0px auto;
@@ -19,7 +19,7 @@ export const NotificationWrapper = styled.li`
   margin-bottom: 14px;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 3px 0px;
   color: var(--cFont);
-  z-index: 10;
+  z-index: 100;
   background: var(--cThemeFront);
   border-radius: 2px;
   transition: all 0.5s ease 0s;

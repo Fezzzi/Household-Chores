@@ -15,8 +15,10 @@ const isImageValid = (file, maxImageSize = 2000000) => {
   return {
     valid: file
       && re.test(file.type)
-      && file.size < maxImageSize
-      && (!file.data || file.data.length < maxImageSize * 1.4),
+      // on FE we don't validate image size as it gets modified in the editor
+      && (maxImageSize === -1 || file.size < maxImageSize)
+      // on BE we forbid image size validation skipping
+      && (!file.data || (maxImageSize !== -1 && file.data.length < maxImageSize * 1.34)),
     message: ERROR.IMAGE_INVALID,
   };
 };
@@ -40,8 +42,8 @@ export const isInputValid = (type, value, constraints) => {
     case InputTypes.SWITCH: {
       return {
         valid: constraints.indexOf(value) !== -1,
-        message: ERROR.INVALID_DATA
-      }
+        message: ERROR.INVALID_DATA,
+      };
     }
     default:
       return { valid: false, message: '' };

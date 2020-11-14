@@ -43,7 +43,7 @@ const logInWithProvider = async (
   req: any,
   res: any,
   condition: boolean,
-  getID: () => Promise<{ userId: number, fsKey: string } | null>,
+  getID: () => Promise<{ userId: number; fsKey: string } | null>,
 ): Promise<boolean> => {
   if (condition) {
     const result = await getID();

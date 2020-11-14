@@ -506,7 +506,7 @@ export const RemoveFileButton = styled.div`
   position: absolute;
   top: -10px;
   left: -10px;
-  z-index: 100;
+  z-index: 5;
   color: var(--cFont);
   opacity: .8;
   

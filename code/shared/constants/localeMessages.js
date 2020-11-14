@@ -27,6 +27,7 @@ export const COMMON = {
   SEARCH: 'common.search',
   SEARCHING: 'common.searching',
   TERMS_AND_CONDITIONS: 'common.termsAndConditions',
+  PHOTO_SIZE: 'common.photoSize',
 };
 
 export const ERROR = {

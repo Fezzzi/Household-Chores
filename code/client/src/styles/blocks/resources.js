@@ -36,7 +36,7 @@ export const BodyBlock = styled.div`
 
 export const TopButton = styled.div`
   position: absolute;
-  z-index: 100;
+  z-index: 25;
   top: 15px;
   left: 15px;
   width: 25px;

@@ -31,7 +31,7 @@ const EditableField = ({ input, editing, setEditing, iconRight, centered, childr
 EditableField.defaultProps = {
   iconRight: 0,
   centered: true,
-}
+};
 
 EditableField.propTypes = {
   editing: PropTypes.bool.isRequired,

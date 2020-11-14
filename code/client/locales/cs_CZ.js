@@ -26,6 +26,7 @@ export default {
   [COMMON.SENDING]: 'Odesílání',
   [COMMON.SHOW]: 'Zobrazit',
   [COMMON.TERMS_AND_CONDITIONS]: 'podmínky použití',
+  [COMMON.PHOTO_SIZE]: 'velikost obrázku',
 
   [ERROR.CONNECTION_ERROR]: 'Chyba spojení, zkuste to prosím později.',
   [ERROR.CONNECTION_REQUEST_ERROR]: 'Žádost o spojení se nezdařila, zkuste to prosím později.',

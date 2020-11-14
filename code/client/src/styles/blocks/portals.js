@@ -102,7 +102,7 @@ export const SimpleFloatingElementWrapper = styled.div`
   display: flex;
   border-radius: 19px;
   padding: 2px;
-  z-index: 10;
+  z-index: 25;
   opacity: ${props => props.enabled ? 1 : 0.8};
   
   :focus {
