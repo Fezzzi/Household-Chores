@@ -7,7 +7,7 @@ import * as SettingsActions from 'clientSrc/actions/settingsActions';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import * as NotificationTypes from 'shared/constants/notificationTypes';
 import { ERROR, INFO, SUCCESS } from 'shared/constants/localeMessages';
-import { invitationApprove, invitationIgnore } from 'clientSrc/effects/householdEffects';
+import { createHousehold, invitationApprove, invitationIgnore } from 'clientSrc/effects/householdEffects';
 
 function* loadSettingsSaga({ payload: { category, tab } }) {
   try {
@@ -110,6 +110,20 @@ function* ignoreInvitationSaga({ payload }) {
   }
 }
 
+function* createHouseholdSaga({ payload }) {
+  try {
+    const { data } = yield call(createHousehold, payload);
+    yield call(handleResponse, data, function* ({ url, ...rest }) {
+      console.log(url, rest);
+      yield put(push(url));
+    });
+  } catch (error) {
+    yield put(NotificationActions.addNotifications({
+      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
+    }));
+  }
+}
+
 export function* settingsSaga() {
   yield takeEvery(SettingsActions.loadSettings.toString(), loadSettingsSaga);
   yield takeEvery(SettingsActions.editSettings.toString(), editSettingsSaga);
@@ -118,4 +132,5 @@ export function* settingsSaga() {
   yield takeEvery(SettingsActions.connectionRequest.toString(), connectionRequestSaga);
   yield takeEvery(SettingsActions.approveInvitation.toString(), approveInvitationSaga);
   yield takeEvery(SettingsActions.ignoreInvitation.toString(), ignoreInvitationSaga);
+  yield takeEvery(SettingsActions.createHousehold.toString(), createHouseholdSaga);
 }

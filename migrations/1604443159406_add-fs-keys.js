@@ -15,7 +15,7 @@ module.exports = {
     conn.query(`
       ALTER TABLE ${tName}
       DROP COLUMN ${fs_key},
-      MODIFY COLUMN ${photo} VARCHAR(2083),
+      MODIFY COLUMN ${photo} VARCHAR(2083)
     `)
   ),
 }

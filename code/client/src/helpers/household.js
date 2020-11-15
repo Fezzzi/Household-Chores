@@ -56,7 +56,15 @@ export const useMemberListProps = members => {
   };
 };
 
-export const useInvitationListProps = invitations => {
+const deleteInvitation = (fromId, toId, handleDeletion) => {
+  if (handleDeletion !== undefined) {
+    handleDeletion(fromId, toId);
+  } else {
+    // todo: Dispatch some generic invitation deletion action
+  }
+}
+
+export const useInvitationListProps = (invitations, handleDeletion) => {
   const rows = invitations.map(invitation => ({
     ...invitation,
     fromPhoto: <TablePhoto src={invitation.fromPhoto} />,
@@ -66,7 +74,7 @@ export const useInvitationListProps = invitations => {
       <TableRowIcon
         color="var(--cRedSecondary)"
         clickable
-        onClick={() => console.log('clicked')}
+        onClick={() => deleteInvitation(invitation.fromId, invitation.toId, handleDeletion)}
       >
         <Delete />
       </TableRowIcon>

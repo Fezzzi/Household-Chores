@@ -16,6 +16,7 @@ import EditableTextField from 'clientSrc/components/common/EditableTextField';
 import EditablePhotoField from 'clientSrc/components/common/EditablePhotoField';
 import LocaleText from '../../common/LocaleText';
 import PrimaryButton from '../common/PrimaryButton';
+import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys';
 
 const HouseholdFormHeader = ({
   photo, name, inputs, errors, currentUser, membersCount, setFormState,
@@ -42,10 +43,9 @@ const HouseholdFormHeader = ({
     <FormHeader>
       <CurrentUserBlock>
         <EditablePhotoField
-          name="userPhoto"
-          edited={inputs.userPhoto}
+          name={HOUSEHOLD_KEYS.USER_PHOTO}
           placeholder={currentUser.photo}
-          error={errors.userPhoto}
+          error={errors[HOUSEHOLD_KEYS.USER_PHOTO]}
           setFormState={setFormState}
           size={100}
           iconRight={40}
@@ -54,10 +54,10 @@ const HouseholdFormHeader = ({
         </EditablePhotoField>
         <UserName>
           <EditableTextField
-            name="userName"
-            edited={inputs.userName}
+            name={HOUSEHOLD_KEYS.USER_NAME}
+            edited={!!inputs[HOUSEHOLD_KEYS.USER_NAME]}
             placeholder={currentUser.name}
-            error={errors.userName}
+            error={errors[HOUSEHOLD_KEYS.USER_NAME]}
             setFormState={setFormState}
           >
             {currentUser.name}
@@ -68,18 +68,19 @@ const HouseholdFormHeader = ({
       </CurrentUserBlock>
 
       <EditablePhotoField
-        name="householdPhoto"
+        name={HOUSEHOLD_KEYS.PHOTO}
         placeholder={photo}
-        error={errors.householdPhoto}
+        error={errors[HOUSEHOLD_KEYS.PHOTO]}
         setFormState={setFormState}
       >
         <FormHeaderPhoto src={photo} />
       </EditablePhotoField>
       <FormHeaderTitle>
         <EditableTextField
-          name="householdName"
+          name={HOUSEHOLD_KEYS.NAME}
+          edited={!!inputs[HOUSEHOLD_KEYS.NAME]}
           placeholder={name}
-          error={errors.householdName}
+          error={errors[HOUSEHOLD_KEYS.NAME]}
           setFormState={setFormState}
         >
           {name}
@@ -104,9 +105,9 @@ HouseholdFormHeader.propTypes = {
   name: PropTypes.string.isRequired,
   photo: PropTypes.string.isRequired,
   currentUser: PropTypes.shape({
-    photo: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    role: PropTypes.string.isRequired,
+    photo: PropTypes.string,
+    name: PropTypes.string,
+    role: PropTypes.string,
   }).isRequired,
   inputs: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,

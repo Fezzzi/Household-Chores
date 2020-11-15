@@ -36,6 +36,7 @@ export const findProfileData = async (userId: number): Promise<Record<string, st
   `);
 
   return result[0] && {
+    [PROFILE.ID]: userId,
     [PROFILE.NAME]: result[0][tabNickname],
     [PROFILE.EMAIL]: result[0][tabEmail],
     [PROFILE.PHOTO]: result[0][tabPhoto],
@@ -94,20 +95,21 @@ export const logInUser = async (email: string, password: string): Promise<{ user
 export const updateLoginTime = (userId: number) =>
   database.query(`UPDATE ${tName} SET ${tabDateLastActive}=NOW() WHERE ${tabID}=?`, [userId]);
 
-export const updateUserData = async (data: Record<string, string | number>, userId: number): Promise<boolean> => {
+export const updateUserData = async (
+  data: Record<string, string | number>,
+  userId: number
+): Promise<boolean> => {
   const newPass = data[PROFILE.NEW_PASSWORD] && await encryptPass(data[PROFILE.NEW_PASSWORD] as string);
   return database.query(
-    `UPDATE ${tName} SET
-      ${
-  [
-    data[PROFILE.NAME] && `${tabNickname}=?`,
-    data[PROFILE.EMAIL] && `${tabEmail}=?`,
-    data[PROFILE.PHOTO] && `${tabPhoto}=?`,
-    data[PROFILE.NEW_PASSWORD] && `${tabPassword}=?`,
-    data[PROFILE.CONNECTION_VISIBILITY] && `${tabVisibility}=?`,
-  ].filter(Boolean).join(',')
-}
-      WHERE ${tabID}=${userId}
+    `UPDATE ${tName} SET ${
+        [
+          data[PROFILE.NAME] && `${tabNickname}=?`,
+          data[PROFILE.EMAIL] && `${tabEmail}=?`,
+          data[PROFILE.PHOTO] && `${tabPhoto}=?`,
+          data[PROFILE.NEW_PASSWORD] && `${tabPassword}=?`,
+          data[PROFILE.CONNECTION_VISIBILITY] && `${tabVisibility}=?`,
+        ].filter(Boolean).join(',')
+      } WHERE ${tabID}=${userId}
     `, [
       data[PROFILE.NAME], data[PROFILE.EMAIL], data[PROFILE.PHOTO], newPass, data[PROFILE.CONNECTION_VISIBILITY],
     ].filter(Boolean)

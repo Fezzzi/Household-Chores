@@ -41,7 +41,7 @@ export const getTabList = (data: any, category: string): { tabs: string[]; messa
   }
 };
 
-const validateField = (res: any, field: string | number | undefined, type: string, constraints?: any): boolean => {
+export const validateField = (res: any, field: string | number | undefined, type: string, constraints?: any): boolean => {
   if (field !== undefined) {
     const validity = isInputValid(type, field, constraints);
     if (!validity.valid) {

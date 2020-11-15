@@ -12,5 +12,7 @@ export const approveInvitation = createAction('APPROVE_INVITATION');
 export const ignoreInvitation = createAction('IGNORE_INVITATION');
 export const ignoreInvitationSuccess = createAction('IGNORE_INVITATION_SUCCESS');
 
+export const createHousehold = createAction('CREATE_HOUSEHOLD');
+
 export const loadSettings = createAction('LOAD_SETTINGS');
 export const loadSettingsSuccess = createAction('LOAD_SETTINGS_SUCCESS');

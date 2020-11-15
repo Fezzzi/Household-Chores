@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { Search, SortByAlpha } from '@material-ui/icons';
 
 import {
-  InvitationFormNode,
-  InvitationFormNodeName,
-  InvitationFormNodePhoto, InvitationNodesWrapper,
+  InvitationFormNode, InvitationFormNodeName, InvitationFormNodePhoto, InvitationNodesWrapper,
 } from 'clientSrc/styles/blocks/households';
 import {
   TableBox, TableHeaderBox, TableHeaderCell, TableSingleRowBox, TableSorterIcon,
@@ -17,7 +15,7 @@ import MiniTextInput from '../inputs/MiniTextInput';
 import MiniButton from '../common/MiniButton';
 import LocaleText from '../../common/LocaleText';
 
-const HouseholdInvitationForm = ({ connections }) => {
+const HouseholdInvitationForm = ({ connections, onInvite }) => {
   const {
     processedRows,
     setQuery,
@@ -42,14 +40,13 @@ const HouseholdInvitationForm = ({ connections }) => {
           />
         </TableHeaderCell>
       </TableHeaderBox>
-      <TableSingleRowBox height="130px">
+      <TableSingleRowBox height={connections.length ? '130px' : '0px'}>
         <InvitationNodesWrapper>
           {processedRows.map(({ id, nickname, photo }) => (
             <InvitationFormNode key={`connection-${id}`}>
               <InvitationFormNodePhoto src={photo} />
               <InvitationFormNodeName>{nickname}</InvitationFormNodeName>
-              {/* todo: Add real invitation logic */}
-              <MiniButton margin={0} clickHandler={() => console.log('sent invitation to user', id)}>
+              <MiniButton margin={0} clickHandler={() => onInvite(id)}>
                 <LocaleText message={HOUSEHOLD.INVITE} />
               </MiniButton>
             </InvitationFormNode>
@@ -66,6 +63,7 @@ HouseholdInvitationForm.propTypes = {
     nickname: PropTypes.string.isRequired,
     photo: PropTypes.string,
   })).isRequired,
+  onInvite: PropTypes.func.isRequired,
 };
 
 export default HouseholdInvitationForm;

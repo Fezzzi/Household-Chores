@@ -20,7 +20,7 @@ const HouseholdInvitationNode = ({ invitation: {
   const dispatch = useDispatch();
 
   const approveHandler = useCallback(() =>
-    dispatch(SettingsActions.approveInvitation({ householdId, fromId, photo: '' })),
+    dispatch(SettingsActions.approveInvitation({ householdId, fromId, name, photo: '' })),
   [dispatch]);
 
   const removeHandler = useCallback(() =>

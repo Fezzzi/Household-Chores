@@ -1,7 +1,7 @@
 import * as SettingTypes from 'shared/constants/settingTypes';
 
 import { getCategoryList, getTabList, validateNotificationData, validateProfileData } from 'serverSrc/helpers/settings';
-import { uploadFiles } from 'serverSrc/helpers/files.';
+import { PROFILE_DIR, uploadFiles } from 'serverSrc/helpers/files.';
 import { findProfileData, updateUserData } from 'serverSrc/database/models/users';
 import { findApprovedConnections, findConnections } from 'serverSrc/database/models/connections';
 import { findUserHouseholds, findUserInvitations } from 'serverSrc/database/models/households';
@@ -57,7 +57,7 @@ export const handleSettingsDataUpdate = async (
         if (!inputs[PROFILE.PHOTO]) {
           return await updateUserData(inputs, req.session.user);
         }
-        const [photo] = uploadFiles([inputs[PROFILE.PHOTO] as any], req.session.fsKey);
+        const [photo] = uploadFiles([inputs[PROFILE.PHOTO] as any], PROFILE_DIR, req.session.fsKey);
         if (photo === null) {
           res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.UPLOADING_ERROR] });
           return true;

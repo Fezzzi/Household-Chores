@@ -4,10 +4,12 @@ import {
   approveInvitation, deleteInvitation, findUserHouseholds, findUserInvitations,
 } from 'serverSrc/database/models/households';
 import {
-  INVITATION_APPROVE, INVITATION_IGNORE,
+  HOUSEHOLD_CREATE, INVITATION_APPROVE, INVITATION_IGNORE,
 } from 'shared/constants/api';
 import * as NotificationTypes from 'shared/constants/notificationTypes';
 import { ERROR } from 'shared/constants/localeMessages';
+
+import { handleCreateHousehold } from "./handlers";
 
 export default () => {
   const router = express.Router();
@@ -15,6 +17,9 @@ export default () => {
     const { params: { action }, body } = req;
     const userId = req.session!.user;
     switch (action) {
+      case HOUSEHOLD_CREATE: {
+        return handleCreateHousehold(body.inputs, body.invitations, userId, req, res);
+      }
       case INVITATION_APPROVE: {
         // todo: Use transaction there
         const success = await deleteInvitation(userId, body) && await approveInvitation(userId, body);

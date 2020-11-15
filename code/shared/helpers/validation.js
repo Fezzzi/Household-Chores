@@ -1,6 +1,8 @@
 import * as InputTypes from 'shared/constants/inputTypes';
 import { ERROR } from 'shared/constants/localeMessages';
 
+export const MAX_IMAGE_SIZE = 2000000;
+
 const isEmailValid = value => {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const reValid = re.test(String(value).toLowerCase());
@@ -10,7 +12,7 @@ const isEmailValid = value => {
   };
 };
 
-const isImageValid = (file, maxImageSize = 2000000) => {
+const isImageValid = (file, maxImageSize = MAX_IMAGE_SIZE) => {
   const re = /^image\/.+$/;
   return {
     valid: file

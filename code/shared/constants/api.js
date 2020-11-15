@@ -22,5 +22,6 @@ export const CONNECTION_BLOCK = 'block';
 export const CONNECTION_UNBLOCK = 'unblock';
 
 export const HOUSEHOLDS_PREFIX = 'households';
+export const HOUSEHOLD_CREATE = 'create';
 export const INVITATION_APPROVE = 'approve';
 export const INVITATION_IGNORE = 'ignore';

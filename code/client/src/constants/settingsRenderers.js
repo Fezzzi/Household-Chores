@@ -43,7 +43,7 @@ export const settingsRenderers = {
       TABS.MY_CONNECTIONS,
       SETTINGS[`${SettingTypes.COLUMNS.TAB}_${TABS.MY_CONNECTIONS}`],
     ),
-    [TABS.FIND_CONNECTION]: (data, handleSubmit) => (
+    [TABS.FIND_CONNECTION]: data => (
       <ConnectionSearchForm
         data={data}
         dataKey={CONNECTION_STATE_TYPE.FOUND}
@@ -66,8 +66,8 @@ export const settingsRenderers = {
   },
   [CATEGORIES.HOUSEHOLDS]: {
     tabModifiers: data => tab => tab === TABS.INVITATIONS && ` (${data.invitations?.length || 0})`,
-    [TABS.NEW_HOUSEHOLD]: (data, handleSubmit) => <HouseholdCreateForm connections={data.connections} />,
-    [TABS.INVITATIONS]: (data, handleSubmit) => <HouseholdInvitationList invitations={data.invitations || []} />,
+    [TABS.NEW_HOUSEHOLD]: data => <HouseholdCreateForm connections={data.connections} />,
+    [TABS.INVITATIONS]: data => <HouseholdInvitationList invitations={data.invitations || []} />,
     [TABS._HOUSEHOLD]: (data, handleSubmit, tab) => (
       <HouseholdModificationForm
         household={data.households?.find(({ key }) => key === tab)}

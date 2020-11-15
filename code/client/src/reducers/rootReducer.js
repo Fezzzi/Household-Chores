@@ -13,6 +13,7 @@ const initialState = {
   debug: true,
   // Set user as logged by default due to routing, otherwise there will be visible redirect each time logged user refreshes the page
   loggedUser: true,
+  user: {},
 };
 
 const logInUser = state => ({
@@ -20,10 +21,11 @@ const logInUser = state => ({
   loggedUser: true,
 });
 
-const stateLoaded = (state, { payload: { debug, loggedUser } }) => ({
+const stateLoaded = (state, { payload: { debug, loggedUser, user } }) => ({
   ...state,
   debug,
   loggedUser,
+  user,
 });
 
 const rootReducer = createReducer(initialState, {

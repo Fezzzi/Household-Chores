@@ -6,10 +6,12 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const PROFILE_DIR = 'profile';
+export const HOUSEHOLD_DIR = 'household';
 const UPLOAD_DIR = process.env.UPLOAD_PATH || 'uploads';
 
 export const uploadFiles = (
   files: { data: string; type: string; name: string; size: number }[],
+  directory: string,
   userFsKey: string
 ): Array<string | null> => {
   const uploadedFiles: Array<string | null> = [];
@@ -17,7 +19,7 @@ export const uploadFiles = (
   files.forEach(fileObject => {
     const fileHash = fileObject.data.split(';base64,').pop();
 
-    const filePath = path.join(path.resolve('./'), UPLOAD_DIR, userFsKey, PROFILE_DIR);
+    const filePath = path.join(path.resolve('./'), UPLOAD_DIR, userFsKey, directory);
     mkdirSync(filePath, { recursive: true });
 
     const fileExtension = fileObject.type.substring(fileObject.type.indexOf('/') + 1);
@@ -32,7 +34,7 @@ export const uploadFiles = (
       uploadedFiles.push(null);
     } else {
       writeFileSync(path.join(filePath, fileName), fileHash, { encoding: 'base64' });
-      uploadedFiles.push(`/${UPLOAD_DIR}/${userFsKey}/${PROFILE_DIR}/${fileName}`);
+      uploadedFiles.push(`/${UPLOAD_DIR}/${userFsKey}/${directory}/${fileName}`);
     }
   });
   return uploadedFiles;
