@@ -47,7 +47,6 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
   return (
     <FormHeader>
       <ProfilePasswordBlock>
-        {console.log('RERENDERING WITH', passwordEditing)}
         <EditableField
           editing={passwordEditing}
           setEditing={setPasswordEditing}

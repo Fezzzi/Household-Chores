@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Save } from '@material-ui/icons';
 
@@ -14,6 +14,7 @@ import ProfileFormHeader from './ProfileFormHeader';
 import Input from '../common/Input';
 
 const ProfileForm = ({ data, onSubmit }) => {
+  const [headerKey, setHeaderKey] = useState(0);
   const [state, setState] = useState({
     submitMessage: FORM.SAVE,
     isFormValid: true,
@@ -21,6 +22,16 @@ const ProfileForm = ({ data, onSubmit }) => {
     inputs: {},
     errors: {},
   });
+
+  useEffect(() => {
+    setState(prevState => ({
+      ...prevState,
+      isFormValid: true,
+      inputs: {},
+      errors: {},
+    }));
+    setHeaderKey(prevState => ++prevState)
+  }, [data])
 
   const { [PROFILE.PHOTO]: photo, [PROFILE.NAME]: name, [PROFILE.EMAIL]: email, [PROFILE.CONNECTION_VISIBILITY]: visibility } = data;
   const { submitMessage, errors, isFormValid, isFormSending, inputs } = state;
@@ -37,6 +48,7 @@ const ProfileForm = ({ data, onSubmit }) => {
         />
       )}
       <ProfileFormHeader
+        key={`profileFormHeader-${headerKey}`}
         photo={photo}
         name={name}
         email={email}

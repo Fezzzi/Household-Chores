@@ -54,6 +54,9 @@ export const handleSettingsDataUpdate = async (
         if (!valid) {
           return true;
         }
+        if (!inputs[PROFILE.PHOTO]) {
+          return await updateUserData(inputs, req.session.user);
+        }
         const [photo] = uploadFiles([inputs[PROFILE.PHOTO] as any], req.session.fsKey);
         if (photo === null) {
           res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.UPLOADING_ERROR] });
