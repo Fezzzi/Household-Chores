@@ -42,7 +42,7 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
         errors: newErrors,
       };
     });
-  }, [setPasswordEditing, setFormState])
+  }, [setPasswordEditing, setFormState]);
 
   return (
     <FormHeader>
@@ -80,11 +80,10 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
                   <LockOpen />
                 </ProfilePasswordIcon>
                 <ProfilePasswordTitle>
-                <LocaleText message={FORM.CHANGE_PASSWORD} />
+                  <LocaleText message={FORM.CHANGE_PASSWORD} />
                 </ProfilePasswordTitle>
               </>
-            )
-          }
+            )}
         </EditableField>
       </ProfilePasswordBlock>
 

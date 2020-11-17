@@ -62,7 +62,7 @@ const deleteInvitation = (fromId, toId, handleDeletion) => {
   } else {
     // todo: Dispatch some generic invitation deletion action
   }
-}
+};
 
 export const useInvitationListProps = (invitations, handleDeletion) => {
   const rows = invitations.map(invitation => ({

@@ -13,7 +13,7 @@ import { PROFILE } from 'shared/constants/settingsDataKeys';
 const getTabData = async (category: string, tab: string, req: any) => {
   switch (category) {
     case SettingTypes.CATEGORIES.PROFILE:
-      return await findProfileData(req.session.user);
+      return findProfileData(req.session.user);
     case SettingTypes.CATEGORIES.HOUSEHOLDS:
       return {
         invitations: await findUserInvitations(req.session.user),
@@ -55,16 +55,16 @@ export const handleSettingsDataUpdate = async (
           return true;
         }
         if (!inputs[PROFILE.PHOTO]) {
-          return await updateUserData(inputs, req.session.user);
+          return updateUserData(inputs, req.session.user);
         }
         const [photo] = uploadFiles([inputs[PROFILE.PHOTO] as any], PROFILE_DIR, req.session.fsKey);
         if (photo === null) {
           res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.UPLOADING_ERROR] });
           return true;
         }
-        return await updateUserData({ ...inputs, [PROFILE.PHOTO]: photo }, req.session.user);
+        return updateUserData({ ...inputs, [PROFILE.PHOTO]: photo }, req.session.user);
       } else if (TABS.NOTIFICATIONS) {
-        return await validateNotificationData(inputs, req, res);
+        return validateNotificationData(inputs, req, res);
       }
     case CATEGORIES.CONNECTIONS:
     case CATEGORIES.HOUSEHOLDS:

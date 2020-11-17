@@ -1,11 +1,11 @@
 import { database } from 'serverSrc/database';
 import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
 
+import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys';
 import HOUSEHOLDS_TABLE from './tables/households';
 import HOUSEHOLD_INVITATIONS_TABLE from './tables/household_invitations';
 import HOUSEHOLD_MEMBERS_TABLE from './tables/household_members';
 import USERS_TABLE from './tables/users';
-import { HOUSEHOLD_KEYS } from "shared/constants/settingsDataKeys";
 
 const {
   name: tName,
@@ -155,13 +155,11 @@ export const addHouseholdInvitations = async (
   householdId: number,
   users: Array<Record<string, string | number>>,
   currentId: number,
-): Promise<boolean> => {
-  return database.query(`
+): Promise<boolean> => database.query(`
     INSERT INTO ${tHouseInvName} VALUES (${
-      users.map(user => `${householdId}, ${currentId}, ?, ?, NOW()`).join('),(')
-    })
+  users.map(() => `${householdId}, ${currentId}, ?, ?, NOW()`).join('),(')
+})
   `, users.flatMap(user => [user.id, user.invitationMessage || '']));
-}
 
 export const createHousehold = async (
   data: Record<string, string | number>,
@@ -176,26 +174,27 @@ export const createHousehold = async (
   }
   const success = await database.query(`
     INSERT INTO ${tHouseMemName}
-    VALUES (${result.insertId}, ${currentId}, ${currentId}, ${HOUSEHOLD_ROLE_TYPE.ADMIN}, ?, ?, NOW())
+    VALUES (${result.insertId}, ${currentId}, ${currentId}, '${HOUSEHOLD_ROLE_TYPE.ADMIN}', ?, ?, NOW())
   `, [data[HOUSEHOLD_KEYS.USER_NAME], data[HOUSEHOLD_KEYS.USER_PHOTO]]);
   return success && result.insertId;
-}
+};
 
 export const deleteInvitation = async (
   currentId: number,
   { fromId, householdId }: { fromId: number; householdId: number },
 ): Promise<boolean> =>
-  await database.query(`
+  database.query(`
     DELETE FROM ${tHouseInvName}
     WHERE ${tabHouseInvIDTo}=${currentId} AND ${tabHouseInvIDFrom}=? AND ${tabHouseInvIDHousehold}=?
   `, [fromId, householdId]);
 
 export const approveInvitation = async (
   currentId: number,
-  { fromId, householdId, name, photo }: { fromId: number; householdId: number; name: string, photo: string },
+  { fromId, householdId, name, photo }: { fromId: number; householdId: number; name: string; photo: string },
 ): Promise<boolean> =>
-  await database.query(`
+  database.query(`
     INSERT INTO ${tHouseMemName} (
-      ${houseMemCols.id_household}, ${houseMemCols.id_user}, ${houseMemCols.id_from} ${houseMemCols.role}, ${houseMemCols.name}, ${houseMemCols.photo}, ${houseMemCols.date_joined}
+      ${houseMemCols.id_household}, ${houseMemCols.id_user}, ${houseMemCols.id_from} ${houseMemCols.role},
+      ${houseMemCols.name}, ${houseMemCols.photo}, ${houseMemCols.date_joined}
     ) VALUES (?, ${currentId}, ?, '${HOUSEHOLD_ROLE_TYPE.MEMBER}', ?, NOW())
   `, [householdId, fromId, name, photo]);

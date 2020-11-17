@@ -1,13 +1,14 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
+import { push } from 'react-router-redux';
 
 import { handleResponse } from 'clientSrc/helpers/sagas';
 import { updateSettings, loadSettings } from 'clientSrc/effects/settingsEffects';
 import { findUsers, connectionRequest } from 'clientSrc/effects/conectionEffects';
+import { createHousehold, invitationApprove, invitationIgnore } from 'clientSrc/effects/householdEffects';
 import * as SettingsActions from 'clientSrc/actions/settingsActions';
 import * as NotificationActions from 'clientSrc/actions/notificationActions';
 import * as NotificationTypes from 'shared/constants/notificationTypes';
 import { ERROR, INFO, SUCCESS } from 'shared/constants/localeMessages';
-import { createHousehold, invitationApprove, invitationIgnore } from 'clientSrc/effects/householdEffects';
 
 function* loadSettingsSaga({ payload: { category, tab } }) {
   try {
@@ -113,8 +114,7 @@ function* ignoreInvitationSaga({ payload }) {
 function* createHouseholdSaga({ payload }) {
   try {
     const { data } = yield call(createHousehold, payload);
-    yield call(handleResponse, data, function* ({ url, ...rest }) {
-      console.log(url, rest);
+    yield call(handleResponse, data, function* ({ url }) {
       yield put(push(url));
     });
   } catch (error) {

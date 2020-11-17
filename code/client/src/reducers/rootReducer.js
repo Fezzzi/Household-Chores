@@ -31,7 +31,8 @@ const stateLoaded = (state, { payload: { debug, loggedUser, user } }) => ({
 const rootReducer = createReducer(initialState, {
   [RootActions.stateLoaded.toString()]: stateLoaded,
   [AuthActions.logInSuccess.toString()]: logInUser,
-});
+}
+);
 
 export default combineReducers({
   app: rootReducer,

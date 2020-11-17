@@ -8,15 +8,15 @@ import { HOUSEHOLD } from 'shared/constants/localeMessages';
 import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
 
 // todo: Replace with some branded Logo-like placeholder
+import { useDispatch, useSelector } from 'react-redux';
+import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys';
+import * as SettingsActions from 'clientSrc/actions/settingsActions';
 import newHouseholdIcon from '~/static/resources/icons/new-household.svg';
 
 import HouseholdFormHeader from './HouseholdFormHeader';
 import HouseholdInvitationForm from './HouseholdInvitationForm';
 import LocaleText from '../../common/LocaleText';
 import Table from '../../common/Table';
-import { useDispatch, useSelector } from 'react-redux';
-import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys';
-import * as SettingsActions from 'clientSrc/actions/settingsActions';
 
 const HouseholdCreateForm = ({ connections }) => {
   const [timer, setTimer] = useState(null);
@@ -31,18 +31,18 @@ const HouseholdCreateForm = ({ connections }) => {
 
   const { inputs, errors, isFormSending } = state;
 
-  const user = useSelector(({ app: { user } }) => user);
+  const userState = useSelector(({ app }) => app.user);
   const currentUser = useMemo(() => ({
-      id: user[PROFILE.ID],
-      photo: user[PROFILE.PHOTO],
-      name: user[PROFILE.NAME],
-      role: HOUSEHOLD_ROLE_TYPE.ADMIN,
-    }), [user]
+    id: userState[PROFILE.ID],
+    photo: userState[PROFILE.PHOTO],
+    name: userState[PROFILE.NAME],
+    role: HOUSEHOLD_ROLE_TYPE.ADMIN,
+  }), [userState]
   );
 
   const invitationTableProps = useMemo(() => {
     const date = new Date();
-    const timeString = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.toTimeString().split(' ')[0]}`
+    const timeString = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.toTimeString().split(' ')[0]}`;
 
     return useInvitationListProps(
       invitations.map(user => ({
@@ -53,34 +53,86 @@ const HouseholdCreateForm = ({ connections }) => {
         fromNickname: currentUser.name,
         fromId: currentUser.id,
         dateCreated: timeString,
-      }))
-      , (fromId, toId) => setInvitations(prevState => prevState.filter(user => user.id !== toId))
+      })),
+      (fromId, toId) => setInvitations(prevState => prevState.filter(user => user.id !== toId))
     );
   }, [connections, invitations]);
 
+  const loadImageUrlWithCallback = (image, type, callback) => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.onload = () => {
+      canvas.height = img.height;
+      canvas.width = img.width;
+      ctx.drawImage(img, 0, 0);
+      const dataUrl = canvas.toDataURL(type);
+      callback({
+        type,
+        size: dataUrl.length,
+        name: image,
+        data: dataUrl,
+      });
+    };
+    img.src = image;
+  };
+
   const dispatch = useDispatch();
-  const handleCreateHousehold = useCallback(e => {
+  const handleCreateHousehold = useCallback(() => {
     setState(prevState => ({
       ...prevState,
       isFormSending: true,
     }));
 
-    dispatch(SettingsActions.createHousehold({
-      inputs: {
-        [HOUSEHOLD_KEYS.USER_PHOTO]: currentUser.photo,
-        [HOUSEHOLD_KEYS.USER_NAME]: currentUser.name,
-        [HOUSEHOLD_KEYS.NAME]: 'New Household',
-        [HOUSEHOLD_KEYS.PHOTO]: newHouseholdIcon,
-        ...inputs,
-      },
-      invitations,
-    }));
+    const inputsData = {
+      [HOUSEHOLD_KEYS.USER_NAME]: currentUser.name,
+      [HOUSEHOLD_KEYS.NAME]: 'New Household',
+      ...inputs,
+    };
+
+    if (!inputs[HOUSEHOLD_KEYS.PHOTO]) {
+      loadImageUrlWithCallback(newHouseholdIcon, 'image/svg+xml', householdPhoto => {
+        if (!inputs[HOUSEHOLD_KEYS.USER_PHOTO]) {
+          loadImageUrlWithCallback(currentUser.photo, `image/${currentUser.photo.split('.').splice(-1)[0]}`, userPhoto => {
+            dispatch(SettingsActions.createHousehold({
+              inputs: {
+                ...inputsData,
+                [HOUSEHOLD_KEYS.PHOTO]: householdPhoto,
+                [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
+              },
+              invitations,
+            }));
+          });
+        } else {
+          dispatch(SettingsActions.createHousehold({
+            inputs: {
+              ...inputsData,
+              [HOUSEHOLD_KEYS.PHOTO]: householdPhoto,
+            },
+            invitations,
+          }));
+        }
+      });
+    } else if (!inputs[HOUSEHOLD_KEYS.USER_PHOTO]) {
+      loadImageUrlWithCallback(currentUser.photo, `image/${currentUser.photo.split('.').splice(-1)[0]}`, userPhoto => {
+        dispatch(SettingsActions.createHousehold({
+          inputs: {
+            ...inputsData,
+            [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
+          },
+          invitations,
+        }));
+      });
+    } else {
+      dispatch(SettingsActions.createHousehold({ inputs: inputsData, invitations }));
+    }
+
     setTimer(setTimeout(
       () => setState && setState(prevState => ({
         ...prevState,
         isFormSending: false,
       })), SUBMIT_TIMEOUT));
-  }, [dispatch, currentUser, invitations]);
+  }, [dispatch, currentUser, inputs, invitations]);
 
   return (
     <>

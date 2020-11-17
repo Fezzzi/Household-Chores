@@ -35,9 +35,10 @@ const getFiles = dir => {
   return Array.prototype.concat(...files);
 };
 
-const cleanDirectory = (path, files) =>
-  getFiles(path)
+const cleanDirectory = (dirPath, files) =>
+  getFiles(dirPath)
     .filter(storedFile => files.indexOf(storedFile) === -1)
+    // eslint-disable-next-line no-console
     .forEach(unusedFile => unlink(unusedFile, () => console.log(`unlinked ${unusedFile}`)));
 
 const cleanUploads = async () => {
@@ -72,6 +73,7 @@ const cleanUploads = async () => {
       if (photosByKeys[directory.name]) {
         cleanDirectory(path.join(uploadsDir, directory.name), photosByKeys[directory.name]);
       } else {
+        // eslint-disable-next-line no-console
         rimraf(path.join(uploadsDir, directory.name), [], () => console.log(`removed ${directory.name}/`));
       }
     }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import deepEqual from 'fast-deep-equal';
@@ -13,7 +13,8 @@ import * as SettingTypes from 'shared/constants/settingTypes';
 import { getSubmitHandler } from 'clientSrc/helpers/form';
 import SettingsColumn from './SettingsColumn';
 
-const Settings = ({ categoryId, tabId, history }) => {
+const Settings = memo(({ categoryId, tabId, history }) => {
+  // todo: Change categoryID and tabId to be handled here and not in router - to support re-rendering triggered by search-query change
   const settings = useSelector(({ settings: settingsState }) => settingsState, deepEqual);
 
   const dispatch = useDispatch();
@@ -57,11 +58,10 @@ const Settings = ({ categoryId, tabId, history }) => {
       tab: newTab,
     });
 
-    // todo: Pushing into history triggers rerender as it gets noticed in Router.jsx - fix to avoid this component re-rendering
-    // history.push({
-    //   pathname: newCategory,
-    //   search: `?tab=${newTab}`,
-    // });
+    history.push({
+      pathname: newCategory,
+      search: `?tab=${newTab}`,
+    });
     loadSettings(newCategory, newTab);
   }, [categoryTypes, setState]);
 
@@ -71,10 +71,9 @@ const Settings = ({ categoryId, tabId, history }) => {
       tab: newTab,
     }));
 
-    // todo: Pushing into history triggers rerender as it gets noticed in Router.jsx - fix to avoid this component re-rendering
-    // history.push({
-    //   search: `?tab=${newTab}`,
-    // });
+    history.push({
+      search: `?tab=${newTab}`,
+    });
     loadSettings(category, newTab);
   }, [category, setState]);
 
@@ -113,7 +112,7 @@ const Settings = ({ categoryId, tabId, history }) => {
       </ContentColumn>
     </SettingsWrapper>
   );
-};
+});
 
 Settings.propTypes = {
   categoryId: PropTypes.string.isRequired,

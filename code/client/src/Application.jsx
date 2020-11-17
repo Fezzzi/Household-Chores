@@ -1,6 +1,8 @@
 import React from 'react';
 import createSagaMiddleware from 'redux-saga';
 import { Provider } from 'react-redux';
+import { routerMiddleware } from 'react-router-redux';
+import { createBrowserHistory } from 'history';
 import { applyMiddleware, compose, createStore } from 'redux';
 
 import { PageContent, PageWrapper, PortalAnchor } from 'clientSrc/styles/blocks';
@@ -14,11 +16,13 @@ import PageTheme from './components/PageTheme';
 import Footer from './components/Footer';
 import Modal from './components/modals/Modal';
 
+export const history = createBrowserHistory();
+
 export default () => {
   const sagaMiddleware = createSagaMiddleware();
 
   const store = createStore(rootReducer,
-    compose(applyMiddleware(sagaMiddleware), window.__REDUX_DEVTOOLS_EXTENSION__
+    compose(applyMiddleware(routerMiddleware(history), sagaMiddleware), window.__REDUX_DEVTOOLS_EXTENSION__
       ? window.__REDUX_DEVTOOLS_EXTENSION__()
       : v => v));
 

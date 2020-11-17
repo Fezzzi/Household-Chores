@@ -24,7 +24,7 @@ export const findBlockedConnections = async (userId: number): Promise<Array<numb
     WHERE ${tabIDTo}=${userId} AND ${tabState}='${CONNECTION_STATE_TYPE.BLOCKED}'
   `);
 
-export const findApprovedConnections = async (userId: number): Promise<Array<number>> =>
+export const findApprovedConnections = async (userId: number): Promise<Array<Record<string, string | number>>> =>
   database.query(`
     SELECT users.${tabUsersID}, users.${tabUsersNickname}, users.${tabUsersPhoto}, ${tabDateCreated} FROM ${tName}
     INNER JOIN ${tUsersName} AS users

@@ -11,7 +11,6 @@ import {
 import PrimaryButton from 'clientSrc/components/forms/common/PrimaryButton';
 import LocaleText from 'clientSrc/components/common/LocaleText';
 import * as ModalActions from 'clientSrc/actions/modalActions';
-import { COLORS } from 'clientSrc/styles/constants';
 import { COMMON, FORM } from 'shared/constants/localeMessages';
 import EditorOverlay from '~/static/resources/editor-overlay.png';
 
@@ -52,8 +51,8 @@ const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
         : 1 / ((130 - zoom) / 30);
 
       const windowSize = CANVAS_SIZE * zoomMultiple;
-      const sx = ((photoObj.width / 2) - windowSize / 2) + offsets.x;
-      const sy = ((photoObj.height / 2) - windowSize / 2) + offsets.y;
+      const sx = ((photoObj.width / 2) - (windowSize / 2)) + offsets.x;
+      const sy = ((photoObj.height / 2) - (windowSize / 2)) + offsets.y;
 
       canvasContext.drawImage(photoObj, sx, sy, windowSize, windowSize, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
       canvasContext.drawImage(editorOverlay, 0, 0);
@@ -68,9 +67,10 @@ const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
 
   const closeModal = useCallback(() => dispatch(ModalActions.closeModal()), [dispatch]);
 
-  const cropPhoto = (photoObj, offsets, zoom) => {
+  const savePhoto = useCallback(() => {
     const canvas = document.createElement('canvas');
-    canvas.width = canvas.height = IMG_SIZE;
+    canvas.width = IMG_SIZE;
+    canvas.height = IMG_SIZE;
     const context = canvas.getContext('2d');
 
     const zoomMultiple = zoom >= 100
@@ -78,22 +78,18 @@ const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
       : 1 / ((130 - zoom) / 30);
 
     const windowSize = IMG_SIZE * zoomMultiple;
-    const sx = ((photoObj.width / 2) - windowSize / 2) + offsets.x;
-    const sy = ((photoObj.height / 2) - windowSize / 2) + offsets.y;
+    const sx = ((photoObj.width / 2) - (windowSize / 2)) + offsets.x;
+    const sy = ((photoObj.height / 2) - (windowSize / 2)) + offsets.y;
 
     context.drawImage(photoObj, sx, sy, windowSize, windowSize, 0, 0, IMG_SIZE, IMG_SIZE);
-    return canvas.toDataURL();
-  };
 
-  const savePhoto = useCallback(() => {
-    const editedPhoto = cropPhoto(photoObj, offsets, zoom);
-    onClose(editedPhoto, size);
+    onClose(canvas.toDataURL(), size);
     closeModal();
   }, [photoObj, offsets, zoom, closeModal, size]);
 
   const handleWheelZooming = useCallback(e => {
     e.stopPropagation();
-    const newZoom = zoom + e.deltaY / 100;
+    const newZoom = zoom + (e.deltaY / 100);
     if (newZoom >= 1 && newZoom <= 200) {
       setZoom(newZoom);
     }
@@ -108,8 +104,8 @@ const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
         ? (zoom - 85) / 15
         : 1 / ((130 - zoom) / 30);
 
-      const newOffsetX = offsets.x + (x - e.pageX) * zoomMultiple;
-      const newOffsetY = offsets.y + (y - e.pageY) * zoomMultiple;
+      const newOffsetX = offsets.x + ((x - e.pageX) * zoomMultiple);
+      const newOffsetY = offsets.y + ((y - e.pageY) * zoomMultiple);
 
       if ((photoObj.width / 2) - Math.abs(newOffsetX) > 0 && (photoObj.height / 2) - Math.abs(newOffsetY) > 0) {
         setOffsets({ x: newOffsetX, y: newOffsetY });

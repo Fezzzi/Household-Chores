@@ -30,8 +30,8 @@ const ProfileForm = ({ data, onSubmit }) => {
       inputs: {},
       errors: {},
     }));
-    setHeaderKey(prevState => ++prevState)
-  }, [data])
+    setHeaderKey(prevState => prevState + 1);
+  }, [data]);
 
   const { [PROFILE.PHOTO]: photo, [PROFILE.NAME]: name, [PROFILE.EMAIL]: email, [PROFILE.CONNECTION_VISIBILITY]: visibility } = data;
   const { submitMessage, errors, isFormValid, isFormSending, inputs } = state;

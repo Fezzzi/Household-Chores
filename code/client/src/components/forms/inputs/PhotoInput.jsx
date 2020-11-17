@@ -25,8 +25,8 @@ const PhotoInput = ({
   const [dragActive, setDragActive] = useState(false);
   const dispatch = useDispatch();
 
-  const addNotification = useCallback((type, message) => dispatch(
-    NotificationActions.addNotifications({ [type]: [message] })
+  const addNotification = useCallback((type, msg) => dispatch(
+    NotificationActions.addNotifications({ [type]: [msg] })
   ), [dispatch]);
 
   const openPhotoEditor = useCallback((photoBase, photoObj, onClose) => dispatch(
@@ -45,20 +45,20 @@ const PhotoInput = ({
       event.target.value = '';
       return;
     }
-    const { type, name } = files[0];
+    const { type, name: photoName } = files[0];
     const reader = new FileReader();
     reader.onload = ({ target: { result } }) => {
-      const img = new Image();
-      img.onload = () => {
-        if (type === 'image/gif') {
-          setFile(result);
-          updateInput(inputValid, {
-            type,
-            size: result.length,
-            name,
-            data: result,
-          });
-        } else {
+      if (type === 'image/gif') {
+        setFile(result);
+        updateInput(inputValid, {
+          type,
+          size: result.length,
+          name: photoName,
+          data: result,
+        });
+      } else {
+        const img = new Image();
+        img.onload = () => {
           openPhotoEditor(result, img, (editedPhoto, newSize) => {
             setFile(editedPhoto);
             updateInput(inputValid, {
@@ -68,9 +68,9 @@ const PhotoInput = ({
               data: editedPhoto,
             });
           });
-        }
-      };
-      img.src = result;
+        };
+        img.src = result;
+      }
     };
     reader.readAsDataURL(files[0]);
     event.target.value = '';

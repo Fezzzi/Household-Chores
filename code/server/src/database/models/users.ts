@@ -28,7 +28,7 @@ export const isCorrectPassword = async (password: string, userId: number): Promi
     `SELECT ${tabPassword} FROM ${tName} WHERE ${tabID}=?`, [userId]
   );
 
-  return result && result.length && await checkPass(password, result[0][tabPassword]);
+  return result && result.length && checkPass(password, result[0][tabPassword]);
 };
 export const findProfileData = async (userId: number): Promise<Record<string, string | number>> => {
   const result = await database.query(`
@@ -102,14 +102,14 @@ export const updateUserData = async (
   const newPass = data[PROFILE.NEW_PASSWORD] && await encryptPass(data[PROFILE.NEW_PASSWORD] as string);
   return database.query(
     `UPDATE ${tName} SET ${
-        [
-          data[PROFILE.NAME] && `${tabNickname}=?`,
-          data[PROFILE.EMAIL] && `${tabEmail}=?`,
-          data[PROFILE.PHOTO] && `${tabPhoto}=?`,
-          data[PROFILE.NEW_PASSWORD] && `${tabPassword}=?`,
-          data[PROFILE.CONNECTION_VISIBILITY] && `${tabVisibility}=?`,
-        ].filter(Boolean).join(',')
-      } WHERE ${tabID}=${userId}
+      [
+        data[PROFILE.NAME] && `${tabNickname}=?`,
+        data[PROFILE.EMAIL] && `${tabEmail}=?`,
+        data[PROFILE.PHOTO] && `${tabPhoto}=?`,
+        data[PROFILE.NEW_PASSWORD] && `${tabPassword}=?`,
+        data[PROFILE.CONNECTION_VISIBILITY] && `${tabVisibility}=?`,
+      ].filter(Boolean).join(',')
+    } WHERE ${tabID}=${userId}
     `, [
       data[PROFILE.NAME], data[PROFILE.EMAIL], data[PROFILE.PHOTO], newPass, data[PROFILE.CONNECTION_VISIBILITY],
     ].filter(Boolean)

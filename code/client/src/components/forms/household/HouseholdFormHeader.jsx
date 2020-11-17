@@ -14,9 +14,9 @@ import { HOUSEHOLD } from 'shared/constants/localeMessages';
 
 import EditableTextField from 'clientSrc/components/common/EditableTextField';
 import EditablePhotoField from 'clientSrc/components/common/EditablePhotoField';
+import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys';
 import LocaleText from '../../common/LocaleText';
 import PrimaryButton from '../common/PrimaryButton';
-import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys';
 
 const HouseholdFormHeader = ({
   photo, name, inputs, errors, currentUser, membersCount, setFormState,

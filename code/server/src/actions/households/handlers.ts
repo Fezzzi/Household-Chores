@@ -1,36 +1,46 @@
-import { HOUSEHOLD_DIR, uploadFiles } from "serverSrc/helpers/files.";
-import { addHouseholdInvitations, createHousehold } from "serverSrc/database/models/households";
-import * as NotificationTypes from "shared/constants/notificationTypes";
-import {HOUSEHOLD_KEYS, PROFILE} from "shared/constants/settingsDataKeys";
-import { ERROR } from "shared/constants/localeMessages";
-import * as InputTypes from "shared/constants/inputTypes";
-import { validateField } from "serverSrc/helpers/settings";
+import { HOUSEHOLD_DIR, uploadFiles } from 'serverSrc/helpers/files.';
+import { validateField } from 'serverSrc/helpers/settings';
+import { addHouseholdInvitations, createHousehold } from 'serverSrc/database/models/households';
+import { findApprovedConnections } from 'serverSrc/database/models/connections';
+import { SETTINGS_PREFIX } from 'shared/constants/api';
+import * as InputTypes from 'shared/constants/inputTypes';
+import * as NotificationTypes from 'shared/constants/notificationTypes';
+import * as SettingTypes from 'shared/constants/settingTypes';
+import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys';
+import { ERROR } from 'shared/constants/localeMessages';
 
 const validateCreateData = async (
   inputs: Record<string, string | number>,
   invitations: Array<Record<string, string | number>>,
+  userId: number,
   res: any
 ): Promise<boolean> => {
   if (!inputs[HOUSEHOLD_KEYS.NAME] || !inputs[HOUSEHOLD_KEYS.USER_NAME]
     || !inputs[HOUSEHOLD_KEYS.PHOTO] || !inputs[HOUSEHOLD_KEYS.USER_PHOTO]
   ) {
+    res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.INVALID_DATA] });
     return false;
   }
 
-  if(!(validateField(res, inputs[HOUSEHOLD_KEYS.NAME], InputTypes.TEXT)
+  if (!(validateField(res, inputs[HOUSEHOLD_KEYS.NAME], InputTypes.TEXT)
     && validateField(res, inputs[HOUSEHOLD_KEYS.USER_NAME], InputTypes.TEXT)
     && validateField(res, inputs[HOUSEHOLD_KEYS.PHOTO], InputTypes.PHOTO)
     && validateField(res, inputs[HOUSEHOLD_KEYS.USER_PHOTO], InputTypes.PHOTO)
-  )){
+  )) {
     return false;
   }
 
   if (invitations.length > 0) {
-
+    const connections = await findApprovedConnections(userId);
+    const connectionIds = connections.map(({ id }) => id);
+    const valid = invitations.every(({ id }) => connectionIds.indexOf(id) !== -1);
+    if (!valid) {
+      res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.ACTION_ERROR] });
+      return false;
+    }
   }
-
   return true;
-}
+};
 
 export const handleCreateHousehold = async (
   inputs: Record<string, string | number>,
@@ -39,9 +49,8 @@ export const handleCreateHousehold = async (
   req: any,
   res: any,
 ): Promise<boolean> => {
-  const valid = await validateCreateData(inputs, invitations, res);
+  const valid = await validateCreateData(inputs, invitations, userId, res);
   if (!valid) {
-    res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.INVALID_DATA] });
     return true;
   }
   const [photo, userPhoto] = uploadFiles([
@@ -64,9 +73,9 @@ export const handleCreateHousehold = async (
     res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.ACTION_ERROR] });
     return true;
   }
-  const success = await addHouseholdInvitations(householdId, invitations, userId);
+  const success = invitations.length === 0 || await addHouseholdInvitations(householdId, invitations, userId);
   res.status(200).send(success
-    ? { url: `/settings/households?tab=household-${householdId}` }
+    ? { url: `/${SETTINGS_PREFIX}/${SettingTypes.CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}` }
     : { [NotificationTypes.ERRORS]: [ERROR.ACTION_ERROR] });
   return true;
-}
+};

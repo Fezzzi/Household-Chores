@@ -9,7 +9,7 @@ import {
 import * as NotificationTypes from 'shared/constants/notificationTypes';
 import { ERROR } from 'shared/constants/localeMessages';
 
-import { handleCreateHousehold } from "./handlers";
+import { handleCreateHousehold } from './handlers';
 
 export default () => {
   const router = express.Router();
