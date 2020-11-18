@@ -10,6 +10,10 @@ export const useContentRendererKeys = (category, tab, categoryTypes, tabTypes) =
       ? categoryTypes[category]
       : null;
 
+  if (categoryKey === null) {
+    return { categoryKey, tabKey: null }
+  }
+
   const tabKey = settingsRenderers[categoryKey][tab]
     ? tab
     : settingsRenderers[categoryKey][tabTypes[tab]]

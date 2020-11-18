@@ -4,44 +4,48 @@ import PropTypes from 'prop-types';
 import deepEqual from 'fast-deep-equal';
 
 import { ContentColumn, SettingsWrapper } from 'clientSrc/styles/blocks/settings';
-import * as SettingsActions from 'clientSrc/actions/settingsActions';
 import { settingsRenderers } from 'clientSrc/constants/settingsRenderers';
 import { CATEGORY_ICONS, TAB_ICONS } from 'clientSrc/constants/settingIcons';
+import { getSubmitHandler } from 'clientSrc/helpers/form';
 import { useContentRendererKeys } from 'clientSrc/helpers/settings';
+import * as SettingsActions from 'clientSrc/actions/settingsActions';
 import * as SettingTypes from 'shared/constants/settingTypes';
 
-import { getSubmitHandler } from 'clientSrc/helpers/form';
 import SettingsColumn from './SettingsColumn';
 
-const Settings = memo(({ categoryId, tabId, history }) => {
-  // todo: Change categoryID and tabId to be handled here and not in router - to support re-rendering triggered by search-query change
+const Settings = memo(({ history, location }) => {
+  const [state, setState] = useState({ category: null, tab: null });
+
   const settings = useSelector(({ settings: settingsState }) => settingsState, deepEqual);
 
   const dispatch = useDispatch();
   const loadSettings = useCallback((category, tab) =>
-    dispatch(SettingsActions.loadSettings({ category, tab })),
-  [dispatch]);
+      dispatch(SettingsActions.loadSettings({ category, tab })),
+    [dispatch]);
 
-  const [state, setState] = useState({
-    category: categoryId,
-    tab: tabId || SettingTypes.TAB_ROWS[categoryId][0],
-  });
-  const [peekedTabs, setPeekedTabs] = useState(SettingTypes.TAB_ROWS[categoryId]);
+  useEffect(() => {
+    let category = location.pathname.split('/')?.[2];
+    let tab = location.search.match(/tab=([^&]+)/)?.[1];
+
+    setState({
+      category,
+      tab,
+    });
+    loadSettings(category, tab);
+    // todo: Resolve redirecting to default category or default tab of selected category in case of route not matching
+  }, [location]);
 
   const { data, categories, messages, categoryTypes, tabTypes } = settings;
   const { category, tab } = state;
+  const [peekedTabs, setPeekedTabs] = useState(SettingTypes.TAB_ROWS[category]);
 
   const tabs = useMemo(() => {
     if (settings.tabs.length > 0) {
       setPeekedTabs(settings.tabs);
       return settings.tabs;
     }
-    return SettingTypes.TAB_ROWS[categoryId];
+    return SettingTypes.TAB_ROWS[category];
   }, [settings.tabs]);
-
-  useEffect(() => {
-    loadSettings(category, tab);
-  }, []);
 
   const { categoryKey, tabKey } = useMemo(() =>
     useContentRendererKeys(category, tab, categoryTypes, tabTypes),
@@ -105,7 +109,7 @@ const Settings = memo(({ categoryId, tabId, history }) => {
         messages={messages}
         types={tabTypes}
         changeSelection={changeTab}
-        modifiers={settingsRenderers[category].tabModifiers && settingsRenderers[category].tabModifiers(data)}
+        modifiers={settingsRenderers[category]?.tabModifiers && settingsRenderers[category].tabModifiers(data)}
       />
       <ContentColumn>
         {categoryKey && tabKey && settingsRenderers[categoryKey][tabKey](data, submitHandler, tab, category)}
@@ -115,12 +119,8 @@ const Settings = memo(({ categoryId, tabId, history }) => {
 });
 
 Settings.propTypes = {
-  categoryId: PropTypes.string.isRequired,
-  tabId: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.bool,
-  ]),
   history: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
 };
 
 export default Settings;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Save } from '@material-ui/icons';
 
@@ -14,6 +14,8 @@ import HouseholdInvitationForm from './HouseholdInvitationForm';
 import LocaleText from '../../common/LocaleText';
 import Table from '../../common/Table';
 import { SimpleFloatingElement } from '../../portals';
+import { useSelector } from 'react-redux';
+import { PROFILE } from 'shared/constants/settingsDataKeys';
 
 const HouseholdModificationForm = ({ household, connections }) => {
   const [timer, setTimer] = useState(null);
@@ -24,7 +26,9 @@ const HouseholdModificationForm = ({ household, connections }) => {
     inputs: {},
     errors: {},
   });
+  // This state holds information about sending state of leave/delete buttons in household header
   const [sendingField, setSendingField] = useState(null);
+  const [newInvitations, setNewInvitations] = useState([]);
 
   useEffect(() => () => timer && clearTimeout(timer), []);
 
@@ -56,12 +60,14 @@ const HouseholdModificationForm = ({ household, connections }) => {
 
   const { inputs, errors, isFormSending, isFormValid, submitMessage } = state;
 
+  const userState = useSelector(({ app }) => app.user);
   // todo: Use members.find to find current user data by id from global store
-  const currentUser = {
-    photo: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
-    name: 'USER USER',
-    role: HOUSEHOLD_ROLE_TYPE.MANAGER,
-  };
+  const currentUser = useMemo(() => ({
+    id: userState[PROFILE.ID],
+    photo: userState[PROFILE.PHOTO],
+    name: userState[PROFILE.NAME],
+    role: HOUSEHOLD_ROLE_TYPE.ADMIN,
+  }), [userState]);
 
   const handleLeaveHousehold = e => {
     setSendingField({ [HOUSEHOLD.LEAVE]: HOUSEHOLD.LEAVING });
@@ -107,7 +113,10 @@ const HouseholdModificationForm = ({ household, connections }) => {
       <SectionHeadline>
         <LocaleText message={HOUSEHOLD.INVITE_USERS} />
       </SectionHeadline>
-      <HouseholdInvitationForm connections={connections} />
+      <HouseholdInvitationForm
+        connections={connections.filter(({ id }) => !newInvitations.find(user => user.id === id))}
+        onInvite={id => setNewInvitations(prevState => [...prevState, connections.find(user => user.id === id)])}
+      />
 
       <SectionHeadline>
         <LocaleText message={HOUSEHOLD.INVITATIONS} />

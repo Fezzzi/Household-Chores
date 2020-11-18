@@ -40,6 +40,7 @@ const SettingsColumn = ({
 
 SettingsColumn.defaultProps = {
   messages: {},
+  rows: [],
   peekSelection: () => {},
   modifiers: () => '',
 };

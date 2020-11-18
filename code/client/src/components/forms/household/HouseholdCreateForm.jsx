@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { SectionHeadline } from 'clientSrc/styles/blocks/settings';
 import { useInvitationListProps } from 'clientSrc/helpers/household';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
+import * as SettingsActions from 'clientSrc/actions/settingsActions';
 import { HOUSEHOLD } from 'shared/constants/localeMessages';
+import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys';
 import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
 
 // todo: Replace with some branded Logo-like placeholder
-import { useDispatch, useSelector } from 'react-redux';
-import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys';
-import * as SettingsActions from 'clientSrc/actions/settingsActions';
 import newHouseholdIcon from '~/static/resources/icons/new-household.svg';
 
 import HouseholdFormHeader from './HouseholdFormHeader';
@@ -37,8 +37,7 @@ const HouseholdCreateForm = ({ connections }) => {
     photo: userState[PROFILE.PHOTO],
     name: userState[PROFILE.NAME],
     role: HOUSEHOLD_ROLE_TYPE.ADMIN,
-  }), [userState]
-  );
+  }), [userState]);
 
   const invitationTableProps = useMemo(() => {
     const date = new Date();
@@ -52,7 +51,7 @@ const HouseholdCreateForm = ({ connections }) => {
         fromPhoto: currentUser.photo,
         fromNickname: currentUser.name,
         fromId: currentUser.id,
-        dateCreated: timeString,
+        dateCreated: '(PENDING)',
       })),
       (fromId, toId) => setInvitations(prevState => prevState.filter(user => user.id !== toId))
     );
