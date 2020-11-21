@@ -9,7 +9,7 @@ import { FORM, SETTINGS } from 'shared/constants/localeMessages';
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
 import * as SettingTypes from 'shared/constants/settingTypes';
 
-const renderConnectionListForm = (dataKey, emptyMessage, tab, headlineMessage) => (data, handleSubmit) => (
+const renderConnectionListForm = (dataKey, emptyMessage, tab, headlineMessage) => data => (
   <ConnectionListForm
     data={data}
     dataKey={dataKey}
@@ -24,8 +24,8 @@ export const settingsRenderers = {
     [TABS.GENERAL]: (data, handleSubmit) => (
       <ProfileForm data={data} onSubmit={handleSubmit} />
     ),
-    [TABS.NOTIFICATIONS]: data => (
-      <NotificationForm data={data} />
+    [TABS.NOTIFICATIONS]: (data, handleSubmit) => (
+      <NotificationForm data={data} onSubmit={handleSubmit} />
     ),
   },
   [CATEGORIES.CONNECTIONS]: {

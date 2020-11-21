@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Save } from '@material-ui/icons';
 
-import { updateHandler } from 'clientSrc/helpers/form';
+import { useFormState, useUpdateHandler } from 'clientSrc/helpers/form';
 import { FormBody } from 'clientSrc/styles/blocks/settings';
 import * as InputTypes from 'shared/constants/inputTypes';
 import { FORM } from 'shared/constants/localeMessages';
@@ -15,26 +15,25 @@ import Input from '../common/Input';
 
 const ProfileForm = ({ data, onSubmit }) => {
   const [headerKey, setHeaderKey] = useState(0);
-  const [state, setState] = useState({
-    submitMessage: FORM.SAVE,
-    isFormValid: true,
-    isFormSending: false,
-    inputs: {},
-    errors: {},
-  });
+  const {
+    submitMessage,
+    isFormValid,
+    isFormSending,
+    inputs,
+    errors,
+    setFormState,
+  } = useFormState(data);
 
   useEffect(() => {
-    setState(prevState => ({
-      ...prevState,
-      isFormValid: true,
-      inputs: {},
-      errors: {},
-    }));
     setHeaderKey(prevState => prevState + 1);
   }, [data]);
 
-  const { [PROFILE.PHOTO]: photo, [PROFILE.NAME]: name, [PROFILE.EMAIL]: email, [PROFILE.CONNECTION_VISIBILITY]: visibility } = data;
-  const { submitMessage, errors, isFormValid, isFormSending, inputs } = state;
+  const {
+    [PROFILE.PHOTO]: photo,
+    [PROFILE.NAME]: name,
+    [PROFILE.EMAIL]: email,
+    [PROFILE.CONNECTION_VISIBILITY]: visibility,
+  } = data;
 
   return (
     <>
@@ -44,7 +43,7 @@ const ProfileForm = ({ data, onSubmit }) => {
           sending={isFormSending}
           enabled={isFormValid}
           icon={<Save />}
-          onClick={() => onSubmit(inputs, setState, FORM.SAVE, FORM.SAVING)}
+          onClick={() => onSubmit(inputs, setFormState)}
         />
       )}
       <ProfileFormHeader
@@ -54,7 +53,7 @@ const ProfileForm = ({ data, onSubmit }) => {
         email={email}
         inputs={inputs}
         errors={errors}
-        setFormState={setState}
+        setFormState={setFormState}
       />
 
       <FormBody>
@@ -64,7 +63,7 @@ const ProfileForm = ({ data, onSubmit }) => {
           label={FORM.USER_VISIBILITY}
           values={[USER_VISIBILITY_TYPE.FOF, USER_VISIBILITY_TYPE.ALL]}
           placeholder={visibility}
-          updateInput={updateHandler(PROFILE.CONNECTION_VISIBILITY, setState, undefined, visibility)}
+          updateInput={useUpdateHandler(PROFILE.CONNECTION_VISIBILITY, setFormState, undefined, visibility)}
         />
       </FormBody>
     </>

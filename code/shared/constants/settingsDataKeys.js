@@ -9,7 +9,9 @@ export const PROFILE = {
 };
 
 export const NOTIFICATIONS = {
-
+  CONNECTIONS: 'connections',
+  HOUSEHOLDS: 'households',
+  GENERAL: 'general',
 };
 
 export const HOUSEHOLD_GROUP_KEYS = {

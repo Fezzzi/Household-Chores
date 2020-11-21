@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { SearchBarWrapper } from 'clientSrc/styles/blocks/settings';
-import { handlerWrapper } from 'clientSrc/helpers/form';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 import { COMMON } from 'shared/constants/localeMessages';
 import * as InputTypes from 'shared/constants/inputTypes';
@@ -19,7 +18,8 @@ const SearchBar = ({ searchQuery }) => {
 
   useEffect(() => () => clearTimeout(timer));
 
-  const handleClick = handlerWrapper(() => {
+  const handleClick = e => {
+    e.preventDefault();
     setIsSearching(true);
     setSubmitMessage(COMMON.SEARCHING);
     searchQuery(query);
@@ -29,7 +29,7 @@ const SearchBar = ({ searchQuery }) => {
         setIsSearching(false);
         setSubmitMessage(COMMON.SEARCH);
       }), SUBMIT_TIMEOUT);
-  });
+  };
 
   return (
     <SearchBarWrapper>

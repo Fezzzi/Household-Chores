@@ -4,7 +4,7 @@ import { Edit } from '@material-ui/icons';
 
 import { EditableFieldIcon, EditableFieldWrapper } from 'clientSrc/styles/blocks/common';
 import { editableFieldProps } from 'clientSrc/helpers/editableField';
-import { updateHandler } from 'clientSrc/helpers/form';
+import { useUpdateHandler } from 'clientSrc/helpers/form';
 import * as InputTypes from 'shared/constants/inputTypes';
 
 import Input from '../forms/common/Input';
@@ -15,7 +15,7 @@ const EditablePhotoField = ({
   const [hovering, setHovering] = useState(false);
   const [editing, setEditing] = useState(false);
   const inputRef = useRef(null);
-  const handleUpdate = updateHandler(name, setFormState, isFormValidFunc, placeholder);
+  const handleUpdate = useUpdateHandler(name, setFormState, isFormValidFunc, placeholder);
 
   const handleFileRemove = e => {
     setEditing(false);

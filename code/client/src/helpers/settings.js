@@ -11,7 +11,7 @@ export const useContentRendererKeys = (category, tab, categoryTypes, tabTypes) =
       : null;
 
   if (categoryKey === null) {
-    return { categoryKey, tabKey: null }
+    return { categoryKey, tabKey: null };
   }
 
   const tabKey = settingsRenderers[categoryKey][tab]

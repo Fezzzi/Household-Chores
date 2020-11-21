@@ -39,23 +39,18 @@ const HouseholdCreateForm = ({ connections }) => {
     role: HOUSEHOLD_ROLE_TYPE.ADMIN,
   }), [userState]);
 
-  const invitationTableProps = useMemo(() => {
-    const date = new Date();
-    const timeString = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.toTimeString().split(' ')[0]}`;
-
-    return useInvitationListProps(
-      invitations.map(user => ({
-        toPhoto: user.photo,
-        toNickname: user.nickname,
-        toId: user.id,
-        fromPhoto: currentUser.photo,
-        fromNickname: currentUser.name,
-        fromId: currentUser.id,
-        dateCreated: '(PENDING)',
-      })),
-      (fromId, toId) => setInvitations(prevState => prevState.filter(user => user.id !== toId))
-    );
-  }, [connections, invitations]);
+  const invitationTableProps = useMemo(() => useInvitationListProps(
+    invitations.map(user => ({
+      toPhoto: user.photo,
+      toNickname: user.nickname,
+      toId: user.id,
+      fromPhoto: currentUser.photo,
+      fromNickname: currentUser.name,
+      fromId: currentUser.id,
+      dateCreated: '(PENDING)',
+    })),
+    (fromId, toId) => setInvitations(prevState => prevState.filter(user => user.id !== toId))
+  ), [connections, invitations]);
 
   const loadImageUrlWithCallback = (image, type, callback) => {
     const canvas = document.createElement('canvas');

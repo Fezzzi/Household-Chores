@@ -9,13 +9,13 @@ import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
 import { FORM, HOUSEHOLD } from 'shared/constants/localeMessages';
 
 import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
+import { useSelector } from 'react-redux';
+import { PROFILE } from 'shared/constants/settingsDataKeys';
 import HouseholdFormHeader from './HouseholdFormHeader';
 import HouseholdInvitationForm from './HouseholdInvitationForm';
 import LocaleText from '../../common/LocaleText';
 import Table from '../../common/Table';
 import { SimpleFloatingElement } from '../../portals';
-import { useSelector } from 'react-redux';
-import { PROFILE } from 'shared/constants/settingsDataKeys';
 
 const HouseholdModificationForm = ({ household, connections }) => {
   const [timer, setTimer] = useState(null);

@@ -6,7 +6,7 @@ import deepEqual from 'fast-deep-equal';
 import { ContentColumn, SettingsWrapper } from 'clientSrc/styles/blocks/settings';
 import { settingsRenderers } from 'clientSrc/constants/settingsRenderers';
 import { CATEGORY_ICONS, TAB_ICONS } from 'clientSrc/constants/settingIcons';
-import { getSubmitHandler } from 'clientSrc/helpers/form';
+import { useSubmitHandler } from 'clientSrc/helpers/form';
 import { useContentRendererKeys } from 'clientSrc/helpers/settings';
 import * as SettingsActions from 'clientSrc/actions/settingsActions';
 import * as SettingTypes from 'shared/constants/settingTypes';
@@ -20,12 +20,12 @@ const Settings = memo(({ history, location }) => {
 
   const dispatch = useDispatch();
   const loadSettings = useCallback((category, tab) =>
-      dispatch(SettingsActions.loadSettings({ category, tab })),
-    [dispatch]);
+    dispatch(SettingsActions.loadSettings({ category, tab })),
+  [dispatch]);
 
   useEffect(() => {
-    let category = location.pathname.split('/')?.[2];
-    let tab = location.search.match(/tab=([^&]+)/)?.[1];
+    const category = location.pathname.split('/')?.[2];
+    const tab = location.search.match(/tab=([^&]+)/)?.[1];
 
     setState({
       category,
@@ -81,7 +81,7 @@ const Settings = memo(({ history, location }) => {
     loadSettings(category, newTab);
   }, [category, setState]);
 
-  const submitHandler = getSubmitHandler(category, tab);
+  const submitHandler = useSubmitHandler(category, tab);
 
   return (
     <SettingsWrapper>

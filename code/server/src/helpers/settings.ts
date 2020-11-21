@@ -1,5 +1,6 @@
 import { findUser, isCorrectPassword } from 'serverSrc/database/models/users';
 import HOUSEHOLDS_TABLE from 'serverSrc/database/models/tables/households';
+import NOTIFICATION_SETTINGS_TABLE from 'serverSrc/database/models/tables/notification_settings';
 import * as SettingTypes from 'shared/constants/settingTypes';
 import * as InputTypes from 'shared/constants/inputTypes';
 import * as NotificationTypes from 'shared/constants/notificationTypes';
@@ -8,14 +9,6 @@ import { PROFILE } from 'shared/constants/settingsDataKeys';
 import { isInputValid } from 'shared/helpers/validation';
 import { ERROR, INFO } from 'shared/constants/localeMessages';
 import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
-
-export const getCategoryList = (data: object): { categories: string[]; messages: object; types: object } => ({
-  categories: [
-    ...Object.values(SettingTypes.CATEGORIES),
-  ],
-  messages: {},
-  types: {},
-});
 
 export const getTabList = (data: any, category: string): { tabs: string[]; messages: object; types: object } => {
   switch (category) {
@@ -78,6 +71,7 @@ export const validateProfileData = async (
     ]);
 
   if (!valid) {
+    res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.INVALID_DATA] });
     return false;
   }
 
@@ -94,8 +88,23 @@ export const validateProfileData = async (
   return true;
 };
 
-export const validateNotificationData = async (
+export const validateNotificationData = (
   inputs: Record<string, string | number>,
   req: any,
   res: any
-): Promise<boolean> => true;
+): boolean => {
+  const inputKeys = Object.keys(inputs);
+  if (inputKeys.length === 0) {
+    res.status(200).send({ [NotificationTypes.ERRORS]: [INFO.NOTHING_TO_UPDATE] });
+    return false;
+  }
+
+  if (!inputKeys.every(input =>
+    NOTIFICATION_SETTINGS_TABLE.columns[input as keyof typeof NOTIFICATION_SETTINGS_TABLE.columns] !== undefined
+  ) && inputs[NOTIFICATION_SETTINGS_TABLE.columns.id_user] === undefined
+  ) {
+    res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.INVALID_DATA] });
+    return false;
+  }
+  return true;
+};

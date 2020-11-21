@@ -55,8 +55,9 @@ const Router = () => {
               <Route path={`/${SETTINGS_PREFIX}`}>
                 <Redirect to={{
                   pathname: `/${SETTINGS_PREFIX}/${SettingTypes.CATEGORIES.PROFILE}`,
-                  search: `tab=${SettingTypes.TAB_ROWS[SettingTypes.CATEGORIES.PROFILE][0]}`
-                }} />
+                  search: `tab=${SettingTypes.TAB_ROWS[SettingTypes.CATEGORIES.PROFILE][0]}`,
+                }}
+                />
               </Route>
 
               <Route exact path="/" component={Home} />

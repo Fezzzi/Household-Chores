@@ -1,66 +1,65 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Save } from '@material-ui/icons';
 
-import { handlerWrapper, updateHandler } from 'clientSrc/helpers/form';
-import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
-import { NotificationGroupBox, SectionHeadline } from 'clientSrc/styles/blocks/settings';
 import LocaleText from 'clientSrc/components/common/LocaleText';
+import { useFormState, useUpdateHandler } from 'clientSrc/helpers/form';
+import { NotificationGroupBox, SectionHeadline } from 'clientSrc/styles/blocks/settings';
 import { TableBox, TableHeaderBox, TableHeaderCell } from 'clientSrc/styles/blocks/table';
-import { COMMON, FORM } from 'shared/constants/localeMessages';
 import * as InputTypes from 'shared/constants/inputTypes';
+import { FORM } from 'shared/constants/localeMessages';
+import { NOTIFICATIONS } from 'shared/constants/settingsDataKeys';
 
 import Input from '../common/Input';
 import { SimpleFloatingElement } from '../../portals';
 
-const NotificationForm = ({ data }) => {
-  const [timer, setTimer] = useState(null);
-  const [state, setState] = useState({
-    submitMessage: FORM.SAVE,
-    isFormValid: true,
-    isFormSending: false,
-    inputs: {},
-    errors: {},
-  });
+const NotificationForm = ({ data, onSubmit }) => {
+  const {
+    submitMessage,
+    isFormValid,
+    isFormSending,
+    inputs,
+    setFormState,
+  } = useFormState(data);
 
-  useEffect(() => () => timer && clearTimeout(timer), []);
+  const {
+    [NOTIFICATIONS.GENERAL]: general,
+    [NOTIFICATIONS.CONNECTIONS]: connections,
+    [NOTIFICATIONS.HOUSEHOLDS]: households,
+  } = data;
 
-  // todo: Replace all those handleClick all around with some handy helper function
-  const handleClick = handlerWrapper(() => {
-    setState(prevState => ({
-      ...prevState,
-      isFormSending: true,
-      submitMessage: COMMON.SENDING,
-    }));
-
-    setTimer(setTimeout(
-      () => setState && setState(prevState => ({
-        ...prevState,
-        isFormSending: false,
-        submitMessage: FORM.SAVE,
-      })), SUBMIT_TIMEOUT));
-  });
-
-  const { connections, households } = data;
-  const { submitMessage, isFormValid, isFormSending, inputs } = state;
+  const filteredGeneral = useMemo(() => {
+    const filtered = { ...general };
+    if (filtered) {
+      const isMobile = false;
+      if (isMobile) {
+        delete filtered.browser_notifications;
+      } else {
+        delete filtered.mobile_notifications;
+      }
+    }
+    return filtered;
+  }, [general]);
 
   const getNotificationsBlock = (group, groupHeadline) => (
     <>
       <TableBox>
-        <TableHeaderBox>
-          <TableHeaderCell>
-            <LocaleText message={groupHeadline} />
-          </TableHeaderCell>
-        </TableHeaderBox>
+        {groupHeadline && (
+          <TableHeaderBox>
+            <TableHeaderCell>
+              <LocaleText message={groupHeadline} />
+            </TableHeaderCell>
+          </TableHeaderBox>
+        )}
         <NotificationGroupBox>
-          {group && group.map(({ name, value }) => (
+          {group && Object.entries(group).map(([name, value]) => (
             <Input
               key={name}
               type={InputTypes.BOOL}
               name={name}
-              label={name}
-              placeholder={value}
-              updateInput={updateHandler(name, setState, undefined, value)}
+              label={`form.${name}`}
+              placeholder={Boolean(value)}
+              updateInput={useUpdateHandler(name, setFormState, undefined, Boolean(value))}
             />
           ))}
         </NotificationGroupBox>
@@ -76,14 +75,15 @@ const NotificationForm = ({ data }) => {
           sending={isFormSending}
           enabled={isFormValid}
           icon={<Save />}
-          onClick={handleClick}
+          onClick={() => onSubmit(inputs, setFormState)}
         />
       )}
 
       <SectionHeadline first>
-        <LocaleText message={FORM.EMAIL_NOTIFICATIONS} />
+        <LocaleText message={FORM.NOTIFICATIONS} />
       </SectionHeadline>
 
+      {getNotificationsBlock(filteredGeneral)}
       {getNotificationsBlock(connections, FORM.CONNECTIONS)}
       {getNotificationsBlock(households, FORM.HOUSEHOLDS)}
     </>
@@ -92,15 +92,11 @@ const NotificationForm = ({ data }) => {
 
 NotificationForm.propTypes = {
   data: PropTypes.shape({
-    connections: PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      value: PropTypes.bool.isRequired,
-    })),
-    households: PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      value: PropTypes.bool.isRequired,
-    })),
+    [NOTIFICATIONS.GENERAL]: PropTypes.object,
+    [NOTIFICATIONS.CONNECTIONS]: PropTypes.object,
+    [NOTIFICATIONS.HOUSEHOLDS]: PropTypes.object,
   }).isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default NotificationForm;

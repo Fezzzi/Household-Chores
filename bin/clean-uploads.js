@@ -81,4 +81,8 @@ const cleanUploads = async () => {
 };
 
 cleanUploads()
-  .then(() => process.exit());
+  .then(() => process.exit())
+  .catch(err => {
+    console.error(err);
+    process.exit();
+  });

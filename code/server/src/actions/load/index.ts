@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 
 import { LOAD_STATE } from 'shared/constants/api';
 import { findProfileData } from 'serverSrc/database/models/users';
+import { getActivityForUser } from 'serverSrc/database/models/activity';
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ export default () => {
           debug: process.env.DEBUG,
           loggedUser: !!(userId),
           user: userId && await findProfileData(userId),
+          activityFeed: userId && await getActivityForUser(userId),
         });
         return;
       }

@@ -6,6 +6,7 @@ import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
 
 import USERS_TABLE from './tables/users';
 import CONNECTIONS_TABLE from './tables/connections';
+import NOTIFICATION_SETTINGS_TABLE from './tables/notification_settings';
 
 const {
   name: tName,
@@ -22,6 +23,8 @@ const {
     id_from: tabConnectionsIDFrom, id_to: tabConnectionsIDTo, state: tabConnectionsState, message: tabConnectionsMessage,
   },
 } = CONNECTIONS_TABLE;
+
+const { columns: notifyCols, name: tNotifyName } = NOTIFICATION_SETTINGS_TABLE;
 
 export const isCorrectPassword = async (password: string, userId: number): Promise<boolean> => {
   const result = await database.query(
@@ -134,6 +137,7 @@ export const SignUpUser = async (
   if (result.insertId) {
     const fsKey = generateFsKey(result.insertId);
     await database.query(`UPDATE ${tName} SET ${tabFSKey}='${fsKey}' WHERE ${tabID}=${result.insertId}`);
+    await database.query(`INSERT INTO ${tNotifyName} (${notifyCols.id_user}) VALUES (${result.insertId})`);
     return {
       insertId: result.insertId,
       fsKey,

@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { HighlightOff, LockOpen } from '@material-ui/icons';
 
-import { updateHandler } from 'clientSrc/helpers/form';
+import { useUpdateHandler } from 'clientSrc/helpers/form';
 import { FormHeader, FormHeaderPhoto, FormHeaderTitle } from 'clientSrc/styles/blocks/form';
 import {
   ProfileHeaderSubtitle, ProfilePasswordBlock, ProfilePasswordClose, ProfilePasswordIcon,
@@ -64,14 +64,14 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
                   type={InputTypes.PASSWORD}
                   message={FORM.OLD_PASSWORD}
                   inputError={errors[PROFILE.OLD_PASSWORD]}
-                  updateInput={updateHandler(PROFILE.OLD_PASSWORD, setFormState)}
+                  updateInput={useUpdateHandler(PROFILE.OLD_PASSWORD, setFormState)}
                 />
                 <Input
                   name={PROFILE.NEW_PASSWORD}
                   type={InputTypes.PASSWORD}
                   message={FORM.NEW_PASSWORD}
                   inputError={errors[PROFILE.NEW_PASSWORD]}
-                  updateInput={updateHandler(PROFILE.NEW_PASSWORD, setFormState)}
+                  updateInput={useUpdateHandler(PROFILE.NEW_PASSWORD, setFormState)}
                 />
               </ProfilePasswordInputs>
             ) : (

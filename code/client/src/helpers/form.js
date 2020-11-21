@@ -3,7 +3,9 @@ import { useDispatch } from 'react-redux';
 
 import * as SettingsActions from 'clientSrc/actions/settingsActions';
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
+import { FORM } from 'shared/constants/localeMessages';
 
+// todo: Refactor Login, Signup and Reset forms to use useUpdateHandler instead
 export const updateInput = (
   setState,
   input,
@@ -35,7 +37,31 @@ export const updateInput = (
   });
 };
 
-export const updateHandler = (name, setFormState, formValidFunc, placeholder) => (isValid, value, errorMessage) => {
+export const useFormState = data => {
+  const [state, setState] = useState({
+    submitMessage: FORM.SAVE,
+    isFormValid: true,
+    isFormSending: false,
+    inputs: {},
+    errors: {},
+  });
+
+  useEffect(() => {
+    setState(prevState => ({
+      ...prevState,
+      isFormValid: true,
+      inputs: {},
+      errors: {},
+    }));
+  }, [data]);
+
+  return {
+    ...state,
+    setFormState: setState,
+  };
+};
+
+export const useUpdateHandler = (name, setFormState, formValidFunc, placeholder) => (isValid, value, errorMessage) => {
   setFormState(prevState => {
     const newInputs = { ...prevState.inputs };
     if (value !== '' && (placeholder === undefined || value !== placeholder)) {
@@ -64,13 +90,13 @@ export const updateHandler = (name, setFormState, formValidFunc, placeholder) =>
   });
 };
 
-export const getSubmitHandler = (category, tab) => {
+export const useSubmitHandler = (category, tab) => {
   const [timer, setTimer] = useState(0);
   const dispatch = useDispatch();
 
   useEffect(() => () => timer && clearTimeout(timer), []);
 
-  return useCallback((inputs, setFormState, submitMessage, submittingMessage) => {
+  return useCallback((inputs, setFormState, submitMessage = FORM.SAVE, submittingMessage = FORM.SAVING) => {
     setFormState(prevState => ({
       ...prevState,
       isFormSending: true,
@@ -87,6 +113,7 @@ export const getSubmitHandler = (category, tab) => {
   }, [category, tab, dispatch]);
 };
 
+// todo: Remove when removing updateInput
 export const handlerWrapper = handlerFunc => e => {
   e.preventDefault();
   handlerFunc();

@@ -1,10 +1,11 @@
 import * as SettingTypes from 'shared/constants/settingTypes';
 
-import { getCategoryList, getTabList, validateNotificationData, validateProfileData } from 'serverSrc/helpers/settings';
+import { getTabList, validateNotificationData, validateProfileData } from 'serverSrc/helpers/settings';
 import { PROFILE_DIR, uploadFiles } from 'serverSrc/helpers/files.';
 import { findProfileData, updateUserData } from 'serverSrc/database/models/users';
 import { findApprovedConnections, findConnections } from 'serverSrc/database/models/connections';
 import { findUserHouseholds, findUserInvitations } from 'serverSrc/database/models/households';
+import { findNotificationSettings, updateNotificationSettings } from 'serverSrc/database/models/notifications';
 import { CATEGORIES, TABS } from 'shared/constants/settingTypes';
 import * as NotificationTypes from 'shared/constants/notificationTypes';
 import { ERROR } from 'shared/constants/localeMessages';
@@ -13,6 +14,9 @@ import { PROFILE } from 'shared/constants/settingsDataKeys';
 const getTabData = async (category: string, tab: string, req: any) => {
   switch (category) {
     case SettingTypes.CATEGORIES.PROFILE:
+      if (tab === TABS.NOTIFICATIONS) {
+        return findNotificationSettings(req.session.user);
+      }
       return findProfileData(req.session.user);
     case SettingTypes.CATEGORIES.HOUSEHOLDS:
       return {
@@ -29,17 +33,13 @@ const getTabData = async (category: string, tab: string, req: any) => {
 
 export const handleSettingsDataFetch = async (category: string, tab: string, req: any, res: any): Promise<void> => {
   const data = await getTabData(category, tab, req);
-  const { categories, messages: categoryMessages, types: categoryTypes } = getCategoryList(data);
   const { tabs, messages: tabMessages, types: tabTypes } = getTabList(data, category);
   res.status(200).send({
-    categories,
     tabs,
     data,
     messages: {
-      ...categoryMessages,
       ...tabMessages,
     },
-    categoryTypes,
     tabTypes,
   });
 };
@@ -64,10 +64,12 @@ export const handleSettingsDataUpdate = async (
         }
         return updateUserData({ ...inputs, [PROFILE.PHOTO]: photo }, req.session.user);
       } else if (TABS.NOTIFICATIONS) {
-        return validateNotificationData(inputs, req, res);
+        const valid = validateNotificationData(inputs, req, res);
+        if (!valid) {
+          return true;
+        }
+        return updateNotificationSettings(inputs, req.session.user);
       }
-    case CATEGORIES.CONNECTIONS:
-    case CATEGORIES.HOUSEHOLDS:
     default:
       res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.INVALID_REQUEST] });
       return false;
