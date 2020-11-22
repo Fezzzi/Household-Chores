@@ -19,6 +19,7 @@
     "babel-polyfill": "^6.26.0",
     "chai": "^4.2.0",
     "classnames": "^2.2.6",
+    "copy-webpack-plugin": "^6.3.2",
     "cross-env-file": "^1.0.0",
     "css-loader": "^3.5.3",
     "eslint": "^6.8.0",
@@ -94,6 +95,7 @@
   },
   "scripts": {
     "start": "node code/server/dist/bundle.js",
+    "dev": "start npm run start-front && start npm run start-back",
     "start-front": "webpack-dev-server --config config/webpack-front.config.js --open --mode development",
     "start-back": "webpack --watch --config config/webpack-back.config.js --mode development",
     "build": "npm run build-front && npm run build-back",

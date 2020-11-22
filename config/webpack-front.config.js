@@ -2,6 +2,7 @@ const path = require('path');
 const dotenv = require('dotenv').config();
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const webpackAliases = require('./webpack-aliases.config');
 
@@ -21,6 +22,7 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
+    port: 8081,
   },
 
   module: {
@@ -40,7 +42,7 @@ module.exports = {
         test: /\.(png|svg|jpg|gif)$/,
         use: ['file-loader'],
       },
-      // Enables inputing svg files (.svgr) as components to further style them
+      // Enables inputting svg files (.svgr) as components to further style them
       // without blocking standard way of .svg files importing
       {
         test: /\.svgr$/,
@@ -63,7 +65,18 @@ module.exports = {
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: path.resolve(__dirname, '../code/client/src/index.html'),
+      template: path.resolve(__dirname, '../static/index.html'),
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: '../../static/manifest.json' },
+        { from: '../../static/favicon.ico' },
+        { from: '../../static/icons/icon-192.png' },
+        { from: '../../static/icons/icon-512.png' },
+      ],
+      options: {
+        concurrency: 100,
+      },
     }),
     new webpack.DefinePlugin({
       'process.env.PORT': (dotenv.parsed && dotenv.parsed.PORT) || 9000,
