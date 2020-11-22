@@ -37,9 +37,7 @@ export const handleSettingsDataFetch = async (category: string, tab: string, req
   res.status(200).send({
     tabs,
     data,
-    messages: {
-      ...tabMessages,
-    },
+    tabMessages,
     tabTypes,
   });
 };

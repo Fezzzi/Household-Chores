@@ -20,6 +20,7 @@ export default {
   [COMMON.HIDE]: 'Hide',
   [COMMON.ADD_MESSAGE]: 'Append message',
   [COMMON.MESSAGE]: 'Message',
+  [COMMON.NO_CONTENT]: 'No content to display.',
   [COMMON.OR]: 'Or',
   [COMMON.SEARCH]: 'Search',
   [COMMON.SEARCHING]: 'Searching',

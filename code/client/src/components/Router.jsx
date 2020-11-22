@@ -1,16 +1,18 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 
 import { RESOURCES_PREFIX, SETTINGS_PREFIX } from 'shared/constants/api';
 import * as TABS from 'clientSrc/constants/authTabs';
 import * as SettingTypes from 'shared/constants/settingTypes';
 
-import { history } from '../Application';
 import Home from './Home';
 import Resource from './Resource';
 import AuthForm from './forms/auth/AuthForm';
 import Settings from './settings/Settings';
+
+export const history = createBrowserHistory();
 
 const Router = () => {
   const isLoggedUser = useSelector(({ app: { loggedUser } }) => loggedUser);

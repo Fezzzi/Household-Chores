@@ -23,6 +23,7 @@ export const COMMON = {
   HIDE: 'common.hide',
   MESSAGE: 'common.message',
   ADD_MESSAGE: 'common.addMessage',
+  NO_CONTENT: 'common.noContent',
   SENDING: 'common.sending',
   SEARCH: 'common.search',
   SEARCHING: 'common.searching',

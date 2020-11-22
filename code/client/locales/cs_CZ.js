@@ -20,6 +20,7 @@ export default {
   [COMMON.HIDE]: 'Skrýt',
   [COMMON.ADD_MESSAGE]: 'Přidat zprávu',
   [COMMON.MESSAGE]: 'Zpráva',
+  [COMMON.NO_CONTENT]: 'Nebyl nalezen žádný obsah.',
   [COMMON.OR]: 'Nebo',
   [COMMON.SEARCH]: 'Hledat',
   [COMMON.SEARCHING]: 'Hledám',

@@ -7,14 +7,17 @@ import { ContentColumn, SettingsWrapper } from 'clientSrc/styles/blocks/settings
 import { settingsRenderers } from 'clientSrc/constants/settingsRenderers';
 import { CATEGORY_ICONS, TAB_ICONS } from 'clientSrc/constants/settingIcons';
 import { useSubmitHandler } from 'clientSrc/helpers/form';
-import { useContentRendererKeys } from 'clientSrc/helpers/settings';
 import * as SettingsActions from 'clientSrc/actions/settingsActions';
 import * as SettingTypes from 'shared/constants/settingTypes';
 
+import { CATEGORIES, TAB_ROWS } from 'shared/constants/settingTypes';
 import SettingsColumn from './SettingsColumn';
 
 const Settings = memo(({ history, location }) => {
-  const [state, setState] = useState({ category: null, tab: null });
+  const [state, setState] = useState({
+    category: location.pathname.split('/')?.[2],
+    tab: location.search.match(/tab=([^&]+)/)?.[1],
+  });
 
   const settings = useSelector(({ settings: settingsState }) => settingsState, deepEqual);
 
@@ -23,63 +26,56 @@ const Settings = memo(({ history, location }) => {
     dispatch(SettingsActions.loadSettings({ category, tab })),
   [dispatch]);
 
+  const { category, tab } = state;
   useEffect(() => {
-    const category = location.pathname.split('/')?.[2];
-    const tab = location.search.match(/tab=([^&]+)/)?.[1];
+    const newCategory = location.pathname.split('/')?.[2];
+    const newTab = location.search.match(/tab=([^&]+)/)?.[1];
 
-    setState({
-      category,
-      tab,
-    });
-    loadSettings(category, tab);
-    // todo: Resolve redirecting to default category or default tab of selected category in case of route not matching
+    if (Object.values(CATEGORIES).indexOf(newCategory) === -1) {
+      history.push({
+        pathname: CATEGORIES.PROFILE,
+        search: `tab=${TAB_ROWS[CATEGORIES.PROFILE][0]}`,
+      });
+      return;
+    }
+
+    loadSettings(newCategory, newTab);
+    if (category !== newCategory || tab !== newTab) {
+      setState({
+        category: newCategory,
+        tab: newTab,
+      });
+    }
   }, [location]);
 
-  const { data, categories, messages, categoryTypes, tabTypes } = settings;
-  const { category, tab } = state;
+  const { data, categories, tabs, tabMessages, tabTypes } = settings;
   const [peekedTabs, setPeekedTabs] = useState(SettingTypes.TAB_ROWS[category]);
 
-  const tabs = useMemo(() => {
-    if (settings.tabs.length > 0) {
-      setPeekedTabs(settings.tabs);
-      return settings.tabs;
+  const displayedTabs = useMemo(() => {
+    if (tabs.length > 0) {
+      setPeekedTabs(tabs);
+      return tabs;
     }
     return SettingTypes.TAB_ROWS[category];
-  }, [settings.tabs]);
+  }, [tabs]);
 
-  const { categoryKey, tabKey } = useMemo(() =>
-    useContentRendererKeys(category, tab, categoryTypes, tabTypes),
-  [category, tab, categoryTypes, tabTypes]
+  const tabKey = useMemo(() =>
+    settingsRenderers[category]?.[tab]
+      ? tab
+      : settingsRenderers[category]?.[tabTypes[tab]]
+        ? tabTypes[tab]
+        : null,
+  [category, tab, tabTypes]
   );
 
-  const changeCategory = useCallback(newCategory => {
-    const newTab = SettingTypes.TAB_ROWS[newCategory]
-      ? SettingTypes.TAB_ROWS[newCategory][0]
-      : SettingTypes.TAB_ROWS[categoryTypes[newCategory]][0];
+  const changeCategory = useCallback(newCategory => history.push({
+    pathname: newCategory,
+    search: `?tab=${SettingTypes.TAB_ROWS[newCategory][0]}`,
+  }), [setState]);
 
-    setState({
-      category: newCategory,
-      tab: newTab,
-    });
-
-    history.push({
-      pathname: newCategory,
-      search: `?tab=${newTab}`,
-    });
-    loadSettings(newCategory, newTab);
-  }, [categoryTypes, setState]);
-
-  const changeTab = useCallback(newTab => {
-    setState(prevState => ({
-      ...prevState,
-      tab: newTab,
-    }));
-
-    history.push({
-      search: `?tab=${newTab}`,
-    });
-    loadSettings(category, newTab);
-  }, [category, setState]);
+  const changeTab = useCallback(newTab => history.push({
+    search: `?tab=${newTab}`,
+  }), [category, setState]);
 
   const submitHandler = useSubmitHandler(category, tab);
 
@@ -92,27 +88,25 @@ const Settings = memo(({ history, location }) => {
         width="175px"
         icons={CATEGORY_ICONS}
         selected={category}
-        messages={messages}
-        types={categoryTypes}
         changeSelection={changeCategory}
         peekSelection={useCallback((peekCategory, enter) => setPeekedTabs(
           enter ? SettingTypes.TAB_ROWS[peekCategory] : null
-        ), [tabs, setPeekedTabs])}
+        ), [displayedTabs, setPeekedTabs])}
       />
       <SettingsColumn
         type={SettingTypes.COLUMNS.TAB}
-        rows={peekedTabs || tabs}
+        rows={peekedTabs || displayedTabs}
         primary={false}
         width="225px"
         selected={tab}
         icons={TAB_ICONS}
-        messages={messages}
+        messages={tabMessages}
         types={tabTypes}
         changeSelection={changeTab}
         modifiers={settingsRenderers[category]?.tabModifiers && settingsRenderers[category].tabModifiers(data)}
       />
       <ContentColumn>
-        {categoryKey && tabKey && settingsRenderers[categoryKey][tabKey](data, submitHandler, tab, category)}
+        {category && tabKey && settingsRenderers[category][tabKey](data, submitHandler, tab, category)}
       </ContentColumn>
     </SettingsWrapper>
   );

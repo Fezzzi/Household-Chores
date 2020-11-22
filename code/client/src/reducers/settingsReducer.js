@@ -7,8 +7,7 @@ import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
 const initialState = {
   categories: Object.values(SettingTypes.CATEGORIES),
   tabs: [],
-  messages: {},
-  categoryTypes: {},
+  tabMessages: {},
   tabTypes: {},
   data: {},
 };
