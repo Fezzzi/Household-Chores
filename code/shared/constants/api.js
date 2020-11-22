@@ -23,5 +23,7 @@ export const CONNECTION_UNBLOCK = 'unblock';
 
 export const HOUSEHOLDS_PREFIX = 'households';
 export const HOUSEHOLD_CREATE = 'create';
+export const HOUSEHOLD_DELETE = 'delete';
+export const HOUSEHOLD_LEAVE = 'leave';
 export const INVITATION_APPROVE = 'approve';
 export const INVITATION_IGNORE = 'ignore';

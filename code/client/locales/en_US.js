@@ -32,6 +32,7 @@ export default {
   [ERROR.CONNECTION_REQUEST_ERROR]: 'Connection request failed, please try again later.',
   [ERROR.INVALID_REQUEST]: 'Invalid request.',
   [ERROR.ACTION_ERROR]: 'Requested action failed, please try again later.',
+  [ERROR.BAD_PERMISSIONS]: 'Bad permissions.',
   [ERROR.EMAIL_USED]: 'An account with this email already exists.',
   [ERROR.GOOGLE_API_INIT_ERROR]: 'Google API initialization error.',
   [ERROR.IMAGE_INVALID]: 'Invalid photo, please verify that the file uploaded is an image with size under 1MB.',

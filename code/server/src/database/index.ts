@@ -11,7 +11,7 @@ const getQueryPromise = (): ((options: string, values: any, callback?: queryCall
   util.promisify(Connection.get().query);
 
 export const database = {
-  query: (sql: string, params: any = [], logSQL = true): any =>
+  query: (sql: string, params: any[] = [], logSQL = true): any =>
     getQueryPromise()
       .call(Connection.get(), sql, params)
       .then(value => {

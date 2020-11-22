@@ -32,6 +32,7 @@ export default {
   [ERROR.CONNECTION_REQUEST_ERROR]: 'Žádost o spojení se nezdařila, zkuste to prosím později.',
   [ERROR.INVALID_REQUEST]: 'Požadovanou akci nelze provést.',
   [ERROR.ACTION_ERROR]: 'Požadovaná akce se nezdařila, zkuste to prosím později.',
+  [ERROR.BAD_PERMISSIONS]: 'Špatné oprávnění.',
   [ERROR.EMAIL_USED]: 'Účet s tímto emailem již existuje.',
   [ERROR.GOOGLE_API_INIT_ERROR]: 'Chyba inicializace Google API.',
   [ERROR.IMAGE_INVALID]: 'Neplatný obrázek, prosím zkonrolujte zdali se jedná o obrázek s velikostí do 1MB',

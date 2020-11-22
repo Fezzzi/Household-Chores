@@ -6,6 +6,7 @@ import HOUSEHOLDS_TABLE from './tables/households';
 import HOUSEHOLD_INVITATIONS_TABLE from './tables/household_invitations';
 import HOUSEHOLD_MEMBERS_TABLE from './tables/household_members';
 import USERS_TABLE from './tables/users';
+import { number } from '~/node_modules/@types/prop-types';
 
 const {
   name: tName,
@@ -179,6 +180,23 @@ export const createHousehold = async (
   return success && result.insertId;
 };
 
+export const deleteHousehold = async (
+  householdId: number
+): Promise<boolean> =>
+  database.query(`
+    DELETE FROM ${tName}
+    WHERE ${tabID}=?
+  `, [householdId]);
+
+export const leaveHousehold = async (
+  userId: number,
+  householdId: number
+): Promise<boolean> =>
+  database.query(`
+    DELETE FROM ${tHouseMemName}
+    WHERE ${houseMemCols.id_household}=? AND ${houseMemCols.id_user}=${userId}
+  `, [householdId]);
+
 export const deleteInvitation = async (
   currentId: number,
   { fromId, householdId }: { fromId: number; householdId: number },
@@ -198,3 +216,13 @@ export const approveInvitation = async (
       ${houseMemCols.name}, ${houseMemCols.photo}, ${houseMemCols.date_joined}
     ) VALUES (?, ${currentId}, ?, '${HOUSEHOLD_ROLE_TYPE.MEMBER}', ?, NOW())
   `, [householdId, fromId, name, photo]);
+
+export const getUserRole = async (
+  userId: number,
+  householdId: number
+): Promise<string | null> =>
+  database.query(`
+    SELECT ${houseMemCols.role}
+    FROM ${tHouseMemName}
+    WHERE ${houseMemCols.id_user}=${userId} AND ${houseMemCols.id_household}=?
+  `, [householdId]);

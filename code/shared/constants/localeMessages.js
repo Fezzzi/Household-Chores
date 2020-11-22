@@ -34,6 +34,7 @@ export const ERROR = {
   CONNECTION_ERROR: 'error.connectionError',
   CONNECTION_REQUEST_ERROR: 'error.connectionRequestError',
   ACTION_ERROR: 'error.actionError',
+  BAD_PERMISSIONS: 'error.badPermissions',
   INVALID_REQUEST: 'error.invalidRequest',
   GOOGLE_API_INIT_ERROR: 'error.googleAPIInitError',
   IMAGE_INVALID: 'error.imageInvalid',
