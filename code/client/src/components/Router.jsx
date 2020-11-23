@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { Router, Switch, Route, Redirect } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
 import { RESOURCES_PREFIX, SETTINGS_PREFIX } from 'shared/constants/api';
@@ -14,11 +14,11 @@ import Settings from './settings/Settings';
 
 export const history = createBrowserHistory();
 
-const Router = () => {
+const RouterComponent = () => {
   const isLoggedUser = useSelector(({ app: { loggedUser } }) => loggedUser);
 
   return (
-    <BrowserRouter history={history}>
+    <Router history={history}>
       <Switch>
         <Route
           path={`/${RESOURCES_PREFIX}`}
@@ -69,8 +69,8 @@ const Router = () => {
             </Switch>
           )}
       </Switch>
-    </BrowserRouter>
+    </Router>
   );
 };
 
-export default Router;
+export default RouterComponent;
