@@ -1,4 +1,6 @@
 import { put, takeEvery, delay } from 'redux-saga/effects';
+
+import { THEME_KEY } from 'clientSrc/constants/common';
 import * as ThemeActions from 'clientSrc/actions/themeActions';
 import * as THEMES from 'clientSrc/constants/themeTypes';
 
@@ -8,7 +10,7 @@ function* handleThemeChange({ payload: theme }) {
       ? THEMES.DARK_THEME
       : THEMES.LIGHT_THEME;
     yield put(ThemeActions.changeTheme(newTheme));
-    localStorage.setItem('theme', newTheme);
+    localStorage.setItem(THEME_KEY, newTheme);
     // Stop theme transition effect
     yield delay(300);
     yield put(ThemeActions.stopThemeTransition());
