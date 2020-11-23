@@ -11,6 +11,7 @@ const getAuthenticationSaga = effect => function* authenticationSaga({ payload }
     const { data } = yield call(effect, payload);
     if (!data[NotificationTypes.ERRORS] || !data[NotificationTypes.ERRORS].length) {
       // We login user after both signUp and LogIn
+      yield put(NotificationActions.addNotifications(data));
       yield put(AuthActions.logInSuccess());
     } else {
       yield put(NotificationActions.addNotifications({

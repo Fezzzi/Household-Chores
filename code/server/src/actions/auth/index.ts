@@ -57,18 +57,17 @@ const getSignUpFunc = (req: any, res: any, body: any) => async () => {
     return getLogInFunc(req, res, body)();
   }
 
-  const { insertId, fsKey } = await SignUpUser(
+  const signUpResult = await SignUpUser(
     email, nickname,
     (password && password.value) || null,
     photo || null,
     googleId, facebookId,
   );
-  if (insertId) {
-    setSession(req, res, insertId, fsKey);
+  if (!signUpResult?.insertId) {
+    return { [NotificationTypes.ERRORS]: [ERROR.SIGN_UP_ERROR] };
   }
-  return {
-    [NotificationTypes.ERRORS]: insertId ? [] : [ERROR.SIGN_UP_ERROR],
-  };
+  setSession(req, res, signUpResult.insertId, signUpResult.fsKey);
+  return { [NotificationTypes.SUCCESSES]: [SUCCESS.ACCOUNT_CREATED] };
 };
 
 export default () => {

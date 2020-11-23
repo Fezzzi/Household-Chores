@@ -27,10 +27,12 @@ const performConnectionAction = async (
   const success = await action(req.session.user, targetId);
   if (success) {
     const data = await findConnections(req.session.user);
-    res.status(200).send({ ...data });
-  } else {
-    res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.ACTION_ERROR] });
+    if (data) {
+      res.status(200).send({ ...data });
+      return true;
+    }
   }
+  res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.ACTION_ERROR] });
   return true;
 };
 

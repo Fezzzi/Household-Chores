@@ -24,16 +24,18 @@ export const database = {
         handleConnectionError(reason, 'Query');
         return null;
       }),
-  withTransaction: async (func: () => Promise<void>): Promise<void> => {
+  withTransaction: async<T> (func: () => Promise<T>): Promise<T | null> => {
     try {
       Logger(DB_LOG, 'Beginning transaction...');
       Connection.get().beginTransaction();
-      await func();
+      const result = await func();
       Connection.get().commit();
       Logger(DB_LOG, '...transaction finished.');
+      return result;
     } catch (err) {
       Logger(DB_LOG, '...transaction failed, rolling back!');
       Connection.get().rollback();
+      return null;
     }
   },
   beginTransaction: Connection.get().beginTransaction,

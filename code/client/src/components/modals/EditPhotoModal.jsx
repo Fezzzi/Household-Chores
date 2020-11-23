@@ -145,8 +145,8 @@ const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
             modifierFunc={text => (
               <>
                 {text}:&nbsp;
-                <PhotoSizeValue isOk={size <= MAX_SIZE}>~{(size / 1000).toFixed(2)} KB</PhotoSizeValue>&nbsp;
-                {size > MAX_SIZE && ' (max 2MB)'}
+                <PhotoSizeValue isOk={size <= MAX_IMAGE_SIZE}>~{(size / 1000).toFixed(2)} KB</PhotoSizeValue>&nbsp;
+                {size > MAX_IMAGE_SIZE && ' (max 2MB)'}
               </>
             )}
           />

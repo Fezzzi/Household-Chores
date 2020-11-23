@@ -33,6 +33,10 @@ const getTabData = async (category: string, tab: string, req: any) => {
 
 export const handleSettingsDataFetch = async (category: string, tab: string, req: any, res: any): Promise<void> => {
   const data = await getTabData(category, tab, req);
+  if (!data) {
+    res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] });
+    return;
+  }
   const { tabs, messages: tabMessages, types: tabTypes } = getTabList(data, category);
   res.status(200).send({
     tabs,
