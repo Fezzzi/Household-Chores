@@ -4,7 +4,6 @@ import { Router, Switch, Route, Redirect } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
 import { RESOURCES_PREFIX, SETTINGS_PREFIX } from 'shared/constants/api';
-import * as TABS from 'clientSrc/constants/authTabs';
 import * as SettingTypes from 'shared/constants/settingTypes';
 
 import Home from './Home';
@@ -15,7 +14,7 @@ import Settings from './settings/Settings';
 export const history = createBrowserHistory();
 
 const RouterComponent = () => {
-  const isLoggedUser = useSelector(({ app: { loggedUser } }) => loggedUser);
+  const { loggedUser, loaded } = useSelector(({ app: { loggedUser, loaded } }) => ({ loggedUser, loaded }));
 
   return (
     <Router history={history}>
@@ -31,24 +30,10 @@ const RouterComponent = () => {
             </>
           )}
         />
-        {!isLoggedUser
+        {loaded && (!loggedUser
           ? (
             <Switch>
-              <Route
-                path={`/${TABS.LOGIN_TAB}`}
-                render={props => <AuthForm {...props} tab={TABS.LOGIN_TAB} />}
-              />
-              <Route
-                path={`/${TABS.SIGNUP_TAB}`}
-                render={props => <AuthForm {...props} tab={TABS.SIGNUP_TAB} />}
-              />
-              <Route
-                path={`/${TABS.RESET_TAB}`}
-                render={props => <AuthForm {...props} tab={TABS.RESET_TAB} />}
-              />
-              <Route path="/*">
-                <Redirect to={`/${TABS.LOGIN_TAB}`} />
-              </Route>
+              <Route path="/*" component={AuthForm} />
             </Switch>
           )
           : (
@@ -67,7 +52,7 @@ const RouterComponent = () => {
                 <Redirect to={{ pathname: '/' }} />
               </Route>
             </Switch>
-          )}
+          ))}
       </Switch>
     </Router>
   );

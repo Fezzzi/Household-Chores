@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import { AuthContent, InputsBlock, LogoBlock, LogoTopBlock } from 'clientSrc/styles/blocks/auth';
@@ -11,53 +11,47 @@ import SignUpForm from './SignUpForm';
 import ResetPassForm from './ResetPassForm';
 import BottomBlock from './BottomBlock';
 
-export default class AuthForm extends Component {
-  constructor(props) {
-    super(props);
+const AuthForm = ({ history, location }) => {
+  const currentTab = useMemo(() => location.pathname.split('/').filter(Boolean)[0], [location]);
 
-    this.state = {
-      tab: props.tab,
-      history: props.history,
-    };
-  }
+  useEffect(() => {
+    const path = location.pathname.split('/').filter(Boolean)[0];
+    if (path !== TABS.LOGIN_TAB && path !== TABS.RESET_TAB && path !== TABS.SIGNUP_TAB) {
+      history.push(`/${TABS.LOGIN_TAB}`);
+    }
+  }, [location]);
 
-  renderTab = () => {
-    switch (this.state.tab) {
+  const renderTab = () => {
+    switch (currentTab) {
       case TABS.SIGNUP_TAB: return <SignUpForm />;
-      case TABS.RESET_TAB: return <ResetPassForm switchTab={() => this.switchTab(TABS.SIGNUP_TAB)} />;
-      default: return <LogInForm switchTab={() => this.switchTab(TABS.RESET_TAB)} />;
+      case TABS.RESET_TAB: return <ResetPassForm switchTab={() => switchTab(TABS.SIGNUP_TAB)} />;
+      default: return <LogInForm switchTab={() => switchTab(TABS.RESET_TAB)} />;
     }
   };
 
-  getTabBottom = () => {
-    switch (this.state.tab) {
+  const getTabBottom = () => {
+    switch (currentTab) {
       case TABS.SIGNUP_TAB: return {
         message: AUTH.HAVE_ACCOUNT,
         linkMessage: AUTH.LOG_IN,
-        onClick: () => this.switchTab(TABS.LOGIN_TAB),
+        onClick: () => switchTab(TABS.LOGIN_TAB),
       };
       case TABS.RESET_TAB: return {
         message: '',
         linkMessage: AUTH.BACK_TO_LOGIN,
-        onClick: () => this.switchTab(TABS.LOGIN_TAB),
+        onClick: () => switchTab(TABS.LOGIN_TAB),
       };
       default: return {
         message: AUTH.DONT_HAVE_ACCOUNT,
         linkMessage: AUTH.SIGN_UP,
-        onClick: () => this.switchTab(TABS.SIGNUP_TAB),
+        onClick: () => switchTab(TABS.SIGNUP_TAB),
       };
     }
   };
 
-  switchTab = tab => {
-    this.state.history.push(tab);
+  const switchTab = newTab => history.push(newTab);
 
-    this.setState({
-      tab,
-    });
-  };
-
-  getRoofStroke = () => {
+  const getRoofStroke = () => {
     const day = new Date().getDay();
     switch (day) {
       case 1:
@@ -76,31 +70,29 @@ export default class AuthForm extends Component {
     }
   };
 
-  render() {
-    return (
-      <>
-        <AuthContent>
-          <LogoBlock>
-            <LogoTopBlock stroke={this.getRoofStroke()}>
-              <LogoTop />
-            </LogoTopBlock>
-            HouseHold
-          </LogoBlock>
-          <InputsBlock extraPadding>
-            {this.renderTab()}
-          </InputsBlock>
-          <InputsBlock>
-            <BottomBlock {...(this.getTabBottom())} />
-          </InputsBlock>
-        </AuthContent>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <AuthContent>
+        <LogoBlock>
+          <LogoTopBlock stroke={getRoofStroke()}>
+            <LogoTop />
+          </LogoTopBlock>
+          HouseHold
+        </LogoBlock>
+        <InputsBlock extraPadding>
+          {renderTab()}
+        </InputsBlock>
+        <InputsBlock>
+          <BottomBlock {...(getTabBottom())} />
+        </InputsBlock>
+      </AuthContent>
+    </>
+  );
+};
 
 AuthForm.propTypes = {
-  tab: PropTypes.string.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
+  history: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
 };
+
+export default AuthForm;

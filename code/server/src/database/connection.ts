@@ -8,6 +8,7 @@ dotenv.config();
 
 const FATAL_ERROR_CODES = [
   'PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR',
+  'PROTOCOL_CONNECTION_LOST',
 ];
 
 const config: object = {
