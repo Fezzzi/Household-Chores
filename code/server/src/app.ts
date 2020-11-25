@@ -12,7 +12,7 @@ import errorHandler from './helpers/errorHandler';
 import router from './actions/router';
 import { Logger } from './helpers/logger';
 import { ACCESS_LOG } from './constants/logs';
-import { Connection } from './database/connection';
+import { pool } from './database/connection';
 
 dotenv.config();
 
@@ -29,7 +29,7 @@ app.use(cookieParser());
 // Initialize session store and session middleware
 // @ts-ignore: Property 'default' is missing in type (some bug in types config of express-mysql-session)
 const MySQLStore = createStore(session);
-const sessionStore = new MySQLStore({}, Connection.get());
+const sessionStore = new MySQLStore({}, pool);
 const YEAR_MILLISECONDS = 31540000000;
 app.use(session({
   store: sessionStore,
