@@ -23,6 +23,7 @@ const FacebookButtonComponent = ({ locale, handleError, logInFacebook }) => (
           backgroundHover="#303B7C"
           color="#FAFAFA"
           disabled={isLoading || isWorking}
+          margin="0 40px 14px"
         >
           <FormButtonContentWrapper>
             <FacebookIconSpan />

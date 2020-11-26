@@ -12,7 +12,7 @@ import LocaleText from 'clientSrc/components/common/LocaleText';
 import * as ModalActions from 'clientSrc/actions/modalActions';
 import { COMMON, FORM } from 'shared/constants/localeMessages';
 import { MAX_IMAGE_SIZE } from 'shared/constants/common';
-import EditorOverlay from '~/static/resources/editor-overlay.png';
+import EditorOverlay from '~/static/editor-overlay.png';
 
 const IMG_SIZE = 150;
 const CANVAS_SIZE = 250;

@@ -31,23 +31,20 @@ export const NotificationIconBlock = styled.div`
   position: relative;
   display: block;
   width: 60px;
-  height: 60px;
 `;
 
 export const NotificationIconWrapper = styled.div`
-  position: absolute;
-  width: 22px;
-  height: 22px;
-  top: 19px;
-  left: 19px;
+  width: 30px;
+  height: 30px;
+  margin: auto;
   display: flex;
-  fill: ${props => props.iconColor};
-  stroke: ${props => props.iconColor};
   border-radius: 10px;
   box-sizing: border-box;
 
-  & > svg {
-    margin: auto;
+  & svg {
+    width: 100%;
+    height: 100%;
+    fill: ${props => props.iconColor};
   }
 `;
 
@@ -72,11 +69,19 @@ export const NotificationClose = styled.div`
   position: relative;
   display: flex;
   width: 20px;
+  height: 20px;
   font-size: 14px;
   fill: var(--cBorder);
   transition: opacity 0.1s ease 0s;
 
   &:hover {
     fill: var(--cBorderActive);
+  }
+  
+  & svg {
+    width: 100%;
+    height: 100%;
+    stroke: var(--cFont);
+    stroke-width: 0.4;
   }
 `;

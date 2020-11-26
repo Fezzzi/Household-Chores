@@ -29,6 +29,24 @@ export const LogoTopBlock = styled.div`
   position: relative;
   top: 3px;
   
+  & svg {
+    height: 100%;
+    width: 100%;
+    
+    & #logo-body ellipse,
+    & #logo-body line,
+    & #logo-body path,
+    & #logo-body rect {
+      stroke: var(--cFont);
+    }
+    
+    & #logo-roof line,
+    & #logo-roof path,
+    & #logo-roof rect {
+      stroke: ${props => props.stroke ?? '#EB4132'};
+    }
+  }
+  
   & line {
     stroke: ${props => props.stroke};
   }
@@ -86,7 +104,7 @@ export const BottomMessageLink = styled.a`
 export const MessageBlock = styled.p`
   color: var(--cGreyPrimary);
   font-size: ${props => props.bigFont ? 14 : 12}px;
-  margin: 10px 40px;
+  margin: ${props => props.margin ?? '10px 40px'};
   line-height: ${props => props.bigFont ? 18 : 16}px;
   text-align: center;
 `;

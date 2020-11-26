@@ -417,7 +417,7 @@ export const FormButtonContentWrapper = styled.span`
 `;
 
 export const SeparatorWrapper = styled.div`
-  margin: 10px auto 18px;
+  margin: 10px auto 10px;
   flex-direction: row;
   display: flex;
   max-width: 750px;
@@ -459,11 +459,14 @@ export const GoogleIconSpan = styled(IconSpan)`
 `;
 
 export const ErrorSpan = styled.span`
-  stroke: var(--cError);
   height: 22px;
   width: 22px;
   display: block;
   position: relative;
+  
+  > * svg {
+    fill: var(--cError);
+  }
 `;
 
 export const InputLabel = styled.span`

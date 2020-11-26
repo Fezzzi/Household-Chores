@@ -52,7 +52,7 @@ class ResetPassForm extends Component {
 
     return (
       <form method="post">
-        <MessageBlock bigFont>
+        <MessageBlock bigFont margin="0 40px 10px;">
           <LocaleText message={AUTH.ENTER_EMAIL_QUOTE} />
         </MessageBlock>
         {inputConfig.map(input => (

@@ -51,30 +51,11 @@ const AuthForm = ({ history, location }) => {
 
   const switchTab = newTab => history.push(newTab);
 
-  const getRoofStroke = () => {
-    const day = new Date().getDay();
-    switch (day) {
-      case 1:
-      case 4:
-        return 'var(--cYellowSecondary)';
-      case 2:
-      case 3:
-        return 'var(--cRedSecondary)';
-      case 5:
-      case 7:
-        return 'var(--cGreenSecondary)';
-      case 6:
-        return 'var(--cBlueSecondary)';
-      default:
-        return 'var(--cFont)';
-    }
-  };
-
   return (
     <>
       <AuthContent>
         <LogoBlock>
-          <LogoTopBlock stroke={getRoofStroke()}>
+          <LogoTopBlock>
             <LogoTop />
           </LogoTopBlock>
           HouseHold
