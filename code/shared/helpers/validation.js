@@ -1,7 +1,6 @@
 import * as InputTypes from 'shared/constants/inputTypes';
 import { ERROR } from 'shared/constants/localeMessages';
-
-export const MAX_IMAGE_SIZE = 2000000;
+import { MAX_IMAGE_SIZE } from 'shared/constants/common';
 
 const isEmailValid = value => {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

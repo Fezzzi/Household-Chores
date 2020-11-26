@@ -11,9 +11,8 @@ import modalReducer from './modalReducer';
 
 const initialState = {
   debug: true,
-  // Set user as logged by default due to routing, otherwise there will be visible redirect each time logged user refreshes the page
-  // todo: However, the problem with this is that when server is not responding, FE recognizes user as logged-in - RESOLVE!
-  loggedUser: true,
+  loaded: false,
+  loggedUser: false,
   user: {},
   activityFeed: [],
 };
@@ -26,6 +25,7 @@ const logInUser = state => ({
 const stateLoaded = (state, { payload: { debug, loggedUser, user, activityFeed } }) => ({
   ...state,
   debug,
+  loaded: true,
   loggedUser,
   user,
   activityFeed,

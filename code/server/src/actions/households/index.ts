@@ -43,8 +43,7 @@ export default () => {
         return true;
       }
       case INVITATION_APPROVE: {
-        // todo: Use transaction there
-        const success = await deleteInvitation(userId, body) && await approveInvitation(userId, body);
+        const success = await approveInvitation(userId, body);
         if (success) {
           res.status(200).send({
             invitations: await findUserInvitations(userId),

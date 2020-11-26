@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { HighlightOff } from '@material-ui/icons';
 
-
 import {
   ModalBody, ModalButtonsBlock, ModalCloseButton, ModalNote, ModalOverlay, ModalPhotoCanvas,
   ModalPhotoControls, ModalPhotoSlider, ModalPhotoSliderWrapper, ModalPhotoWrapper, PhotoSizeValue,
@@ -12,9 +11,9 @@ import PrimaryButton from 'clientSrc/components/forms/common/PrimaryButton';
 import LocaleText from 'clientSrc/components/common/LocaleText';
 import * as ModalActions from 'clientSrc/actions/modalActions';
 import { COMMON, FORM } from 'shared/constants/localeMessages';
-import EditorOverlay from '~/static/resources/editor-overlay.png';
+import { MAX_IMAGE_SIZE } from 'shared/constants/common';
+import EditorOverlay from '~/static/editor-overlay.png';
 
-const MAX_SIZE = 3000000000;
 const IMG_SIZE = 150;
 const CANVAS_SIZE = 250;
 
@@ -146,8 +145,8 @@ const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
             modifierFunc={text => (
               <>
                 {text}:&nbsp;
-                <PhotoSizeValue isOk={size <= MAX_SIZE}>~{(size / 1000).toFixed(2)} KB</PhotoSizeValue>&nbsp;
-                {size > MAX_SIZE && ' (max 2MB)'}
+                <PhotoSizeValue isOk={size <= MAX_IMAGE_SIZE}>~{(size / 1000).toFixed(2)} KB</PhotoSizeValue>&nbsp;
+                {size > MAX_IMAGE_SIZE && ' (max 2MB)'}
               </>
             )}
           />
@@ -158,7 +157,7 @@ const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
             background="var(--cBluePrimary)"
             backgroundHover="var(--cBlueSecondary)"
             color="var(--cFont)"
-            disabled={size > MAX_SIZE}
+            disabled={size > MAX_IMAGE_SIZE}
           >
             <LocaleText message={FORM.SAVE} />
           </PrimaryButton>

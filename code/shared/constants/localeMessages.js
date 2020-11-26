@@ -151,4 +151,5 @@ export const SETTINGS = {
 export const SUCCESS = {
   RESET_LINK: 'success.resetLink',
   SETTINGS_UPDATED: 'success.settingsUpdated',
+  ACCOUNT_CREATED: 'success.accountCreated',
 };

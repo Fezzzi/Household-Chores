@@ -1,10 +1,11 @@
 import { createReducer } from '@reduxjs/toolkit';
 
 import { AVAILABLE_LOCALES, DEFAULT_LOCALE } from 'shared/constants/locale';
+import { LOCALE_KEY } from 'clientSrc/constants/common';
 import * as LocaleActions from 'clientSrc/actions/localeActions';
 import applicationTexts from '~/code/client/locales';
 
-const storageLocale = localStorage.getItem('locale');
+const storageLocale = localStorage.getItem(LOCALE_KEY);
 
 const initialState = {
   locale: storageLocale || DEFAULT_LOCALE,

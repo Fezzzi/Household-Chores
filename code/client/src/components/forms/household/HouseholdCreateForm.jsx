@@ -10,8 +10,7 @@ import { HOUSEHOLD } from 'shared/constants/localeMessages';
 import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys';
 import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
 
-// todo: Replace with some branded Logo-like placeholder
-import newHouseholdIcon from '~/static/resources/icons/new-household.svg';
+import newHouseholdIcon from '~/static/icons/icon-150.png';
 
 import HouseholdFormHeader from './HouseholdFormHeader';
 import HouseholdInvitationForm from './HouseholdInvitationForm';
