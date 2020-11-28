@@ -1,6 +1,6 @@
 import { put, takeEvery } from 'redux-saga/effects'
 
-import * as LocaleActions from 'clientSrc/actions/localeActions'
+import { LocaleActions } from 'clientSrc/actions'
 import { LOCALE_KEY } from 'clientSrc/constants/common'
 
 function* handleLocaleChange({ payload: newLocale }) {

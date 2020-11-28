@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { PropTypes } from 'prop-types'
 
 import { AUTH } from 'shared/constants/localeMessages'
-import * as AuthActions from 'clientSrc/actions/authActions'
+import { AuthActions } from 'clientSrc/actions'
 import { GoogleIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/blocks/form'
 
 import LocaleText from '../../common/LocaleText'

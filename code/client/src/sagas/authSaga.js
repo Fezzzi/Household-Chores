@@ -2,8 +2,7 @@ import { takeEvery, call, put } from 'redux-saga/effects'
 
 import * as NotificationTypes from 'shared/constants/notificationTypes'
 import { ERROR } from 'shared/constants/localeMessages'
-import * as AuthActions from 'clientSrc/actions/authActions'
-import * as NotificationActions from 'clientSrc/actions/notificationActions'
+import { AuthActions, NotificationActions } from 'clientSrc/actions'
 import { signUp, logIn, resetPass } from 'clientSrc/effects/authEffects'
 
 const getAuthenticationSaga = effect => function* authenticationSaga({ payload }) {

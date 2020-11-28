@@ -1,7 +1,7 @@
 import { put, takeEvery, delay } from 'redux-saga/effects'
 
 import { THEME_KEY } from 'clientSrc/constants/common'
-import * as ThemeActions from 'clientSrc/actions/themeActions'
+import { ThemeActions } from 'clientSrc/actions'
 import * as THEMES from 'clientSrc/constants/themeTypes'
 
 function* handleThemeChange({ payload: theme }) {

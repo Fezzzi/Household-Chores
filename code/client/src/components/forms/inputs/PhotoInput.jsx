@@ -8,8 +8,7 @@ import {
   FileInputPreview, RemoveFileButton, PhotoPreviewBlock, PhotoPreview, PhotoInputWrapper,
 } from 'clientSrc/styles/blocks/form'
 import { MODAL_TYPE } from 'clientSrc/constants/modalType'
-import * as ModalActions from 'clientSrc/actions/modalActions'
-import * as NotificationActions from 'clientSrc/actions/notificationActions'
+import { ModalActions, NotificationActions } from 'clientSrc/actions'
 import * as NotificationTypes from 'shared/constants/notificationTypes'
 import * as InputTypes from 'shared/constants/inputTypes'
 import { ERROR, FORM } from 'shared/constants/localeMessages'

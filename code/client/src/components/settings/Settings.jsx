@@ -7,7 +7,7 @@ import { ContentColumn, SettingsWrapper } from 'clientSrc/styles/blocks/settings
 import { settingsRenderers } from 'clientSrc/constants/settingsRenderers'
 import { CATEGORY_ICONS, TAB_ICONS } from 'clientSrc/constants/settingIcons'
 import { useSubmitHandler } from 'clientSrc/helpers/form'
-import * as SettingsActions from 'clientSrc/actions/settingsActions'
+import { SettingsActions } from 'clientSrc/actions'
 import * as SettingTypes from 'shared/constants/settingTypes'
 import { CATEGORIES, TAB_ROWS } from 'shared/constants/settingTypes'
 

@@ -1,8 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import * as NotificationTypes from 'shared/constants/notificationTypes'
-
-import * as NotificationActions from '../actions/notificationActions'
+import { NotificationActions } from 'clientSrc/actions'
 
 const initialState = {
   errors: [],

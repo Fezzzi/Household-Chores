@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Zoom from '@material-ui/core/Zoom'
 import { Brightness6 } from '@material-ui/icons'
 
-import * as ThemeActions from 'clientSrc/actions/themeActions'
+import { ThemeActions } from 'clientSrc/actions'
 import * as THEMES from 'clientSrc/constants/themeTypes'
 import { IconButtonWrapper, IconButton } from 'clientSrc/styles/blocks/settings'
 

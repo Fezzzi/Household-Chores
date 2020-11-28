@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { LABELS } from 'shared/constants/locale'
 import { FLAGS } from 'clientSrc/constants/localeFlags'
-import * as LocaleActions from 'clientSrc/actions/localeActions'
+import { LocaleActions } from 'clientSrc/actions'
 import {
   IconButtonWrapper, IconButton, LocaleIcon,
   LocaleLabel, LocaleSelector, LocaleLine,

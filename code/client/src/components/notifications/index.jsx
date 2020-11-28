@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import * as NotificationTypes from 'shared/constants/notificationTypes'
 import { NotificationsBlock } from 'clientSrc/styles/blocks/notifications'
-import * as NotificationActions from 'clientSrc/actions/notificationActions'
+import { NotificationActions } from 'clientSrc/actions'
 
 import Notification from './Notification'
 

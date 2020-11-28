@@ -6,7 +6,7 @@ import { InputRow } from 'clientSrc/styles/blocks/form'
 import { UserList } from 'clientSrc/styles/blocks/users'
 import { SectionHeadline } from 'clientSrc/styles/blocks/settings'
 import { TableBox, TableHeaderBox } from 'clientSrc/styles/blocks/table'
-import * as SettingsActions from 'clientSrc/actions/settingsActions'
+import { SettingsActions } from 'clientSrc/actions'
 import { FORM } from 'shared/constants/localeMessages'
 
 import UserConnectionNode from './UserConnectionNode'

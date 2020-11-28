@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import * as ModalActions from 'clientSrc/actions/modalActions'
+import { ModalActions } from 'clientSrc/actions'
 
 const initialState = {
   type: null,

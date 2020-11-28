@@ -1,6 +1,6 @@
 import { put, call } from 'redux-saga/effects'
 
-import * as NotificationActions from 'clientSrc/actions/notificationActions'
+import { NotificationActions } from 'clientSrc/actions'
 import * as NotificationTypes from 'shared/constants/notificationTypes'
 
 export function* handleResponse(response, onSuccess) {

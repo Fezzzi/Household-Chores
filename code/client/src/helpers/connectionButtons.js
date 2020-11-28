@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import {
   connectionApprove, connectionBlock, connectionIgnore, connectionRemove, connectionUnblock,
 } from 'clientSrc/effects/conectionEffects'
-import * as SettingsActions from 'clientSrc/actions/settingsActions'
+import { SettingsActions } from 'clientSrc/actions'
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType'
 import { FORM } from 'shared/constants/localeMessages'
 import { TABS } from 'shared/constants/settingTypes'

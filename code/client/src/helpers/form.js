@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import * as SettingsActions from 'clientSrc/actions/settingsActions'
+import { SettingsActions } from 'clientSrc/actions'
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common'
 import { FORM } from 'shared/constants/localeMessages'
 

@@ -1,7 +1,6 @@
 import { createReducer, combineReducers } from '@reduxjs/toolkit'
 
-import * as RootActions from 'clientSrc/actions/rootActions'
-import * as AuthActions from 'clientSrc/actions/authActions'
+import { RootActions, AuthActions } from 'clientSrc/actions'
 
 import notificationsReducer from './notificationsReducer'
 import themeReducer from './themeReducer'

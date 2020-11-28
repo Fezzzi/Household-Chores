@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import * as SettingsActions from 'clientSrc/actions/settingsActions'
+import { SettingsActions } from 'clientSrc/actions'
 import * as SettingTypes from 'shared/constants/settingTypes'
 import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType'
 

@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import { THEME_KEY } from 'clientSrc/constants/common'
-import * as ThemeActions from 'clientSrc/actions/themeActions'
+import { ThemeActions } from 'clientSrc/actions'
 import * as THEMES from 'clientSrc/constants/themeTypes'
 
 const initialState = {

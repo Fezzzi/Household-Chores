@@ -7,7 +7,7 @@ import {
   UserButtonsBox, UserName, UserNode, UserPhotoBox, UserPhoto, AppendMessageIcon, WrapperBox,
   AppendMessageAnchor, UserPhotoMoreBox, MiniUserName, MiniUserPhoto, UserFloatingNameBox,
 } from 'clientSrc/styles/blocks/users'
-import * as SettingsActions from 'clientSrc/actions/settingsActions'
+import { SettingsActions } from 'clientSrc/actions'
 import { FORM } from 'shared/constants/localeMessages'
 
 import PrimaryButton from '../common/PrimaryButton'

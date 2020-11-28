@@ -5,7 +5,7 @@ import { themeSaga } from 'clientSrc/sagas/themeSaga'
 import { localeSaga } from 'clientSrc/sagas/localeSaga'
 import { settingsSaga } from 'clientSrc/sagas/settingsSaga'
 import { loadState } from 'clientSrc/effects/rootEffects'
-import * as RootActions from 'clientSrc/actions/rootActions'
+import { RootActions } from 'clientSrc/actions'
 
 export default function* rootSaga() {
   yield all([

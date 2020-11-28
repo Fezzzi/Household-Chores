@@ -11,7 +11,7 @@ import {
 } from 'clientSrc/styles/blocks/modals'
 import PrimaryButton from 'clientSrc/components/forms/common/PrimaryButton'
 import LocaleText from 'clientSrc/components/common/LocaleText'
-import * as ModalActions from 'clientSrc/actions/modalActions'
+import { ModalActions } from 'clientSrc/actions'
 import { COMMON, FORM } from 'shared/constants/localeMessages'
 import { MAX_IMAGE_SIZE } from 'shared/constants/common'
 
