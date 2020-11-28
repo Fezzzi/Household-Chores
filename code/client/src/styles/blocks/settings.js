@@ -1,5 +1,6 @@
-import styled from 'styled-components';
-import { FormHeaderLeftPanel, FormHeaderRightPanel } from 'clientSrc/styles/blocks/form';
+import styled from 'styled-components'
+
+import { FormHeaderLeftPanel, FormHeaderRightPanel } from 'clientSrc/styles/blocks/form'
 
 export const SettingsWrapper = styled.div`
   width: 100%;
@@ -7,7 +8,7 @@ export const SettingsWrapper = styled.div`
   overflow: hidden;
   display: flex;
   padding: 15px 0 15px 20px;
-`;
+`
 
 export const ColumnWrapper = styled.div`
   min-width: ${props => props.width};
@@ -16,7 +17,7 @@ export const ColumnWrapper = styled.div`
   display: table-col;
   margin-right: 10px;
   color: var(--cFont);
-`;
+`
 
 export const SettingIcon = styled.div`
   margin-right: 10px;
@@ -27,13 +28,13 @@ export const SettingIcon = styled.div`
   & svg {
     height: 20px;
   }
-`;
+`
 
 export const SettingText = styled.div`
   font-size: ${props => props.primary ? 1.17 : 1.10}em;
   line-height: ${props => props.primary ? 1.17 : 1.10}em;
   display: inline-block;
-`;
+`
 
 export const Column = styled.div`
   width: 100%;
@@ -44,7 +45,7 @@ export const Column = styled.div`
   margin: 14px 0;
   user-select: none;
   border: 1px solid var(--cBorder);
-`;
+`
 
 export const SettingRow = styled.div`
   padding: 0 14px 14px 14px;
@@ -58,7 +59,7 @@ export const SettingRow = styled.div`
     opacity: 0.8;
     font-weight: 600;
   }
-`;
+`
 
 export const ContentColumn = styled.div`
   width: 100%;
@@ -70,12 +71,12 @@ export const ContentColumn = styled.div`
   border: 1px solid var(--cBorder);
   overflow-y: auto;
   overflow-x: hidden;
-`;
+`
 
 export const IconButtonWrapper = styled.div` 
   display: inline-block;
   float: right;
-`;
+`
 
 export const IconButton = styled.button`
   width: 38px;
@@ -102,7 +103,7 @@ export const IconButton = styled.button`
     width: 20px;
     height: 20px;
   }
-`;
+`
 
 export const LocaleSelector = styled.div`
   position: absolute;
@@ -119,20 +120,20 @@ export const LocaleSelector = styled.div`
     cursor: pointer;
     background-color: var(--cThemeBack);
   }
-`;
+`
 
 export const LocaleLine = styled.div`
   padding: 0 8px 8px 8px;
   width: calc(100% - 16px);
   height: 20px;
-`;
+`
 
 export const LocaleIcon = styled.span`
   width: 22px;
   height: 22px;
   display: inline-block;
   float: left;
-`;
+`
 
 export const LocaleLabel = styled.span`
   line-height: 23px;
@@ -140,19 +141,19 @@ export const LocaleLabel = styled.span`
   float: right;
   font-size: 13px;
   color: var(--cFont);
-`;
+`
 
 export const SectionHeadline = styled.h2`
   font-size: 2em;
   font-weight: 700;
   margin: ${props => props.first ? 25 : 50}px 50px 25px;
   text-transform: capitalize;
-`;
+`
 
 export const SearchBarWrapper = styled.div`
   display: flex;
   margin: 0 auto;
-`;
+`
 
 export const ProfileHeaderSubtitle = styled.div`
   width: 235px;
@@ -166,7 +167,7 @@ export const ProfileHeaderSubtitle = styled.div`
   > * input {
     width: 235px;
   }
-`;
+`
 
 export const ProfilePasswordBlock = styled(FormHeaderLeftPanel)`
   width: 235px;
@@ -178,11 +179,11 @@ export const ProfilePasswordBlock = styled(FormHeaderLeftPanel)`
   > * input {
     width: 235px;
   }
-`;
+`
 
 export const ProfilePasswordInputs = styled.div`
   margin: 15px 10px 0;
-`;
+`
 
 export const ProfilePasswordClose = styled.div`
   position: absolute;
@@ -193,7 +194,7 @@ export const ProfilePasswordClose = styled.div`
   :hover {
     opacity: 1;
   }
-`;
+`
 
 export const ProfilePasswordIcon = styled.span`
   height: 50px;
@@ -205,13 +206,13 @@ export const ProfilePasswordIcon = styled.span`
     width: 100%;
     height: 100%;
   }
-`;
+`
 
 export const ProfilePasswordTitle = styled.div`
   font-size: 1.4em;
   font-weight: 500;
   margin: 15px 0;
-`;
+`
 
 export const ProfileSwitchesBlock = styled(FormHeaderRightPanel)`
   flex-flow: column;
@@ -220,12 +221,12 @@ export const ProfileSwitchesBlock = styled(FormHeaderRightPanel)`
   > div {
     padding-bottom: 5px;
   }
-`;
+`
 
 export const FormBody = styled.div`
    margin: 40px 100px 0;
-`;
+`
 
 export const NotificationGroupBox = styled.div`
   margin: 0 50px;
-`;
+`

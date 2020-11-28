@@ -1,40 +1,40 @@
-import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback } from 'react'
+import { useDispatch } from 'react-redux'
 
 import {
   connectionApprove, connectionBlock, connectionIgnore, connectionRemove, connectionUnblock,
-} from 'clientSrc/effects/conectionEffects';
-import * as SettingsActions from 'clientSrc/actions/settingsActions';
-import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
-import { FORM } from 'shared/constants/localeMessages';
-import { TABS } from 'shared/constants/settingTypes';
+} from 'clientSrc/effects/conectionEffects'
+import * as SettingsActions from 'clientSrc/actions/settingsActions'
+import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType'
+import { FORM } from 'shared/constants/localeMessages'
+import { TABS } from 'shared/constants/settingTypes'
 
 const tabButtons = {
   [TABS.MY_CONNECTIONS]: [FORM.CONNECTION_BLOCK, FORM.CONNECTION_REMOVE],
   [TABS.FIND_CONNECTION]: [FORM.CONNECTION_CONNECT],
   [TABS.PENDING]: [FORM.CONNECTION_BLOCK, FORM.CONNECTION_APPROVE, FORM.CONNECTION_IGNORE],
   [TABS.BLOCKED]: [FORM.CONNECTION_UNBLOCK],
-};
+}
 
 export const useConnectionButtons = (tab, { state, id: targetId }) => {
-  const requestSent = state && state === CONNECTION_STATE_TYPE.WAITING;
+  const requestSent = state && state === CONNECTION_STATE_TYPE.WAITING
 
-  const isButtonActive = label => Boolean(tabButtons[tab].find(btn => btn === label));
+  const isButtonActive = label => Boolean(tabButtons[tab].find(btn => btn === label))
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const connectHandler = useCallback(message =>
     dispatch(SettingsActions.connectionRequest({ targetId, message })),
-  [dispatch]);
+  [dispatch])
 
   const getHandler = effect =>
-    useCallback(() => dispatch(SettingsActions.connectionAction({ effect, targetId })), [dispatch]);
+    useCallback(() => dispatch(SettingsActions.connectionAction({ effect, targetId })), [dispatch])
 
-  const blockHandler = getHandler(connectionBlock);
-  const approveHandler = getHandler(connectionApprove);
-  const ignoreHandler = getHandler(connectionIgnore);
-  const unblockHandler = getHandler(connectionUnblock);
-  const removeHandler = getHandler(connectionRemove);
+  const blockHandler = getHandler(connectionBlock)
+  const approveHandler = getHandler(connectionApprove)
+  const ignoreHandler = getHandler(connectionIgnore)
+  const unblockHandler = getHandler(connectionUnblock)
+  const removeHandler = getHandler(connectionRemove)
 
   // The order buttons are returned in decides the order they will be displayed in
   return {
@@ -83,5 +83,5 @@ export const useConnectionButtons = (tab, { state, id: targetId }) => {
       backgroundHover: 'var(--cGreenSecondary)',
       clickHandler: unblockHandler,
     },
-  };
-};
+  }
+}

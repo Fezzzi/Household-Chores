@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const MiniInputWrapper = styled.div`
   background: var(--cThemeBack);
@@ -17,7 +17,7 @@ export const MiniInputWrapper = styled.div`
   &input {
     font-size: .9em;
   }
-`;
+`
 
 export const EditableFieldWrapper = styled.div`
   position: relative;
@@ -26,7 +26,7 @@ export const EditableFieldWrapper = styled.div`
   :hover {
     cursor: pointer;
   }
-`;
+`
 
 export const EditableFieldIcon = styled.div`
   position: absolute;
@@ -41,4 +41,4 @@ export const EditableFieldIcon = styled.div`
     width: 100%;
     height: 100%;
   }
-`;
+`

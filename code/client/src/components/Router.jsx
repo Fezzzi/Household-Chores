@@ -1,20 +1,20 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { Router, Switch, Route, Redirect } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { Router, Switch, Route, Redirect } from 'react-router-dom'
+import { createBrowserHistory } from 'history'
 
-import { RESOURCES_PREFIX, SETTINGS_PREFIX } from 'shared/constants/api';
-import * as SettingTypes from 'shared/constants/settingTypes';
+import { RESOURCES_PREFIX, SETTINGS_PREFIX } from 'shared/constants/api'
+import * as SettingTypes from 'shared/constants/settingTypes'
 
-import Home from './Home';
-import Resource from './Resource';
-import AuthForm from './forms/auth/AuthForm';
-import Settings from './settings/Settings';
+import Home from './Home'
+import Resource from './Resource'
+import AuthForm from './forms/auth/AuthForm'
+import Settings from './settings/Settings'
 
-export const history = createBrowserHistory();
+export const history = createBrowserHistory()
 
 const RouterComponent = () => {
-  const { loggedUser, loaded } = useSelector(({ app: { loggedUser, loaded } }) => ({ loggedUser, loaded }));
+  const { loggedUser, loaded } = useSelector(({ app: { loggedUser, loaded } }) => ({ loggedUser, loaded }))
 
   return (
     <Router history={history}>
@@ -55,7 +55,7 @@ const RouterComponent = () => {
           ))}
       </Switch>
     </Router>
-  );
-};
+  )
+}
 
-export default RouterComponent;
+export default RouterComponent

@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
 export const editableFieldProps = {
   name: PropTypes.string.isRequired,
@@ -11,4 +11,4 @@ export const editableFieldProps = {
     PropTypes.element,
     PropTypes.string,
   ]),
-};
+}

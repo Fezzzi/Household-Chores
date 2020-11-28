@@ -1,6 +1,6 @@
-import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
-import * as SettingTypes from 'shared/constants/settingTypes';
-import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
+import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
+import * as SettingTypes from 'shared/constants/settingTypes'
+import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType'
 
 export default {
   [AUTH.BACK_TO_LOGIN]: 'Back to Login',
@@ -135,4 +135,4 @@ export default {
   [SUCCESS.RESET_LINK]: 'A reset link has been sent to your email address.',
   [SUCCESS.SETTINGS_UPDATED]: 'Settings have been successfully updated.',
   [SUCCESS.ACCOUNT_CREATED]: 'Your account has been successfully created.',
-};
+}

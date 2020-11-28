@@ -1,25 +1,25 @@
-import React, { useRef } from 'react';
-import PropTypes from 'prop-types';
-import { Search } from '@material-ui/icons';
+import React, { useRef } from 'react'
+import PropTypes from 'prop-types'
+import { Search } from '@material-ui/icons'
 
-import { InputRow } from 'clientSrc/styles/blocks/form';
-import { UserList } from 'clientSrc/styles/blocks/users';
-import { SectionHeadline } from 'clientSrc/styles/blocks/settings';
-import { TableBox, TableHeaderBox, TableHeaderCell, TableSorterIcon } from 'clientSrc/styles/blocks/table';
-import { useTableLogic } from 'clientSrc/helpers/table';
-import { COMMON, FORM } from 'shared/constants/localeMessages';
+import { InputRow } from 'clientSrc/styles/blocks/form'
+import { UserList } from 'clientSrc/styles/blocks/users'
+import { SectionHeadline } from 'clientSrc/styles/blocks/settings'
+import { TableBox, TableHeaderBox, TableHeaderCell, TableSorterIcon } from 'clientSrc/styles/blocks/table'
+import { useTableLogic } from 'clientSrc/helpers/table'
+import { COMMON, FORM } from 'shared/constants/localeMessages'
 
-import MiniTextInput from '../inputs/MiniTextInput';
-import HouseholdInvitationNode from './HouseholdInvitationNode';
-import LocaleText from '../../common/LocaleText';
+import MiniTextInput from '../inputs/MiniTextInput'
+import HouseholdInvitationNode from './HouseholdInvitationNode'
+import LocaleText from '../../common/LocaleText'
 
 const HouseholdInvitationList = ({ invitations }) => {
-  const textInputRef = useRef(null);
+  const textInputRef = useRef(null)
 
   const {
     processedRows,
     setQuery,
-  } = useTableLogic(invitations || [], [], 'name');
+  } = useTableLogic(invitations || [], [], 'name')
 
   return (
     <>
@@ -64,8 +64,8 @@ const HouseholdInvitationList = ({ invitations }) => {
           </InputRow>
         )}
     </>
-  );
-};
+  )
+}
 
 HouseholdInvitationList.propTypes = {
   invitations: PropTypes.arrayOf(
@@ -79,6 +79,6 @@ HouseholdInvitationList.propTypes = {
       photo: PropTypes.string,
     })
   ).isRequired,
-};
+}
 
-export default HouseholdInvitationList;
+export default HouseholdInvitationList

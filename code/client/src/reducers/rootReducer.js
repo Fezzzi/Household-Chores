@@ -1,13 +1,13 @@
-import { createReducer, combineReducers } from '@reduxjs/toolkit';
+import { createReducer, combineReducers } from '@reduxjs/toolkit'
 
-import * as RootActions from 'clientSrc/actions/rootActions';
-import * as AuthActions from 'clientSrc/actions/authActions';
+import * as RootActions from 'clientSrc/actions/rootActions'
+import * as AuthActions from 'clientSrc/actions/authActions'
 
-import notificationsReducer from './notificationsReducer';
-import themeReducer from './themeReducer';
-import localeReducer from './localeReducer';
-import settingsReducer from './settingsReducer';
-import modalReducer from './modalReducer';
+import notificationsReducer from './notificationsReducer'
+import themeReducer from './themeReducer'
+import localeReducer from './localeReducer'
+import settingsReducer from './settingsReducer'
+import modalReducer from './modalReducer'
 
 const initialState = {
   debug: true,
@@ -15,12 +15,12 @@ const initialState = {
   loggedUser: false,
   user: {},
   activityFeed: [],
-};
+}
 
 const logInUser = state => ({
   ...state,
   loggedUser: true,
-});
+})
 
 const stateLoaded = (state, { payload: { debug, loggedUser, user, activityFeed } }) => ({
   ...state,
@@ -29,13 +29,13 @@ const stateLoaded = (state, { payload: { debug, loggedUser, user, activityFeed }
   loggedUser,
   user,
   activityFeed,
-});
+})
 
 const rootReducer = createReducer(initialState, {
   [RootActions.stateLoaded.toString()]: stateLoaded,
   [AuthActions.logInSuccess.toString()]: logInUser,
 }
-);
+)
 
 export default combineReducers({
   app: rootReducer,
@@ -44,4 +44,4 @@ export default combineReducers({
   locale: localeReducer,
   settings: settingsReducer,
   modal: modalReducer,
-});
+})

@@ -1,28 +1,28 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Message } from '@material-ui/icons';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Message } from '@material-ui/icons'
 
-import { useConnectionButtons } from 'clientSrc/helpers/connectionButtons';
+import { useConnectionButtons } from 'clientSrc/helpers/connectionButtons'
 import {
   UserButtonsBox, UserName, UserNode, UserPhotoBox,
   UserPhoto, WrapperBox, AppendMessageAnchor, AppendMessageIcon,
-} from 'clientSrc/styles/blocks/users';
-import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
-import { TABS } from 'shared/constants/settingTypes';
+} from 'clientSrc/styles/blocks/users'
+import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType'
+import { TABS } from 'shared/constants/settingTypes'
 
-import PrimaryButton from '../common/PrimaryButton';
-import LocaleText from '../../common/LocaleText';
-import { InfoTooltip } from '../../portals';
+import PrimaryButton from '../common/PrimaryButton'
+import LocaleText from '../../common/LocaleText'
+import { InfoTooltip } from '../../portals'
 
 const UserConnectionNode = ({ tab, user }) => {
-  const buttons = useConnectionButtons(tab, user);
+  const buttons = useConnectionButtons(tab, user)
 
   const handleClick = clickHandler => () => {
     /* todo: Implement connection messages and pass it here */
-    clickHandler();
-  };
+    clickHandler()
+  }
 
-  const { id, nickname, photo, state, message: userMessage } = user;
+  const { id, nickname, photo, state, message: userMessage } = user
   return (
     <WrapperBox>
       <UserNode>
@@ -42,7 +42,7 @@ const UserConnectionNode = ({ tab, user }) => {
           {Object.keys(buttons).map(label => {
             const {
               active, message: buttonMessage, color, background, backgroundHover, disabled, clickHandler,
-            } = buttons[label];
+            } = buttons[label]
             return active && (
               <PrimaryButton
                 key={`${id}-${label}`}
@@ -55,13 +55,13 @@ const UserConnectionNode = ({ tab, user }) => {
               >
                 <LocaleText message={buttonMessage || label} />
               </PrimaryButton>
-            );
+            )
           })}
         </UserButtonsBox>
       </UserNode>
     </WrapperBox>
-  );
-};
+  )
+}
 
 UserConnectionNode.propTypes = {
   tab: PropTypes.string.isRequired,
@@ -73,6 +73,6 @@ UserConnectionNode.propTypes = {
     message: PropTypes.string,
     state: PropTypes.string,
   }).isRequired,
-};
+}
 
-export default UserConnectionNode;
+export default UserConnectionNode

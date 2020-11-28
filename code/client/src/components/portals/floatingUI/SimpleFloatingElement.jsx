@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types'
 
-import * as PortalType from 'clientSrc/constants/portalType';
+import * as PortalType from 'clientSrc/constants/portalType'
 import {
   SimpleFloatingElementWrapper, FloatingElementIcon, FloatingElementText,
-} from 'clientSrc/styles/blocks/portals';
+} from 'clientSrc/styles/blocks/portals'
 
-import LocaleText from '../../common/LocaleText';
+import LocaleText from '../../common/LocaleText'
 
 const SimpleFloatingElement = ({ message, sending, enabled, background, backgroundHovered, icon, onClick }) => {
-  const [hovered, setHovered] = useState(false);
+  const [hovered, setHovered] = useState(false)
 
-  const floatingUIRoot = document.getElementById(PortalType.FLOATING_UI);
+  const floatingUIRoot = document.getElementById(PortalType.FLOATING_UI)
   return ReactDOM.createPortal((
     <SimpleFloatingElementWrapper
       onMouseEnter={() => setHovered(true)}
@@ -22,9 +22,9 @@ const SimpleFloatingElement = ({ message, sending, enabled, background, backgrou
       enabled={!sending && enabled}
       onClick={e => {
         if (sending || !enabled) {
-          return;
+          return
         }
-        onClick(e);
+        onClick(e)
       }}
     >
       {(hovered || sending)
@@ -43,8 +43,8 @@ const SimpleFloatingElement = ({ message, sending, enabled, background, backgrou
           )
         : <FloatingElementIcon>{icon}</FloatingElementIcon>}
     </SimpleFloatingElementWrapper>
-  ), floatingUIRoot);
-};
+  ), floatingUIRoot)
+}
 
 SimpleFloatingElement.defaultProps = {
   background: 'var(--cBluePrimary)',
@@ -52,7 +52,7 @@ SimpleFloatingElement.defaultProps = {
   sending: false,
   enabled: true,
   onClick: () => {},
-};
+}
 
 SimpleFloatingElement.propTypes = {
   message: PropTypes.string.isRequired,
@@ -62,6 +62,6 @@ SimpleFloatingElement.propTypes = {
   sending: PropTypes.bool,
   icon: PropTypes.element,
   onClick: PropTypes.func,
-};
+}
 
-export default SimpleFloatingElement;
+export default SimpleFloatingElement

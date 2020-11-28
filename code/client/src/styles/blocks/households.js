@@ -1,12 +1,13 @@
-import styled from 'styled-components';
-import { FormHeaderLeftPanel, FormHeaderRightPanel } from 'clientSrc/styles/blocks/form';
+import styled from 'styled-components'
+
+import { FormHeaderLeftPanel, FormHeaderRightPanel } from 'clientSrc/styles/blocks/form'
 
 export const HouseholdSubtitle = styled.div`
   margin-top: 15px;
   opacity: 0.6;
   font-size: 0.9em;
   display: flex;
-`;
+`
 
 export const CriticalButtonsBlock = styled(FormHeaderRightPanel)`
   width: max-content;
@@ -18,7 +19,7 @@ export const CriticalButtonsBlock = styled(FormHeaderRightPanel)`
   button:hover {
     opacity: 1;
   }
-`;
+`
 
 export const ButtonIconSpan = styled.span`
   height: 18px;
@@ -33,13 +34,13 @@ export const ButtonIconSpan = styled.span`
     width: 100%;
     height: 100%;
   }
-`;
+`
 
 export const CurrentUserBlock = styled(FormHeaderLeftPanel)`
   justify-content: center;
   align-items: center;
   width: 200px;
-`;
+`
 
 export const UserPhoto = styled.img`
   width: 100px;
@@ -47,7 +48,7 @@ export const UserPhoto = styled.img`
   margin: auto;
   border-radius: 100%;
   display: flex;
-`;
+`
 
 export const UserName = styled.div`
   margin: auto;
@@ -57,7 +58,7 @@ export const UserName = styled.div`
   width: fit-content;
   padding: 10px;
   word-break: break-all;
-`;
+`
 
 export const RoleLabel = styled.div`
   background-color: ${props => props.background};
@@ -69,11 +70,11 @@ export const RoleLabel = styled.div`
   line-height: 18px;
   height: 20px;
   margin: 0 auto;
-`;
+`
 
 export const InvitationNodesWrapper = styled.div`
   width: max-content;
-`;
+`
 
 export const InvitationFormNode = styled.div`
   display: inline-block;
@@ -81,7 +82,7 @@ export const InvitationFormNode = styled.div`
   align-items: center;
   width: 80px;
   padding: 5px 3px;
-`;
+`
 
 export const InvitationFormNodePhoto = styled.img`
   width: 50px;
@@ -89,7 +90,7 @@ export const InvitationFormNodePhoto = styled.img`
   margin: auto;
   border-radius: 100%;
   display: flex;
-`;
+`
 
 export const InvitationFormNodeName = styled.div`
   margin: auto;
@@ -99,4 +100,4 @@ export const InvitationFormNodeName = styled.div`
   width: fit-content;
   padding: 10px;
   word-break: break-all;
-`;
+`

@@ -1,13 +1,13 @@
-import React from 'react';
+import React from 'react'
 
 import {
   ConnectionListForm, ConnectionSearchForm, HouseholdCreateForm, HouseholdModificationForm,
   HouseholdInvitationList, ProfileForm, NotificationForm,
-} from 'clientSrc/components/forms';
-import { CATEGORIES, TABS } from 'shared/constants/settingTypes';
-import { FORM, SETTINGS } from 'shared/constants/localeMessages';
-import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
-import * as SettingTypes from 'shared/constants/settingTypes';
+} from 'clientSrc/components/forms'
+import { CATEGORIES, TABS } from 'shared/constants/settingTypes'
+import { FORM, SETTINGS } from 'shared/constants/localeMessages'
+import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType'
+import * as SettingTypes from 'shared/constants/settingTypes'
 
 const renderConnectionListForm = (dataKey, emptyMessage, tab, headlineMessage) => data => (
   <ConnectionListForm
@@ -17,7 +17,7 @@ const renderConnectionListForm = (dataKey, emptyMessage, tab, headlineMessage) =
     headlineMessage={headlineMessage}
     tab={tab}
   />
-);
+)
 
 export const settingsRenderers = {
   [CATEGORIES.PROFILE]: {
@@ -31,10 +31,10 @@ export const settingsRenderers = {
   [CATEGORIES.CONNECTIONS]: {
     tabModifiers: data => tab => {
       switch (tab) {
-        case TABS.MY_CONNECTIONS: return ` (${data[CONNECTION_STATE_TYPE.APPROVED]?.length || 0})`;
-        case TABS.PENDING: return ` (${data[CONNECTION_STATE_TYPE.WAITING]?.length || 0})`;
-        case TABS.BLOCKED: return ` (${data[CONNECTION_STATE_TYPE.BLOCKED]?.length || 0})`;
-        default: return '';
+        case TABS.MY_CONNECTIONS: return ` (${data[CONNECTION_STATE_TYPE.APPROVED]?.length || 0})`
+        case TABS.PENDING: return ` (${data[CONNECTION_STATE_TYPE.WAITING]?.length || 0})`
+        case TABS.BLOCKED: return ` (${data[CONNECTION_STATE_TYPE.BLOCKED]?.length || 0})`
+        default: return ''
       }
     },
     [TABS.MY_CONNECTIONS]: renderConnectionListForm(
@@ -75,4 +75,4 @@ export const settingsRenderers = {
       />
     ),
   },
-};
+}

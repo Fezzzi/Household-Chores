@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const NotificationsBlock = styled.div`
   position: fixed;
@@ -8,7 +8,7 @@ export const NotificationsBlock = styled.div`
   overflow-y: hidden;
   list-style: none;
   margin: 0px auto;
-`;
+`
 
 export const NotificationWrapper = styled.li`
   position: relative;
@@ -25,13 +25,13 @@ export const NotificationWrapper = styled.li`
   transition: all 0.5s ease 0s;
   overflow: hidden;
   padding: 10px;
-`;
+`
 
 export const NotificationIconBlock = styled.div`
   position: relative;
   display: block;
   width: 60px;
-`;
+`
 
 export const NotificationIconWrapper = styled.div`
   width: 30px;
@@ -46,7 +46,7 @@ export const NotificationIconWrapper = styled.div`
     height: 100%;
     fill: ${props => props.iconColor};
   }
-`;
+`
 
 export const NotificationContent = styled.div`
   display: flex;
@@ -54,14 +54,14 @@ export const NotificationContent = styled.div`
   width: 220px;
   padding-right: 10px;
   margin: 0px;
-`;
+`
 
 export const NotificationMessage = styled.p`
   margin: 0px;
   font-size: 14px;
   font-weight: 400;
   line-height: 18px;
-`;
+`
 
 export const NotificationClose = styled.div`
   cursor: pointer;
@@ -84,4 +84,4 @@ export const NotificationClose = styled.div`
     stroke: var(--cFont);
     stroke-width: 0.4;
   }
-`;
+`

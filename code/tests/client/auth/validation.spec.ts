@@ -1,7 +1,7 @@
-import { assert } from 'chai';
+import { assert } from 'chai'
 
-import * as InputTypes from 'shared/constants/inputTypes';
-import { isInputValid } from 'shared/helpers/validation';
+import * as InputTypes from 'shared/constants/inputTypes'
+import { isInputValid } from 'shared/helpers/validation'
 
 const testData: any = {
   [InputTypes.TEXT]: {
@@ -39,31 +39,31 @@ const testData: any = {
       'test@.com',
     ],
   },
-};
+}
 
 const validateInputs = (inputKey: string, validityKey: string): boolean => {
-  let validity = true;
+  let validity = true
   testData[inputKey][validityKey].forEach((input: string) => {
-    validity = validity && isInputValid(inputKey, input).valid;
-  });
-  return validity;
-};
+    validity = validity && isInputValid(inputKey, input).valid
+  })
+  return validity
+}
 
 describe('Auth > validation', () => {
   describe('Shared input validation test', () => {
     it('should distinguish valid and invalid Email fields', () => {
-      assert.isTrue(validateInputs(InputTypes.EMAIL, 'valid'));
-      assert.isFalse(validateInputs(InputTypes.EMAIL, 'invalid'));
-    });
+      assert.isTrue(validateInputs(InputTypes.EMAIL, 'valid'))
+      assert.isFalse(validateInputs(InputTypes.EMAIL, 'invalid'))
+    })
 
     it('should distinguish valid and invalid Text fields', () => {
-      assert.isTrue(validateInputs(InputTypes.TEXT, 'valid'));
-      assert.isFalse(validateInputs(InputTypes.TEXT, 'invalid'));
-    });
+      assert.isTrue(validateInputs(InputTypes.TEXT, 'valid'))
+      assert.isFalse(validateInputs(InputTypes.TEXT, 'invalid'))
+    })
 
     it('should distinguish valid and invalid Password fields', () => {
-      assert.isTrue(validateInputs(InputTypes.PASSWORD, 'valid'));
-      assert.isFalse(validateInputs(InputTypes.PASSWORD, 'invalid'));
-    });
-  });
-});
+      assert.isTrue(validateInputs(InputTypes.PASSWORD, 'valid'))
+      assert.isFalse(validateInputs(InputTypes.PASSWORD, 'invalid'))
+    })
+  })
+})

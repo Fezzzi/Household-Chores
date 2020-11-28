@@ -1,8 +1,9 @@
-import React from 'react';
-import { PropTypes } from 'prop-types';
+import React from 'react'
+import { PropTypes } from 'prop-types'
 
-import { SeparatorWrapper, SeparatorLine, SeparatorText } from 'clientSrc/styles/blocks/form';
-import LocaleText from '../../common/LocaleText';
+import { SeparatorWrapper, SeparatorLine, SeparatorText } from 'clientSrc/styles/blocks/form'
+
+import LocaleText from '../../common/LocaleText'
 
 const Separator = ({ message, line }) => (
   <SeparatorWrapper>
@@ -14,15 +15,15 @@ const Separator = ({ message, line }) => (
     )}
     {line && <SeparatorLine />}
   </SeparatorWrapper>
-);
+)
 
 Separator.defaultProps = {
   line: true,
-};
+}
 
 Separator.propTypes = {
   message: PropTypes.string,
   line: PropTypes.bool,
-};
+}
 
-export default Separator;
+export default Separator

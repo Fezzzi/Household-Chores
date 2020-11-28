@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
 import {
   BottomMessageWrapper, BottomMessageBlock, BottomMessageLink,
-} from 'clientSrc/styles/blocks/auth';
+} from 'clientSrc/styles/blocks/auth'
 
-import LocaleText from '../../common/LocaleText';
+import LocaleText from '../../common/LocaleText'
 
 const BottomBlock = ({ message, linkMessage, onClick }) => (
   <BottomMessageWrapper>
@@ -16,12 +16,12 @@ const BottomBlock = ({ message, linkMessage, onClick }) => (
       </BottomMessageLink>
     </BottomMessageBlock>
   </BottomMessageWrapper>
-);
+)
 
 BottomBlock.propTypes = {
   message: PropTypes.string.isRequired,
   linkMessage: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
-};
+}
 
-export default BottomBlock;
+export default BottomBlock

@@ -1,16 +1,16 @@
-import { database } from 'serverSrc/database';
-import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
+import { database } from 'serverSrc/database'
+import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType'
+import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys'
 
-import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys';
-import HOUSEHOLDS_TABLE from './tables/households';
-import HOUSEHOLD_INVITATIONS_TABLE from './tables/household_invitations';
-import HOUSEHOLD_MEMBERS_TABLE from './tables/household_members';
-import USERS_TABLE from './tables/users';
+import HOUSEHOLDS_TABLE from './tables/households'
+import HOUSEHOLD_INVITATIONS_TABLE from './tables/household_invitations'
+import HOUSEHOLD_MEMBERS_TABLE from './tables/household_members'
+import USERS_TABLE from './tables/users'
 
-const { name: tName, columns: tHouseholdCols } = HOUSEHOLDS_TABLE;
-const { name: tHouseInvName, columns: tHouseInvCols } = HOUSEHOLD_INVITATIONS_TABLE;
-const { name: tHouseMemName, columns: tHouseMemCols } = HOUSEHOLD_MEMBERS_TABLE;
-const { name: tUsersName, columns: tUserCols } = USERS_TABLE;
+const { name: tName, columns: tHouseholdCols } = HOUSEHOLDS_TABLE
+const { name: tHouseInvName, columns: tHouseInvCols } = HOUSEHOLD_INVITATIONS_TABLE
+const { name: tHouseMemName, columns: tHouseMemCols } = HOUSEHOLD_MEMBERS_TABLE
+const { name: tUsersName, columns: tUserCols } = USERS_TABLE
 
 export const findUserInvitations = async (currentUser: number): Promise<Array<object>> => {
   return [{
@@ -29,11 +29,10 @@ export const findUserInvitations = async (currentUser: number): Promise<Array<ob
     fromNickname: 'Uzivatel 2',
     fromPhoto: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
     [tHouseInvCols.message]: 'AHOJKY',
-  }];
+  }]
 
-  return database.query(`SELECT * FROM ${tHouseInvName} WHERE ${tHouseInvCols.id_to}=${currentUser}`);
-};
-
+  return database.query(`SELECT * FROM ${tHouseInvName} WHERE ${tHouseInvCols.id_to}=${currentUser}`)
+}
 
 export const findUserHouseholds = async (currentUser: number): Promise<Array<object>> =>
   [{
@@ -131,7 +130,6 @@ export const findUserHouseholds = async (currentUser: number): Promise<Array<obj
       FROM ${tName} AS households
       INNER JOIN ${tHouseMemName} ON households.${tabID}=${tabHouseMemIDHousehold} AND ${tabHouseMemIDUser}=${currentUser}
   `); */
-;
 
 export const addHouseholdInvitations = async (
   householdId: number,
@@ -140,7 +138,7 @@ export const addHouseholdInvitations = async (
 ): Promise<boolean> => database.query(`
     INSERT INTO ${tHouseInvName}
     VALUES (${users.map(() => `${householdId}, ${currentId}, ?, ?, NOW()`).join('),(')})
-  `, users.flatMap(user => [user.id, user.invitationMessage || '']));
+  `, users.flatMap(user => [user.id, user.invitationMessage || '']))
 
 export const createHousehold = async (
   data: Record<string, string | number>,
@@ -150,17 +148,17 @@ export const createHousehold = async (
     const result = await database.query(`
       INSERT INTO ${tName} (${tHouseholdCols.name}, ${tHouseholdCols.photo}, ${tHouseholdCols.date_created})
       VALUES (?, ?, NOW())
-    `, [data[HOUSEHOLD_KEYS.NAME], data[HOUSEHOLD_KEYS.PHOTO]]);
+    `, [data[HOUSEHOLD_KEYS.NAME], data[HOUSEHOLD_KEYS.PHOTO]])
 
     if (!result?.insertId) {
-      return null;
+      return null
     }
     const success = await database.query(`
       INSERT INTO ${tHouseMemName}
       VALUES (${result.insertId}, ${currentId}, ${currentId}, '${HOUSEHOLD_ROLE_TYPE.ADMIN}', ?, ?, NOW())
-    `, [data[HOUSEHOLD_KEYS.USER_NAME], data[HOUSEHOLD_KEYS.USER_PHOTO]]);
-    return success && result.insertId;
-  });
+    `, [data[HOUSEHOLD_KEYS.USER_NAME], data[HOUSEHOLD_KEYS.USER_PHOTO]])
+    return success && result.insertId
+  })
 
 export const deleteHousehold = async (
   householdId: number
@@ -168,7 +166,7 @@ export const deleteHousehold = async (
   database.query(`
     DELETE FROM ${tName}
     WHERE ${tHouseholdCols.id}=?
-  `, [householdId]);
+  `, [householdId])
 
 export const leaveHousehold = async (
   userId: number,
@@ -177,7 +175,7 @@ export const leaveHousehold = async (
   database.query(`
     DELETE FROM ${tHouseMemName}
     WHERE ${tHouseMemCols.id_household}=? AND ${tHouseMemCols.id_user}=${userId}
-  `, [householdId]);
+  `, [householdId])
 
 export const deleteInvitation = async (
   currentId: number,
@@ -186,25 +184,25 @@ export const deleteInvitation = async (
   database.query(`
     DELETE FROM ${tHouseInvName}
     WHERE ${tHouseInvCols.id_to}=${currentId} AND ${tHouseInvCols.id_from}=? AND ${tHouseInvCols.id_household}=?
-  `, [fromId, householdId]);
+  `, [fromId, householdId])
 
 export const approveInvitation = async (
   currentId: number,
   data: { fromId: number; householdId: number; name: string; photo: string },
 ): Promise<boolean | null> =>
   database.withTransaction(async (): Promise<boolean> => {
-    const success = await deleteInvitation(currentId, data);
+    const success = await deleteInvitation(currentId, data)
     if (success) {
-      const { fromId, householdId, name, photo } = data;
+      const { fromId, householdId, name, photo } = data
       return database.query(`
         INSERT INTO ${tHouseMemName} (
           ${tHouseMemCols.id_household}, ${tHouseMemCols.id_user}, ${tHouseMemCols.id_from} ${tHouseMemCols.role},
           ${tHouseMemCols.name}, ${tHouseMemCols.photo}, ${tHouseMemCols.date_joined}
         ) VALUES (?, ${currentId}, ?, '${HOUSEHOLD_ROLE_TYPE.MEMBER}', ?, NOW())
-      `, [householdId, fromId, name, photo]);
+      `, [householdId, fromId, name, photo])
     }
-    return false;
-  });
+    return false
+  })
 
 export const getUserRole = async (
   userId: number,
@@ -214,4 +212,4 @@ export const getUserRole = async (
     SELECT ${tHouseMemCols.role}
     FROM ${tHouseMemName}
     WHERE ${tHouseMemCols.id_user}=${userId} AND ${tHouseMemCols.id_household}=?
-  `, [householdId]);
+  `, [householdId])

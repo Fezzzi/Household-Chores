@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const TooltipWrapper = styled.div`
   position: relative;
@@ -6,7 +6,7 @@ export const TooltipWrapper = styled.div`
   :focus {
     outline: none;
   }
-`;
+`
 
 export const OptionsTooltipIcon = styled.span`
   opacity: ${props => props.active ? 0.9 : 0.6};
@@ -15,13 +15,13 @@ export const OptionsTooltipIcon = styled.span`
     cursor: pointer;
     opacity: 0.9;
   }
-`;
+`
 
 export const TooltipAnchor = styled.div`
   position: absolute;
   top: ${props => props.position?.y ? props.position.y + 2 : 180}px;
   left: ${props => props.position?.x ?? 1400}px;
-`;
+`
 
 export const Tooltip = styled.div`
   top: -3px;
@@ -50,7 +50,7 @@ export const Tooltip = styled.div`
   :focus {
     outline: none;
   }
-`;
+`
 
 export const TooltipRow = styled.div`
   padding: 6px 11px;
@@ -90,7 +90,7 @@ export const TooltipRow = styled.div`
   :last-child {
     margin-bottom: 0;
   }
-`;
+`
 
 export const SimpleFloatingElementWrapper = styled.div`
   top: 10px;
@@ -117,7 +117,7 @@ export const SimpleFloatingElementWrapper = styled.div`
   :active, :focus {
     opacity: 0.8;
   }
-`;
+`
 
 export const FloatingElementIcon = styled.span`
   width: 28px;
@@ -130,7 +130,7 @@ export const FloatingElementIcon = styled.span`
     height: 100%;
     width: 100%;
   }
-`;
+`
 
 export const FloatingElementText = styled.span`
   display: inline-flex;
@@ -140,4 +140,4 @@ export const FloatingElementText = styled.span`
   font-weight: 500;
   user-select: none;
   
-`;
+`

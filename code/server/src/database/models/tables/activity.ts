@@ -8,4 +8,4 @@ export default {
     seen: 'seen',
     date_created: 'date_created',
   },
-};
+}

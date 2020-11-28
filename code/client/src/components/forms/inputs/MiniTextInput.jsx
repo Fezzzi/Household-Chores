@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
-import { TextInputBox, TextInputField, TextInputLabel } from 'clientSrc/styles/blocks/form';
-import { MiniInputWrapper } from 'clientSrc/styles/blocks/common';
-import * as TYPES from 'shared/constants/inputTypes';
+import { TextInputBox, TextInputField, TextInputLabel } from 'clientSrc/styles/blocks/form'
+import { MiniInputWrapper } from 'clientSrc/styles/blocks/common'
+import * as TYPES from 'shared/constants/inputTypes'
 
-import LocaleText from '../../common/LocaleText';
+import LocaleText from '../../common/LocaleText'
 
 const MiniTextInput = ({ name, reference, message, handleChange }) => {
-  const [inputTextLength, setInputTextLength] = useState(0);
-  const [inputActive, setInputActive] = useState(false);
+  const [inputTextLength, setInputTextLength] = useState(0)
+  const [inputActive, setInputActive] = useState(false)
 
   const handleInputChange = e => {
-    setInputTextLength(e.target.value.length);
-    handleChange(e.target.value);
-  };
+    setInputTextLength(e.target.value.length)
+    handleChange(e.target.value)
+  }
 
   return (
     <MiniInputWrapper active={inputActive}>
@@ -36,14 +36,14 @@ const MiniTextInput = ({ name, reference, message, handleChange }) => {
         />
       </TextInputBox>
     </MiniInputWrapper>
-  );
-};
+  )
+}
 
 MiniTextInput.propTypes = {
   name: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   reference: PropTypes.object,
-};
+}
 
-export default MiniTextInput;
+export default MiniTextInput

@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { PropTypes } from 'prop-types';
-import { ArrowBack } from '@material-ui/icons';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { PropTypes } from 'prop-types'
+import { ArrowBack } from '@material-ui/icons'
 
-import { loadResource } from 'clientSrc/effects/resourceEffects';
+import errorIcon from '~/static/resources/icons/error-icon.svg'
+
+import { loadResource } from 'clientSrc/effects/resourceEffects'
 import {
   ResourceWrapper, TopButton, BannerWrapper, BodyBlock,
   BodyWrapper, HeadlineBlock, IconBlock,
-} from 'clientSrc/styles/blocks/resources';
-import errorIcon from '~/static/resources/icons/error-icon.svg';
+} from 'clientSrc/styles/blocks/resources'
 
 class Resource extends Component {
   constructor(props) {
-    super(props);
-    const { match: { params: { resourceId } } } = this.props;
+    super(props)
+    const { match: { params: { resourceId } } } = this.props
 
     this.state = {
       data: {
@@ -21,7 +22,7 @@ class Resource extends Component {
         body: '',
       },
       resourceId,
-    };
+    }
   }
 
   fetchData(resourceId, locale) {
@@ -35,29 +36,29 @@ class Resource extends Component {
         icon: errorIcon,
         body: 'Error loading data, please try refreshing the page.',
       },
-    }));
+    }))
   }
 
   componentDidMount() {
-    const { locale } = this.props;
-    const { resourceId } = this.state;
+    const { locale } = this.props
+    const { resourceId } = this.state
 
-    this.fetchData(resourceId, locale);
+    this.fetchData(resourceId, locale)
   }
 
   componentDidUpdate(prevProps) {
-    const { match: { params: { resourceId: prevResourceId } }, locale: prevLocale } = prevProps;
-    const { locale } = this.props;
-    const { resourceId } = this.state;
+    const { match: { params: { resourceId: prevResourceId } }, locale: prevLocale } = prevProps
+    const { locale } = this.props
+    const { resourceId } = this.state
 
     if (prevResourceId !== resourceId || prevLocale !== locale) {
-      this.fetchData(resourceId, locale);
+      this.fetchData(resourceId, locale)
     }
   }
 
   render() {
-    const { history } = this.props;
-    const { data: { headline, icon, banner, body } } = this.state;
+    const { history } = this.props
+    const { data: { headline, icon, banner, body } } = this.state
 
     return (
       <ResourceWrapper>
@@ -71,7 +72,7 @@ class Resource extends Component {
           <BodyBlock dangerouslySetInnerHTML={{ __html: body }} />
         </BodyWrapper>
       </ResourceWrapper>
-    );
+    )
   }
 }
 
@@ -83,10 +84,10 @@ Resource.propTypes = {
   }),
   history: PropTypes.object.isRequired,
   locale: PropTypes.string.isRequired,
-};
+}
 
 const mapStateToProps = ({ locale: { locale } }) => ({
   locale,
-});
+})
 
-export default connect(mapStateToProps)(Resource);
+export default connect(mapStateToProps)(Resource)

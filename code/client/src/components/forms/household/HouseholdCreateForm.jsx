@@ -1,42 +1,42 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { SectionHeadline } from 'clientSrc/styles/blocks/settings';
-import { useInvitationListProps } from 'clientSrc/helpers/household';
-import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
-import * as SettingsActions from 'clientSrc/actions/settingsActions';
-import { HOUSEHOLD } from 'shared/constants/localeMessages';
-import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys';
-import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
+import newHouseholdIcon from '~/static/icons/icon-150.png'
 
-import newHouseholdIcon from '~/static/icons/icon-150.png';
+import { SectionHeadline } from 'clientSrc/styles/blocks/settings'
+import { useInvitationListProps } from 'clientSrc/helpers/household'
+import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common'
+import * as SettingsActions from 'clientSrc/actions/settingsActions'
+import { HOUSEHOLD } from 'shared/constants/localeMessages'
+import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
+import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType'
 
-import HouseholdFormHeader from './HouseholdFormHeader';
-import HouseholdInvitationForm from './HouseholdInvitationForm';
-import LocaleText from '../../common/LocaleText';
-import Table from '../../common/Table';
+import HouseholdFormHeader from './HouseholdFormHeader'
+import HouseholdInvitationForm from './HouseholdInvitationForm'
+import LocaleText from '../../common/LocaleText'
+import Table from '../../common/Table'
 
 const HouseholdCreateForm = ({ connections }) => {
-  const [timer, setTimer] = useState(null);
+  const [timer, setTimer] = useState(null)
   const [state, setState] = useState({
     isFormSending: false,
     inputs: {},
     errors: {},
-  });
-  const [invitations, setInvitations] = useState([]);
+  })
+  const [invitations, setInvitations] = useState([])
 
-  useEffect(() => () => timer && clearTimeout(timer), []);
+  useEffect(() => () => timer && clearTimeout(timer), [])
 
-  const { inputs, errors, isFormSending } = state;
+  const { inputs, errors, isFormSending } = state
 
-  const userState = useSelector(({ app }) => app.user);
+  const userState = useSelector(({ app }) => app.user)
   const currentUser = useMemo(() => ({
     id: userState[PROFILE.ID],
     photo: userState[PROFILE.PHOTO],
     name: userState[PROFILE.NAME],
     role: HOUSEHOLD_ROLE_TYPE.ADMIN,
-  }), [userState]);
+  }), [userState])
 
   const invitationTableProps = useMemo(() => useInvitationListProps(
     invitations.map(user => ({
@@ -49,39 +49,39 @@ const HouseholdCreateForm = ({ connections }) => {
       dateCreated: '(PENDING)',
     })),
     (fromId, toId) => setInvitations(prevState => prevState.filter(user => user.id !== toId))
-  ), [connections, invitations]);
+  ), [connections, invitations])
 
   const loadImageUrlWithCallback = (image, type, callback) => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    const img = new Image()
     img.onload = () => {
-      canvas.height = img.height;
-      canvas.width = img.width;
-      ctx.drawImage(img, 0, 0);
-      const dataUrl = canvas.toDataURL(type);
+      canvas.height = img.height
+      canvas.width = img.width
+      ctx.drawImage(img, 0, 0)
+      const dataUrl = canvas.toDataURL(type)
       callback({
         type,
         size: dataUrl.length,
         name: image,
         data: dataUrl,
-      });
-    };
-    img.src = image;
-  };
+      })
+    }
+    img.src = image
+  }
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const handleCreateHousehold = useCallback(() => {
     setState(prevState => ({
       ...prevState,
       isFormSending: true,
-    }));
+    }))
 
     const inputsData = {
       [HOUSEHOLD_KEYS.USER_NAME]: currentUser.name,
       [HOUSEHOLD_KEYS.NAME]: 'New Household',
       ...inputs,
-    };
+    }
 
     if (!inputs[HOUSEHOLD_KEYS.PHOTO]) {
       loadImageUrlWithCallback(newHouseholdIcon, 'image/svg+xml', householdPhoto => {
@@ -94,8 +94,8 @@ const HouseholdCreateForm = ({ connections }) => {
                 [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
               },
               invitations,
-            }));
-          });
+            }))
+          })
         } else {
           dispatch(SettingsActions.createHousehold({
             inputs: {
@@ -103,9 +103,9 @@ const HouseholdCreateForm = ({ connections }) => {
               [HOUSEHOLD_KEYS.PHOTO]: householdPhoto,
             },
             invitations,
-          }));
+          }))
         }
-      });
+      })
     } else if (!inputs[HOUSEHOLD_KEYS.USER_PHOTO]) {
       loadImageUrlWithCallback(currentUser.photo, `image/${currentUser.photo.split('.').splice(-1)[0]}`, userPhoto => {
         dispatch(SettingsActions.createHousehold({
@@ -114,18 +114,18 @@ const HouseholdCreateForm = ({ connections }) => {
             [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
           },
           invitations,
-        }));
-      });
+        }))
+      })
     } else {
-      dispatch(SettingsActions.createHousehold({ inputs: inputsData, invitations }));
+      dispatch(SettingsActions.createHousehold({ inputs: inputsData, invitations }))
     }
 
     setTimer(setTimeout(
       () => setState && setState(prevState => ({
         ...prevState,
         isFormSending: false,
-      })), SUBMIT_TIMEOUT));
-  }, [dispatch, currentUser, inputs, invitations]);
+      })), SUBMIT_TIMEOUT))
+  }, [dispatch, currentUser, inputs, invitations])
 
   return (
     <>
@@ -158,12 +158,12 @@ const HouseholdCreateForm = ({ connections }) => {
         <LocaleText message={HOUSEHOLD.ADD_MODULES} />
       </SectionHeadline>
     </>
-  );
-};
+  )
+}
 
 HouseholdCreateForm.defaultProps = {
   connections: [],
-};
+}
 
 HouseholdCreateForm.propTypes = {
   connections: PropTypes.arrayOf(PropTypes.shape({
@@ -171,6 +171,6 @@ HouseholdCreateForm.propTypes = {
     nickname: PropTypes.string.isRequired,
     photo: PropTypes.string,
   })),
-};
+}
 
-export default HouseholdCreateForm;
+export default HouseholdCreateForm

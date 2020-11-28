@@ -1,30 +1,30 @@
-import React, { useCallback, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useMemo } from 'react'
+import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 
-import { InputRow } from 'clientSrc/styles/blocks/form';
-import { UserList } from 'clientSrc/styles/blocks/users';
-import { SectionHeadline } from 'clientSrc/styles/blocks/settings';
-import { TableBox, TableHeaderBox } from 'clientSrc/styles/blocks/table';
-import * as SettingsActions from 'clientSrc/actions/settingsActions';
-import { FORM } from 'shared/constants/localeMessages';
+import { InputRow } from 'clientSrc/styles/blocks/form'
+import { UserList } from 'clientSrc/styles/blocks/users'
+import { SectionHeadline } from 'clientSrc/styles/blocks/settings'
+import { TableBox, TableHeaderBox } from 'clientSrc/styles/blocks/table'
+import * as SettingsActions from 'clientSrc/actions/settingsActions'
+import { FORM } from 'shared/constants/localeMessages'
 
-import UserConnectionNode from './UserConnectionNode';
-import LocaleText from '../../common/LocaleText';
-import SearchBar from '../common/SearchBar';
+import UserConnectionNode from './UserConnectionNode'
+import LocaleText from '../../common/LocaleText'
+import SearchBar from '../common/SearchBar'
 
 const ConnectionSearchForm = ({ tab, data, dataKey, emptyMessage, headlineMessage }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const searchQuery = useCallback(query =>
     dispatch(SettingsActions.searchConnectionAction(query)),
-  [dispatch]);
+  [dispatch])
 
   const emptyResultMessage = useMemo(() => {
     if (data[dataKey]?.length === 0) {
-      return FORM.NO_CONNECTIONS_FOUND;
+      return FORM.NO_CONNECTIONS_FOUND
     }
-    return emptyMessage;
-  }, [data[dataKey]]);
+    return emptyMessage
+  }, [data[dataKey]])
 
   return (
     <>
@@ -53,12 +53,12 @@ const ConnectionSearchForm = ({ tab, data, dataKey, emptyMessage, headlineMessag
           </InputRow>
         )}
     </>
-  );
-};
+  )
+}
 
 ConnectionSearchForm.defaultProps = {
   emptyMessage: '',
-};
+}
 
 ConnectionSearchForm.propTypes = {
   tab: PropTypes.string.isRequired,
@@ -66,6 +66,6 @@ ConnectionSearchForm.propTypes = {
   dataKey: PropTypes.string.isRequired,
   emptyMessage: PropTypes.string,
   headlineMessage: PropTypes.string.isRequired,
-};
+}
 
-export default ConnectionSearchForm;
+export default ConnectionSearchForm

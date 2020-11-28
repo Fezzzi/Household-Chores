@@ -1,14 +1,14 @@
-import { put, call } from 'redux-saga/effects';
+import { put, call } from 'redux-saga/effects'
 
-import * as NotificationActions from 'clientSrc/actions/notificationActions';
-import * as NotificationTypes from 'shared/constants/notificationTypes';
+import * as NotificationActions from 'clientSrc/actions/notificationActions'
+import * as NotificationTypes from 'shared/constants/notificationTypes'
 
 export function* handleResponse(response, onSuccess) {
   if (!response[NotificationTypes.ERRORS] || !response[NotificationTypes.ERRORS].length) {
-    yield call(onSuccess, response);
+    yield call(onSuccess, response)
   } else {
     yield put(NotificationActions.addNotifications({
       [NotificationTypes.ERRORS]: response[NotificationTypes.ERRORS],
-    }));
+    }))
   }
 }

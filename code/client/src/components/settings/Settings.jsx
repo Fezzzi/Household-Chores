@@ -1,63 +1,63 @@
-import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
-import deepEqual from 'fast-deep-equal';
+import React, { useState, useEffect, useMemo, useCallback, memo } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
+import deepEqual from 'fast-deep-equal'
 
-import { ContentColumn, SettingsWrapper } from 'clientSrc/styles/blocks/settings';
-import { settingsRenderers } from 'clientSrc/constants/settingsRenderers';
-import { CATEGORY_ICONS, TAB_ICONS } from 'clientSrc/constants/settingIcons';
-import { useSubmitHandler } from 'clientSrc/helpers/form';
-import * as SettingsActions from 'clientSrc/actions/settingsActions';
-import * as SettingTypes from 'shared/constants/settingTypes';
+import { ContentColumn, SettingsWrapper } from 'clientSrc/styles/blocks/settings'
+import { settingsRenderers } from 'clientSrc/constants/settingsRenderers'
+import { CATEGORY_ICONS, TAB_ICONS } from 'clientSrc/constants/settingIcons'
+import { useSubmitHandler } from 'clientSrc/helpers/form'
+import * as SettingsActions from 'clientSrc/actions/settingsActions'
+import * as SettingTypes from 'shared/constants/settingTypes'
+import { CATEGORIES, TAB_ROWS } from 'shared/constants/settingTypes'
 
-import { CATEGORIES, TAB_ROWS } from 'shared/constants/settingTypes';
-import SettingsColumn from './SettingsColumn';
+import SettingsColumn from './SettingsColumn'
 
 const Settings = memo(({ history, location }) => {
   const [state, setState] = useState({
     category: location.pathname.split('/')?.[2],
     tab: location.search.match(/tab=([^&]+)/)?.[1],
-  });
+  })
 
-  const settings = useSelector(({ settings: settingsState }) => settingsState, deepEqual);
+  const settings = useSelector(({ settings: settingsState }) => settingsState, deepEqual)
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const loadSettings = useCallback((category, tab) =>
     dispatch(SettingsActions.loadSettings({ category, tab })),
-  [dispatch]);
+  [dispatch])
 
-  const { category, tab } = state;
+  const { category, tab } = state
   useEffect(() => {
-    const newCategory = location.pathname.split('/')?.[2];
-    const newTab = location.search.match(/tab=([^&]+)/)?.[1];
+    const newCategory = location.pathname.split('/')?.[2]
+    const newTab = location.search.match(/tab=([^&]+)/)?.[1]
 
     if (Object.values(CATEGORIES).indexOf(newCategory) === -1) {
       history.push({
         pathname: CATEGORIES.PROFILE,
         search: `tab=${TAB_ROWS[CATEGORIES.PROFILE][0]}`,
-      });
-      return;
+      })
+      return
     }
 
-    loadSettings(newCategory, newTab);
+    loadSettings(newCategory, newTab)
     if (category !== newCategory || tab !== newTab) {
       setState({
         category: newCategory,
         tab: newTab,
-      });
+      })
     }
-  }, [location]);
+  }, [location])
 
-  const { data, categories, tabs, tabMessages, tabTypes } = settings;
-  const [peekedTabs, setPeekedTabs] = useState(SettingTypes.TAB_ROWS[category]);
+  const { data, categories, tabs, tabMessages, tabTypes } = settings
+  const [peekedTabs, setPeekedTabs] = useState(SettingTypes.TAB_ROWS[category])
 
   const displayedTabs = useMemo(() => {
     if (tabs.length > 0) {
-      setPeekedTabs(tabs);
-      return tabs;
+      setPeekedTabs(tabs)
+      return tabs
     }
-    return SettingTypes.TAB_ROWS[category];
-  }, [tabs]);
+    return SettingTypes.TAB_ROWS[category]
+  }, [tabs])
 
   const tabKey = useMemo(() =>
     settingsRenderers[category]?.[tab]
@@ -66,18 +66,18 @@ const Settings = memo(({ history, location }) => {
         ? tabTypes[tab]
         : null,
   [category, tab, tabTypes]
-  );
+  )
 
   const changeCategory = useCallback(newCategory => history.push({
     pathname: newCategory,
     search: `?tab=${SettingTypes.TAB_ROWS[newCategory][0]}`,
-  }), [setState]);
+  }), [setState])
 
   const changeTab = useCallback(newTab => history.push({
     search: `?tab=${newTab}`,
-  }), [category, setState]);
+  }), [category, setState])
 
-  const submitHandler = useSubmitHandler(category, tab);
+  const submitHandler = useSubmitHandler(category, tab)
 
   return (
     <SettingsWrapper>
@@ -109,12 +109,12 @@ const Settings = memo(({ history, location }) => {
         {category && tabKey && settingsRenderers[category][tabKey](data, submitHandler, tab, category)}
       </ContentColumn>
     </SettingsWrapper>
-  );
-});
+  )
+})
 
 Settings.propTypes = {
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-};
+}
 
-export default Settings;
+export default Settings

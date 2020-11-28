@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { FormButtonWrapper, FormButton } from 'clientSrc/styles/blocks/form';
+import { FormButtonWrapper, FormButton } from 'clientSrc/styles/blocks/form'
 
 const PrimaryButton = ({ children, clickHandler, margin, inline, ...props }) => (
   <FormButtonWrapper margin={margin} inline={inline}>
@@ -9,7 +9,7 @@ const PrimaryButton = ({ children, clickHandler, margin, inline, ...props }) => 
       {children}
     </FormButton>
   </FormButtonWrapper>
-);
+)
 
 PrimaryButton.defaultProps = {
   background: 'var(--cBluePrimary)',
@@ -19,7 +19,7 @@ PrimaryButton.defaultProps = {
   border: false,
   inline: false,
   disabled: false,
-};
+}
 
 PrimaryButton.propTypes = {
   background: PropTypes.string,
@@ -37,6 +37,6 @@ PrimaryButton.propTypes = {
     PropTypes.string,
   ]),
   clickHandler: PropTypes.func,
-};
+}
 
-export default PrimaryButton;
+export default PrimaryButton

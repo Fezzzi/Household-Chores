@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { PropTypes } from 'prop-types';
-import { connect } from 'react-redux';
+import React, { Component } from 'react'
+import { PropTypes } from 'prop-types'
+import { connect } from 'react-redux'
 
-import { LABELS } from 'shared/constants/locale';
-import { FLAGS } from 'clientSrc/constants/localeFlags';
-import * as LocaleActions from 'clientSrc/actions/localeActions';
+import { LABELS } from 'shared/constants/locale'
+import { FLAGS } from 'clientSrc/constants/localeFlags'
+import * as LocaleActions from 'clientSrc/actions/localeActions'
 import {
   IconButtonWrapper, IconButton, LocaleIcon,
   LocaleLabel, LocaleSelector, LocaleLine,
-} from 'clientSrc/styles/blocks/settings';
+} from 'clientSrc/styles/blocks/settings'
 
 const renderAvailableLocales = (availableLocales, switchFunc) =>
   availableLocales.map((locale, key) => (
@@ -20,21 +20,21 @@ const renderAvailableLocales = (availableLocales, switchFunc) =>
         {LABELS[locale]}
       </LocaleLabel>
     </LocaleLine>
-  ));
+  ))
 
 class LocaleSwitchComponent extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = ({
       expanded: false,
       inputActive: false,
-    });
+    })
   }
 
   render() {
-    const { locale, availableLocales, switchLocale } = this.props;
-    const { expanded, inputActive } = this.state;
+    const { locale, availableLocales, switchLocale } = this.props
+    const { expanded, inputActive } = this.state
 
     return (
       <IconButtonWrapper>
@@ -55,7 +55,7 @@ class LocaleSwitchComponent extends Component {
           {FLAGS[locale]()}
         </IconButton>
       </IconButtonWrapper>
-    );
+    )
   }
 }
 
@@ -63,15 +63,15 @@ LocaleSwitchComponent.propTypes = {
   locale: PropTypes.string,
   availableLocales: PropTypes.arrayOf(PropTypes.string),
   switchLocale: PropTypes.func,
-};
+}
 
 const mapStateToProps = ({ locale: { locale, availableLocales } }) => ({
   locale,
   availableLocales,
-});
+})
 
 const mapDispatchToProps = dispatch => ({
   switchLocale: locale => dispatch(LocaleActions.triggerLocaleChange(locale)),
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(LocaleSwitchComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(LocaleSwitchComponent)

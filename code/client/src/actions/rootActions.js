@@ -1,3 +1,3 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createAction } from '@reduxjs/toolkit'
 
-export const stateLoaded = createAction('STATE_LOADED');
+export const stateLoaded = createAction('STATE_LOADED')

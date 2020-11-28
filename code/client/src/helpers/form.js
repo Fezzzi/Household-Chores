@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
-import * as SettingsActions from 'clientSrc/actions/settingsActions';
-import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
-import { FORM } from 'shared/constants/localeMessages';
+import * as SettingsActions from 'clientSrc/actions/settingsActions'
+import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common'
+import { FORM } from 'shared/constants/localeMessages'
 
 // todo: Refactor Login, Signup and Reset forms to use useUpdateHandler instead
 export const updateInput = (
@@ -19,13 +19,13 @@ export const updateInput = (
         valid: isValid,
         value,
       },
-    };
+    }
 
-    const isFormValid = formValidFunc(inputs);
+    const isFormValid = formValidFunc(inputs)
     const errors = {
       ...prevState.errors,
       [input]: isValid || !value ? '' : errorMessage,
-    };
+    }
 
     return {
       ...prevState,
@@ -33,9 +33,9 @@ export const updateInput = (
       isFormChanged: formChangedFunc(inputs),
       inputs,
       errors,
-    };
-  });
-};
+    }
+  })
+}
 
 export const useFormState = data => {
   const [state, setState] = useState({
@@ -44,7 +44,7 @@ export const useFormState = data => {
     isFormSending: false,
     inputs: {},
     errors: {},
-  });
+  })
 
   useEffect(() => {
     setState(prevState => ({
@@ -52,69 +52,69 @@ export const useFormState = data => {
       isFormValid: true,
       inputs: {},
       errors: {},
-    }));
-  }, [data]);
+    }))
+  }, [data])
 
   return {
     ...state,
     setFormState: setState,
-  };
-};
+  }
+}
 
 export const useUpdateHandler = (name, setFormState, formValidFunc, placeholder) => (isValid, value, errorMessage) => {
   setFormState(prevState => {
-    const newInputs = { ...prevState.inputs };
+    const newInputs = { ...prevState.inputs }
     if (value !== '' && (placeholder === undefined || value !== placeholder)) {
-      newInputs[name] = value;
+      newInputs[name] = value
     } else {
-      delete newInputs[name];
+      delete newInputs[name]
     }
 
-    const newErrors = { ...prevState.errors };
+    const newErrors = { ...prevState.errors }
     if (!isValid && value) {
-      newErrors[name] = errorMessage;
+      newErrors[name] = errorMessage
     } else {
-      delete newErrors[name];
+      delete newErrors[name]
     }
 
     const isFormValid = formValidFunc
       ? formValidFunc(newInputs)
-      : Object.values(newErrors).length === 0;
+      : Object.values(newErrors).length === 0
 
     return {
       ...prevState,
       isFormValid,
       inputs: newInputs,
       errors: newErrors,
-    };
-  });
-};
+    }
+  })
+}
 
 export const useSubmitHandler = (category, tab) => {
-  const [timer, setTimer] = useState(0);
-  const dispatch = useDispatch();
+  const [timer, setTimer] = useState(0)
+  const dispatch = useDispatch()
 
-  useEffect(() => () => timer && clearTimeout(timer), []);
+  useEffect(() => () => timer && clearTimeout(timer), [])
 
   return useCallback((inputs, setFormState, submitMessage = FORM.SAVE, submittingMessage = FORM.SAVING) => {
     setFormState(prevState => ({
       ...prevState,
       isFormSending: true,
       submitMessage: submittingMessage,
-    }));
+    }))
 
-    dispatch(SettingsActions.editSettings({ category, tab, inputs }));
+    dispatch(SettingsActions.editSettings({ category, tab, inputs }))
     setTimer(setTimeout(
       () => setFormState && setFormState(prevState => ({
         ...prevState,
         isFormSending: false,
         submitMessage,
-      })), SUBMIT_TIMEOUT));
-  }, [category, tab, dispatch]);
-};
+      })), SUBMIT_TIMEOUT))
+  }, [category, tab, dispatch])
+}
 
 // todo: Remove when removing updateInput
 export const handlerWrapper = handlerFunc => e => {
-  e.preventDefault();
-  handlerFunc();
-};
+  e.preventDefault()
+  handlerFunc()
+}

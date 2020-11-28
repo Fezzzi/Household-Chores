@@ -1,15 +1,15 @@
-import React from 'react';
+import React from 'react'
 import {
   Add, Home, HomeOutlined, Person, PersonAdd, PersonAddOutlined, PersonAddDisabled, Group, House, Settings, NotificationsActive,
-} from '@material-ui/icons';
+} from '@material-ui/icons'
 
-import { CATEGORIES, TABS } from 'shared/constants/settingTypes';
+import { CATEGORIES, TABS } from 'shared/constants/settingTypes'
 
 export const CATEGORY_ICONS = {
   [CATEGORIES.PROFILE]: <Person />,
   [CATEGORIES.CONNECTIONS]: <Group />,
   [CATEGORIES.HOUSEHOLDS]: <House />,
-};
+}
 
 export const TAB_ICONS = {
   [TABS.NOTIFICATIONS]: <NotificationsActive />,
@@ -21,4 +21,4 @@ export const TAB_ICONS = {
   [TABS.INVITATIONS]: <HomeOutlined />,
   [TABS.NEW_HOUSEHOLD]: <Add />,
   [TABS._HOUSEHOLD]: <Home />,
-};
+}

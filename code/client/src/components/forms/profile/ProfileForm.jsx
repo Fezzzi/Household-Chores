@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Save } from '@material-ui/icons';
+import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
+import { Save } from '@material-ui/icons'
 
-import { useFormState, useUpdateHandler } from 'clientSrc/helpers/form';
-import { FormBody } from 'clientSrc/styles/blocks/settings';
-import * as InputTypes from 'shared/constants/inputTypes';
-import { FORM } from 'shared/constants/localeMessages';
-import { PROFILE } from 'shared/constants/settingsDataKeys';
-import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
+import { useFormState, useUpdateHandler } from 'clientSrc/helpers/form'
+import { FormBody } from 'clientSrc/styles/blocks/settings'
+import * as InputTypes from 'shared/constants/inputTypes'
+import { FORM } from 'shared/constants/localeMessages'
+import { PROFILE } from 'shared/constants/settingsDataKeys'
+import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType'
 
-import { SimpleFloatingElement } from '../../portals';
-import ProfileFormHeader from './ProfileFormHeader';
-import Input from '../common/Input';
+import { SimpleFloatingElement } from '../../portals'
+import ProfileFormHeader from './ProfileFormHeader'
+import Input from '../common/Input'
 
 const ProfileForm = ({ data, onSubmit }) => {
-  const [headerKey, setHeaderKey] = useState(0);
+  const [headerKey, setHeaderKey] = useState(0)
   const {
     submitMessage,
     isFormValid,
@@ -22,18 +22,18 @@ const ProfileForm = ({ data, onSubmit }) => {
     inputs,
     errors,
     setFormState,
-  } = useFormState(data);
+  } = useFormState(data)
 
   useEffect(() => {
-    setHeaderKey(prevState => prevState + 1);
-  }, [data]);
+    setHeaderKey(prevState => prevState + 1)
+  }, [data])
 
   const {
     [PROFILE.PHOTO]: photo,
     [PROFILE.NAME]: name,
     [PROFILE.EMAIL]: email,
     [PROFILE.CONNECTION_VISIBILITY]: visibility,
-  } = data;
+  } = data
 
   return (
     <>
@@ -67,8 +67,8 @@ const ProfileForm = ({ data, onSubmit }) => {
         />
       </FormBody>
     </>
-  );
-};
+  )
+}
 
 ProfileForm.propTypes = {
   data: PropTypes.shape({
@@ -78,6 +78,6 @@ ProfileForm.propTypes = {
     [PROFILE.CONNECTION_VISIBILITY]: PropTypes.string,
   }).isRequired,
   onSubmit: PropTypes.func.isRequired,
-};
+}
 
-export default ProfileForm;
+export default ProfileForm

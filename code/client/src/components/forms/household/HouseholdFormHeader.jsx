@@ -1,22 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { DeleteForever, MeetingRoom, Add } from '@material-ui/icons';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { DeleteForever, MeetingRoom, Add } from '@material-ui/icons'
 
 import {
   ButtonIconSpan, CriticalButtonsBlock, CurrentUserBlock,
   HouseholdSubtitle, RoleLabel, UserName, UserPhoto,
-} from 'clientSrc/styles/blocks/households';
-import {
-  FormHeader, FormButtonContentWrapper, FormHeaderPhoto, FormHeaderTitle,
-} from 'clientSrc/styles/blocks/form';
-import { getLabelColors } from 'clientSrc/helpers/household';
-import { HOUSEHOLD } from 'shared/constants/localeMessages';
+} from 'clientSrc/styles/blocks/households'
+import { FormHeader, FormButtonContentWrapper, FormHeaderPhoto, FormHeaderTitle } from 'clientSrc/styles/blocks/form'
+import { getLabelColors } from 'clientSrc/helpers/household'
+import { HOUSEHOLD } from 'shared/constants/localeMessages'
+import EditableTextField from 'clientSrc/components/common/EditableTextField'
+import EditablePhotoField from 'clientSrc/components/common/EditablePhotoField'
+import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys'
 
-import EditableTextField from 'clientSrc/components/common/EditableTextField';
-import EditablePhotoField from 'clientSrc/components/common/EditablePhotoField';
-import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys';
-import LocaleText from '../../common/LocaleText';
-import PrimaryButton from '../common/PrimaryButton';
+import LocaleText from '../../common/LocaleText'
+import PrimaryButton from '../common/PrimaryButton'
 
 const HouseholdFormHeader = ({
   photo, name, inputs, errors, currentUser, membersCount, setFormState,
@@ -37,7 +35,7 @@ const HouseholdFormHeader = ({
         <LocaleText message={sendingField?.[message] ?? message} />
       </FormButtonContentWrapper>
     </PrimaryButton>
-  );
+  )
 
   return (
     <FormHeader>
@@ -98,8 +96,8 @@ const HouseholdFormHeader = ({
         {onCreateHousehold && criticalButton(onCreateHousehold, 'var(--cGreenSecondary)', HOUSEHOLD.CREATE, <Add />)}
       </CriticalButtonsBlock>
     </FormHeader>
-  );
-};
+  )
+}
 
 HouseholdFormHeader.propTypes = {
   name: PropTypes.string.isRequired,
@@ -117,6 +115,6 @@ HouseholdFormHeader.propTypes = {
   onLeaveHousehold: PropTypes.func,
   onDeleteHousehold: PropTypes.func,
   onCreateHousehold: PropTypes.func,
-};
+}
 
-export default HouseholdFormHeader;
+export default HouseholdFormHeader

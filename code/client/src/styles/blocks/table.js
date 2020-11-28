@@ -1,16 +1,16 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const TableBox = styled.div`
   margin: 0 50px;
   min-width: 550px;
-`;
+`
 
 export const TableHeaderBox = styled.div`
   height: ${props => props.isBigger ? 42 : 32}px;
   border-bottom: 1px solid var(--cBorder);
   margin-bottom: 10px;
   display: flex;
-`;
+`
 
 export const TableHeaderCell = styled.div`
   padding: 0 6px;
@@ -19,24 +19,24 @@ export const TableHeaderCell = styled.div`
   font-size: 1.1em;
   
   ${props => props.growing ? 'margin-right: auto' : 'flex-shrink: 0'};
-`;
+`
 
 export const TableSingleRowBox = styled.div`
   height: ${props => props.height};
   max-height: ${props => props.height};
   overflow-x: auto;
-`;
+`
 
 export const TableRowsBox = styled.div`
   height: max-content;
   max-height: 270px;
   overflow: auto;
-`;
+`
 
 export const TableRow = styled.div`
   padding: 5px 6px;
   display: flex;
-`;
+`
 
 export const TableRowIcon = styled.span`
   color: ${props => props.color || 'var(--cFont)'};
@@ -52,7 +52,7 @@ export const TableRowIcon = styled.span`
       opacity: 0.9;
     }
   `}
-`;
+`
 
 export const TableCell = styled.div`
   display: flex;
@@ -70,7 +70,7 @@ export const TableCell = styled.div`
   svg {
     height: 20px;
   }
-`;
+`
 
 export const TablePhoto = styled.img`
   width: 20px;
@@ -78,7 +78,7 @@ export const TablePhoto = styled.img`
   
   border-radius: 100%;
   object-fit: cover;
-`;
+`
 
 export const TableSorterIcon = styled.span`
   height: 22px;
@@ -99,4 +99,4 @@ export const TableSorterIcon = styled.span`
     cursor: pointer;
     opacity: 1;
   }
-`;
+`

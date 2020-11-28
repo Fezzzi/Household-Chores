@@ -1,14 +1,14 @@
-import React from 'react';
-import GoogleLogin from 'react-google-login';
-import { connect } from 'react-redux';
-import { PropTypes } from 'prop-types';
+import React from 'react'
+import GoogleLogin from 'react-google-login'
+import { connect } from 'react-redux'
+import { PropTypes } from 'prop-types'
 
-import { AUTH } from 'shared/constants/localeMessages';
-import * as AuthActions from 'clientSrc/actions/authActions';
-import { GoogleIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/blocks/form';
+import { AUTH } from 'shared/constants/localeMessages'
+import * as AuthActions from 'clientSrc/actions/authActions'
+import { GoogleIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/blocks/form'
 
-import LocaleText from '../../common/LocaleText';
-import PrimaryButton from '../common/PrimaryButton';
+import LocaleText from '../../common/LocaleText'
+import PrimaryButton from '../common/PrimaryButton'
 
 const GoogleButtonComponent = ({ handleError, logInGoogle }) => (
   <GoogleLogin
@@ -33,15 +33,15 @@ const GoogleButtonComponent = ({ handleError, logInGoogle }) => (
     onFailure={error => handleError({ message: error.message || '' })}
     cookiePolicy="single_host_origin"
   />
-);
+)
 
 GoogleButtonComponent.propTypes = {
   handleError: PropTypes.func.isRequired,
   logInGoogle: PropTypes.func,
-};
+}
 
 const mapDispatchToProps = dispatch => ({
   logInGoogle: data => dispatch(AuthActions.logInGoogle(data)),
-});
+})
 
-export default connect(null, mapDispatchToProps)(GoogleButtonComponent);
+export default connect(null, mapDispatchToProps)(GoogleButtonComponent)

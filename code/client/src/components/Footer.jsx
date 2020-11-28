@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-import { PageFooter, FooterWrapper, CopyrightRow } from 'clientSrc/styles/blocks';
+import { PageFooter, FooterWrapper, CopyrightRow } from 'clientSrc/styles/blocks'
 
 export default () => (
   <PageFooter>
@@ -10,4 +10,4 @@ export default () => (
       </CopyrightRow>
     </FooterWrapper>
   </PageFooter>
-);
+)

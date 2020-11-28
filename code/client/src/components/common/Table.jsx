@@ -1,22 +1,22 @@
-import React, { useRef } from 'react';
-import PropTypes from 'prop-types';
-import { Search } from '@material-ui/icons';
+import React, { useRef } from 'react'
+import PropTypes from 'prop-types'
+import { Search } from '@material-ui/icons'
 
 import {
   TableBox, TableHeaderBox, TableHeaderCell, TableRow, TableCell, TableSorterIcon, TableRowsBox,
-} from 'clientSrc/styles/blocks/table';
-import MiniTextInput from 'clientSrc/components/forms/inputs/MiniTextInput';
-import { COMMON } from 'shared/constants/localeMessages';
-import { useTableLogic } from 'clientSrc/helpers/table';
+} from 'clientSrc/styles/blocks/table'
+import MiniTextInput from 'clientSrc/components/forms/inputs/MiniTextInput'
+import { COMMON } from 'shared/constants/localeMessages'
+import { useTableLogic } from 'clientSrc/helpers/table'
 
 const Table = ({ rows, keys, sortConfig, filterKey }) => {
   const {
     processedRows,
     setQuery,
     sorters,
-  } = useTableLogic(rows, sortConfig, filterKey);
+  } = useTableLogic(rows, sortConfig, filterKey)
 
-  const textInputRef = useRef(null);
+  const textInputRef = useRef(null)
 
   return (
     <TableBox>
@@ -46,13 +46,13 @@ const Table = ({ rows, keys, sortConfig, filterKey }) => {
         ))}
       </TableRowsBox>
     </TableBox>
-  );
-};
+  )
+}
 
 Table.defaultProps = {
   rows: [],
   sortConfig: [],
-};
+}
 
 Table.propTypes = {
   rows: PropTypes.arrayOf(PropTypes.object),
@@ -68,6 +68,6 @@ Table.propTypes = {
     icon: PropTypes.element.isRequired,
   })),
   filterKey: PropTypes.string,
-};
+}
 
-export default Table;
+export default Table

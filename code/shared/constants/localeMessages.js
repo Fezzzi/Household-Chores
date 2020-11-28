@@ -1,5 +1,5 @@
-import * as SettingTypes from 'shared/constants/settingTypes';
-import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
+import * as SettingTypes from 'shared/constants/settingTypes'
+import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType'
 
 export const AUTH = {
   BACK_TO_LOGIN: 'auth.backToLogin',
@@ -15,7 +15,7 @@ export const AUTH = {
   SEND_RESET_LINK: 'auth.sendResetLink',
   SIGN_UP: 'auth.signUp',
   TERMS_AGREEMENT: 'auth.termsAgreement',
-};
+}
 
 export const COMMON = {
   OR: 'common.or',
@@ -29,7 +29,7 @@ export const COMMON = {
   SEARCHING: 'common.searching',
   TERMS_AND_CONDITIONS: 'common.termsAndConditions',
   PHOTO_SIZE: 'common.photoSize',
-};
+}
 
 export const ERROR = {
   CONNECTION_ERROR: 'error.connectionError',
@@ -54,11 +54,11 @@ export const ERROR = {
   SMTH_BROKE_LOGIN: 'error.smthBrokeLogIn',
   VALUE_TOO_SHORT: 'error.valueTooShort',
   VALUE_TOO_LONG: 'error.valueTooLong',
-};
+}
 
 export const INFO = {
   NOTHING_TO_UPDATE: 'info.nothingToUpdate',
-};
+}
 
 export const FORM = {
   DROP_PHOTO_HERE: 'form.dropPhotoHere',
@@ -110,7 +110,7 @@ export const FORM = {
 
   [USER_VISIBILITY_TYPE.FOF]: 'form.userVisibilityFOF',
   [USER_VISIBILITY_TYPE.ALL]: 'form.userVisibilityALL',
-};
+}
 
 export const HOUSEHOLD = {
   LEAVE: 'household.leave',
@@ -129,7 +129,7 @@ export const HOUSEHOLD = {
   INVITE: 'household.invite',
   MODULES: 'household.modules',
   ADD_MODULES: 'household.addModule',
-};
+}
 
 export const SETTINGS = {
   [`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]: 'settings.categoryProfile',
@@ -146,10 +146,10 @@ export const SETTINGS = {
   [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NEW_HOUSEHOLD}`]: 'settings.newHousehold',
   [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.INVITATIONS}`]: 'settings.invitations',
   [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS._HOUSEHOLD}`]: 'settings.household',
-};
+}
 
 export const SUCCESS = {
   RESET_LINK: 'success.resetLink',
   SETTINGS_UPDATED: 'success.settingsUpdated',
   ACCOUNT_CREATED: 'success.accountCreated',
-};
+}

@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import FacebookIcon from '~/static/social/facebook-icon-white.png';
-import GoogleIcon from '~/static/social/google-icon.svg';
+import FacebookIcon from '~/static/social/facebook-icon-white.png'
+import GoogleIcon from '~/static/social/google-icon.svg'
 
 export const FormHeader = styled.div`
   display: flex;
@@ -12,7 +12,7 @@ export const FormHeader = styled.div`
   flex-direction: column;
   min-width: 550px;
   position: relative
-`;
+`
 
 export const FormHeaderPhoto = styled.img`
   object-fit: cover;
@@ -20,7 +20,7 @@ export const FormHeaderPhoto = styled.img`
   height: 150px;
   display: flex;
   border-radius: 100%;
-`;
+`
 
 export const FormHeaderTitle = styled.h1`
   font-weight: 800;
@@ -33,25 +33,25 @@ export const FormHeaderTitle = styled.h1`
   > * input {
     width: 250px;
   }
-`;
+`
 
 export const FormHeaderLeftPanel = styled.div`
   position: absolute;
   left: 50px;
   top: 0;
-`;
+`
 
 export const FormHeaderRightPanel = styled.div`
   position: absolute;
   right: 50px;
   top: 0;
-`;
+`
 
 export const InputRow = styled.div`
   margin: 0 ${props => props.fixedPadding ? '42px' : 'auto'} 6px;
   position: relative;
   min-height: 38px;
-`;
+`
 
 export const FixedInputBlock = styled.div`
   margin-right: 20px;
@@ -61,7 +61,7 @@ export const FixedInputBlock = styled.div`
   width: fill-available;
   display: inline-block;
   vertical-align: top;
-`;
+`
 
 export const InputWrapper = styled.div`
   background: var(--cThemeBack);
@@ -76,7 +76,7 @@ export const InputWrapper = styled.div`
   max-width: 400px;
   display: inline-flex;
   flex-direction: row;
-`;
+`
 
 export const TextInputBox = styled.label`
   height: ${props => props.lineHeight ?? 36}px;
@@ -87,7 +87,7 @@ export const TextInputBox = styled.label`
   font-weight: 400;
   flex: 1 0 0;
   display: flex;
-`;
+`
 
 export const TextInputLabel = styled.span`
   color: var(--cGreyPrimary);
@@ -107,7 +107,7 @@ export const TextInputLabel = styled.span`
     ? { display: 'none' }
     : { transform: 'scale(.83333) translateY(-13px)' }
   )}
-`;
+`
 
 export const TextInputField = styled.input`
   background: var(--cThemeBack);
@@ -122,7 +122,7 @@ export const TextInputField = styled.input`
   &:active, &:focus {
     outline: 0;
   }
-`;
+`
 
 export const InputSiderWrapper = styled.div`
   align-items: center;
@@ -130,12 +130,12 @@ export const InputSiderWrapper = styled.div`
   margin-right: 8px;
   vertical-align: middle;
   display: flex;
-`;
+`
 
 export const ShowPassWrapper = styled.div`
   margin-left: 8px;
   align-items: stretch;
-`;
+`
 
 export const ShowPassButton = styled.button`
   outline: 0;
@@ -154,7 +154,7 @@ export const ShowPassButton = styled.button`
   &:active {
     opacity: .7;
   };
-`;
+`
 
 export const PhotoInputWrapper = styled(InputWrapper)`
   width: ${props => props.size}px;
@@ -162,7 +162,7 @@ export const PhotoInputWrapper = styled(InputWrapper)`
   margin: auto;
   display: flex;
   margin-bottom: ${props => props.size / 8}px;
-`;
+`
 
 export const PaddedInputWrapper = styled.div`
   position: relative;
@@ -172,7 +172,7 @@ export const PaddedInputWrapper = styled.div`
   box-sizing: border-box;
   display: inline-block;
   float: right;
-`;
+`
 
 export const BoolInputBox = styled.label`
   height: 36px;
@@ -190,7 +190,7 @@ export const BoolInputBox = styled.label`
     color: var(--cGreenSecondary);
     cursor: pointer;
   }
-`;
+`
 
 export const BoolInputLabel = styled.span`
   position: absolute;
@@ -205,7 +205,7 @@ export const BoolInputLabel = styled.span`
     margin-right: auto;
     display: block;
   }
-`;
+`
 
 export const BoolInputField = styled.input`
   position: absolute;
@@ -220,7 +220,7 @@ export const BoolInputField = styled.input`
   &:active, &:focus {
     outline: 0;
   }
-`;
+`
 
 export const FileInputBox = styled.label`
   height: 100%;
@@ -238,8 +238,7 @@ export const FileInputBox = styled.label`
   &:active svg {
     opacity: .7;
   }
-`;
-
+`
 
 export const FileInputLabel = styled.div`
   width: 100%;
@@ -254,7 +253,7 @@ export const FileInputLabel = styled.div`
     font-size: 50px;
     color: var(--cBluePrimary);
   }
-`;
+`
 
 export const FileInputField = styled.input`
   background: var(--cThemeBack);
@@ -280,14 +279,14 @@ export const FileInputField = styled.input`
   &:active, &:focus {
     outline: 0;
   }
-`;
+`
 
 export const FileInputPreview = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
   background: url('${props => props.file}')
-`;
+`
 
 export const FileImagePreview = styled.img`
   max-width: 100%;
@@ -295,7 +294,7 @@ export const FileImagePreview = styled.img`
   margin-left: auto;
   margin-right: auto;
   display: block;
-`;
+`
 
 export const SwitchInputBox = styled.label`
   height: 36px;
@@ -307,13 +306,13 @@ export const SwitchInputBox = styled.label`
   flex: 1 0 0;
   display: flex;
   background-color: var(--cThemeBack);
-`;
+`
 
 export const SwitchInputLabel = styled.div`
   display: flex;
   height: 100%;
   user-select: none;
-`;
+`
 
 export const SwitchInputValue = styled.span`
   display: flex;
@@ -341,7 +340,7 @@ export const SwitchInputValue = styled.span`
   :not(:last-child) {
     border-right: 1px solid var(--cBorder);
   }
-`;
+`
 
 export const SwitchInputField = styled.input`
   position: absolute;
@@ -356,14 +355,14 @@ export const SwitchInputField = styled.input`
   &:active, &:focus {
     outline: 0;
   }
-`;
+`
 
 export const FormButtonWrapper = styled.div`
   margin: ${props => props.margin};
   display: ${props => props.inline ? 'inline-block' : 'block'};
   min-width: 100px;
   align-content: stretch;
-`;
+`
 
 export const FormButton = styled.button`
   border: ${props => props.border ? '1px solid var(--cBorder)' : 'none'};
@@ -398,30 +397,30 @@ export const FormButton = styled.button`
   &:hover {
     background-color: ${props => props.backgroundHover};
   }
-`;
+`
 
 export const MiniFormButtonWrapper = styled.div`
   margin: ${props => props.margin || '0 auto'};
   display: ${props => props.inline ? 'inline-block' : 'block'};
   width: fit-content;
   align-content: stretch;
-`;
+`
 
 export const MiniFormButton = styled(FormButton)`
   height: 24px;
-`;
+`
 
 export const FormButtonContentWrapper = styled.span`
   position: relative;
   top: -2px;
-`;
+`
 
 export const SeparatorWrapper = styled.div`
   margin: 10px auto 10px;
   flex-direction: row;
   display: flex;
   max-width: 750px;
-`;
+`
 
 export const SeparatorLine = styled.div`
   background-color: var(--cBorder);
@@ -430,7 +429,7 @@ export const SeparatorLine = styled.div`
   top: .45em;
   flex-shrink: 1;
   flex-grow: 1;
-`;
+`
 
 export const SeparatorText = styled.div`
   color: var(--cGreyPrimary);
@@ -439,7 +438,7 @@ export const SeparatorText = styled.div`
   line-height: 15px;
   margin: 0 18px;
   text-transform: uppercase;
-`;
+`
 
 const IconSpan = styled.span`
   height: 18px;
@@ -448,15 +447,15 @@ const IconSpan = styled.span`
   margin-right: 8px;
   position: relative;
   top: 3px;
-`;
+`
 
 export const FacebookIconSpan = styled(IconSpan)`
   background: url(${FacebookIcon});
-`;
+`
 
 export const GoogleIconSpan = styled(IconSpan)`
   background: url(${GoogleIcon});
-`;
+`
 
 export const ErrorSpan = styled.span`
   height: 22px;
@@ -467,7 +466,7 @@ export const ErrorSpan = styled.span`
   > * svg {
     fill: var(--cError);
   }
-`;
+`
 
 export const InputLabel = styled.span`
   font-weight: 500;
@@ -475,7 +474,7 @@ export const InputLabel = styled.span`
   display: inline-block;
   font-size: 1.2em;
   vertical-align: top;
-`;
+`
 
 export const InputPlaceholder = styled.span`
   font-weight: 500;
@@ -483,7 +482,7 @@ export const InputPlaceholder = styled.span`
   margin-left: 40px;
   position: absolute;
   white-space: nowrap;
-`;
+`
 
 export const ToggleInputIcon = styled.span`
   height: 20px;
@@ -503,7 +502,7 @@ export const ToggleInputIcon = styled.span`
     padding-top: 10px;
     position: absolute;
   }
-`;
+`
 
 export const RemoveFileButton = styled.div`
   position: absolute;
@@ -517,7 +516,7 @@ export const RemoveFileButton = styled.div`
     cursor: pointer;
     opacity: 1;
   }
-`;
+`
 
 export const PhotoPreviewBlock = styled.div`
   position: absolute;
@@ -528,10 +527,10 @@ export const PhotoPreviewBlock = styled.div`
   border-radius: 100%;
   border: 1px solid var(--cBorder);
   overflow: hidden;
-`;
+`
 
 export const PhotoPreview = styled.img`
   height: 100%;
   width: 100%;
   background-color: var(--cThemeFront)
-`;
+`

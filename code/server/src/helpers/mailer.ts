@@ -1,21 +1,21 @@
-import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
+import nodemailer from 'nodemailer'
+import dotenv from 'dotenv'
 
-import { Logger } from './logger';
-import { MAIL_LOG } from '../constants/logs';
+import { Logger } from './logger'
+import { MAIL_LOG } from '../constants/logs'
 
-const envs = dotenv.config();
+const envs = dotenv.config()
 
 const getTemplate = (templateName: string, data: any): { subject: string; html: string} => {
-  const templateModule = require(`serverSrc/mails/${templateName}.ts`);
+  const templateModule = require(`serverSrc/mails/${templateName}.ts`)
   return {
     subject: templateModule.getSubject(data),
     html: templateModule.getHTML(data),
-  };
-};
+  }
+}
 
 export const sendEmails = async (templateName: string, data: any, recipients: [string]) => {
-  const testAccount = await nodemailer.createTestAccount();
+  const testAccount = await nodemailer.createTestAccount()
 
   const transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
@@ -28,10 +28,10 @@ export const sendEmails = async (templateName: string, data: any, recipients: [s
     tls: {
       rejectUnauthorized: false,
     },
-  });
+  })
 
   // todo: Add locale translations to data
-  const { subject, html } = getTemplate(templateName, data);
+  const { subject, html } = getTemplate(templateName, data)
   return transporter.sendMail({
     from: 'Household App',
     to: envs.parsed
@@ -46,10 +46,10 @@ export const sendEmails = async (templateName: string, data: any, recipients: [s
       MAIL_LOG,
       `Sent ${value.accepted.length} of ${value.accepted.length + value.rejected.length} ${templateName} emails, `
       + `approved: [${value.accepted.join(',')}] failed: [${value.rejected.join(',')}]`
-    );
-    return value.accepted.length > 0;
+    )
+    return value.accepted.length > 0
   }).catch(reason => {
-    Logger(MAIL_LOG, `Sending ${templateName} emails to ${recipients.join(',')} failed - ${reason.code}`);
-    return false;
-  });
-};
+    Logger(MAIL_LOG, `Sending ${templateName} emails to ${recipients.join(',')} failed - ${reason.code}`)
+    return false
+  })
+}

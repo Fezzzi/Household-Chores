@@ -1,48 +1,48 @@
-import React, { useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
-import { HighlightOff, LockOpen } from '@material-ui/icons';
+import React, { useCallback, useState } from 'react'
+import PropTypes from 'prop-types'
+import { HighlightOff, LockOpen } from '@material-ui/icons'
 
-import { useUpdateHandler } from 'clientSrc/helpers/form';
-import { FormHeader, FormHeaderPhoto, FormHeaderTitle } from 'clientSrc/styles/blocks/form';
+import { useUpdateHandler } from 'clientSrc/helpers/form'
+import { FormHeader, FormHeaderPhoto, FormHeaderTitle } from 'clientSrc/styles/blocks/form'
 import {
   ProfileHeaderSubtitle, ProfilePasswordBlock, ProfilePasswordClose, ProfilePasswordIcon,
   ProfilePasswordInputs, ProfilePasswordTitle, ProfileSwitchesBlock,
-} from 'clientSrc/styles/blocks/settings';
-import * as InputTypes from 'shared/constants/inputTypes';
-import { FORM } from 'shared/constants/localeMessages';
-import { PROFILE } from 'shared/constants/settingsDataKeys';
+} from 'clientSrc/styles/blocks/settings'
+import * as InputTypes from 'shared/constants/inputTypes'
+import { FORM } from 'shared/constants/localeMessages'
+import { PROFILE } from 'shared/constants/settingsDataKeys'
 
-import LocaleSwitch from '../inputs/LocaleSwitch';
-import ThemeSwitch from '../inputs/ThemeSwitch';
-import Input from '../common/Input';
-import EditableField from '../../common/EditableField';
-import EditablePhotoField from '../../common/EditablePhotoField';
-import EditableTextField from '../../common/EditableTextField';
-import LocaleText from '../../common/LocaleText';
+import LocaleSwitch from '../inputs/LocaleSwitch'
+import ThemeSwitch from '../inputs/ThemeSwitch'
+import Input from '../common/Input'
+import EditableField from '../../common/EditableField'
+import EditablePhotoField from '../../common/EditablePhotoField'
+import EditableTextField from '../../common/EditableTextField'
+import LocaleText from '../../common/LocaleText'
 
 const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState }) => {
-  const [passwordEditing, setPasswordEditing] = useState(false);
+  const [passwordEditing, setPasswordEditing] = useState(false)
 
   const clearPasswords = useCallback(e => {
-    e.stopPropagation();
-    setPasswordEditing(false);
+    e.stopPropagation()
+    setPasswordEditing(false)
 
     setFormState(prevState => {
-      const newInputs = { ...prevState.inputs };
-      delete newInputs[PROFILE.OLD_PASSWORD];
-      delete newInputs[PROFILE.NEW_PASSWORD];
+      const newInputs = { ...prevState.inputs }
+      delete newInputs[PROFILE.OLD_PASSWORD]
+      delete newInputs[PROFILE.NEW_PASSWORD]
 
-      const newErrors = { ...prevState.errors };
-      delete newErrors[PROFILE.OLD_PASSWORD];
-      delete newErrors[PROFILE.NEW_PASSWORD];
+      const newErrors = { ...prevState.errors }
+      delete newErrors[PROFILE.OLD_PASSWORD]
+      delete newErrors[PROFILE.NEW_PASSWORD]
 
       return {
         ...prevState,
         inputs: newInputs,
         errors: newErrors,
-      };
-    });
-  }, [setPasswordEditing, setFormState]);
+      }
+    })
+  }, [setPasswordEditing, setFormState])
 
   return (
     <FormHeader>
@@ -124,8 +124,8 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
         <LocaleSwitch />
       </ProfileSwitchesBlock>
     </FormHeader>
-  );
-};
+  )
+}
 
 ProfileFormHeader.propTypes = {
   photo: PropTypes.string,
@@ -134,6 +134,6 @@ ProfileFormHeader.propTypes = {
   inputs: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   setFormState: PropTypes.func.isRequired,
-};
+}
 
-export default ProfileFormHeader;
+export default ProfileFormHeader

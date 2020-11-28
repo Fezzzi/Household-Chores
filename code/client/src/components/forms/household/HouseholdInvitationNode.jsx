@@ -1,31 +1,31 @@
-import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
-import { Message } from '@material-ui/icons';
+import React, { useCallback } from 'react'
+import { useDispatch } from 'react-redux'
+import PropTypes from 'prop-types'
+import { Message } from '@material-ui/icons'
 
 import {
   UserButtonsBox, UserName, UserNode, UserPhotoBox, UserPhoto, AppendMessageIcon, WrapperBox,
   AppendMessageAnchor, UserPhotoMoreBox, MiniUserName, MiniUserPhoto, UserFloatingNameBox,
-} from 'clientSrc/styles/blocks/users';
-import * as SettingsActions from 'clientSrc/actions/settingsActions';
-import { FORM } from 'shared/constants/localeMessages';
+} from 'clientSrc/styles/blocks/users'
+import * as SettingsActions from 'clientSrc/actions/settingsActions'
+import { FORM } from 'shared/constants/localeMessages'
 
-import PrimaryButton from '../common/PrimaryButton';
-import LocaleText from '../../common/LocaleText';
-import { InfoTooltip } from '../../portals';
+import PrimaryButton from '../common/PrimaryButton'
+import LocaleText from '../../common/LocaleText'
+import { InfoTooltip } from '../../portals'
 
 const HouseholdInvitationNode = ({ invitation: {
   fromId, fromNickname, fromPhoto, id_household: householdId, name, message: invitationMessage, photo,
 } }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const approveHandler = useCallback(() =>
     dispatch(SettingsActions.approveInvitation({ householdId, fromId, name, photo: '' })),
-  [dispatch]);
+  [dispatch])
 
   const removeHandler = useCallback(() =>
     dispatch(SettingsActions.ignoreInvitation({ householdId, fromId })),
-  [dispatch]);
+  [dispatch])
 
   return (
     <WrapperBox>
@@ -69,8 +69,8 @@ const HouseholdInvitationNode = ({ invitation: {
         </UserButtonsBox>
       </UserNode>
     </WrapperBox>
-  );
-};
+  )
+}
 
 HouseholdInvitationNode.propTypes = {
   invitation: PropTypes.shape({
@@ -82,6 +82,6 @@ HouseholdInvitationNode.propTypes = {
     message: PropTypes.string,
     photo: PropTypes.string,
   }).isRequired,
-};
+}
 
-export default HouseholdInvitationNode;
+export default HouseholdInvitationNode

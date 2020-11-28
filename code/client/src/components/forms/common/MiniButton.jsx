@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { MiniFormButtonWrapper, MiniFormButton } from 'clientSrc/styles/blocks/form';
+import { MiniFormButtonWrapper, MiniFormButton } from 'clientSrc/styles/blocks/form'
 
 const MiniButton = ({ children, clickHandler, margin, inline, ...props }) => (
   <MiniFormButtonWrapper margin={margin} inline={inline}>
@@ -9,7 +9,7 @@ const MiniButton = ({ children, clickHandler, margin, inline, ...props }) => (
       {children}
     </MiniFormButton>
   </MiniFormButtonWrapper>
-);
+)
 
 MiniButton.defaultProps = {
   background: 'var(--cBluePrimary)',
@@ -19,7 +19,7 @@ MiniButton.defaultProps = {
   border: false,
   inline: false,
   disabled: false,
-};
+}
 
 MiniButton.propTypes = {
   background: PropTypes.string,
@@ -37,6 +37,6 @@ MiniButton.propTypes = {
     PropTypes.string,
   ]),
   clickHandler: PropTypes.func,
-};
+}
 
-export default MiniButton;
+export default MiniButton

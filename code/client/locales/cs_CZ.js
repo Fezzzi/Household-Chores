@@ -1,6 +1,6 @@
-import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
-import * as SettingTypes from 'shared/constants/settingTypes';
-import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
+import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
+import * as SettingTypes from 'shared/constants/settingTypes'
+import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType'
 
 export default {
   [AUTH.BACK_TO_LOGIN]: 'Zpět na přihlášení',
@@ -135,4 +135,4 @@ export default {
   [SUCCESS.RESET_LINK]: 'Link pro obnovu hesla byl úspěšně zaslán na Vaši emailovou adresu.',
   [SUCCESS.SETTINGS_UPDATED]: 'Nastavaní bylo úspěšně upraveno.',
   [SUCCESS.ACCOUNT_CREATED]: 'Váš účet byl úspěšně vytvořen.',
-};
+}

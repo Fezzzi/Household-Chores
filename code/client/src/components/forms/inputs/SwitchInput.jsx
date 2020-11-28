@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 import {
   InputRow, PaddedInputWrapper, SwitchInputBox,
   InputLabel, SwitchInputLabel, SwitchInputValue,
-} from 'clientSrc/styles/blocks/form';
-import { FORM } from 'shared/constants/localeMessages';
+} from 'clientSrc/styles/blocks/form'
+import { FORM } from 'shared/constants/localeMessages'
 
-import LocaleText from '../../common/LocaleText';
+import LocaleText from '../../common/LocaleText'
 
 const SwitchInput = ({ name, label, values, placeholder, updateInput }) => {
-  const [selectedValue, setSelectedValue] = useState(null);
+  const [selectedValue, setSelectedValue] = useState(null)
 
   const handleChange = value => {
     if (value === selectedValue) {
-      return;
+      return
     }
 
-    setSelectedValue(value);
-    updateInput(true, value);
-  };
+    setSelectedValue(value)
+    updateInput(true, value)
+  }
 
   return (
     <InputRow>
@@ -44,8 +44,8 @@ const SwitchInput = ({ name, label, values, placeholder, updateInput }) => {
         </SwitchInputBox>
       </PaddedInputWrapper>
     </InputRow>
-  );
-};
+  )
+}
 
 SwitchInput.propTypes = {
   name: PropTypes.string.isRequired,
@@ -53,6 +53,6 @@ SwitchInput.propTypes = {
   values: PropTypes.arrayOf(PropTypes.string).isRequired,
   placeholder: PropTypes.string,
   updateInput: PropTypes.func.isRequired,
-};
+}
 
-export default SwitchInput;
+export default SwitchInput

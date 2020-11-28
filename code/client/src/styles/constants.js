@@ -20,4 +20,4 @@ export const COLORS = {
 
   LIGHT_PRIMARY: '--cLightPrimary',
   LIGHT_SECONDARY: '--cLightSecondary',
-};
+}

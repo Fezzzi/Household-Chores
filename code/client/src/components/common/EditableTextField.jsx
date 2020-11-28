@@ -1,35 +1,35 @@
-import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Edit } from '@material-ui/icons';
+import React, { useEffect, useRef, useState } from 'react'
+import PropTypes from 'prop-types'
+import { Edit } from '@material-ui/icons'
 
-import { EditableFieldIcon, EditableFieldWrapper } from 'clientSrc/styles/blocks/common';
-import { editableFieldProps } from 'clientSrc/helpers/editableField';
-import { useUpdateHandler } from 'clientSrc/helpers/form';
-import * as InputTypes from 'shared/constants/inputTypes';
+import { EditableFieldIcon, EditableFieldWrapper } from 'clientSrc/styles/blocks/common'
+import { editableFieldProps } from 'clientSrc/helpers/editableField'
+import { useUpdateHandler } from 'clientSrc/helpers/form'
+import * as InputTypes from 'shared/constants/inputTypes'
 
-import Input from '../forms/common/Input';
+import Input from '../forms/common/Input'
 
 const EditableTextField = ({
   name, edited, placeholder, error, setFormState, isEmail, isFormValidFunc, children,
 }) => {
-  const [hovering, setHovering] = useState(false);
-  const [editing, setEditing] = useState(false);
-  const inputRef = useRef(null);
-  const handleUpdate = useUpdateHandler(name, setFormState, isFormValidFunc, placeholder);
+  const [hovering, setHovering] = useState(false)
+  const [editing, setEditing] = useState(false)
+  const inputRef = useRef(null)
+  const handleUpdate = useUpdateHandler(name, setFormState, isFormValidFunc, placeholder)
 
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.focus();
+      inputRef.current.focus()
     }
-  }, [editing]);
+  }, [editing])
 
   return (
     <EditableFieldWrapper
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
       onClick={() => {
-        setEditing(true);
-        setHovering(false);
+        setEditing(true)
+        setHovering(false)
       }}
       onBlur={() => !edited && setEditing(false)}
     >
@@ -50,18 +50,18 @@ const EditableTextField = ({
           </>
         )}
     </EditableFieldWrapper>
-  );
-};
+  )
+}
 
 EditableTextField.defaultProps = {
   isEmail: false,
   edited: false,
-};
+}
 
 EditableTextField.propTypes = {
   ...editableFieldProps,
   isEmail: PropTypes.bool,
   edited: PropTypes.bool,
-};
+}
 
-export default EditableTextField;
+export default EditableTextField

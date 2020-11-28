@@ -1,28 +1,28 @@
-import React, { useRef } from 'react';
-import PropTypes from 'prop-types';
-import { Search, SortByAlpha } from '@material-ui/icons';
+import React, { useRef } from 'react'
+import PropTypes from 'prop-types'
+import { Search, SortByAlpha } from '@material-ui/icons'
 
 import {
   InvitationFormNode, InvitationFormNodeName, InvitationFormNodePhoto, InvitationNodesWrapper,
-} from 'clientSrc/styles/blocks/households';
+} from 'clientSrc/styles/blocks/households'
 import {
   TableBox, TableHeaderBox, TableHeaderCell, TableSingleRowBox, TableSorterIcon,
-} from 'clientSrc/styles/blocks/table';
-import { useTableLogic } from 'clientSrc/helpers/table';
-import { COMMON, HOUSEHOLD } from 'shared/constants/localeMessages';
+} from 'clientSrc/styles/blocks/table'
+import { useTableLogic } from 'clientSrc/helpers/table'
+import { COMMON, HOUSEHOLD } from 'shared/constants/localeMessages'
 
-import MiniTextInput from '../inputs/MiniTextInput';
-import MiniButton from '../common/MiniButton';
-import LocaleText from '../../common/LocaleText';
+import MiniTextInput from '../inputs/MiniTextInput'
+import MiniButton from '../common/MiniButton'
+import LocaleText from '../../common/LocaleText'
 
 const HouseholdInvitationForm = ({ connections, onInvite }) => {
   const {
     processedRows,
     setQuery,
     sorters,
-  } = useTableLogic(connections, [{ key: 'nickname', icon: <SortByAlpha /> }], 'nickname');
+  } = useTableLogic(connections, [{ key: 'nickname', icon: <SortByAlpha /> }], 'nickname')
 
-  const textInputRef = useRef(null);
+  const textInputRef = useRef(null)
 
   return (
     <TableBox>
@@ -54,8 +54,8 @@ const HouseholdInvitationForm = ({ connections, onInvite }) => {
         </InvitationNodesWrapper>
       </TableSingleRowBox>
     </TableBox>
-  );
-};
+  )
+}
 
 HouseholdInvitationForm.propTypes = {
   connections: PropTypes.arrayOf(PropTypes.shape({
@@ -64,6 +64,6 @@ HouseholdInvitationForm.propTypes = {
     photo: PropTypes.string,
   })).isRequired,
   onInvite: PropTypes.func.isRequired,
-};
+}
 
-export default HouseholdInvitationForm;
+export default HouseholdInvitationForm

@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
-import { TooltipWrapper, OptionsTooltipIcon } from 'clientSrc/styles/blocks/portals';
+import { TooltipWrapper, OptionsTooltipIcon } from 'clientSrc/styles/blocks/portals'
+import { useElementPosition } from 'clientSrc/helpers/dom'
 
-import { useElementPosition } from 'clientSrc/helpers/dom';
-import { NestedTooltipOptions, optionsShape } from './NestedTooltipOptions';
+import { NestedTooltipOptions, optionsShape } from './NestedTooltipOptions'
 
 const OptionsTooltip = ({ icon, options }) => {
   const [state, setState] = useState({
     visible: false,
     position: null,
-  });
+  })
 
   const showToolbar = e => {
     if (!state.visible) {
       setState({
         visible: true,
         position: useElementPosition(e.target.closest('svg')),
-      });
+      })
     }
-  };
+  }
 
   return (
     <TooltipWrapper>
@@ -35,12 +35,12 @@ const OptionsTooltip = ({ icon, options }) => {
         />
       )}
     </TooltipWrapper>
-  );
-};
+  )
+}
 
 OptionsTooltip.propTypes = {
   icon: PropTypes.element.isRequired,
   options: PropTypes.arrayOf(optionsShape).isRequired,
-};
+}
 
-export default OptionsTooltip;
+export default OptionsTooltip

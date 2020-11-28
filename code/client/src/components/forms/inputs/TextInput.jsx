@@ -1,47 +1,47 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Edit, HighlightOff, ChevronLeft } from '@material-ui/icons';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Edit, HighlightOff, ChevronLeft } from '@material-ui/icons'
 
 import {
   InputRow, TextInputField, InputWrapper, TextInputBox, TextInputLabel, InputPlaceholder,
   ToggleInputIcon, InputLabel, FixedInputBlock, ErrorSpan, ShowPassWrapper,
   ShowPassButton, InputSiderWrapper,
-} from 'clientSrc/styles/blocks/form';
-import { InfoTooltip } from 'clientSrc/components/portals';
-import * as InputTypes from 'shared/constants/inputTypes';
-import { COMMON } from 'shared/constants/localeMessages';
-import { isInputValid } from 'shared/helpers/validation';
+} from 'clientSrc/styles/blocks/form'
+import { InfoTooltip } from 'clientSrc/components/portals'
+import * as InputTypes from 'shared/constants/inputTypes'
+import { COMMON } from 'shared/constants/localeMessages'
+import { isInputValid } from 'shared/helpers/validation'
 
-import LocaleText from '../../common/LocaleText';
+import LocaleText from '../../common/LocaleText'
 
 class TextInput extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       inputTextLength: 0,
       showPassword: false,
       inputActive: false,
       inputShown: null,
-    };
+    }
   }
 
   handleInputChange = e => {
     this.setState({
       inputTextLength: e.target.value.length,
-    });
+    })
 
-    const { type, updateInput } = this.props;
-    const { valid, message } = isInputValid(type, e.target.value);
-    updateInput(valid, e.target.value, message);
+    const { type, updateInput } = this.props
+    const { valid, message } = isInputValid(type, e.target.value)
+    updateInput(valid, e.target.value, message)
   };
 
   getInputBody() {
-    const { name, message, label, placeholder, type, reference, inputError } = this.props;
-    const { inputTextLength, showPassword, inputActive, inputShown } = this.state;
+    const { name, message, label, placeholder, type, reference, inputError } = this.props
+    const { inputTextLength, showPassword, inputActive, inputShown } = this.state
 
-    const showPassButton = type === InputTypes.PASSWORD && inputTextLength > 0;
-    const showError = !inputActive && !!inputError;
+    const showPassButton = type === InputTypes.PASSWORD && inputTextLength > 0
+    const showError = !inputActive && !!inputError
 
     return (
       <>
@@ -74,8 +74,8 @@ class TextInput extends Component {
                     <ShowPassButton
                       tabIndex={-1}
                       onClick={e => {
-                        e.preventDefault();
-                        this.setState({ showPassword: !showPassword });
+                        e.preventDefault()
+                        this.setState({ showPassword: !showPassword })
                       }}
                     >
                       <LocaleText message={showPassword ? COMMON.HIDE : COMMON.SHOW} />
@@ -104,12 +104,12 @@ class TextInput extends Component {
           </>
         )}
       </>
-    );
+    )
   }
 
   render() {
-    const { inline, fixedPadding, fixedProps } = this.props;
-    const body = this.getInputBody();
+    const { inline, fixedPadding, fixedProps } = this.props
+    const body = this.getInputBody()
 
     return inline
       ? (
@@ -120,7 +120,7 @@ class TextInput extends Component {
         <InputRow fixedPadding={fixedPadding}>
           {body}
         </InputRow>
-      );
+      )
   }
 }
 
@@ -136,6 +136,6 @@ TextInput.propTypes = {
   reference: PropTypes.object,
   inputError: PropTypes.string,
   updateInput: PropTypes.func,
-};
+}
 
-export default TextInput;
+export default TextInput
