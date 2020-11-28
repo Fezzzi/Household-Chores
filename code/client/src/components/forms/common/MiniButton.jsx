@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 
 import { MiniFormButtonWrapper, MiniFormButton } from 'clientSrc/styles/blocks/form'
 
-const MiniButton = ({ children, clickHandler, margin, inline, ...props }) => (
+const MiniButton = ({ children, onClick, margin, inline, ...props }) => (
   <MiniFormButtonWrapper margin={margin} inline={inline}>
-    <MiniFormButton onClick={clickHandler} {...props}>
+    <MiniFormButton onClick={onClick} {...props}>
       {children}
     </MiniFormButton>
   </MiniFormButtonWrapper>
@@ -36,7 +36,7 @@ MiniButton.propTypes = {
     PropTypes.element,
     PropTypes.string,
   ]),
-  clickHandler: PropTypes.func,
+  onClick: PropTypes.func,
 }
 
 export default MiniButton

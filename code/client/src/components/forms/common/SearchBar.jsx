@@ -10,7 +10,7 @@ import LocaleText from '../../common/LocaleText'
 import PrimaryButton from './PrimaryButton'
 import Input from './Input'
 
-const SearchBar = ({ searchQuery }) => {
+const SearchBar = ({ onSearch }) => {
   const [timer, setTimer] = useState(null)
   const [query, setQuery] = useState('')
   const [isSearching, setIsSearching] = useState(false)
@@ -22,7 +22,7 @@ const SearchBar = ({ searchQuery }) => {
     e.preventDefault()
     setIsSearching(true)
     setSubmitMessage(COMMON.SEARCHING)
-    searchQuery(query)
+    onSearch(query)
 
     setTimer(setTimeout(
       () => {
@@ -36,14 +36,14 @@ const SearchBar = ({ searchQuery }) => {
       <Input
         type={InputTypes.TEXT}
         name="query"
-        updateInput={(_, value) => setQuery(value)}
+        onUpdate={(_, value) => setQuery(value)}
         inline
-        message={COMMON.SEARCH}
+        value={COMMON.SEARCH}
       />
       <PrimaryButton
         disabled={query.length === 0 || isSearching}
         inline
-        clickHandler={handleClick}
+        onClick={handleClick}
         margin="3px 5px 3px -10px"
       >
         <LocaleText message={submitMessage} />
@@ -53,7 +53,7 @@ const SearchBar = ({ searchQuery }) => {
 }
 
 SearchBar.propTypes = {
-  searchQuery: PropTypes.func.isRequired,
+  onSearch: PropTypes.func.isRequired,
 }
 
 export default SearchBar

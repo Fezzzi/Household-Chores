@@ -18,7 +18,7 @@ import { isInputValid } from 'shared/helpers/validation'
 import LocaleText from '../../common/LocaleText'
 
 const PhotoInput = ({
-  name, message, size, closable, reference, updateInput, onFileRemove,
+  name, message, size, closable, reference, onUpdate, onFileRemove,
 }) => {
   const [file, setFile] = useState(null)
   const [inputActive, setInputActive] = useState(false)
@@ -50,7 +50,7 @@ const PhotoInput = ({
     reader.onload = ({ target: { result } }) => {
       if (type === 'image/gif') {
         setFile(result)
-        updateInput(inputValid, {
+        onUpdate(inputValid, {
           type,
           size: result.length,
           name: photoName,
@@ -61,7 +61,7 @@ const PhotoInput = ({
         img.onload = () => {
           openPhotoEditor(result, img, (editedPhoto, newSize) => {
             setFile(editedPhoto)
-            updateInput(inputValid, {
+            onUpdate(inputValid, {
               type,
               size: newSize,
               name,
@@ -78,7 +78,7 @@ const PhotoInput = ({
 
   const handleFileRemove = e => {
     setFile(null)
-    updateInput(true, '')
+    onUpdate(true, '')
 
     if (onFileRemove) {
       onFileRemove(e)
@@ -141,7 +141,7 @@ PhotoInput.propTypes = {
   message: PropTypes.string,
   closable: PropTypes.bool,
   size: PropTypes.number,
-  updateInput: PropTypes.func,
+  onUpdate: PropTypes.func,
   onFileRemove: PropTypes.func,
   reference: PropTypes.object,
 }

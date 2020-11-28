@@ -9,13 +9,13 @@ import {
 
 import LocaleText from '../../common/LocaleText'
 
-const BoolInputComponent = ({ name, label, placeholder, updateInput }) => {
+const BoolInput = ({ name, label, value, onUpdate }) => {
   const [inputActive, setInputActive] = useState(false)
   const [isOn, setIsOn] = useState(null)
 
   const handleChange = value => {
     setIsOn(value)
-    updateInput(true, value)
+    onUpdate(true, value)
   }
 
   return (
@@ -26,13 +26,13 @@ const BoolInputComponent = ({ name, label, placeholder, updateInput }) => {
       <PaddedInputWrapper active={inputActive}>
         <BoolInputBox htmlFor={name}>
           <BoolInputLabel>
-            {(isOn !== null ? isOn : placeholder) && <Check />}
+            {(isOn !== null ? isOn : value) && <Check />}
           </BoolInputLabel>
           <BoolInputField
             name={name}
             type="checkbox"
-            value={placeholder}
-            onChange={() => handleChange(isOn !== null ? !isOn : !placeholder)}
+            value={value}
+            onChange={() => handleChange(isOn !== null ? !isOn : !value)}
             onFocus={() => setInputActive(true)}
             onBlur={() => setInputActive(false)}
             noValidate
@@ -43,11 +43,11 @@ const BoolInputComponent = ({ name, label, placeholder, updateInput }) => {
   )
 }
 
-BoolInputComponent.propTypes = {
+BoolInput.propTypes = {
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  placeholder: PropTypes.bool,
-  updateInput: PropTypes.func.isRequired,
+  label: PropTypes.string,
+  value: PropTypes.bool,
+  onUpdate: PropTypes.func.isRequired,
 }
 
-export default BoolInputComponent
+export default BoolInput

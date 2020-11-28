@@ -58,8 +58,8 @@ const NotificationForm = ({ data, onSubmit }) => {
               type={InputTypes.BOOL}
               name={name}
               label={`form.${name}`}
-              placeholder={Boolean(value)}
-              updateInput={useUpdateHandler(name, setFormState, undefined, Boolean(value))}
+              value={Boolean(value)}
+              onUpdate={useUpdateHandler(name, setFormState, undefined, Boolean(value))}
             />
           ))}
         </NotificationGroupBox>

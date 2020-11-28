@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { PropTypes } from 'prop-types'
 
 import * as InputTypes from 'shared/constants/inputTypes'
@@ -10,6 +10,7 @@ import * as NotificationActions from 'clientSrc/actions/notificationActions'
 import { LinkRow } from 'clientSrc/styles/blocks/auth'
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/form'
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common'
+import * as TABS from 'clientSrc/constants/authTabs'
 
 import FacebookLoginButton from './FacebookLoginButton'
 import GoogleLoginButton from './GoogleLoginButton'
@@ -23,78 +24,76 @@ const inputConfig = [
   { name: 'password', message: FORM.PASSWORD, type: InputTypes.PASSWORD },
 ]
 
-class LogInForm extends Component {
-  constructor(props) {
-    super(props)
+const LogInForm = ({ history }) => {
+  const dispatch = useDispatch()
+  const logIn = useCallback(values => dispatch(AuthActions.logIn(values)), [dispatch])
+  const addNotification = useCallback((type, message) =>
+    dispatch(NotificationActions.addNotifications({ [type]: [message] })),
+  [dispatch])
 
-    this.timer = null
-    this.state = {
-      submitMessage: AUTH.LOG_IN,
-      isFormValid: false,
-      isFormSending: false,
-      inputs: Object.fromEntries(inputConfig.map(input =>
-        [input.name, { valid: false, value: '' }]
-      )),
-      errors: {},
-    }
-  }
+  const [timer, setTimer] = useState(null)
+  const [state, setState] = useState({
+    submitMessage: AUTH.LOG_IN,
+    isFormValid: false,
+    isFormSending: false,
+    inputs: Object.fromEntries(inputConfig.map(input =>
+      [input.name, { valid: false, value: '' }]
+    )),
+    errors: {},
+  })
 
-  componentWillUnmount() {
-    clearTimeout(this.timer)
-  }
+  useEffect(() => { if (timer) { clearTimeout(timer) } }, [])
 
-  handleError = error => this.props.addNotification(NotificationTypes.ERRORS, error.message);
+  const handleError = error => addNotification(NotificationTypes.ERRORS, error.message)
 
-  handleClick = handlerWrapper(() => {
-    this.props.logIn(this.state.inputs)
-    this.setState({ isFormSending: true, submitMessage: COMMON.SENDING })
-    this.timer = setTimeout(
-      () => this && this.setState({ isFormSending: false, submitMessage: AUTH.LOG_IN }), SUBMIT_TIMEOUT
-    )
-  });
+  const { submitMessage, isFormValid, isFormSending, inputs, errors } = state
 
-  render() {
-    const { switchTab } = this.props
-    const { submitMessage, isFormValid, isFormSending, errors } = this.state
+  const handleClick = handlerWrapper(() => {
+    logIn(inputs)
+    setState(prevState => ({
+      ...prevState,
+      isFormSending: true,
+      submitMessage: COMMON.SENDING,
+    }))
+    setTimer(setTimeout(
+      () => setState(prevState => ({
+        ...prevState,
+        isFormSending: false,
+        submitMessage: AUTH.LOG_IN,
+      })), SUBMIT_TIMEOUT
+    ))
+  })
 
-    return (
-      <form method="post">
-        {inputConfig.map(input => (
-          <TextInput
-            name={input.name}
-            key={input.name}
-            message={input.message}
-            type={input.type}
-            fixedPadding
-            inputError={errors[input.name] || ''}
-            updateInput={updateInput(this.setState.bind(this), input.name)}
-          />
-        ))}
-        <PrimaryButton disabled={!isFormValid || isFormSending} clickHandler={this.handleClick}>
-          <LocaleText message={submitMessage} />
-        </PrimaryButton>
-        <Separator message={COMMON.OR} />
-        <FacebookLoginButton handleError={this.handleError} />
-        <GoogleLoginButton handleError={this.handleError} />
-        <LinkRow onClick={switchTab}>
-          <LocaleText message={AUTH.FORGOT_PASS} />
-        </LinkRow>
-      </form>
-    )
-  }
+  const switchTab = () => history.push(TABS.RESET_TAB)
+
+  return (
+    <form method="post">
+      {inputConfig.map(input => (
+        <TextInput
+          name={input.name}
+          key={input.name}
+          value={input.message}
+          type={input.type}
+          fixedPadding
+          inputError={errors[input.name] || ''}
+          onUpdate={updateInput(setState.bind(this), input.name)}
+        />
+      ))}
+      <PrimaryButton disabled={!isFormValid || isFormSending} onClick={handleClick}>
+        <LocaleText message={submitMessage} />
+      </PrimaryButton>
+      <Separator message={COMMON.OR} />
+      <FacebookLoginButton onError={handleError} />
+      <GoogleLoginButton onError={handleError} />
+      <LinkRow onClick={switchTab}>
+        <LocaleText message={AUTH.FORGOT_PASS} />
+      </LinkRow>
+    </form>
+  )
 }
 
 LogInForm.propTypes = {
-  switchTab: PropTypes.func,
-  logIn: PropTypes.func,
-  addNotification: PropTypes.func,
+  history: PropTypes.object.isRequired,
 }
 
-const mapDispatchToProps = dispatch => ({
-  logIn: values => dispatch(AuthActions.logIn(values)),
-  addNotification: (type, message) => dispatch(NotificationActions.addNotifications({
-    [type]: [message],
-  })),
-})
-
-export default connect(null, mapDispatchToProps)(LogInForm)
+export default LogInForm

@@ -154,7 +154,7 @@ const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
         </ModalNote>
         <ModalButtonsBlock>
           <PrimaryButton
-            clickHandler={savePhoto}
+            onClick={savePhoto}
             background="var(--cBluePrimary)"
             backgroundHover="var(--cBlueSecondary)"
             color="var(--cFont)"

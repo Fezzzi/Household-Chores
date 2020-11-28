@@ -62,16 +62,16 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
                 <Input
                   name={PROFILE.OLD_PASSWORD}
                   type={InputTypes.PASSWORD}
-                  message={FORM.OLD_PASSWORD}
+                  value={FORM.OLD_PASSWORD}
                   inputError={errors[PROFILE.OLD_PASSWORD]}
-                  updateInput={useUpdateHandler(PROFILE.OLD_PASSWORD, setFormState)}
+                  onUpdate={useUpdateHandler(PROFILE.OLD_PASSWORD, setFormState)}
                 />
                 <Input
                   name={PROFILE.NEW_PASSWORD}
                   type={InputTypes.PASSWORD}
-                  message={FORM.NEW_PASSWORD}
+                  value={FORM.NEW_PASSWORD}
                   inputError={errors[PROFILE.NEW_PASSWORD]}
-                  updateInput={useUpdateHandler(PROFILE.NEW_PASSWORD, setFormState)}
+                  onUpdate={useUpdateHandler(PROFILE.NEW_PASSWORD, setFormState)}
                 />
               </ProfilePasswordInputs>
             ) : (

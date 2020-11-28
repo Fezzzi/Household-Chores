@@ -41,7 +41,7 @@ const ConnectionListForm = ({ tab, data, dataKey, emptyMessage, headlineMessage 
                   <MiniTextInput
                     reference={textInputRef}
                     name="table-filter"
-                    message={COMMON.SEARCH}
+                    value={COMMON.SEARCH}
                     handleChange={setQuery}
                   />
                 </TableHeaderCell>

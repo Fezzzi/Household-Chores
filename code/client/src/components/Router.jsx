@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Router, Switch, Route, Redirect } from 'react-router-dom'
+import { Router as BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 
 import { RESOURCES_PREFIX, SETTINGS_PREFIX } from 'shared/constants/api'
@@ -13,11 +13,11 @@ import Settings from './settings/Settings'
 
 export const history = createBrowserHistory()
 
-const RouterComponent = () => {
+const Router = () => {
   const { loggedUser, loaded } = useSelector(({ app: { loggedUser, loaded } }) => ({ loggedUser, loaded }))
 
   return (
-    <Router history={history}>
+    <BrowserRouter history={history}>
       <Switch>
         <Route
           path={`/${RESOURCES_PREFIX}`}
@@ -54,8 +54,8 @@ const RouterComponent = () => {
             </Switch>
           ))}
       </Switch>
-    </Router>
+    </BrowserRouter>
   )
 }
 
-export default RouterComponent
+export default Router

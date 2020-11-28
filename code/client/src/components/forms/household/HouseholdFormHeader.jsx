@@ -25,7 +25,7 @@ const HouseholdFormHeader = ({
       background={color}
       backgroundHover={color}
       margin="0 0 15px"
-      clickHandler={handleClick}
+      onClick={handleClick}
       disabled={sendingField !== null}
     >
       <FormButtonContentWrapper>

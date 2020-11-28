@@ -19,7 +19,7 @@ const getNotificationColor = type => {
   }
 }
 
-export const Notification = ({ type, message, close }) => {
+const Notification = ({ type, message, close }) => {
   setTimeout(close, 4000)
 
   return (
@@ -48,3 +48,5 @@ Notification.propTypes = {
   message: PropTypes.string.isRequired,
   close: PropTypes.func.isRequired,
 }
+
+export default Notification

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 
 import { FormButtonWrapper, FormButton } from 'clientSrc/styles/blocks/form'
 
-const PrimaryButton = ({ children, clickHandler, margin, inline, ...props }) => (
+const PrimaryButton = ({ children, onClick, margin, inline, ...props }) => (
   <FormButtonWrapper margin={margin} inline={inline}>
-    <FormButton onClick={clickHandler} {...props}>
+    <FormButton onClick={onClick} {...props}>
       {children}
     </FormButton>
   </FormButtonWrapper>
@@ -36,7 +36,7 @@ PrimaryButton.propTypes = {
     PropTypes.element,
     PropTypes.string,
   ]),
-  clickHandler: PropTypes.func,
+  onClick: PropTypes.func,
 }
 
 export default PrimaryButton

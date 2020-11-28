@@ -6,7 +6,7 @@ export default () => (
   <PageFooter>
     <FooterWrapper>
       <CopyrightRow>
-        © 2020 ...
+        © 2020 Filip Horký
       </CopyrightRow>
     </FooterWrapper>
   </PageFooter>

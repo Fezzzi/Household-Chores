@@ -37,9 +37,9 @@ const EditablePhotoField = ({
           <Input
             name={name}
             type={InputTypes.PHOTO}
-            message={placeholder}
+            value={placeholder}
             inputError={error}
-            updateInput={handleUpdate}
+            onUpdate={handleUpdate}
             onFileRemove={handleFileRemove}
             closable
             size={size}

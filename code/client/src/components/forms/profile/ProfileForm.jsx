@@ -62,8 +62,8 @@ const ProfileForm = ({ data, onSubmit }) => {
           type={InputTypes.SWITCH}
           label={FORM.USER_VISIBILITY}
           values={[USER_VISIBILITY_TYPE.FOF, USER_VISIBILITY_TYPE.ALL]}
-          placeholder={visibility}
-          updateInput={useUpdateHandler(PROFILE.CONNECTION_VISIBILITY, setFormState, undefined, visibility)}
+          value={visibility}
+          onUpdate={useUpdateHandler(PROFILE.CONNECTION_VISIBILITY, setFormState, undefined, visibility)}
         />
       </FormBody>
     </>

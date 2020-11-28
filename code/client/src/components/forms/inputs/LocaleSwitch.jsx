@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import { PropTypes } from 'prop-types'
-import { connect } from 'react-redux'
+import React, { useCallback, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { LABELS } from 'shared/constants/locale'
 import { FLAGS } from 'clientSrc/constants/localeFlags'
@@ -10,68 +9,48 @@ import {
   LocaleLabel, LocaleSelector, LocaleLine,
 } from 'clientSrc/styles/blocks/settings'
 
-const renderAvailableLocales = (availableLocales, switchFunc) =>
-  availableLocales.map((locale, key) => (
-    <LocaleLine key={`locale-${key}`} onClick={() => switchFunc(locale)}>
-      <LocaleIcon>
-        {FLAGS[locale]()}
-      </LocaleIcon>
-      <LocaleLabel>
-        {LABELS[locale]}
-      </LocaleLabel>
-    </LocaleLine>
-  ))
+const LocaleSwitch = () => {
+  const [state, setState] = useState({ expanded: false, inputActive: false })
 
-class LocaleSwitchComponent extends Component {
-  constructor(props) {
-    super(props)
+  const { locale, availableLocales } = useSelector(({ locale }) => locale)
+  const dispatch = useDispatch()
+  const switchLocale = useCallback(locale =>
+    dispatch(LocaleActions.triggerLocaleChange(locale)),
+  [dispatch])
 
-    this.state = ({
-      expanded: false,
-      inputActive: false,
-    })
-  }
-
-  render() {
-    const { locale, availableLocales, switchLocale } = this.props
-    const { expanded, inputActive } = this.state
-
-    return (
-      <IconButtonWrapper>
-        <IconButton
-          active={inputActive}
-          onClick={() => this.setState({
-            expanded: !expanded,
-            inputActive: true,
-          })}
-          onBlur={() => this.setState({
-            expanded: false,
-            inputActive: false,
-          })}
-        >
-          <LocaleSelector hidden={!expanded}>
-            {renderAvailableLocales(availableLocales.filter(l => l !== locale), switchLocale)}
-          </LocaleSelector>
+  const renderLocaleSelection = (locales, switchFunc) =>
+    locales.map((locale, key) => (
+      <LocaleLine key={`locale-${key}`} onClick={() => switchFunc(locale)}>
+        <LocaleIcon>
           {FLAGS[locale]()}
-        </IconButton>
-      </IconButtonWrapper>
-    )
-  }
+        </LocaleIcon>
+        <LocaleLabel>
+          {LABELS[locale]}
+        </LocaleLabel>
+      </LocaleLine>
+    ))
+
+  const { expanded, inputActive } = state
+  return (
+    <IconButtonWrapper>
+      <IconButton
+        active={inputActive}
+        onClick={() => setState({
+          expanded: !expanded,
+          inputActive: true,
+        })}
+        onBlur={() => setState({
+          expanded: false,
+          inputActive: false,
+        })}
+      >
+        <LocaleSelector hidden={!expanded}>
+          {renderLocaleSelection(availableLocales.filter(l => l !== locale), switchLocale)}
+        </LocaleSelector>
+        {FLAGS[locale]()}
+      </IconButton>
+    </IconButtonWrapper>
+  )
 }
 
-LocaleSwitchComponent.propTypes = {
-  locale: PropTypes.string,
-  availableLocales: PropTypes.arrayOf(PropTypes.string),
-  switchLocale: PropTypes.func,
-}
-
-const mapStateToProps = ({ locale: { locale, availableLocales } }) => ({
-  locale,
-  availableLocales,
-})
-
-const mapDispatchToProps = dispatch => ({
-  switchLocale: locale => dispatch(LocaleActions.triggerLocaleChange(locale)),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(LocaleSwitchComponent)
+export default LocaleSwitch

@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { TextInputBox, TextInputField, TextInputLabel } from 'clientSrc/styles/blocks/form'
+import { TextInputBox, TextInputField, TextInputValue } from 'clientSrc/styles/blocks/form'
 import { MiniInputWrapper } from 'clientSrc/styles/blocks/common'
 import * as TYPES from 'shared/constants/inputTypes'
 
 import LocaleText from '../../common/LocaleText'
 
-const MiniTextInput = ({ name, reference, message, handleChange }) => {
+const MiniTextInput = ({ name, reference, value, handleChange }) => {
   const [inputTextLength, setInputTextLength] = useState(0)
   const [inputActive, setInputActive] = useState(false)
 
@@ -19,9 +19,9 @@ const MiniTextInput = ({ name, reference, message, handleChange }) => {
   return (
     <MiniInputWrapper active={inputActive}>
       <TextInputBox htmlFor={name} lineHeight={26}>
-        <TextInputLabel shrunken={inputTextLength !== 0} lineHeight={26} miniInput>
-          <LocaleText message={message} />
-        </TextInputLabel>
+        <TextInputValue shrunken={inputTextLength !== 0} lineHeight={26} miniInput>
+          <LocaleText message={value} />
+        </TextInputValue>
         <TextInputField
           lineHeight={26}
           name={name}
@@ -41,7 +41,7 @@ const MiniTextInput = ({ name, reference, message, handleChange }) => {
 
 MiniTextInput.propTypes = {
   name: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   reference: PropTypes.object,
 }

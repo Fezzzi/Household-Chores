@@ -35,7 +35,7 @@ const HouseholdInvitationForm = ({ connections, onInvite }) => {
           <MiniTextInput
             reference={textInputRef}
             name="table-filter"
-            message={COMMON.SEARCH}
+            value={COMMON.SEARCH}
             handleChange={setQuery}
           />
         </TableHeaderCell>
@@ -46,7 +46,7 @@ const HouseholdInvitationForm = ({ connections, onInvite }) => {
             <InvitationFormNode key={`connection-${id}`}>
               <InvitationFormNodePhoto src={photo} />
               <InvitationFormNodeName>{nickname}</InvitationFormNodeName>
-              <MiniButton margin={0} clickHandler={() => onInvite(id)}>
+              <MiniButton margin={0} onClick={() => onInvite(id)}>
                 <LocaleText message={HOUSEHOLD.INVITE} />
               </MiniButton>
             </InvitationFormNode>

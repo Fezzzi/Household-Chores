@@ -33,7 +33,7 @@ const ConnectionSearchForm = ({ tab, data, dataKey, emptyMessage, headlineMessag
       </SectionHeadline>
       <TableBox>
         <TableHeaderBox isBigger>
-          <SearchBar searchQuery={searchQuery} />
+          <SearchBar onSearch={searchQuery} />
         </TableHeaderBox>
       </TableBox>
       {data[dataKey]?.length

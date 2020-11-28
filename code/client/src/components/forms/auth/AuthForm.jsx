@@ -25,8 +25,8 @@ const AuthForm = ({ history, location }) => {
   const renderTab = () => {
     switch (currentTab) {
       case TABS.SIGNUP_TAB: return <SignUpForm />
-      case TABS.RESET_TAB: return <ResetPassForm switchTab={() => switchTab(TABS.SIGNUP_TAB)} />
-      default: return <LogInForm switchTab={() => switchTab(TABS.RESET_TAB)} />
+      case TABS.RESET_TAB: return <ResetPassForm history={history} />
+      default: return <LogInForm history={history} />
     }
   }
 

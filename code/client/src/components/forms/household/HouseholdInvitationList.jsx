@@ -42,7 +42,7 @@ const HouseholdInvitationList = ({ invitations }) => {
                   <MiniTextInput
                     reference={textInputRef}
                     name="table-filter"
-                    message={COMMON.SEARCH}
+                    value={COMMON.SEARCH}
                     handleChange={setQuery}
                   />
                 </TableHeaderCell>

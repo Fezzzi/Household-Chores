@@ -23,10 +23,14 @@ const Input = ({ type, ...props }) => {
 
 Input.propTypes = {
   name: PropTypes.string.isRequired,
-  message: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.bool,
+  ]),
   type: PropTypes.string.isRequired,
   inputError: PropTypes.string,
-  updateInput: PropTypes.func,
+  onUpdate: PropTypes.func,
 }
 
 export default Input

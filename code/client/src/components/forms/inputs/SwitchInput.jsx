@@ -9,16 +9,16 @@ import { FORM } from 'shared/constants/localeMessages'
 
 import LocaleText from '../../common/LocaleText'
 
-const SwitchInput = ({ name, label, values, placeholder, updateInput }) => {
+const SwitchInput = ({ name, label, values, value, onUpdate }) => {
   const [selectedValue, setSelectedValue] = useState(null)
 
-  const handleChange = value => {
-    if (value === selectedValue) {
+  const handleChange = newValue => {
+    if (newValue === selectedValue) {
       return
     }
 
-    setSelectedValue(value)
-    updateInput(true, value)
+    setSelectedValue(newValue)
+    onUpdate(true, newValue)
   }
 
   return (
@@ -29,15 +29,15 @@ const SwitchInput = ({ name, label, values, placeholder, updateInput }) => {
       <PaddedInputWrapper>
         <SwitchInputBox>
           <SwitchInputLabel>
-            {values.map(value => (
+            {values.map(switchValue => (
               <SwitchInputValue
-                key={`${name}-${value}`}
-                selected={value === (selectedValue ?? placeholder)}
-                onClick={() => handleChange(value)}
+                key={`${name}-${switchValue}`}
+                selected={switchValue === (selectedValue ?? value)}
+                onClick={() => handleChange(switchValue)}
               >
-                {FORM[value]
-                  ? <LocaleText message={FORM[value]} />
-                  : value}
+                {FORM[switchValue]
+                  ? <LocaleText message={FORM[switchValue]} />
+                  : switchValue}
               </SwitchInputValue>
             ))}
           </SwitchInputLabel>
@@ -51,8 +51,8 @@ SwitchInput.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   values: PropTypes.arrayOf(PropTypes.string).isRequired,
-  placeholder: PropTypes.string,
-  updateInput: PropTypes.func.isRequired,
+  value: PropTypes.string,
+  onUpdate: PropTypes.func.isRequired,
 }
 
 export default SwitchInput

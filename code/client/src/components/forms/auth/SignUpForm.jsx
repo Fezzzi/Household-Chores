@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { PropTypes } from 'prop-types'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import * as InputTypes from 'shared/constants/inputTypes'
 import * as NotificationTypes from 'shared/constants/notificationTypes'
@@ -25,79 +24,73 @@ const inputConfig = [
   { name: 'password', message: FORM.PASSWORD, type: InputTypes.PASSWORD },
 ]
 
-class SignUpForm extends Component {
-  constructor(props) {
-    super(props)
+const SignUpForm = () => {
+  const dispatch = useDispatch()
+  const signUp = useCallback(values => dispatch(AuthActions.signUp(values)), [dispatch])
+  const addNotification = useCallback((type, message) =>
+    dispatch(NotificationActions.addNotifications({ [type]: [message] })),
+  [dispatch])
 
-    this.timer = null
-    this.state = {
-      submitMessage: AUTH.SIGN_UP,
-      isFormValid: false,
-      isFormSending: false,
-      inputs: Object.fromEntries(inputConfig.map(input =>
-        [input.name, { valid: false, value: '' }]
-      )),
-      errors: {},
-    }
-  }
+  const [timer, setTimer] = useState(null)
+  const [state, setState] = useState({
+    submitMessage: AUTH.SIGN_UP,
+    isFormValid: false,
+    isFormSending: false,
+    inputs: Object.fromEntries(inputConfig.map(input =>
+      [input.name, { valid: false, value: '' }]
+    )),
+    errors: {},
+  })
 
-  componentWillUnmount() {
-    clearTimeout(this.timer)
-  }
+  useEffect(() => { if (timer) { clearTimeout(timer) } }, [])
 
-  handleError = error => this.props.addNotification(NotificationTypes.ERRORS, error.message);
+  const handleError = error => addNotification(NotificationTypes.ERRORS, error.message)
 
-  handleClick = handlerWrapper(() => {
-    this.props.signUp(this.state.inputs)
-    this.setState({ isFormSending: true, submitMessage: COMMON.SENDING })
-    this.timer = setTimeout(
-      () => this.setState({ isFormSending: false, submitMessage: AUTH.SIGN_UP }), SUBMIT_TIMEOUT
-    )
-  });
+  const { submitMessage, isFormValid, isFormSending, inputs, errors } = state
 
-  render() {
-    const { submitMessage, isFormValid, isFormSending, errors } = this.state
+  const handleClick = handlerWrapper(() => {
+    signUp(inputs)
+    setState(prevState => ({
+      ...prevState,
+      isFormSending: true,
+      submitMessage: COMMON.SENDING,
+    }))
+    setTimer(setTimeout(
+      () => setState(prevState => ({
+        ...prevState,
+        isFormSending: false,
+        submitMessage: AUTH.SIGN_UP,
+      })), SUBMIT_TIMEOUT
+    ))
+  })
 
-    return (
-      <form method="post">
-        <FacebookLoginButton handleError={this.handleError} />
-        <GoogleLoginButton handleError={this.handleError} />
-        <Separator message={COMMON.OR} />
-        {inputConfig.map(input => (
-          <TextInput
-            name={input.name}
-            key={input.name}
-            message={input.message}
-            type={input.type}
-            fixedPadding
-            inputError={errors[input.name] || ''}
-            updateInput={updateInput(this.setState.bind(this), input.name)}
-          />
-        ))}
-        <PrimaryButton disabled={!isFormValid || isFormSending} clickHandler={this.handleClick}>
-          <LocaleText message={submitMessage} />
-        </PrimaryButton>
-        <MessageBlock>
-          <LocaleText message={AUTH.TERMS_AGREEMENT} />
-          <MessageBlockLink target="_self" href={`/${RESOURCES_PREFIX}/${RESOURCE_TAC}`}>
-            <LocaleText message={COMMON.TERMS_AND_CONDITIONS} />
-          </MessageBlockLink>.
-        </MessageBlock>
-      </form>
-    )
-  }
+  return (
+    <form method="post">
+      <FacebookLoginButton onError={handleError} />
+      <GoogleLoginButton onError={handleError} />
+      <Separator message={COMMON.OR} />
+      {inputConfig.map(input => (
+        <TextInput
+          name={input.name}
+          key={input.name}
+          value={input.message}
+          type={input.type}
+          fixedPadding
+          inputError={errors[input.name] || ''}
+          onUpdate={updateInput(setState.bind(this), input.name)}
+        />
+      ))}
+      <PrimaryButton disabled={!isFormValid || isFormSending} onClick={handleClick}>
+        <LocaleText message={submitMessage} />
+      </PrimaryButton>
+      <MessageBlock>
+        <LocaleText message={AUTH.TERMS_AGREEMENT} />
+        <MessageBlockLink target="_self" href={`/${RESOURCES_PREFIX}/${RESOURCE_TAC}`}>
+          <LocaleText message={COMMON.TERMS_AND_CONDITIONS} />
+        </MessageBlockLink>.
+      </MessageBlock>
+    </form>
+  )
 }
 
-SignUpForm.propTypes = {
-  signUp: PropTypes.func,
-  addNotification: PropTypes.func,
-}
-
-const mapDispatchToProps = dispatch => ({
-  signUp: values => dispatch(AuthActions.signUp(values)),
-  addNotification: (type, message) => dispatch(NotificationActions.addNotifications({
-    [type]: [message],
-  })),
-})
-
-export default connect(null, mapDispatchToProps)(SignUpForm)
+export default SignUpForm

@@ -1,14 +1,19 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { PropTypes } from 'prop-types'
+import React, { useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import * as NotificationTypes from 'shared/constants/notificationTypes'
 import { NotificationsBlock } from 'clientSrc/styles/blocks/notifications'
 import * as NotificationActions from 'clientSrc/actions/notificationActions'
 
-import { Notification } from './Notification'
+import Notification from './Notification'
 
-const NotificationsComponent = ({ errors, warnings, messages, successes, removeNotification }) => {
+const Notifications = () => {
+  const { errors, warnings, messages, successes } = useSelector(({ notifications }) => notifications)
+  const dispatch = useDispatch()
+  const removeNotification = useCallback(notification =>
+    dispatch(NotificationActions.removeNotification(notification)),
+  [dispatch])
+
   const mapNotifications = (notifications, type) => notifications && notifications.map((msg, id) => (
     <Notification
       type={type}
@@ -28,18 +33,4 @@ const NotificationsComponent = ({ errors, warnings, messages, successes, removeN
   )
 }
 
-NotificationsComponent.propTypes = {
-  errors: PropTypes.arrayOf(PropTypes.string),
-  messages: PropTypes.arrayOf(PropTypes.string),
-  warnings: PropTypes.arrayOf(PropTypes.string),
-  successes: PropTypes.arrayOf(PropTypes.string),
-  removeNotification: PropTypes.func,
-}
-
-const mapStateToProps = ({ notifications }) => notifications
-
-const mapDispatchToProps = dispatch => ({
-  removeNotification: notification => dispatch(NotificationActions.removeNotification(notification)),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(NotificationsComponent)
+export default Notifications

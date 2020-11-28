@@ -89,7 +89,7 @@ export const TextInputBox = styled.label`
   display: flex;
 `
 
-export const TextInputLabel = styled.span`
+export const TextInputValue = styled.span`
   color: var(--cGreyPrimary);
   font-size: 12px;
   height: ${props => props.lineHeight ?? 36}px;

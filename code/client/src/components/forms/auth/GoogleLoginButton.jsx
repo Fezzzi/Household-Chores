@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import GoogleLogin from 'react-google-login'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { PropTypes } from 'prop-types'
 
 import { AUTH } from 'shared/constants/localeMessages'
@@ -10,38 +10,38 @@ import { GoogleIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/block
 import LocaleText from '../../common/LocaleText'
 import PrimaryButton from '../common/PrimaryButton'
 
-const GoogleButtonComponent = ({ handleError, logInGoogle }) => (
-  <GoogleLogin
-    clientId={process.env.GCID}
-    render={({ onClick, disabled }) => (
-      <PrimaryButton
-        clickHandler={onClick}
-        background="#FAFAFA"
-        backgroundHover="#E7E7E7"
-        color="#262626"
-        disabled={disabled}
-        border
-      >
-        <FormButtonContentWrapper>
-          <GoogleIconSpan />
-          <LocaleText message={disabled ? AUTH.LOADING_DOTS : AUTH.LOG_IN_GOOGLE} />
-        </FormButtonContentWrapper>
-      </PrimaryButton>
-    )}
-    buttonText="Log in with Google"
-    onSuccess={data => logInGoogle(data)}
-    onFailure={error => handleError({ message: error.message || '' })}
-    cookiePolicy="single_host_origin"
-  />
-)
+const GoogleLoginButton = ({ onError }) => {
+  const dispatch = useDispatch()
+  const logInGoogle = useCallback(data => dispatch(AuthActions.logInGoogle(data)), [dispatch])
 
-GoogleButtonComponent.propTypes = {
-  handleError: PropTypes.func.isRequired,
-  logInGoogle: PropTypes.func,
+  return (
+    <GoogleLogin
+      clientId={process.env.GCID}
+      render={({ onClick, disabled }) => (
+        <PrimaryButton
+          onClick={onClick}
+          background="#FAFAFA"
+          backgroundHover="#E7E7E7"
+          color="#262626"
+          disabled={disabled}
+          border
+        >
+          <FormButtonContentWrapper>
+            <GoogleIconSpan />
+            <LocaleText message={disabled ? AUTH.LOADING_DOTS : AUTH.LOG_IN_GOOGLE} />
+          </FormButtonContentWrapper>
+        </PrimaryButton>
+      )}
+      buttonText="Log in with Google"
+      onSuccess={data => logInGoogle(data)}
+      onFailure={error => onError({ message: error.message || '' })}
+      cookiePolicy="single_host_origin"
+    />
+  )
 }
 
-const mapDispatchToProps = dispatch => ({
-  logInGoogle: data => dispatch(AuthActions.logInGoogle(data)),
-})
+GoogleLoginButton.propTypes = {
+  onError: PropTypes.func.isRequired,
+}
 
-export default connect(null, mapDispatchToProps)(GoogleButtonComponent)
+export default GoogleLoginButton

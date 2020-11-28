@@ -47,7 +47,7 @@ const UserConnectionNode = ({ tab, user }) => {
               <PrimaryButton
                 key={`${id}-${label}`}
                 disabled={disabled}
-                clickHandler={handleClick(clickHandler)}
+                onClick={handleClick(clickHandler)}
                 margin="0 0 6px"
                 color={color}
                 background={background}

@@ -50,7 +50,7 @@ const HouseholdInvitationNode = ({ invitation: {
         <UserName>{name}</UserName>
         <UserButtonsBox>
           <PrimaryButton
-            clickHandler={approveHandler}
+            onClick={approveHandler}
             margin="0 0 6px"
             background="var(--cBluePrimary)"
             backgroundHover="var(--cBlueSecondary)"
@@ -58,7 +58,7 @@ const HouseholdInvitationNode = ({ invitation: {
             <LocaleText message={FORM.CONNECTION_APPROVE} />
           </PrimaryButton>
           <PrimaryButton
-            clickHandler={removeHandler}
+            onClick={removeHandler}
             margin="0 0 6px"
             color="var(--cFont)"
             background="var(--cLightPrimary)"

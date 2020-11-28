@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Edit, HighlightOff, ChevronLeft } from '@material-ui/icons'
 
 import {
-  InputRow, TextInputField, InputWrapper, TextInputBox, TextInputLabel, InputPlaceholder,
+  InputRow, TextInputField, InputWrapper, TextInputBox, TextInputValue, InputPlaceholder,
   ToggleInputIcon, InputLabel, FixedInputBlock, ErrorSpan, ShowPassWrapper,
   ShowPassButton, InputSiderWrapper,
 } from 'clientSrc/styles/blocks/form'
@@ -14,32 +14,30 @@ import { isInputValid } from 'shared/helpers/validation'
 
 import LocaleText from '../../common/LocaleText'
 
-class TextInput extends Component {
-  constructor(props) {
-    super(props)
+const TextInput = ({
+  name, value, label, placeholder, type, reference,
+  inputError, inline, fixedPadding, fixedProps, onUpdate,
+}) => {
+  const [state, setState] = useState({
+    inputTextLength: 0,
+    showPassword: false,
+    inputActive: false,
+    inputShown: null,
+  })
 
-    this.state = {
-      inputTextLength: 0,
-      showPassword: false,
-      inputActive: false,
-      inputShown: null,
-    }
+  const handleInputChange = ({ target }) => {
+    setState(prevState => ({
+      ...prevState,
+      inputTextLength: target.value.length,
+    }))
+
+    const { valid, message } = isInputValid(type, target.value)
+    onUpdate(valid, target.value, message)
   }
 
-  handleInputChange = e => {
-    this.setState({
-      inputTextLength: e.target.value.length,
-    })
+  const { inputTextLength, showPassword, inputActive, inputShown } = state
 
-    const { type, updateInput } = this.props
-    const { valid, message } = isInputValid(type, e.target.value)
-    updateInput(valid, e.target.value, message)
-  };
-
-  getInputBody() {
-    const { name, message, label, placeholder, type, reference, inputError } = this.props
-    const { inputTextLength, showPassword, inputActive, inputShown } = this.state
-
+  const getInputBody = () => {
     const showPassButton = type === InputTypes.PASSWORD && inputTextLength > 0
     const showError = !inputActive && !!inputError
 
@@ -48,16 +46,16 @@ class TextInput extends Component {
         {(inputShown === true || (inputShown === null && !placeholder)) && (
           <InputWrapper active={inputActive}>
             <TextInputBox htmlFor={name}>
-              <TextInputLabel shrunken={inputTextLength !== 0}>
-                <LocaleText message={message} />
-              </TextInputLabel>
+              <TextInputValue shrunken={inputTextLength !== 0}>
+                <LocaleText message={value} />
+              </TextInputValue>
               <TextInputField
                 name={name}
                 type={type === InputTypes.PASSWORD && showPassword ? InputTypes.TEXT : type}
                 ref={reference}
-                onChange={this.handleInputChange}
-                onFocus={() => this.setState({ inputActive: true })}
-                onBlur={() => this.setState({ inputActive: false })}
+                onChange={handleInputChange}
+                onFocus={() => setState(prevState => ({ ...prevState, inputActive: true }))}
+                onBlur={() => setState(prevState => ({ ...prevState, inputActive: false }))}
                 shrunken={inputTextLength !== 0}
                 noValidate
               />
@@ -75,7 +73,7 @@ class TextInput extends Component {
                       tabIndex={-1}
                       onClick={e => {
                         e.preventDefault()
-                        this.setState({ showPassword: !showPassword })
+                        setState(prevState => ({ ...prevState, showPassword: !showPassword }))
                       }}
                     >
                       <LocaleText message={showPassword ? COMMON.HIDE : COMMON.SHOW} />
@@ -95,8 +93,8 @@ class TextInput extends Component {
             )}
             <ToggleInputIcon>
               {inputShown
-                ? <ChevronLeft onClick={() => this.setState({ inputShown: false })} />
-                : <Edit onClick={() => this.setState({ inputShown: true })} />}
+                ? <ChevronLeft onClick={() => setState(prevState => ({ ...prevState, inputShown: false }))} />
+                : <Edit onClick={() => setState(prevState => ({ ...prevState, inputShown: true }))} />}
             </ToggleInputIcon>
             <InputPlaceholder>
               {placeholder}
@@ -107,26 +105,21 @@ class TextInput extends Component {
     )
   }
 
-  render() {
-    const { inline, fixedPadding, fixedProps } = this.props
-    const body = this.getInputBody()
-
-    return inline
-      ? (
-        <FixedInputBlock {...fixedProps}>
-          {body}
-        </FixedInputBlock>
-      ) : (
-        <InputRow fixedPadding={fixedPadding}>
-          {body}
-        </InputRow>
-      )
-  }
+  return inline
+    ? (
+      <FixedInputBlock {...fixedProps}>
+        {getInputBody()}
+      </FixedInputBlock>
+    ) : (
+      <InputRow fixedPadding={fixedPadding}>
+        {getInputBody()}
+      </InputRow>
+    )
 }
 
 TextInput.propTypes = {
   name: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
   label: PropTypes.string,
   inline: PropTypes.bool,
   fixedPadding: PropTypes.bool,
@@ -135,7 +128,7 @@ TextInput.propTypes = {
   type: PropTypes.string.isRequired,
   reference: PropTypes.object,
   inputError: PropTypes.string,
-  updateInput: PropTypes.func,
+  onUpdate: PropTypes.func,
 }
 
 export default TextInput

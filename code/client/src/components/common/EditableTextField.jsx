@@ -38,9 +38,9 @@ const EditableTextField = ({
           <Input
             name={name}
             type={isEmail ? InputTypes.EMAIL : InputTypes.TEXT}
-            message={placeholder}
+            value={placeholder}
             inputError={error}
-            updateInput={handleUpdate}
+            onUpdate={handleUpdate}
             reference={inputRef}
           />
         ) : (
