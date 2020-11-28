@@ -6,11 +6,11 @@ import newHouseholdIcon from '~/static/icons/icon-150.png'
 
 import { SectionHeadline } from 'clientSrc/styles/blocks/settings'
 import { useInvitationListProps } from 'clientSrc/helpers/household'
-import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common'
+import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { SettingsActions } from 'clientSrc/actions'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
-import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType'
+import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 
 import HouseholdFormHeader from './HouseholdFormHeader'
 import HouseholdInvitationForm from './HouseholdInvitationForm'

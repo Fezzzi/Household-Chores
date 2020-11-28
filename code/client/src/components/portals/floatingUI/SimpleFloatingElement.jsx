@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
-import * as PortalType from 'clientSrc/constants/portalType'
+import { PORTAL_TYPE } from 'clientSrc/constants'
 import {
   SimpleFloatingElementWrapper, FloatingElementIcon, FloatingElementText,
 } from 'clientSrc/styles/blocks/portals'
@@ -12,7 +12,7 @@ import LocaleText from '../../common/LocaleText'
 const SimpleFloatingElement = ({ message, sending, enabled, background, backgroundHovered, icon, onClick }) => {
   const [hovered, setHovered] = useState(false)
 
-  const floatingUIRoot = document.getElementById(PortalType.FLOATING_UI)
+  const floatingUIRoot = document.getElementById(PORTAL_TYPE.FLOATING_UI)
   return ReactDOM.createPortal((
     <SimpleFloatingElementWrapper
       onMouseEnter={() => setHovered(true)}

@@ -7,10 +7,9 @@ import {
   InputRow, FileInputBox, FileInputLabel, FileImagePreview, FileInputField,
   FileInputPreview, RemoveFileButton, PhotoPreviewBlock, PhotoPreview, PhotoInputWrapper,
 } from 'clientSrc/styles/blocks/form'
-import { MODAL_TYPE } from 'clientSrc/constants/modalType'
+import { MODAL_TYPE } from 'clientSrc/constants'
 import { ModalActions, NotificationActions } from 'clientSrc/actions'
-import * as NotificationTypes from 'shared/constants/notificationTypes'
-import * as InputTypes from 'shared/constants/inputTypes'
+import { INPUT_TYPE, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR, FORM } from 'shared/constants/localeMessages'
 import { isInputValid } from 'shared/helpers/validation'
 
@@ -38,9 +37,9 @@ const PhotoInput = ({
       event.target.value = ''
       return
     }
-    const { valid: inputValid, message: inputMessage } = isInputValid(InputTypes.PHOTO, files[0], -1)
+    const { valid: inputValid, message: inputMessage } = isInputValid(INPUT_TYPE.PHOTO, files[0], -1)
     if (!inputValid) {
-      addNotification(NotificationTypes.WARNINGS, inputMessage || ERROR.IMAGE_INVALID)
+      addNotification(NOTIFICATION_TYPE.WARNINGS, inputMessage || ERROR.IMAGE_INVALID)
       event.target.value = ''
       return
     }

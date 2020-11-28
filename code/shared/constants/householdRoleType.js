@@ -1,5 +1,3 @@
-export default {
-  ADMIN: 'ADMIN',
-  MANAGER: 'MANAGER',
-  MEMBER: 'MEMBER',
-}
+export const ADMIN = 'ADMIN'
+export const MANAGER = 'MANAGER'
+export const MEMBER = 'MEMBER'

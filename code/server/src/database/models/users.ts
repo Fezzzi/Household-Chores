@@ -1,8 +1,7 @@
 import { database } from 'serverSrc/database'
 import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords'
-import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType'
+import { CONNECTION_STATE_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
 import { PROFILE } from 'shared/constants/settingsDataKeys'
-import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType'
 
 import USERS_TABLE from './tables/users'
 import CONNECTIONS_TABLE from './tables/connections'

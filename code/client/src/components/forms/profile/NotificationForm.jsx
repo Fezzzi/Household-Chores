@@ -6,7 +6,7 @@ import LocaleText from 'clientSrc/components/common/LocaleText'
 import { useFormState, useUpdateHandler } from 'clientSrc/helpers/form'
 import { NotificationGroupBox, SectionHeadline } from 'clientSrc/styles/blocks/settings'
 import { TableBox, TableHeaderBox, TableHeaderCell } from 'clientSrc/styles/blocks/table'
-import * as InputTypes from 'shared/constants/inputTypes'
+import { INPUT_TYPE } from 'shared/constants'
 import { FORM } from 'shared/constants/localeMessages'
 import { NOTIFICATIONS } from 'shared/constants/settingsDataKeys'
 
@@ -55,7 +55,7 @@ const NotificationForm = ({ data, onSubmit }) => {
           {group && Object.entries(group).map(([name, value]) => (
             <Input
               key={name}
-              type={InputTypes.BOOL}
+              type={INPUT_TYPE.BOOL}
               name={name}
               label={`form.${name}`}
               value={Boolean(value)}

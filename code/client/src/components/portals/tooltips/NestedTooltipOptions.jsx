@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import { Tooltip, TooltipRow, TooltipAnchor } from 'clientSrc/styles/blocks/portals'
 import { useElementPosition } from 'clientSrc/helpers/dom'
-import * as PortalType from 'clientSrc/constants/portalType'
+import { PORTAL_TYPE } from 'clientSrc/constants'
 
 import LocaleText from '../../common/LocaleText'
 
@@ -37,7 +37,7 @@ export const NestedTooltipOptions = ({ position, options, withArrow, blurHandler
   const thisRef = useRef(null)
   useEffect(() => thisRef.current && thisRef.current.focus(), [thisRef])
 
-  const tooltipRoot = document.getElementById(PortalType.TOOLTIPS)
+  const tooltipRoot = document.getElementById(PORTAL_TYPE.TOOLTIPS)
   return ReactDOM.createPortal((
     <TooltipAnchor position={position}>
       <Tooltip

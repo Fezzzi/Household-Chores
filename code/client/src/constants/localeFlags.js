@@ -1,9 +1,9 @@
 import CS_FLAG from '~/static/locales/cs_CZ.svgr'
 import EN_FLAG from '~/static/locales/en_US.svgr'
 
-import { CODES } from 'shared/constants/locale'
+import { LOCALE_CODES } from 'shared/constants'
 
 export const FLAGS = ({
-  [CODES.CS]: CS_FLAG,
-  [CODES.EN]: EN_FLAG,
+  [LOCALE_CODES.CS]: CS_FLAG,
+  [LOCALE_CODES.EN]: EN_FLAG,
 })

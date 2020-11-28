@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import * as NotificationTypes from 'shared/constants/notificationTypes'
+import { NOTIFICATION_TYPE } from 'shared/constants'
 import { NotificationActions } from 'clientSrc/actions'
 
 const initialState = {
@@ -11,10 +11,10 @@ const initialState = {
 }
 
 const addNotifications = ({ errors, messages, warnings, successes }, { payload }) => ({
-  errors: [...errors, ...(payload[NotificationTypes.ERRORS] || [])],
-  messages: [...messages, ...(payload[NotificationTypes.MESSAGES] || [])],
-  warnings: [...warnings, ...(payload[NotificationTypes.WARNINGS] || [])],
-  successes: [...successes, ...(payload[NotificationTypes.SUCCESSES] || [])],
+  errors: [...errors, ...(payload[NOTIFICATION_TYPE.ERRORS] || [])],
+  messages: [...messages, ...(payload[NOTIFICATION_TYPE.MESSAGES] || [])],
+  warnings: [...warnings, ...(payload[NOTIFICATION_TYPE.WARNINGS] || [])],
+  successes: [...successes, ...(payload[NOTIFICATION_TYPE.SUCCESSES] || [])],
 })
 
 const removeNotification = (state, { payload: { type, id } }) => ({

@@ -1,9 +1,8 @@
 import express from 'express'
 
-import * as NotificationTypes from 'shared/constants/notificationTypes'
-import { AUTH_LOG_IN, AUTH_SIGN_UP, AUTH_RESET } from 'shared/constants/api'
+import { NOTIFICATION_TYPE, API } from 'shared/constants'
 import { ERROR, SUCCESS } from 'shared/constants/localeMessages'
-import { RESET_PASSWORD } from 'serverSrc/constants/mails'
+import { MAILS } from 'serverSrc/constants'
 import { sendEmails } from 'serverSrc/helpers/mailer'
 import { logInUser, SignUpUser, findUser } from 'serverSrc/database/models/users'
 import { handleAction, setSession } from 'serverSrc/helpers/auth'
@@ -12,13 +11,13 @@ import { validateLoginData, validateResetData, validateSignupData } from './vali
 import { getProvidersUserId, handleProvidersLogIn, logInWithIds } from './providers'
 
 const getResetPassFunc = ({ email: { value: email } }: any) => async () => {
-  const emailSent = await sendEmails(RESET_PASSWORD, {
+  const emailSent = await sendEmails(MAILS.RESET_PASSWORD, {
     resetLink: 'resetLink',
   }, [email])
 
   return {
-    [NotificationTypes.ERRORS]: emailSent ? [] : [ERROR.RESET_PASS_ERROR],
-    [NotificationTypes.SUCCESSES]: emailSent ? [SUCCESS.RESET_LINK] : [],
+    [NOTIFICATION_TYPE.ERRORS]: emailSent ? [] : [ERROR.RESET_PASS_ERROR],
+    [NOTIFICATION_TYPE.SUCCESSES]: emailSent ? [SUCCESS.RESET_LINK] : [],
   }
 }
 
@@ -26,7 +25,7 @@ const getLogInFunc = (req: any, res: any, { email: { value: email }, password: {
   const result = await logInUser(email, password)
   if (result === null) {
     return {
-      [NotificationTypes.ERRORS]: [ERROR.INCORRECT_PASS],
+      [NOTIFICATION_TYPE.ERRORS]: [ERROR.INCORRECT_PASS],
     }
   }
 
@@ -49,7 +48,7 @@ const getSignUpFunc = (req: any, res: any, body: any) => async () => {
         return {}
       } else {
         return {
-          [NotificationTypes.ERRORS]: [ERROR.SMTH_BROKE_LOGIN],
+          [NOTIFICATION_TYPE.ERRORS]: [ERROR.SMTH_BROKE_LOGIN],
         }
       }
     }
@@ -63,10 +62,10 @@ const getSignUpFunc = (req: any, res: any, body: any) => async () => {
     googleId, facebookId,
   )
   if (!signUpResult?.insertId) {
-    return { [NotificationTypes.ERRORS]: [ERROR.SIGN_UP_ERROR] }
+    return { [NOTIFICATION_TYPE.ERRORS]: [ERROR.SIGN_UP_ERROR] }
   }
   setSession(req, res, signUpResult.insertId, signUpResult.fsKey)
-  return { [NotificationTypes.SUCCESSES]: [SUCCESS.ACCOUNT_CREATED] }
+  return { [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.ACCOUNT_CREATED] }
 }
 
 export default () => {
@@ -74,11 +73,11 @@ export default () => {
   router.post('/:action', (req, res) => {
     const { params: { action }, body } = req
     switch (action) {
-      case AUTH_LOG_IN:
+      case API.AUTH_LOG_IN:
         return handleAction(body, validateLoginData, getLogInFunc(req, res, body), res)
-      case AUTH_SIGN_UP:
+      case API.AUTH_SIGN_UP:
         return handleAction(body, validateSignupData, getSignUpFunc(req, req, body), res)
-      case AUTH_RESET:
+      case API.AUTH_RESET:
         return handleAction(body, validateResetData, getResetPassFunc(body), res)
       default:
         res.status(404).send('Not Found')

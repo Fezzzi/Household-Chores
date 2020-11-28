@@ -4,7 +4,7 @@ import Zoom from '@material-ui/core/Zoom'
 import { Brightness6 } from '@material-ui/icons'
 
 import { ThemeActions } from 'clientSrc/actions'
-import * as THEMES from 'clientSrc/constants/themeTypes'
+import { THEME_TYPE } from 'clientSrc/constants'
 import { IconButtonWrapper, IconButton } from 'clientSrc/styles/blocks/settings'
 
 const reverseColorStyle = {
@@ -20,10 +20,10 @@ const ThemeSwitch = () => {
   return (
     <IconButtonWrapper>
       <IconButton onClick={() => switchTheme(theme)}>
-        <Zoom in={theme === THEMES.DARK_THEME} timeout={300} style={reverseColorStyle}>
+        <Zoom in={theme === THEME_TYPE.DARK_THEME} timeout={300} style={reverseColorStyle}>
           <Brightness6 />
         </Zoom>
-        <Zoom in={theme !== THEMES.DARK_THEME} timeout={300}>
+        <Zoom in={theme !== THEME_TYPE.DARK_THEME} timeout={300}>
           <Brightness6 />
         </Zoom>
       </IconButton>

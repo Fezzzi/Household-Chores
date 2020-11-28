@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 
 import { Logger } from './logger'
-import { MAIL_LOG } from '../constants/logs'
+import { LOGS } from '../constants'
 
 const envs = dotenv.config()
 
@@ -43,13 +43,13 @@ export const sendEmails = async (templateName: string, data: any, recipients: [s
     html,
   }).then(value => {
     Logger(
-      MAIL_LOG,
+      LOGS.MAIL_LOG,
       `Sent ${value.accepted.length} of ${value.accepted.length + value.rejected.length} ${templateName} emails, `
       + `approved: [${value.accepted.join(',')}] failed: [${value.rejected.join(',')}]`
     )
     return value.accepted.length > 0
   }).catch(reason => {
-    Logger(MAIL_LOG, `Sending ${templateName} emails to ${recipients.join(',')} failed - ${reason.code}`)
+    Logger(LOGS.MAIL_LOG, `Sending ${templateName} emails to ${recipients.join(',')} failed - ${reason.code}`)
     return false
   })
 }

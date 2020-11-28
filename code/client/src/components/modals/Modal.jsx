@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import deepEqual from 'fast-deep-equal'
 
-import { MODAL_TYPE } from 'clientSrc/constants/modalType'
+import { MODAL_TYPE } from 'clientSrc/constants'
 
 import EditPhotoModal from './EditPhotoModal'
 

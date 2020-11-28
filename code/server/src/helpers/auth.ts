@@ -1,4 +1,4 @@
-import * as NotificationTypes from 'shared/constants/notificationTypes'
+import { NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 
 export const handleAction = async (
@@ -10,11 +10,11 @@ export const handleAction = async (
   const valid = await validationFunc(data)
   if (valid === false || valid === null) {
     res.status(200).send({
-      [NotificationTypes.ERRORS]: [ERROR.INVALID_DATA],
+      [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA],
     })
   } else if (valid === -1) {
     res.status(200).send({
-      [NotificationTypes.ERRORS]: [ERROR.NO_ACCOUNT],
+      [NOTIFICATION_TYPE.ERRORS]: [ERROR.NO_ACCOUNT],
     })
   } else {
     const response = await handlerFunc(data)

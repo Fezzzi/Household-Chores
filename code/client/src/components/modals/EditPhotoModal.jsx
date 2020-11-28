@@ -13,7 +13,7 @@ import PrimaryButton from 'clientSrc/components/forms/common/PrimaryButton'
 import LocaleText from 'clientSrc/components/common/LocaleText'
 import { ModalActions } from 'clientSrc/actions'
 import { COMMON, FORM } from 'shared/constants/localeMessages'
-import { MAX_IMAGE_SIZE } from 'shared/constants/common'
+import { MAX_IMAGE_SIZE } from 'shared/constants'
 
 const IMG_SIZE = 150
 const CANVAS_SIZE = 250

@@ -1,10 +1,10 @@
 import { assert } from 'chai'
 
-import * as InputTypes from 'shared/constants/inputTypes'
+import { INPUT_TYPE } from 'shared/constants'
 import { isInputValid } from 'shared/helpers/validation'
 
 const testData: any = {
-  [InputTypes.TEXT]: {
+  [INPUT_TYPE.TEXT]: {
     valid: [
       'aaaaaaa',
     ],
@@ -13,7 +13,7 @@ const testData: any = {
       'aaaaaaaaaaaaaaaaaaaaa',
     ],
   },
-  [InputTypes.PASSWORD]: {
+  [INPUT_TYPE.PASSWORD]: {
     valid: [
       'aaaaaaaa',
       'aaaaaAaaAAaAAaAaaAaaAaAaAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaAAAAAAaaaAAaaAAAAAAA',
@@ -23,7 +23,7 @@ const testData: any = {
       'aaaaaAaaAAaAAaAaaAaaAaAaAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaAAAAAAaaaAAaaAAAAAAAaaaAaaaAaaaAaaaAaaaAaaaaAaaaAAaaAAaaaAAaa',
     ],
   },
-  [InputTypes.EMAIL]: {
+  [INPUT_TYPE.EMAIL]: {
     valid: [
       'test@domain.com',
       'id-with-dash@domain.com',
@@ -52,18 +52,18 @@ const validateInputs = (inputKey: string, validityKey: string): boolean => {
 describe('Auth > validation', () => {
   describe('Shared input validation test', () => {
     it('should distinguish valid and invalid Email fields', () => {
-      assert.isTrue(validateInputs(InputTypes.EMAIL, 'valid'))
-      assert.isFalse(validateInputs(InputTypes.EMAIL, 'invalid'))
+      assert.isTrue(validateInputs(INPUT_TYPE.EMAIL, 'valid'))
+      assert.isFalse(validateInputs(INPUT_TYPE.EMAIL, 'invalid'))
     })
 
     it('should distinguish valid and invalid Text fields', () => {
-      assert.isTrue(validateInputs(InputTypes.TEXT, 'valid'))
-      assert.isFalse(validateInputs(InputTypes.TEXT, 'invalid'))
+      assert.isTrue(validateInputs(INPUT_TYPE.TEXT, 'valid'))
+      assert.isFalse(validateInputs(INPUT_TYPE.TEXT, 'invalid'))
     })
 
     it('should distinguish valid and invalid Password fields', () => {
-      assert.isTrue(validateInputs(InputTypes.PASSWORD, 'valid'))
-      assert.isFalse(validateInputs(InputTypes.PASSWORD, 'invalid'))
+      assert.isTrue(validateInputs(INPUT_TYPE.PASSWORD, 'valid'))
+      assert.isFalse(validateInputs(INPUT_TYPE.PASSWORD, 'invalid'))
     })
   })
 })

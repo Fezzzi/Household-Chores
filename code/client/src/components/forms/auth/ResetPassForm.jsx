@@ -4,11 +4,10 @@ import { PropTypes } from 'prop-types'
 
 import { MessageBlock, LinkRow } from 'clientSrc/styles/blocks/auth'
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/form'
-import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common'
+import { SUBMIT_TIMEOUT, AUTH_TABS } from 'clientSrc/constants'
 import { AuthActions } from 'clientSrc/actions'
-import * as InputTypes from 'shared/constants/inputTypes'
+import { INPUT_TYPE } from 'shared/constants'
 import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages'
-import * as TABS from 'clientSrc/constants/authTabs'
 
 import TextInput from '../inputs/TextInput'
 import Separator from '../common/Separator'
@@ -16,7 +15,7 @@ import PrimaryButton from '../common/PrimaryButton'
 import LocaleText from '../../common/LocaleText'
 
 const inputConfig = [
-  { name: 'email', message: FORM.EMAIL, type: InputTypes.EMAIL },
+  { name: 'email', message: FORM.EMAIL, type: INPUT_TYPE.EMAIL },
 ]
 
 const ResetPassForm = ({ history }) => {
@@ -54,7 +53,7 @@ const ResetPassForm = ({ history }) => {
     ))
   })
 
-  const switchTab = () => history.push(TABS.SIGNUP_TAB)
+  const switchTab = () => history.push(AUTH_TABS.SIGNUP_TAB)
 
   return (
     <form method="post">

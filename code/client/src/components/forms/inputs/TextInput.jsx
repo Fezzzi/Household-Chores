@@ -8,7 +8,7 @@ import {
   ShowPassButton, InputSiderWrapper,
 } from 'clientSrc/styles/blocks/form'
 import { InfoTooltip } from 'clientSrc/components/portals'
-import * as InputTypes from 'shared/constants/inputTypes'
+import { INPUT_TYPE } from 'shared/constants'
 import { COMMON } from 'shared/constants/localeMessages'
 import { isInputValid } from 'shared/helpers/validation'
 
@@ -38,7 +38,7 @@ const TextInput = ({
   const { inputTextLength, showPassword, inputActive, inputShown } = state
 
   const getInputBody = () => {
-    const showPassButton = type === InputTypes.PASSWORD && inputTextLength > 0
+    const showPassButton = type === INPUT_TYPE.PASSWORD && inputTextLength > 0
     const showError = !inputActive && !!inputError
 
     return (
@@ -51,7 +51,7 @@ const TextInput = ({
               </TextInputValue>
               <TextInputField
                 name={name}
-                type={type === InputTypes.PASSWORD && showPassword ? InputTypes.TEXT : type}
+                type={type === INPUT_TYPE.PASSWORD && showPassword ? INPUT_TYPE.TEXT : type}
                 ref={reference}
                 onChange={handleInputChange}
                 onFocus={() => setState(prevState => ({ ...prevState, inputActive: true }))}

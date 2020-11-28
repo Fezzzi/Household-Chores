@@ -2,7 +2,7 @@ import React from 'react'
 import { PropTypes } from 'prop-types'
 import { Close, ErrorOutline } from '@material-ui/icons'
 
-import * as NotificationTypes from 'shared/constants/notificationTypes'
+import { NOTIFICATION_TYPE } from 'shared/constants'
 import {
   NotificationWrapper, NotificationIconBlock, NotificationIconWrapper,
   NotificationContent, NotificationClose, NotificationMessage,
@@ -12,9 +12,9 @@ import LocaleText from '../common/LocaleText'
 
 const getNotificationColor = type => {
   switch (type) {
-    case NotificationTypes.SUCCESSES: return 'var(--cSuccess)'
-    case NotificationTypes.MESSAGES: return 'var(--cMessage)'
-    case NotificationTypes.WARNINGS: return 'var(--cWarning)'
+    case NOTIFICATION_TYPE.SUCCESSES: return 'var(--cSuccess)'
+    case NOTIFICATION_TYPE.MESSAGES: return 'var(--cMessage)'
+    case NOTIFICATION_TYPE.WARNINGS: return 'var(--cWarning)'
     default: return 'var(--cError)'
   }
 }

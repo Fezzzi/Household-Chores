@@ -4,10 +4,9 @@ import { Save } from '@material-ui/icons'
 
 import { useFormState, useUpdateHandler } from 'clientSrc/helpers/form'
 import { FormBody } from 'clientSrc/styles/blocks/settings'
-import * as InputTypes from 'shared/constants/inputTypes'
+import { INPUT_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
 import { FORM } from 'shared/constants/localeMessages'
 import { PROFILE } from 'shared/constants/settingsDataKeys'
-import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType'
 
 import { SimpleFloatingElement } from '../../portals'
 import ProfileFormHeader from './ProfileFormHeader'
@@ -59,7 +58,7 @@ const ProfileForm = ({ data, onSubmit }) => {
       <FormBody>
         <Input
           name={PROFILE.CONNECTION_VISIBILITY}
-          type={InputTypes.SWITCH}
+          type={INPUT_TYPE.SWITCH}
           label={FORM.USER_VISIBILITY}
           values={[USER_VISIBILITY_TYPE.FOF, USER_VISIBILITY_TYPE.ALL]}
           value={visibility}

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import * as NotificationTypes from 'shared/constants/notificationTypes'
+import { NOTIFICATION_TYPE } from 'shared/constants'
 import { NotificationsBlock } from 'clientSrc/styles/blocks/notifications'
 import { NotificationActions } from 'clientSrc/actions'
 
@@ -25,10 +25,10 @@ const Notifications = () => {
 
   return (
     <NotificationsBlock>
-      {mapNotifications(errors, NotificationTypes.ERRORS)}
-      {mapNotifications(warnings, NotificationTypes.WARNINGS)}
-      {mapNotifications(messages, NotificationTypes.MESSAGES)}
-      {mapNotifications(successes, NotificationTypes.SUCCESSES)}
+      {mapNotifications(errors, NOTIFICATION_TYPE.ERRORS)}
+      {mapNotifications(warnings, NOTIFICATION_TYPE.WARNINGS)}
+      {mapNotifications(messages, NOTIFICATION_TYPE.MESSAGES)}
+      {mapNotifications(successes, NOTIFICATION_TYPE.SUCCESSES)}
     </NotificationsBlock>
   )
 }

@@ -1,3 +1,1 @@
-export const MODAL_TYPE = {
-  PHOTO_EDITOR: 'PHOTO_EDITOR',
-}
+export const PHOTO_EDITOR = 'PHOTO_EDITOR'

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { TextInputBox, TextInputField, TextInputValue } from 'clientSrc/styles/blocks/form'
 import { MiniInputWrapper } from 'clientSrc/styles/blocks/common'
-import * as TYPES from 'shared/constants/inputTypes'
+import { INPUT_TYPE } from 'shared/constants'
 
 import LocaleText from '../../common/LocaleText'
 
@@ -25,7 +25,7 @@ const MiniTextInput = ({ name, reference, value, handleChange }) => {
         <TextInputField
           lineHeight={26}
           name={name}
-          type={TYPES.TEXT}
+          type={INPUT_TYPE.TEXT}
           ref={reference}
           onChange={handleInputChange}
           onFocus={() => setInputActive(true)}

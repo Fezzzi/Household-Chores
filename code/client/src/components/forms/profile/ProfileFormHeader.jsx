@@ -8,7 +8,7 @@ import {
   ProfileHeaderSubtitle, ProfilePasswordBlock, ProfilePasswordClose, ProfilePasswordIcon,
   ProfilePasswordInputs, ProfilePasswordTitle, ProfileSwitchesBlock,
 } from 'clientSrc/styles/blocks/settings'
-import * as InputTypes from 'shared/constants/inputTypes'
+import { INPUT_TYPE } from 'shared/constants'
 import { FORM } from 'shared/constants/localeMessages'
 import { PROFILE } from 'shared/constants/settingsDataKeys'
 
@@ -61,14 +61,14 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
                 </ProfilePasswordClose>
                 <Input
                   name={PROFILE.OLD_PASSWORD}
-                  type={InputTypes.PASSWORD}
+                  type={INPUT_TYPE.PASSWORD}
                   value={FORM.OLD_PASSWORD}
                   inputError={errors[PROFILE.OLD_PASSWORD]}
                   onUpdate={useUpdateHandler(PROFILE.OLD_PASSWORD, setFormState)}
                 />
                 <Input
                   name={PROFILE.NEW_PASSWORD}
-                  type={InputTypes.PASSWORD}
+                  type={INPUT_TYPE.PASSWORD}
                   value={FORM.NEW_PASSWORD}
                   inputError={errors[PROFILE.NEW_PASSWORD]}
                   onUpdate={useUpdateHandler(PROFILE.NEW_PASSWORD, setFormState)}

@@ -1,29 +1,27 @@
-import * as SettingTypes from 'shared/constants/settingTypes'
 import { getTabList, validateNotificationData, validateProfileData } from 'serverSrc/helpers/settings'
 import { PROFILE_DIR, uploadFiles } from 'serverSrc/helpers/files.'
 import { findProfileData, updateUserData } from 'serverSrc/database/models/users'
 import { findApprovedConnections, findConnections } from 'serverSrc/database/models/connections'
 import { findUserHouseholds, findUserInvitations } from 'serverSrc/database/models/households'
 import { findNotificationSettings, updateNotificationSettings } from 'serverSrc/database/models/notifications'
-import { CATEGORIES, TABS } from 'shared/constants/settingTypes'
-import * as NotificationTypes from 'shared/constants/notificationTypes'
+import { SETTING_CATEGORIES, SETTING_TABS, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 import { PROFILE } from 'shared/constants/settingsDataKeys'
 
 const getTabData = async (category: string, tab: string, req: any) => {
   switch (category) {
-    case SettingTypes.CATEGORIES.PROFILE:
-      if (tab === TABS.NOTIFICATIONS) {
+    case SETTING_CATEGORIES.PROFILE:
+      if (tab === SETTING_TABS.NOTIFICATIONS) {
         return findNotificationSettings(req.session.user)
       }
       return findProfileData(req.session.user)
-    case SettingTypes.CATEGORIES.HOUSEHOLDS:
+    case SETTING_CATEGORIES.HOUSEHOLDS:
       return {
         invitations: await findUserInvitations(req.session.user),
         households: await findUserHouseholds(req.session.user),
         connections: await findApprovedConnections(req.session.user),
       }
-    case SettingTypes.CATEGORIES.CONNECTIONS:
+    case SETTING_CATEGORIES.CONNECTIONS:
       return findConnections(req.session.user)
     default:
       return {}
@@ -33,7 +31,7 @@ const getTabData = async (category: string, tab: string, req: any) => {
 export const handleSettingsDataFetch = async (category: string, tab: string, req: any, res: any): Promise<void> => {
   const data = await getTabData(category, tab, req)
   if (!data) {
-    res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] })
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] })
     return
   }
   const { tabs, messages: tabMessages, types: tabTypes } = getTabList(data, category)
@@ -49,8 +47,8 @@ export const handleSettingsDataUpdate = async (
   category: string, tab: string, inputs: Record<string, string | number>, req: any, res: any
 ): Promise<boolean> => {
   switch (category) {
-    case CATEGORIES.PROFILE:
-      if (tab === TABS.GENERAL) {
+    case SETTING_CATEGORIES.PROFILE:
+      if (tab === SETTING_TABS.GENERAL) {
         const valid = await validateProfileData(inputs, req, res)
         if (!valid) {
           return true
@@ -60,11 +58,11 @@ export const handleSettingsDataUpdate = async (
         }
         const [photo] = uploadFiles([inputs[PROFILE.PHOTO] as any], PROFILE_DIR, req.session.fsKey)
         if (photo === null) {
-          res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.UPLOADING_ERROR] })
+          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
           return true
         }
         return updateUserData({ ...inputs, [PROFILE.PHOTO]: photo }, req.session.user)
-      } else if (TABS.NOTIFICATIONS) {
+      } else if (SETTING_TABS.NOTIFICATIONS) {
         const valid = validateNotificationData(inputs, req, res)
         if (!valid) {
           return true
@@ -72,7 +70,7 @@ export const handleSettingsDataUpdate = async (
         return updateNotificationSettings(inputs, req.session.user)
       }
     default:
-      res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.INVALID_REQUEST] })
+      res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
       return false
   }
 }

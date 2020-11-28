@@ -7,8 +7,7 @@ import {
   UserButtonsBox, UserName, UserNode, UserPhotoBox,
   UserPhoto, WrapperBox, AppendMessageAnchor, AppendMessageIcon,
 } from 'clientSrc/styles/blocks/users'
-import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType'
-import { TABS } from 'shared/constants/settingTypes'
+import { SETTING_TABS, CONNECTION_STATE_TYPE } from 'shared/constants'
 
 import PrimaryButton from '../common/PrimaryButton'
 import LocaleText from '../../common/LocaleText'
@@ -28,7 +27,8 @@ const UserConnectionNode = ({ tab, user }) => {
       <UserNode>
         <UserPhotoBox>
           <UserPhoto src={photo} />
-          {(tab === TABS.FIND_CONNECTION || tab === TABS.PENDING) && state === CONNECTION_STATE_TYPE.WAITING && userMessage && (
+          {(tab === SETTING_TABS.FIND_CONNECTION || tab === SETTING_TABS.PENDING)
+          && state === CONNECTION_STATE_TYPE.WAITING && userMessage && (
             <AppendMessageAnchor>
               <InfoTooltip
                 icon={<AppendMessageIcon><Message /></AppendMessageIcon>}

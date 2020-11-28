@@ -1,8 +1,7 @@
 import CONNECTIONS_TABLE from 'serverSrc/database/models/tables/connections';
 import USERS_TABLE from 'serverSrc/database/models/tables/users';
-import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
+import { USER_VISIBILITY_TYPE, CONNECTION_STATE_TYPE } from 'shared/constants';
 import { migrateWithQueries } from 'serverSrc/helpers/migrations';
-import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
 
 const { columns: { id_from, id_to, message, state, date_created } } = CONNECTIONS_TABLE;
 
@@ -17,7 +16,7 @@ module.exports = {
         ${date_created} DATETIME NOT NULL,
         PRIMARY KEY (${id_from}, ${id_to})
       )
-    `) 
+    `)
     && conn.query(`
       ALTER TABLE ${USERS_TABLE.name} ADD ${USERS_TABLE.columns.visibility} ENUM('${USER_VISIBILITY_TYPE.ALL}', '${USER_VISIBILITY_TYPE.FOF}') NOT NULL DEFAULT '${USER_VISIBILITY_TYPE.ALL}'
     `)

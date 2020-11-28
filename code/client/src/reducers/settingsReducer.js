@@ -1,11 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import { SettingsActions } from 'clientSrc/actions'
-import * as SettingTypes from 'shared/constants/settingTypes'
-import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType'
+import { SETTING_CATEGORIES, CONNECTION_STATE_TYPE } from 'shared/constants'
 
 const initialState = {
-  categories: Object.values(SettingTypes.CATEGORIES),
+  categories: Object.values(SETTING_CATEGORIES),
   tabs: [],
   tabMessages: {},
   tabTypes: {},

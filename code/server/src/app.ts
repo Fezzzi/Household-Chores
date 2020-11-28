@@ -11,7 +11,7 @@ import dotenv from 'dotenv'
 import errorHandler from './helpers/errorHandler'
 import router from './actions/router'
 import { Logger } from './helpers/logger'
-import { ACCESS_LOG } from './constants/logs'
+import { LOGS } from './constants'
 import { pool } from './database/connection'
 
 dotenv.config()
@@ -50,7 +50,7 @@ app.use(session({
 // Setup access logging
 app.use(morgan(':remote-addr - :remote-user ":method :url" :status :response-time ms', {
   stream: {
-    write: (str: string) => Logger(ACCESS_LOG, str),
+    write: (str: string) => Logger(LOGS.ACCESS_LOG, str),
   },
 }))
 

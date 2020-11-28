@@ -4,12 +4,7 @@ import { queryUsers } from 'serverSrc/database/models/users'
 import {
   approveConnection, createConnection, blockConnection, removeConnection, findBlockedConnections, findConnections,
 } from 'serverSrc/database/models/connections'
-import {
-  CONNECTION_FIND, CONNECTION_REQUEST, CONNECTION_APPROVE,
-  CONNECTION_BLOCK, CONNECTION_IGNORE, CONNECTION_REMOVE, CONNECTION_UNBLOCK,
-} from 'shared/constants/api'
-import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType'
-import * as NotificationTypes from 'shared/constants/notificationTypes'
+import { API, CONNECTION_STATE_TYPE, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 
 const findUsers = async (req: any, res: any, { query }: { query: string }) => {
@@ -32,7 +27,7 @@ const performConnectionAction = async (
       return true
     }
   }
-  res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.ACTION_ERROR] })
+  res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
   return true
 }
 
@@ -48,10 +43,10 @@ const handleConnectionRequest = async (
     if (success) {
       res.status(200).send({ targetId })
     } else {
-      res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] })
+      res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] })
     }
   } else {
-    res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.INVALID_REQUEST] })
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
   }
   return true
 }
@@ -61,17 +56,17 @@ export default () => {
   router.post('/:action', (req, res) => {
     const { params: { action }, body } = req
     switch (action) {
-      case CONNECTION_FIND:
+      case API.CONNECTION_FIND:
         return findUsers(req, res, body)
-      case CONNECTION_REQUEST:
+      case API.CONNECTION_REQUEST:
         return handleConnectionRequest(req, res, body)
-      case CONNECTION_APPROVE:
+      case API.CONNECTION_APPROVE:
         return performConnectionAction(req, res, body, approveConnection)
-      case CONNECTION_BLOCK:
+      case API.CONNECTION_BLOCK:
         return performConnectionAction(req, res, body, blockConnection)
-      case CONNECTION_IGNORE:
-      case CONNECTION_REMOVE:
-      case CONNECTION_UNBLOCK:
+      case API.CONNECTION_IGNORE:
+      case API.CONNECTION_REMOVE:
+      case API.CONNECTION_UNBLOCK:
         return performConnectionAction(req, res, body, removeConnection)
       default:
         res.status(404).send('Not Found')

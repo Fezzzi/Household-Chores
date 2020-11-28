@@ -1,5 +1,5 @@
 import { database } from 'serverSrc/database'
-import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType'
+import { CONNECTION_STATE_TYPE } from 'shared/constants'
 
 import CONNECTIONS_TABLE from './tables/connections'
 import USERS_TABLE from './tables/users'

@@ -1,5 +1,4 @@
-import * as SettingTypes from 'shared/constants/settingTypes'
-import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType'
+import { USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_TABS, SETTING_CATEGORIES } from 'shared/constants'
 
 export const AUTH = {
   BACK_TO_LOGIN: 'auth.backToLogin',
@@ -132,20 +131,20 @@ export const HOUSEHOLD = {
 }
 
 export const SETTINGS = {
-  [`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]: 'settings.categoryProfile',
-  [`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.CONNECTIONS}`]: 'settings.categoryConnections',
-  [`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.HOUSEHOLDS}`]: 'settings.categoryHouseholds',
+  [`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.PROFILE}`]: 'settings.categoryProfile',
+  [`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.CONNECTIONS}`]: 'settings.categoryConnections',
+  [`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.HOUSEHOLDS}`]: 'settings.categoryHouseholds',
 
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.GENERAL}`]: 'settings.tabGeneral',
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NOTIFICATIONS}`]: 'settings.tabNotifications',
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.MY_CONNECTIONS}`]: 'settings.tabMyConnections',
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.PENDING}`]: 'settings.tabPending',
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.BLOCKED}`]: 'settings.tabBlocked',
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.FIND_CONNECTION}`]: 'settings.tabFindConnection',
+  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.GENERAL}`]: 'settings.tabGeneral',
+  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.NOTIFICATIONS}`]: 'settings.tabNotifications',
+  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.MY_CONNECTIONS}`]: 'settings.tabMyConnections',
+  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.PENDING}`]: 'settings.tabPending',
+  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.BLOCKED}`]: 'settings.tabBlocked',
+  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.FIND_CONNECTION}`]: 'settings.tabFindConnection',
 
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NEW_HOUSEHOLD}`]: 'settings.newHousehold',
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.INVITATIONS}`]: 'settings.invitations',
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS._HOUSEHOLD}`]: 'settings.household',
+  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.NEW_HOUSEHOLD}`]: 'settings.newHousehold',
+  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.INVITATIONS}`]: 'settings.invitations',
+  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS._HOUSEHOLD}`]: 'settings.household',
 }
 
 export const SUCCESS = {

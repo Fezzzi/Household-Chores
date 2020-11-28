@@ -5,15 +5,14 @@ import {
   connectionApprove, connectionBlock, connectionIgnore, connectionRemove, connectionUnblock,
 } from 'clientSrc/effects/conectionEffects'
 import { SettingsActions } from 'clientSrc/actions'
-import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType'
+import { CONNECTION_STATE_TYPE, SETTING_TABS } from 'shared/constants'
 import { FORM } from 'shared/constants/localeMessages'
-import { TABS } from 'shared/constants/settingTypes'
 
 const tabButtons = {
-  [TABS.MY_CONNECTIONS]: [FORM.CONNECTION_BLOCK, FORM.CONNECTION_REMOVE],
-  [TABS.FIND_CONNECTION]: [FORM.CONNECTION_CONNECT],
-  [TABS.PENDING]: [FORM.CONNECTION_BLOCK, FORM.CONNECTION_APPROVE, FORM.CONNECTION_IGNORE],
-  [TABS.BLOCKED]: [FORM.CONNECTION_UNBLOCK],
+  [SETTING_TABS.MY_CONNECTIONS]: [FORM.CONNECTION_BLOCK, FORM.CONNECTION_REMOVE],
+  [SETTING_TABS.FIND_CONNECTION]: [FORM.CONNECTION_CONNECT],
+  [SETTING_TABS.PENDING]: [FORM.CONNECTION_BLOCK, FORM.CONNECTION_APPROVE, FORM.CONNECTION_IGNORE],
+  [SETTING_TABS.BLOCKED]: [FORM.CONNECTION_UNBLOCK],
 }
 
 export const useConnectionButtons = (tab, { state, id: targetId }) => {

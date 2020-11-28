@@ -1,4 +1,2 @@
-export default {
-  ALL: 'ALL',
-  FOF: 'FRIENDS_OF_FRIENDS',
-}
+export const ALL = 'ALL'
+export const FOF = 'FRIENDS_OF_FRIENDS'

@@ -1,7 +1,6 @@
 import express from 'express'
 
-import { RESOURCE_NOT_FOUND } from 'shared/constants/api'
-import { AVAILABLE_LOCALES, DEFAULT_LOCALE } from 'shared/constants/locale'
+import { API, AVAILABLE_LOCALES, DEFAULT_LOCALE } from 'shared/constants'
 
 const sendResourceData = async (res: any, localeCode: string, resource: string): Promise<boolean> => {
   try {
@@ -21,7 +20,7 @@ export default () => {
       = (locale && AVAILABLE_LOCALES.includes(locale as string) && locale as string)
       || DEFAULT_LOCALE
 
-    if (await sendResourceData(res, localeCode, resource) || await sendResourceData(res, localeCode, RESOURCE_NOT_FOUND)) {
+    if (await sendResourceData(res, localeCode, resource) || await sendResourceData(res, localeCode, API.RESOURCE_NOT_FOUND)) {
       return
     }
     res.status(404).send('Not Found')

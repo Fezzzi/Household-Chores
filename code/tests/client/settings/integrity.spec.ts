@@ -2,17 +2,16 @@ import { assert } from 'chai'
 
 import applicationTexts from '~/code/client/locales'
 
-import * as SettingTypes from 'shared/constants/settingTypes'
 import { SETTINGS } from 'shared/constants/localeMessages'
-import { AVAILABLE_LOCALES } from 'shared/constants/locale'
-import { settingsRenderers } from 'clientSrc/constants/settingsRenderers'
+import { AVAILABLE_LOCALES, SETTING_CATEGORIES, SETTING_TAB_ROWS } from 'shared/constants'
+import { settingsRenderers } from 'clientSrc/helpers/settingsRenderers'
 
 describe('Settings > integrity', () => {
   describe('Form configuration integrity test', () => {
-    const categories = Object.values(SettingTypes.CATEGORIES)
+    const categories = Object.values(SETTING_CATEGORIES)
     it('each category and tab has its form renderer', () => {
       categories.forEach(category => {
-        const tabs = SettingTypes.TAB_ROWS[category]
+        const tabs = SETTING_TAB_ROWS[category]
         if (!tabs) {
           assert.fail(`missing tab configuration for category ${category} in SettingTypes!`)
         }

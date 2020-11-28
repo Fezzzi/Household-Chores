@@ -3,8 +3,7 @@ import { useSelector } from 'react-redux'
 import { Router as BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 
-import { RESOURCES_PREFIX, SETTINGS_PREFIX } from 'shared/constants/api'
-import * as SettingTypes from 'shared/constants/settingTypes'
+import { API, SETTING_TAB_ROWS, SETTING_CATEGORIES } from 'shared/constants'
 
 import Home from './Home'
 import Resource from './Resource'
@@ -20,7 +19,7 @@ const Router = () => {
     <BrowserRouter history={history}>
       <Switch>
         <Route
-          path={`/${RESOURCES_PREFIX}`}
+          path={`/${API.RESOURCES_PREFIX}`}
           render={({ match: { url } }) => (
             <>
               <Route path={`${url}/:resourceId`} component={Resource} />
@@ -38,11 +37,11 @@ const Router = () => {
           )
           : (
             <Switch>
-              <Route exact path={`/${SETTINGS_PREFIX}/:category?:tab`} component={Settings} />
-              <Route path={`/${SETTINGS_PREFIX}`}>
+              <Route exact path={`/${API.SETTINGS_PREFIX}/:category?:tab`} component={Settings} />
+              <Route path={`/${API.SETTINGS_PREFIX}`}>
                 <Redirect to={{
-                  pathname: `/${SETTINGS_PREFIX}/${SettingTypes.CATEGORIES.PROFILE}`,
-                  search: `tab=${SettingTypes.TAB_ROWS[SettingTypes.CATEGORIES.PROFILE][0]}`,
+                  pathname: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.PROFILE}`,
+                  search: `tab=${SETTING_TAB_ROWS[SETTING_CATEGORIES.PROFILE][0]}`,
                 }}
                 />
               </Route>

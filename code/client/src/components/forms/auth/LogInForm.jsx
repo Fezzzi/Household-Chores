@@ -2,14 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { PropTypes } from 'prop-types'
 
-import * as InputTypes from 'shared/constants/inputTypes'
-import * as NotificationTypes from 'shared/constants/notificationTypes'
+import { INPUT_TYPE, NOTIFICATION_TYPE } from 'shared/constants'
 import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages'
 import { AuthActions, NotificationActions } from 'clientSrc/actions'
 import { LinkRow } from 'clientSrc/styles/blocks/auth'
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/form'
-import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common'
-import * as TABS from 'clientSrc/constants/authTabs'
+import { SUBMIT_TIMEOUT, AUTH_TABS } from 'clientSrc/constants'
 
 import FacebookLoginButton from './FacebookLoginButton'
 import GoogleLoginButton from './GoogleLoginButton'
@@ -19,8 +17,8 @@ import Separator from '../common/Separator'
 import LocaleText from '../../common/LocaleText'
 
 const inputConfig = [
-  { name: 'email', message: FORM.EMAIL, type: InputTypes.EMAIL },
-  { name: 'password', message: FORM.PASSWORD, type: InputTypes.PASSWORD },
+  { name: 'email', message: FORM.EMAIL, type: INPUT_TYPE.EMAIL },
+  { name: 'password', message: FORM.PASSWORD, type: INPUT_TYPE.PASSWORD },
 ]
 
 const LogInForm = ({ history }) => {
@@ -43,7 +41,7 @@ const LogInForm = ({ history }) => {
 
   useEffect(() => { if (timer) { clearTimeout(timer) } }, [])
 
-  const handleError = error => addNotification(NotificationTypes.ERRORS, error.message)
+  const handleError = error => addNotification(NOTIFICATION_TYPE.ERRORS, error.message)
 
   const { submitMessage, isFormValid, isFormSending, inputs, errors } = state
 
@@ -63,7 +61,7 @@ const LogInForm = ({ history }) => {
     ))
   })
 
-  const switchTab = () => history.push(TABS.RESET_TAB)
+  const switchTab = () => history.push(AUTH_TABS.RESET_TAB)
 
   return (
     <form method="post">

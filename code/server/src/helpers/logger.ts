@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 import fs from 'fs'
 import path from 'path'
 
-import * as LOGS from 'serverSrc/constants/logs'
+import { LOGS } from 'serverSrc/constants'
 
 dotenv.config()
 

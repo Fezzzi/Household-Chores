@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import * as InputTypes from 'shared/constants/inputTypes'
-import * as NotificationTypes from 'shared/constants/notificationTypes'
+import { INPUT_TYPE, NOTIFICATION_TYPE, API } from 'shared/constants'
 import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages'
-import { RESOURCES_PREFIX, RESOURCE_TAC } from 'shared/constants/api'
 import { AuthActions, NotificationActions } from 'clientSrc/actions'
 import { MessageBlock, MessageBlockLink } from 'clientSrc/styles/blocks/auth'
 import { updateInput, handlerWrapper } from 'clientSrc/helpers/form'
-import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common'
+import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 
 import FacebookLoginButton from './FacebookLoginButton'
 import GoogleLoginButton from './GoogleLoginButton'
@@ -18,9 +16,9 @@ import PrimaryButton from '../common/PrimaryButton'
 import LocaleText from '../../common/LocaleText'
 
 const inputConfig = [
-  { name: 'email', message: FORM.EMAIL, type: InputTypes.EMAIL },
-  { name: 'nickname', message: FORM.NICKNAME, type: InputTypes.TEXT },
-  { name: 'password', message: FORM.PASSWORD, type: InputTypes.PASSWORD },
+  { name: 'email', message: FORM.EMAIL, type: INPUT_TYPE.EMAIL },
+  { name: 'nickname', message: FORM.NICKNAME, type: INPUT_TYPE.TEXT },
+  { name: 'password', message: FORM.PASSWORD, type: INPUT_TYPE.PASSWORD },
 ]
 
 const SignUpForm = () => {
@@ -43,7 +41,7 @@ const SignUpForm = () => {
 
   useEffect(() => { if (timer) { clearTimeout(timer) } }, [])
 
-  const handleError = error => addNotification(NotificationTypes.ERRORS, error.message)
+  const handleError = error => addNotification(NOTIFICATION_TYPE.ERRORS, error.message)
 
   const { submitMessage, isFormValid, isFormSending, inputs, errors } = state
 
@@ -84,7 +82,7 @@ const SignUpForm = () => {
       </PrimaryButton>
       <MessageBlock>
         <LocaleText message={AUTH.TERMS_AGREEMENT} />
-        <MessageBlockLink target="_self" href={`/${RESOURCES_PREFIX}/${RESOURCE_TAC}`}>
+        <MessageBlockLink target="_self" href={`/${API.RESOURCES_PREFIX}/${API.RESOURCE_TAC}`}>
           <LocaleText message={COMMON.TERMS_AND_CONDITIONS} />
         </MessageBlockLink>.
       </MessageBlock>

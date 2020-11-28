@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { SearchBarWrapper } from 'clientSrc/styles/blocks/settings'
-import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common'
+import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { COMMON } from 'shared/constants/localeMessages'
-import * as InputTypes from 'shared/constants/inputTypes'
+import { INPUT_TYPE } from 'shared/constants'
 
 import LocaleText from '../../common/LocaleText'
 import PrimaryButton from './PrimaryButton'
@@ -34,7 +34,7 @@ const SearchBar = ({ onSearch }) => {
   return (
     <SearchBarWrapper>
       <Input
-        type={InputTypes.TEXT}
+        type={INPUT_TYPE.TEXT}
         name="query"
         onUpdate={(_, value) => setQuery(value)}
         inline

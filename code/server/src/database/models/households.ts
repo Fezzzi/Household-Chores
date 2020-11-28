@@ -1,5 +1,5 @@
 import { database } from 'serverSrc/database'
-import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType'
+import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys'
 
 import HOUSEHOLDS_TABLE from './tables/households'

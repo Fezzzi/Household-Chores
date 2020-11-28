@@ -3,7 +3,7 @@ import { queryCallback } from 'mysql'
 
 import { Connection, handleConnectionError } from './connection'
 import { Logger } from '../helpers/logger'
-import { DB_LOG, ERROR_LOG } from '../constants/logs'
+import { LOGS } from '../constants'
 
 const toLine = (sql: string) => sql.replace(/(\r\n|\r|\n)+/g, '').trim()
 
@@ -15,25 +15,25 @@ export const database = {
     getQueryPromise()
       .call(Connection.get(), sql, params)
       .then(value => {
-        Logger(DB_LOG, `${toLine(`${logSQL ? `${sql} [${params}]` : '-'}; OK`)}`)
+        Logger(LOGS.DB_LOG, `${toLine(`${logSQL ? `${sql} [${params}]` : '-'}; OK`)}`)
         return value
       }, reason => {
         const message = `${toLine(`${logSQL ? `${sql} [${params}]` : '-'}; (${reason.message})`)}`
-        Logger(DB_LOG, message)
-        Logger(ERROR_LOG, message)
+        Logger(LOGS.DB_LOG, message)
+        Logger(LOGS.ERROR_LOG, message)
         handleConnectionError(reason, 'Query')
         return null
       }),
   withTransaction: async<T> (func: () => Promise<T>): Promise<T | null> => {
     try {
-      Logger(DB_LOG, 'Beginning transaction...')
+      Logger(LOGS.DB_LOG, 'Beginning transaction...')
       Connection.get().beginTransaction()
       const result = await func()
       Connection.get().commit()
-      Logger(DB_LOG, '...transaction finished.')
+      Logger(LOGS.DB_LOG, '...transaction finished.')
       return result
     } catch (err) {
-      Logger(DB_LOG, '...transaction failed, rolling back!')
+      Logger(LOGS.DB_LOG, '...transaction failed, rolling back!')
       Connection.get().rollback()
       return null
     }

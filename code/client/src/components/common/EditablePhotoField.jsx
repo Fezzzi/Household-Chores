@@ -5,7 +5,7 @@ import { Edit } from '@material-ui/icons'
 import { EditableFieldIcon, EditableFieldWrapper } from 'clientSrc/styles/blocks/common'
 import { editableFieldProps } from 'clientSrc/helpers/editableField'
 import { useUpdateHandler } from 'clientSrc/helpers/form'
-import * as InputTypes from 'shared/constants/inputTypes'
+import { INPUT_TYPE } from 'shared/constants'
 
 import Input from '../forms/common/Input'
 
@@ -36,7 +36,7 @@ const EditablePhotoField = ({
         ? (
           <Input
             name={name}
-            type={InputTypes.PHOTO}
+            type={INPUT_TYPE.PHOTO}
             value={placeholder}
             inputError={error}
             onUpdate={handleUpdate}

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { SettingsActions } from 'clientSrc/actions'
-import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common'
+import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { FORM } from 'shared/constants/localeMessages'
 
 // todo: Refactor Login, Signup and Reset forms to use useUpdateHandler instead

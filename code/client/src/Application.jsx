@@ -5,7 +5,7 @@ import { routerMiddleware } from 'react-router-redux'
 import { applyMiddleware, compose, createStore } from 'redux'
 
 import { PageContent, PageWrapper, PortalAnchor } from 'clientSrc/styles/blocks'
-import * as PortalType from 'clientSrc/constants/portalType'
+import { PORTAL_TYPE } from 'clientSrc/constants'
 
 import rootReducer from './reducers/rootReducer'
 import rootSaga from './sagas/rootSaga'
@@ -28,9 +28,9 @@ export default () => {
   return (
     <Provider store={store}>
       <PageTheme>
-        <PortalAnchor id={PortalType.FLOATING_UI} />
+        <PortalAnchor id={PORTAL_TYPE.FLOATING_UI} />
         <PageWrapper id="pageWrapper">
-          <PortalAnchor id={PortalType.TOOLTIPS} />
+          <PortalAnchor id={PORTAL_TYPE.TOOLTIPS} />
           <Modal />
           <PageContent>
             <Notifications />

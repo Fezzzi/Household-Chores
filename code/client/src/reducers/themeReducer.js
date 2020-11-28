@@ -1,11 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { THEME_KEY } from 'clientSrc/constants/common'
 import { ThemeActions } from 'clientSrc/actions'
-import * as THEMES from 'clientSrc/constants/themeTypes'
+import { THEME_TYPE, THEME_KEY } from 'clientSrc/constants'
 
 const initialState = {
-  theme: localStorage.getItem(THEME_KEY) || THEMES.LIGHT_THEME,
+  theme: localStorage.getItem(THEME_KEY) || THEME_TYPE.LIGHT_THEME,
   changing: false,
 }
 

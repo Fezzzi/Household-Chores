@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { LABELS } from 'shared/constants/locale'
-import { FLAGS } from 'clientSrc/constants/localeFlags'
+import { LOCALE_LABELS } from 'shared/constants'
+import { FLAGS } from 'clientSrc/constants'
 import { LocaleActions } from 'clientSrc/actions'
 import {
   IconButtonWrapper, IconButton, LocaleIcon,
@@ -25,7 +25,7 @@ const LocaleSwitch = () => {
           {FLAGS[locale]()}
         </LocaleIcon>
         <LocaleLabel>
-          {LABELS[locale]}
+          {LOCALE_LABELS[locale]}
         </LocaleLabel>
       </LocaleLine>
     ))

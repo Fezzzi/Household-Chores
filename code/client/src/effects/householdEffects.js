@@ -1,8 +1,11 @@
-import {
-  HOUSEHOLD_CREATE, HOUSEHOLDS_PREFIX, INVITATION_APPROVE, INVITATION_IGNORE,
-} from 'shared/constants/api'
+import { API } from 'shared/constants'
 import { clientApi } from 'clientSrc/client-api'
 
-export const invitationApprove = data => clientApi.post(`${HOUSEHOLDS_PREFIX}/${INVITATION_APPROVE}`, data)
-export const invitationIgnore = data => clientApi.post(`${HOUSEHOLDS_PREFIX}/${INVITATION_IGNORE}`, data)
-export const createHousehold = data => clientApi.post(`${HOUSEHOLDS_PREFIX}/${HOUSEHOLD_CREATE}`, data)
+export const invitationApprove = data =>
+  clientApi.post(`${API.HOUSEHOLDS_PREFIX}/${API.INVITATION_APPROVE}`, data)
+
+export const invitationIgnore = data =>
+  clientApi.post(`${API.HOUSEHOLDS_PREFIX}/${API.INVITATION_IGNORE}`, data)
+
+export const createHousehold = data =>
+  clientApi.post(`${API.HOUSEHOLDS_PREFIX}/${API.HOUSEHOLD_CREATE}`, data)

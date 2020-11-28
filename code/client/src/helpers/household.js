@@ -4,7 +4,7 @@ import { CalendarToday, ChevronRight, Delete, Grade, MoreVert, SortByAlpha } fro
 import OptionsTooltip from 'clientSrc/components/portals/tooltips/OptionsTooltip'
 import { TablePhoto, TableRowIcon } from 'clientSrc/styles/blocks/table'
 import { RoleLabel } from 'clientSrc/styles/blocks/households'
-import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType'
+import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
 
 // todo: Add real clickHandlers

@@ -1,5 +1,5 @@
-import { RESOURCES_PREFIX } from 'shared/constants/api'
+import { API } from 'shared/constants'
 import { clientApi } from 'clientSrc/client-api'
 
 export const loadResource = ({ resourceId, localeData }) =>
-  clientApi.get(`${RESOURCES_PREFIX}/${resourceId}`, { params: localeData })
+  clientApi.get(`${API.RESOURCES_PREFIX}/${resourceId}`, { params: localeData })

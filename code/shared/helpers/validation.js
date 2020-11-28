@@ -1,6 +1,5 @@
-import * as InputTypes from 'shared/constants/inputTypes'
 import { ERROR } from 'shared/constants/localeMessages'
-import { MAX_IMAGE_SIZE } from 'shared/constants/common'
+import { MAX_IMAGE_SIZE, INPUT_TYPE } from 'shared/constants'
 
 const isEmailValid = value => {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -26,21 +25,21 @@ const isImageValid = (file, maxImageSize = MAX_IMAGE_SIZE) => {
 
 export const isInputValid = (type, value, constraints) => {
   switch (type) {
-    case InputTypes.TEXT:
+    case INPUT_TYPE.TEXT:
       return {
         valid: value.length > 3 && value.length < 21,
         message: (value.length <= 3 && ERROR.VALUE_TOO_SHORT) || (value.length >= 21 && ERROR.VALUE_TOO_LONG) || '',
       }
-    case InputTypes.PASSWORD:
+    case INPUT_TYPE.PASSWORD:
       return {
         valid: value.length > 7 && value.length < 128,
         message: (value.length <= 7 && ERROR.VALUE_TOO_SHORT) || (value.length >= 128 && ERROR.VALUE_TOO_LONG) || '',
       }
-    case InputTypes.EMAIL:
+    case INPUT_TYPE.EMAIL:
       return isEmailValid(value)
-    case InputTypes.PHOTO:
+    case INPUT_TYPE.PHOTO:
       return isImageValid(value, constraints)
-    case InputTypes.SWITCH: {
+    case INPUT_TYPE.SWITCH: {
       return {
         valid: constraints.indexOf(value) !== -1,
         message: ERROR.INVALID_DATA,

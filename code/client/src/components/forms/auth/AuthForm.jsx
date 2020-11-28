@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import LogoTop from '~/static/logo-top.svgr'
 
 import { AuthContent, InputsBlock, LogoBlock, LogoTopBlock } from 'clientSrc/styles/blocks/auth'
-import * as TABS from 'clientSrc/constants/authTabs'
+import { AUTH_TABS } from 'clientSrc/constants'
 import { AUTH } from 'shared/constants/localeMessages'
 
 import LogInForm from './LogInForm'
@@ -17,35 +17,35 @@ const AuthForm = ({ history, location }) => {
 
   useEffect(() => {
     const path = location.pathname.split('/').filter(Boolean)[0]
-    if (path !== TABS.LOGIN_TAB && path !== TABS.RESET_TAB && path !== TABS.SIGNUP_TAB) {
-      history.push(`/${TABS.LOGIN_TAB}`)
+    if (path !== AUTH_TABS.LOGIN_TAB && path !== AUTH_TABS.RESET_TAB && path !== AUTH_TABS.SIGNUP_TAB) {
+      history.push(`/${AUTH_TABS.LOGIN_TAB}`)
     }
   }, [location])
 
   const renderTab = () => {
     switch (currentTab) {
-      case TABS.SIGNUP_TAB: return <SignUpForm />
-      case TABS.RESET_TAB: return <ResetPassForm history={history} />
+      case AUTH_TABS.SIGNUP_TAB: return <SignUpForm />
+      case AUTH_TABS.RESET_TAB: return <ResetPassForm history={history} />
       default: return <LogInForm history={history} />
     }
   }
 
   const getTabBottom = () => {
     switch (currentTab) {
-      case TABS.SIGNUP_TAB: return {
+      case AUTH_TABS.SIGNUP_TAB: return {
         message: AUTH.HAVE_ACCOUNT,
         linkMessage: AUTH.LOG_IN,
-        onClick: () => switchTab(TABS.LOGIN_TAB),
+        onClick: () => switchTab(AUTH_TABS.LOGIN_TAB),
       }
-      case TABS.RESET_TAB: return {
+      case AUTH_TABS.RESET_TAB: return {
         message: '',
         linkMessage: AUTH.BACK_TO_LOGIN,
-        onClick: () => switchTab(TABS.LOGIN_TAB),
+        onClick: () => switchTab(AUTH_TABS.LOGIN_TAB),
       }
       default: return {
         message: AUTH.DONT_HAVE_ACCOUNT,
         linkMessage: AUTH.SIGN_UP,
-        onClick: () => switchTab(TABS.SIGNUP_TAB),
+        onClick: () => switchTab(AUTH_TABS.SIGNUP_TAB),
       }
     }
   }

@@ -6,7 +6,7 @@ import { updateSettings, loadSettings } from 'clientSrc/effects/settingsEffects'
 import { findUsers, connectionRequest } from 'clientSrc/effects/conectionEffects'
 import { createHousehold, invitationApprove, invitationIgnore } from 'clientSrc/effects/householdEffects'
 import { SettingsActions, NotificationActions } from 'clientSrc/actions'
-import * as NotificationTypes from 'shared/constants/notificationTypes'
+import { NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR, INFO, SUCCESS } from 'shared/constants/localeMessages'
 
 function* loadSettingsSaga({ payload: { category, tab } }) {
@@ -17,7 +17,7 @@ function* loadSettingsSaga({ payload: { category, tab } }) {
     })
   } catch (error) {
     yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
+      [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR],
     }))
   }
 }
@@ -26,7 +26,7 @@ function* editSettingsSaga({ payload: { category, tab, inputs } }) {
   try {
     if (Object.values(inputs).length === 0) {
       yield put(NotificationActions.addNotifications({
-        [NotificationTypes.ERRORS]: [INFO.NOTHING_TO_UPDATE],
+        [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE],
       }))
     } else {
       const { data } = yield call(updateSettings, category, tab, inputs)
@@ -34,13 +34,13 @@ function* editSettingsSaga({ payload: { category, tab, inputs } }) {
       yield call(handleResponse, data, function* (response) {
         yield put(SettingsActions.loadSettingsSuccess(response))
         yield put(NotificationActions.addNotifications({
-          [NotificationTypes.SUCCESSES]: [SUCCESS.SETTINGS_UPDATED],
+          [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.SETTINGS_UPDATED],
         }))
       })
     }
   } catch (error) {
     yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
+      [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR],
     }))
   }
 }
@@ -53,7 +53,7 @@ function* connectionActionSaga({ payload: { effect, targetId } }) {
     })
   } catch (error) {
     yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
+      [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR],
     }))
   }
 }
@@ -66,7 +66,7 @@ function* searchConnectionActionSaga({ payload: query }) {
     })
   } catch (error) {
     yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
+      [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR],
     }))
   }
 }
@@ -79,7 +79,7 @@ function* connectionRequestSaga({ payload: { targetId, message } }) {
     })
   } catch (error) {
     yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
+      [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR],
     }))
   }
 }
@@ -92,7 +92,7 @@ function* approveInvitationSaga({ payload }) {
     })
   } catch (error) {
     yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
+      [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR],
     }))
   }
 }
@@ -105,7 +105,7 @@ function* ignoreInvitationSaga({ payload }) {
     })
   } catch (error) {
     yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
+      [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR],
     }))
   }
 }
@@ -118,7 +118,7 @@ function* createHouseholdSaga({ payload }) {
     })
   } catch (error) {
     yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
+      [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR],
     }))
   }
 }

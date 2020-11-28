@@ -5,7 +5,7 @@ import { Edit } from '@material-ui/icons'
 import { EditableFieldIcon, EditableFieldWrapper } from 'clientSrc/styles/blocks/common'
 import { editableFieldProps } from 'clientSrc/helpers/editableField'
 import { useUpdateHandler } from 'clientSrc/helpers/form'
-import * as InputTypes from 'shared/constants/inputTypes'
+import { INPUT_TYPE } from 'shared/constants'
 
 import Input from '../forms/common/Input'
 
@@ -37,7 +37,7 @@ const EditableTextField = ({
         ? (
           <Input
             name={name}
-            type={isEmail ? InputTypes.EMAIL : InputTypes.TEXT}
+            type={isEmail ? INPUT_TYPE.EMAIL : INPUT_TYPE.TEXT}
             value={placeholder}
             inputError={error}
             onUpdate={handleUpdate}

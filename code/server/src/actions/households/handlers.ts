@@ -2,10 +2,7 @@ import { HOUSEHOLD_DIR, uploadFiles } from 'serverSrc/helpers/files.'
 import { validateField } from 'serverSrc/helpers/settings'
 import { addHouseholdInvitations, createHousehold } from 'serverSrc/database/models/households'
 import { findApprovedConnections } from 'serverSrc/database/models/connections'
-import { SETTINGS_PREFIX } from 'shared/constants/api'
-import * as InputTypes from 'shared/constants/inputTypes'
-import * as NotificationTypes from 'shared/constants/notificationTypes'
-import * as SettingTypes from 'shared/constants/settingTypes'
+import { NOTIFICATION_TYPE, INPUT_TYPE, API, SETTING_CATEGORIES } from 'shared/constants'
 import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys'
 import { ERROR } from 'shared/constants/localeMessages'
 
@@ -18,14 +15,14 @@ const validateCreateData = async (
   if (!inputs[HOUSEHOLD_KEYS.NAME] || !inputs[HOUSEHOLD_KEYS.USER_NAME]
     || !inputs[HOUSEHOLD_KEYS.PHOTO] || !inputs[HOUSEHOLD_KEYS.USER_PHOTO]
   ) {
-    res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.INVALID_DATA] })
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return false
   }
 
-  if (!(validateField(res, inputs[HOUSEHOLD_KEYS.NAME], InputTypes.TEXT)
-    && validateField(res, inputs[HOUSEHOLD_KEYS.USER_NAME], InputTypes.TEXT)
-    && validateField(res, inputs[HOUSEHOLD_KEYS.PHOTO], InputTypes.PHOTO)
-    && validateField(res, inputs[HOUSEHOLD_KEYS.USER_PHOTO], InputTypes.PHOTO)
+  if (!(validateField(res, inputs[HOUSEHOLD_KEYS.NAME], INPUT_TYPE.TEXT)
+    && validateField(res, inputs[HOUSEHOLD_KEYS.USER_NAME], INPUT_TYPE.TEXT)
+    && validateField(res, inputs[HOUSEHOLD_KEYS.PHOTO], INPUT_TYPE.PHOTO)
+    && validateField(res, inputs[HOUSEHOLD_KEYS.USER_PHOTO], INPUT_TYPE.PHOTO)
   )) {
     return false
   }
@@ -35,7 +32,7 @@ const validateCreateData = async (
     const connectionIds = connections.map(({ id }) => id)
     const valid = invitations.every(({ id }) => connectionIds.indexOf(id) !== -1)
     if (!valid) {
-      res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.ACTION_ERROR] })
+      res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
       return false
     }
   }
@@ -59,7 +56,7 @@ export const handleCreateHousehold = async (
   ], HOUSEHOLD_DIR, req.session!.fsKey)
 
   if (photo === null || userPhoto === null) {
-    res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.UPLOADING_ERROR] })
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
     return true
   }
 
@@ -70,12 +67,12 @@ export const handleCreateHousehold = async (
   }, userId)
 
   if (householdId === null) {
-    res.status(200).send({ [NotificationTypes.ERRORS]: [ERROR.ACTION_ERROR] })
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
     return true
   }
   const success = invitations.length === 0 || await addHouseholdInvitations(householdId, invitations, userId)
   res.status(200).send(success
-    ? { url: `/${SETTINGS_PREFIX}/${SettingTypes.CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}` }
-    : { [NotificationTypes.ERRORS]: [ERROR.ACTION_ERROR] })
+    ? { url: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}` }
+    : { [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
   return true
 }

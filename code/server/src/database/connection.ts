@@ -2,7 +2,7 @@ import mysql, { MysqlError } from 'mysql'
 import dotenv from 'dotenv'
 
 import { Logger } from '../helpers/logger'
-import { DB_LOG } from '../constants/logs'
+import { LOGS } from '../constants'
 
 dotenv.config()
 
@@ -21,7 +21,7 @@ const config: object = {
 
 export const handleConnectionError = (err: MysqlError | null, type: string) => {
   if (err && (err.fatal || FATAL_ERROR_CODES.find(code => err.code === code))) {
-    Logger(DB_LOG, `FATAL ERROR (${type}) [${err.message}] - Resetting connection...\n`)
+    Logger(LOGS.DB_LOG, `FATAL ERROR (${type}) [${err.message}] - Resetting connection...\n`)
     Connection.reset()
   }
 }

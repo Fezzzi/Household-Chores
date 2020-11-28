@@ -4,12 +4,11 @@ import PropTypes from 'prop-types'
 import deepEqual from 'fast-deep-equal'
 
 import { ContentColumn, SettingsWrapper } from 'clientSrc/styles/blocks/settings'
-import { settingsRenderers } from 'clientSrc/constants/settingsRenderers'
-import { CATEGORY_ICONS, TAB_ICONS } from 'clientSrc/constants/settingIcons'
+import { settingsRenderers } from 'clientSrc/helpers/settingsRenderers'
+import { CATEGORY_ICONS, TAB_ICONS } from 'clientSrc/constants'
 import { useSubmitHandler } from 'clientSrc/helpers/form'
 import { SettingsActions } from 'clientSrc/actions'
-import * as SettingTypes from 'shared/constants/settingTypes'
-import { CATEGORIES, TAB_ROWS } from 'shared/constants/settingTypes'
+import { SETTING_TAB_ROWS, SETTING_CATEGORIES, SETTING_COLUMNS } from 'shared/constants'
 
 import SettingsColumn from './SettingsColumn'
 
@@ -31,10 +30,10 @@ const Settings = memo(({ history, location }) => {
     const newCategory = location.pathname.split('/')?.[2]
     const newTab = location.search.match(/tab=([^&]+)/)?.[1]
 
-    if (Object.values(CATEGORIES).indexOf(newCategory) === -1) {
+    if (Object.values(SETTING_CATEGORIES).indexOf(newCategory) === -1) {
       history.push({
-        pathname: CATEGORIES.PROFILE,
-        search: `tab=${TAB_ROWS[CATEGORIES.PROFILE][0]}`,
+        pathname: SETTING_CATEGORIES.PROFILE,
+        search: `tab=${SETTING_TAB_ROWS[SETTING_CATEGORIES.PROFILE][0]}`,
       })
       return
     }
@@ -49,14 +48,14 @@ const Settings = memo(({ history, location }) => {
   }, [location])
 
   const { data, categories, tabs, tabMessages, tabTypes } = settings
-  const [peekedTabs, setPeekedTabs] = useState(SettingTypes.TAB_ROWS[category])
+  const [peekedTabs, setPeekedTabs] = useState(SETTING_TAB_ROWS[category])
 
   const displayedTabs = useMemo(() => {
     if (tabs.length > 0) {
       setPeekedTabs(tabs)
       return tabs
     }
-    return SettingTypes.TAB_ROWS[category]
+    return SETTING_TAB_ROWS[category]
   }, [tabs])
 
   const tabKey = useMemo(() =>
@@ -70,7 +69,7 @@ const Settings = memo(({ history, location }) => {
 
   const changeCategory = useCallback(newCategory => history.push({
     pathname: newCategory,
-    search: `?tab=${SettingTypes.TAB_ROWS[newCategory][0]}`,
+    search: `?tab=${SETTING_TAB_ROWS[newCategory][0]}`,
   }), [setState])
 
   const changeTab = useCallback(newTab => history.push({
@@ -82,7 +81,7 @@ const Settings = memo(({ history, location }) => {
   return (
     <SettingsWrapper>
       <SettingsColumn
-        type={SettingTypes.COLUMNS.CATEGORY}
+        type={SETTING_COLUMNS.CATEGORY}
         rows={categories}
         primary
         width="175px"
@@ -90,11 +89,11 @@ const Settings = memo(({ history, location }) => {
         selected={category}
         changeSelection={changeCategory}
         peekSelection={useCallback((peekCategory, enter) => setPeekedTabs(
-          enter ? SettingTypes.TAB_ROWS[peekCategory] : null
+          enter ? SETTING_TAB_ROWS[peekCategory] : null
         ), [displayedTabs, setPeekedTabs])}
       />
       <SettingsColumn
-        type={SettingTypes.COLUMNS.TAB}
+        type={SETTING_COLUMNS.TAB}
         rows={peekedTabs || displayedTabs}
         primary={false}
         width="225px"

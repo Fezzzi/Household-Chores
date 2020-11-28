@@ -2,7 +2,7 @@ import { assert } from 'chai'
 
 import applicationTexts from '~/code/client/locales'
 
-import { DEFAULT_LOCALE, AVAILABLE_LOCALES } from 'shared/constants/locale'
+import { DEFAULT_LOCALE, AVAILABLE_LOCALES } from 'shared/constants'
 import * as MESSAGES from 'shared/constants/localeMessages'
 
 describe('Locales > integrity', () => {
