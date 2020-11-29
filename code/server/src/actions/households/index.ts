@@ -1,14 +1,9 @@
 import express from 'express'
 
 import {
-  approveInvitation,
-  deleteHousehold,
-  deleteInvitation,
-  findUserHouseholds,
-  findUserInvitations,
-  getUserRole,
-  leaveHousehold,
-} from 'serverSrc/database/models/households'
+  approveInvitation, deleteHousehold, deleteInvitation, findUserHouseholds,
+  findUserInvitations, getUserRole, leaveHousehold,
+} from 'serverSrc/database/models'
 import { API, NOTIFICATION_TYPE, HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 

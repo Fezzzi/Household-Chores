@@ -4,27 +4,12 @@ import dotenv from 'dotenv'
 import rimraf from 'rimraf'
 
 import { database } from 'serverSrc/database'
-import USERS_TABLE from 'serverSrc/database/models/tables/users'
-import HOUSEHOLD_MEMBERS_TABLE from 'serverSrc/database/models/tables/household_members'
-import HOUSEHOLDS_TABLE from 'serverSrc/database/models/tables/households'
+import {
+  tUsersName, tUsersCols, tHouseMemName, tHouseMemCols, tHouseholdsName, tHouseholdsCols,
+} from 'serverSrc/database/models/tables'
 
 dotenv.config()
 const UPLOAD_DIR = process.env.UPLOAD_PATH || 'uploads'
-
-const {
-  name: usersTable,
-  columns: { photo: userTabPhoto },
-} = USERS_TABLE
-
-const {
-  name: membersTable,
-  columns: { photo: memTabPhoto },
-} = HOUSEHOLD_MEMBERS_TABLE
-
-const {
-  name: householdsTable,
-  columns: { photo: houseTabPhoto },
-} = HOUSEHOLDS_TABLE
 
 const getFiles = dir => {
   const dirents = readdirSync(dir, { withFileTypes: true })
@@ -43,15 +28,15 @@ const cleanDirectory = (dirPath, files) =>
 
 const cleanUploads = async () => {
   const userResults = await database.query(`
-    SELECT ${userTabPhoto} FROM ${usersTable} WHERE ${userTabPhoto} IS NOT NULL
+    SELECT ${tUsersCols.photo} FROM ${tUsersName} WHERE ${tUsersCols.photo} IS NOT NULL
   `, [], false)
 
   const membershipResults = await database.query(`
-    SELECT ${memTabPhoto} FROM ${membersTable} WHERE ${memTabPhoto} IS NOT NULL
+    SELECT ${tHouseMemCols.photo} FROM ${tHouseMemName} WHERE ${tHouseMemCols.photo} IS NOT NULL
   `, [], false)
 
   const householdResults = await database.query(`
-    SELECT ${houseTabPhoto} FROM ${householdsTable} WHERE ${houseTabPhoto} IS NOT NULL
+    SELECT ${tHouseholdsCols.photo} FROM ${tHouseholdsName} WHERE ${tHouseholdsCols.photo} IS NOT NULL
   `, [], false)
 
   const photosByKeys = [...userResults, ...membershipResults, ...householdResults].reduce((acc, result) => {

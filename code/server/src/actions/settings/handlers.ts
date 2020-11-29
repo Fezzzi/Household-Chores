@@ -1,9 +1,9 @@
 import { getTabList, validateNotificationData, validateProfileData } from 'serverSrc/helpers/settings'
 import { PROFILE_DIR, uploadFiles } from 'serverSrc/helpers/files.'
-import { findProfileData, updateUserData } from 'serverSrc/database/models/users'
-import { findApprovedConnections, findConnections } from 'serverSrc/database/models/connections'
-import { findUserHouseholds, findUserInvitations } from 'serverSrc/database/models/households'
-import { findNotificationSettings, updateNotificationSettings } from 'serverSrc/database/models/notifications'
+import {
+  findProfileData, updateUserData, findApprovedConnections, findConnections,
+  findUserHouseholds, findUserInvitations, findNotificationSettings, updateNotificationSettings,
+} from 'serverSrc/database/models'
 import { SETTING_CATEGORIES, SETTING_TABS, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 import { PROFILE } from 'shared/constants/settingsDataKeys'

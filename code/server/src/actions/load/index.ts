@@ -2,8 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 
 import { API } from 'shared/constants'
-import { findProfileData } from 'serverSrc/database/models/users'
-import { getActivityForUser } from 'serverSrc/database/models/activity'
+import { findProfileData, getActivityForUser } from 'serverSrc/database/models'
 
 dotenv.config()
 

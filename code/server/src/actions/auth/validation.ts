@@ -1,6 +1,6 @@
 import { isInputValid } from 'shared/helpers/validation'
 import { INPUT_TYPE } from 'shared/constants'
-import { findUser } from 'serverSrc/database/models/users'
+import { findUser } from 'serverSrc/database/models'
 
 export const validateResetData = async ({ email: { valid, value } }: any): Promise<boolean|number> =>
   valid && isInputValid(INPUT_TYPE.EMAIL, value).valid

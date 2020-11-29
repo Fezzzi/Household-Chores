@@ -1,7 +1,6 @@
 import { HOUSEHOLD_DIR, uploadFiles } from 'serverSrc/helpers/files.'
 import { validateField } from 'serverSrc/helpers/settings'
-import { addHouseholdInvitations, createHousehold } from 'serverSrc/database/models/households'
-import { findApprovedConnections } from 'serverSrc/database/models/connections'
+import { addHouseholdInvitations, createHousehold, findApprovedConnections } from 'serverSrc/database/models'
 import { NOTIFICATION_TYPE, INPUT_TYPE, API, SETTING_CATEGORIES } from 'shared/constants'
 import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys'
 import { ERROR } from 'shared/constants/localeMessages'

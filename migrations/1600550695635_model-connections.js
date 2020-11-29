@@ -1,29 +1,31 @@
-import CONNECTIONS_TABLE from 'serverSrc/database/models/tables/connections';
-import USERS_TABLE from 'serverSrc/database/models/tables/users';
-import { USER_VISIBILITY_TYPE, CONNECTION_STATE_TYPE } from 'shared/constants';
-import { migrateWithQueries } from 'serverSrc/helpers/migrations';
-
-const { columns: { id_from, id_to, message, state, date_created } } = CONNECTIONS_TABLE;
+import { tUsersName, tUsersCols, tConnectionsName, tConnectionsCols } from 'serverSrc/database/models/tables'
+import { USER_VISIBILITY_TYPE, CONNECTION_STATE_TYPE } from 'shared/constants'
+import { migrateWithQueries } from 'serverSrc/helpers/migrations'
 
 module.exports = {
-  up: (conn, cb) => migrateWithQueries(cb,
-    conn.query(`
-        CREATE TABLE ${CONNECTIONS_TABLE.name} (
-        ${id_from} INT NOT NULL,
-        ${id_to} INT NOT NULL,
-        ${message} VARCHAR(255) DEFAULT NULL,
-        ${state} ENUM('${CONNECTION_STATE_TYPE.WAITING}', '${CONNECTION_STATE_TYPE.APPROVED}', '${CONNECTION_STATE_TYPE.BLOCKED}') NOT NULL DEFAULT '${CONNECTION_STATE_TYPE.WAITING}',
-        ${date_created} DATETIME NOT NULL,
-        PRIMARY KEY (${id_from}, ${id_to})
+  up: async (conn, cb) => migrateWithQueries(cb,
+    await conn.query(`
+      CREATE TABLE ${tConnectionsName} (
+        ${tConnectionsCols.id_from} INT NOT NULL,
+        ${tConnectionsCols.id_to} INT NOT NULL,
+        ${tConnectionsCols.message} VARCHAR(255) DEFAULT NULL,
+        ${tConnectionsCols.state} ENUM(
+          '${CONNECTION_STATE_TYPE.WAITING}', '${CONNECTION_STATE_TYPE.APPROVED}', '${CONNECTION_STATE_TYPE.BLOCKED}'
+        ) NOT NULL DEFAULT '${CONNECTION_STATE_TYPE.WAITING}',
+        ${tConnectionsCols.date_created} DATETIME NOT NULL,
+        PRIMARY KEY (${tConnectionsCols.id_from}, ${tConnectionsCols.id_to})
       )
     `)
-    && conn.query(`
-      ALTER TABLE ${USERS_TABLE.name} ADD ${USERS_TABLE.columns.visibility} ENUM('${USER_VISIBILITY_TYPE.ALL}', '${USER_VISIBILITY_TYPE.FOF}') NOT NULL DEFAULT '${USER_VISIBILITY_TYPE.ALL}'
+    && await conn.query(`
+      ALTER TABLE ${tUsersName}
+      ADD ${tUsersCols.visibility} ENUM(
+        '${USER_VISIBILITY_TYPE.ALL}', '${USER_VISIBILITY_TYPE.FOF}'
+      ) NOT NULL DEFAULT '${USER_VISIBILITY_TYPE.ALL}'
     `)
   ),
-  down: (conn, cb) => migrateWithQueries(cb,
-    conn.query(`DROP TABLE ${CONNECTIONS_TABLE.name}`)
-    && conn.query(`ALTER TABLE ${USERS_TABLE.name} DROP COLUMN ${USERS_TABLE.columns.visibility}`)
+  down: async (conn, cb) => migrateWithQueries(cb,
+    await conn.query(`DROP TABLE ${tConnectionsName}`)
+    && await conn.query(`ALTER TABLE ${tUsersName} DROP COLUMN ${tUsersCols.visibility}`)
   ),
 }
 

@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 
 import { NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { findFacebookUser, findGoogleUser, assignUserProvider, updateLoginTime } from 'serverSrc/database/models/users'
+import { findFacebookUser, findGoogleUser, assignUserProvider, updateLoginTime } from 'serverSrc/database/models'
 import { setSession } from 'serverSrc/helpers/auth'
 
 const config = dotenv.config()

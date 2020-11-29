@@ -1,9 +1,9 @@
 import express from 'express'
 
-import { queryUsers } from 'serverSrc/database/models/users'
 import {
-  approveConnection, createConnection, blockConnection, removeConnection, findBlockedConnections, findConnections,
-} from 'serverSrc/database/models/connections'
+  queryUsers, approveConnection, createConnection, blockConnection,
+  removeConnection, findBlockedConnections, findConnections,
+} from 'serverSrc/database/models'
 import { API, CONNECTION_STATE_TYPE, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 

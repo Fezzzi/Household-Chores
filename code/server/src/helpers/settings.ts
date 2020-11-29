@@ -1,6 +1,5 @@
-import { findUser, isCorrectPassword } from 'serverSrc/database/models/users'
-import HOUSEHOLDS_TABLE from 'serverSrc/database/models/tables/households'
-import NOTIFICATION_SETTINGS_TABLE from 'serverSrc/database/models/tables/notification_settings'
+import { findUser, isCorrectPassword } from 'serverSrc/database/models'
+import { tHouseholdsCols, tNotifySettingsCols } from 'serverSrc/database/models/tables'
 import {
   INPUT_TYPE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE,
   SETTING_CATEGORIES, SETTING_TABS, SETTING_TAB_ROWS,
@@ -22,7 +21,7 @@ export const getTabList = (
       messages: Object.fromEntries(
         data.households.map((household: any) => [
           household.key,
-          household[HOUSEHOLDS_TABLE.columns.name],
+          household[tHouseholdsCols.name],
         ]),
       ),
       types: Object.fromEntries(
@@ -108,9 +107,8 @@ export const validateNotificationData = (
     return false
   }
 
-  if (!inputKeys.every(input =>
-    NOTIFICATION_SETTINGS_TABLE.columns[input as keyof typeof NOTIFICATION_SETTINGS_TABLE.columns] !== undefined
-  ) && inputs[NOTIFICATION_SETTINGS_TABLE.columns.id_user] === undefined
+  if (!inputKeys.every(input => tNotifySettingsCols[input as keyof typeof tNotifySettingsCols] !== undefined)
+    && inputs[tNotifySettingsCols.id_user] === undefined
   ) {
     res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return false
