@@ -5,7 +5,7 @@ import { TextInputBox, TextInputField, TextInputValue } from 'clientSrc/styles/b
 import { MiniInputWrapper } from 'clientSrc/styles/blocks/common'
 import { INPUT_TYPE } from 'shared/constants'
 
-import LocaleText from '../../common/LocaleText'
+import LocaleText from '../LocaleText'
 
 const MiniTextInput = ({ name, reference, value, handleChange }) => {
   const [inputTextLength, setInputTextLength] = useState(0)

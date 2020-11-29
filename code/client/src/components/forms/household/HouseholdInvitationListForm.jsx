@@ -9,11 +9,11 @@ import { TableBox, TableHeaderBox, TableHeaderCell, TableSorterIcon } from 'clie
 import { useTableLogic } from 'clientSrc/helpers/table'
 import { COMMON, FORM } from 'shared/constants/localeMessages'
 
-import MiniTextInput from '../inputs/MiniTextInput'
+import { MiniTextInput } from '../../common'
 import HouseholdInvitationNode from './HouseholdInvitationNode'
 import LocaleText from '../../common/LocaleText'
 
-const HouseholdInvitationList = ({ invitations }) => {
+const HouseholdInvitationListForm = ({ invitations }) => {
   const textInputRef = useRef(null)
 
   const {
@@ -67,7 +67,7 @@ const HouseholdInvitationList = ({ invitations }) => {
   )
 }
 
-HouseholdInvitationList.propTypes = {
+HouseholdInvitationListForm.propTypes = {
   invitations: PropTypes.arrayOf(
     PropTypes.shape({
       fromId: PropTypes.number.isRequired,
@@ -81,4 +81,4 @@ HouseholdInvitationList.propTypes = {
   ).isRequired,
 }
 
-export default HouseholdInvitationList
+export default HouseholdInvitationListForm

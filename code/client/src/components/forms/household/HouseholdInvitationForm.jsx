@@ -11,8 +11,7 @@ import {
 import { useTableLogic } from 'clientSrc/helpers/table'
 import { COMMON, HOUSEHOLD } from 'shared/constants/localeMessages'
 
-import MiniTextInput from '../inputs/MiniTextInput'
-import MiniButton from '../common/MiniButton'
+import { MiniTextInput, MiniButton } from '../../common'
 import LocaleText from '../../common/LocaleText'
 
 const HouseholdInvitationForm = ({ connections, onInvite }) => {

@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 
 import { SETTINGS } from 'shared/constants/localeMessages'
 import { ColumnWrapper, SettingIcon, SettingText, Column, SettingRow } from 'clientSrc/styles/blocks/settings'
-import LocaleText from 'clientSrc/components/common/LocaleText'
+
+import LocaleText from '../common/LocaleText'
 
 const SettingsColumn = ({
   type, rows, primary, icons, width, selected,

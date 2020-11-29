@@ -2,7 +2,7 @@ import React from 'react'
 
 import {
   ConnectionListForm, ConnectionSearchForm, HouseholdCreateForm, HouseholdModificationForm,
-  HouseholdInvitationList, ProfileForm, NotificationForm,
+  HouseholdInvitationListForm, ProfileForm, NotificationForm,
 } from 'clientSrc/components/forms'
 import { SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, CONNECTION_STATE_TYPE } from 'shared/constants'
 import { FORM, SETTINGS } from 'shared/constants/localeMessages'
@@ -67,7 +67,7 @@ export const settingsRenderers = {
     [SETTING_TABS.NEW_HOUSEHOLD]: data =>
       <HouseholdCreateForm connections={data.connections} />,
     [SETTING_TABS.INVITATIONS]: data =>
-      <HouseholdInvitationList invitations={data.invitations || []} />,
+      <HouseholdInvitationListForm invitations={data.invitations || []} />,
     [SETTING_TABS._HOUSEHOLD]: (data, handleSubmit, tab) => (
       <HouseholdModificationForm
         household={data.households?.find(({ key }) => key === tab)}

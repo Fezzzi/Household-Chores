@@ -7,12 +7,12 @@ import {
   ToggleInputIcon, InputLabel, FixedInputBlock, ErrorSpan, ShowPassWrapper,
   ShowPassButton, InputSiderWrapper,
 } from 'clientSrc/styles/blocks/form'
-import { InfoTooltip } from 'clientSrc/components/portals'
 import { INPUT_TYPE } from 'shared/constants'
 import { COMMON } from 'shared/constants/localeMessages'
 import { isInputValid } from 'shared/helpers/validation'
 
-import LocaleText from '../../common/LocaleText'
+import LocaleText from '../LocaleText'
+import { InfoTooltip } from '../../portals'
 
 const TextInput = ({
   name, value, label, placeholder, type, reference,

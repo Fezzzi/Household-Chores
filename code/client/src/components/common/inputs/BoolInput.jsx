@@ -7,7 +7,7 @@ import {
   InputLabel, BoolInputLabel,
 } from 'clientSrc/styles/blocks/form'
 
-import LocaleText from '../../common/LocaleText'
+import LocaleText from '../LocaleText'
 
 const BoolInput = ({ name, label, value, onUpdate }) => {
   const [inputActive, setInputActive] = useState(false)

@@ -5,9 +5,10 @@ import { Search } from '@material-ui/icons'
 import {
   TableBox, TableHeaderBox, TableHeaderCell, TableRow, TableCell, TableSorterIcon, TableRowsBox,
 } from 'clientSrc/styles/blocks/table'
-import MiniTextInput from 'clientSrc/components/forms/inputs/MiniTextInput'
 import { COMMON } from 'shared/constants/localeMessages'
 import { useTableLogic } from 'clientSrc/helpers/table'
+
+import { MiniTextInput } from '.'
 
 const Table = ({ rows, keys, sortConfig, filterKey }) => {
   const {

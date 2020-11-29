@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Edit } from '@material-ui/icons'
 
@@ -7,21 +7,21 @@ import { editableFieldProps } from 'clientSrc/helpers/editableField'
 import { useUpdateHandler } from 'clientSrc/helpers/form'
 import { INPUT_TYPE } from 'shared/constants'
 
-import Input from '../forms/common/Input'
+import Input from '../Input'
 
-const EditablePhotoField = ({
-  name, size, iconRight, placeholder, error, setFormState, isFormValidFunc, children,
+const EditableTextField = ({
+  name, edited, placeholder, error, setFormState, isEmail, isFormValidFunc, children,
 }) => {
   const [hovering, setHovering] = useState(false)
   const [editing, setEditing] = useState(false)
   const inputRef = useRef(null)
   const handleUpdate = useUpdateHandler(name, setFormState, isFormValidFunc, placeholder)
 
-  const handleFileRemove = e => {
-    setEditing(false)
-    setHovering(false)
-    e.stopPropagation()
-  }
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [editing])
 
   return (
     <EditableFieldWrapper
@@ -31,42 +31,37 @@ const EditablePhotoField = ({
         setEditing(true)
         setHovering(false)
       }}
+      onBlur={() => !edited && setEditing(false)}
     >
       {editing
         ? (
           <Input
             name={name}
-            type={INPUT_TYPE.PHOTO}
+            type={isEmail ? INPUT_TYPE.EMAIL : INPUT_TYPE.TEXT}
             value={placeholder}
             inputError={error}
             onUpdate={handleUpdate}
-            onFileRemove={handleFileRemove}
-            closable
-            size={size}
             reference={inputRef}
           />
         ) : (
           <>
             {children}
-            {hovering && (
-              <EditableFieldIcon iconRight={iconRight} centered={false}>
-                <Edit />
-              </EditableFieldIcon>
-            )}
+            {hovering && <EditableFieldIcon centered><Edit /></EditableFieldIcon>}
           </>
         )}
     </EditableFieldWrapper>
   )
 }
 
-EditablePhotoField.defaultProps = {
-  iconRight: 15,
+EditableTextField.defaultProps = {
+  isEmail: false,
+  edited: false,
 }
 
-EditablePhotoField.propTypes = {
+EditableTextField.propTypes = {
   ...editableFieldProps,
-  size: PropTypes.number,
-  iconRight: PropTypes.number,
+  isEmail: PropTypes.bool,
+  edited: PropTypes.bool,
 }
 
-export default EditablePhotoField
+export default EditableTextField

@@ -7,7 +7,7 @@ import {
 } from 'clientSrc/styles/blocks/form'
 import { FORM } from 'shared/constants/localeMessages'
 
-import LocaleText from '../../common/LocaleText'
+import LocaleText from '../LocaleText'
 
 const SwitchInput = ({ name, label, values, value, onUpdate }) => {
   const [selectedValue, setSelectedValue] = useState(null)

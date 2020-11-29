@@ -9,9 +9,8 @@ import { AuthActions } from 'clientSrc/actions'
 import { INPUT_TYPE } from 'shared/constants'
 import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages'
 
-import TextInput from '../inputs/TextInput'
-import Separator from '../common/Separator'
-import PrimaryButton from '../common/PrimaryButton'
+import { TextInput, PrimaryButton } from '../../common'
+import Separator from '../Separator'
 import LocaleText from '../../common/LocaleText'
 
 const inputConfig = [

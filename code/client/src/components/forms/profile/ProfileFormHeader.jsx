@@ -12,12 +12,8 @@ import { INPUT_TYPE } from 'shared/constants'
 import { FORM } from 'shared/constants/localeMessages'
 import { PROFILE } from 'shared/constants/settingsDataKeys'
 
-import LocaleSwitch from '../inputs/LocaleSwitch'
-import ThemeSwitch from '../inputs/ThemeSwitch'
-import Input from '../common/Input'
-import EditableField from '../../common/EditableField'
-import EditablePhotoField from '../../common/EditablePhotoField'
-import EditableTextField from '../../common/EditableTextField'
+import { LocaleSwitch, ThemeSwitch, EditableField, EditablePhotoField, EditableTextField } from '../../common'
+import Input from '../../common/Input'
 import LocaleText from '../../common/LocaleText'
 
 const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState }) => {

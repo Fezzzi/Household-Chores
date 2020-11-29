@@ -2,7 +2,6 @@ import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { Save } from '@material-ui/icons'
 
-import LocaleText from 'clientSrc/components/common/LocaleText'
 import { useFormState, useUpdateHandler } from 'clientSrc/helpers/form'
 import { NotificationGroupBox, SectionHeadline } from 'clientSrc/styles/blocks/settings'
 import { TableBox, TableHeaderBox, TableHeaderCell } from 'clientSrc/styles/blocks/table'
@@ -10,7 +9,8 @@ import { INPUT_TYPE } from 'shared/constants'
 import { FORM } from 'shared/constants/localeMessages'
 import { NOTIFICATIONS } from 'shared/constants/settingsDataKeys'
 
-import Input from '../common/Input'
+import Input from '../../common/Input'
+import LocaleText from '../../common/LocaleText'
 import { SimpleFloatingElement } from '../../portals'
 
 const NotificationForm = ({ data, onSubmit }) => {

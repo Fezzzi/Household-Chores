@@ -3,10 +3,7 @@ import PropTypes from 'prop-types'
 
 import { INPUT_TYPE } from 'shared/constants'
 
-import TextInput from '../inputs/TextInput'
-import PhotoInput from '../inputs/PhotoInput'
-import BoolInput from '../inputs/BoolInput'
-import SwitchInput from '../inputs/SwitchInput'
+import { TextInput, PhotoInput, BoolInput, SwitchInput } from './inputs'
 
 const Input = ({ type, ...props }) => {
   switch (type) {

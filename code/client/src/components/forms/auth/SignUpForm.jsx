@@ -10,9 +10,8 @@ import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 
 import FacebookLoginButton from './FacebookLoginButton'
 import GoogleLoginButton from './GoogleLoginButton'
-import TextInput from '../inputs/TextInput'
-import Separator from '../common/Separator'
-import PrimaryButton from '../common/PrimaryButton'
+import { TextInput, PrimaryButton } from '../../common'
+import Separator from '../Separator'
 import LocaleText from '../../common/LocaleText'
 
 const inputConfig = [

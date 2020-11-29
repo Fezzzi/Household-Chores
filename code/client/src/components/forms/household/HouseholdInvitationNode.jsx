@@ -10,7 +10,7 @@ import {
 import { SettingsActions } from 'clientSrc/actions'
 import { FORM } from 'shared/constants/localeMessages'
 
-import PrimaryButton from '../common/PrimaryButton'
+import PrimaryButton from '../../common/buttons/PrimaryButton'
 import LocaleText from '../../common/LocaleText'
 import { InfoTooltip } from '../../portals'
 

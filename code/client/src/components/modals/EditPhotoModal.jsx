@@ -9,11 +9,12 @@ import {
   ModalBody, ModalButtonsBlock, ModalCloseButton, ModalNote, ModalOverlay, ModalPhotoCanvas,
   ModalPhotoControls, ModalPhotoSlider, ModalPhotoSliderWrapper, ModalPhotoWrapper, PhotoSizeValue,
 } from 'clientSrc/styles/blocks/modals'
-import PrimaryButton from 'clientSrc/components/forms/common/PrimaryButton'
-import LocaleText from 'clientSrc/components/common/LocaleText'
 import { ModalActions } from 'clientSrc/actions'
 import { COMMON, FORM } from 'shared/constants/localeMessages'
 import { MAX_IMAGE_SIZE } from 'shared/constants'
+
+import { PrimaryButton } from '../common'
+import LocaleText from '../common/LocaleText'
 
 const IMG_SIZE = 150
 const CANVAS_SIZE = 250

@@ -13,7 +13,7 @@ import { INPUT_TYPE, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR, FORM } from 'shared/constants/localeMessages'
 import { isInputValid } from 'shared/helpers/validation'
 
-import LocaleText from '../../common/LocaleText'
+import LocaleText from '../LocaleText'
 
 const PhotoInput = ({
   name, message, size, closable, reference, onUpdate, onFileRemove,

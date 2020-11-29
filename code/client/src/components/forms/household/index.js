@@ -1,6 +1,6 @@
 import HouseholdInvitationForm from './HouseholdInvitationForm'
 import HouseholdCreateForm from './HouseholdCreateForm'
 import HouseholdModificationForm from './HouseholdModificationForm'
-import HouseholdInvitationList from './HouseholdInvitationList'
+import HouseholdInvitationListForm from './HouseholdInvitationListForm'
 
-export { HouseholdInvitationForm, HouseholdInvitationList, HouseholdCreateForm, HouseholdModificationForm }
+export { HouseholdInvitationForm, HouseholdInvitationListForm, HouseholdCreateForm, HouseholdModificationForm }

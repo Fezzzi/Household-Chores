@@ -10,7 +10,7 @@ import { PROFILE } from 'shared/constants/settingsDataKeys'
 
 import { SimpleFloatingElement } from '../../portals'
 import ProfileFormHeader from './ProfileFormHeader'
-import Input from '../common/Input'
+import Input from '../../common/Input'
 
 const ProfileForm = ({ data, onSubmit }) => {
   const [headerKey, setHeaderKey] = useState(0)

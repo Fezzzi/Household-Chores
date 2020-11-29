@@ -8,7 +8,7 @@ import { AuthActions } from 'clientSrc/actions'
 import { FacebookIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/blocks/form'
 
 import LocaleText from '../../common/LocaleText'
-import PrimaryButton from '../common/PrimaryButton'
+import PrimaryButton from '../../common/buttons/PrimaryButton'
 
 const FacebookLoginButton = ({ onError }) => {
   const locale = useSelector(({ locale: { locale } }) => locale)

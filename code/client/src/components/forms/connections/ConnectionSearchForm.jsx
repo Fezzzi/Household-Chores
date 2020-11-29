@@ -11,7 +11,7 @@ import { FORM } from 'shared/constants/localeMessages'
 
 import UserConnectionNode from './UserConnectionNode'
 import LocaleText from '../../common/LocaleText'
-import SearchBar from '../common/SearchBar'
+import SearchBar from '../SearchBar'
 
 const ConnectionSearchForm = ({ tab, data, dataKey, emptyMessage, headlineMessage }) => {
   const dispatch = useDispatch()

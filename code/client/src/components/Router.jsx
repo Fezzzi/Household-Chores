@@ -7,7 +7,7 @@ import { API, SETTING_TAB_ROWS, SETTING_CATEGORIES } from 'shared/constants'
 
 import Home from './Home'
 import Resource from './Resource'
-import AuthForm from './forms/auth/AuthForm'
+import { AuthForm } from './forms'
 import Settings from './settings/Settings'
 
 export const history = createBrowserHistory()
