@@ -13,9 +13,23 @@ module.exports = {
   context: path.resolve(__dirname, '../code/client'),
   ...webpackAliases,
   output: {
-    filename: 'main.js',
+    filename: 'main.[contenthash].js',
+    chunkFilename: '[name].[contenthash].js',
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/',
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      maxInitialRequests: Infinity,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: module =>
+            `npm.${module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1].replace('@', '')}`,
+        },
+      },
+    },
   },
   entry: {
     js: ['babel-polyfill', 'clientSrc/index.jsx'],
