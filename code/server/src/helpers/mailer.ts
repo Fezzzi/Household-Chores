@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import { Logger } from './logger'
 import { LOGS } from '../constants'
 
-const envs = dotenv.config()
+dotenv.config()
 
 const getTemplate = (templateName: string, data: any): { subject: string; html: string} => {
   const templateModule = require(`serverSrc/mails/${templateName}.ts`)
@@ -34,11 +34,9 @@ export const sendEmails = async (templateName: string, data: any, recipients: [s
   const { subject, html } = getTemplate(templateName, data)
   return transporter.sendMail({
     from: 'Household App',
-    to: envs.parsed
-      ? (envs.parsed.TEST === 'true'
-        ? envs.parsed.TEST_EMAIL
-        : recipients.join(','))
-      : '',
+    to: process.env.TEST === 'true'
+      ? process.env.TEST_EMAIL
+      : recipients.join(','),
     subject,
     html,
   }).then(value => {

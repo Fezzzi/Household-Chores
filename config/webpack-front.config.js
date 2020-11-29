@@ -1,8 +1,8 @@
 const path = require('path')
-const dotenv = require('dotenv').config()
 const webpack = require('webpack')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+require('dotenv').config()
 
 const webpackAliases = require('./webpack-aliases.config')
 
@@ -79,8 +79,8 @@ module.exports = {
       },
     }),
     new webpack.DefinePlugin({
-      'process.env.PORT': (dotenv.parsed && dotenv.parsed.PORT) || 9000,
-      'process.env.GCID': (dotenv.parsed && JSON.stringify(dotenv.parsed.GCID)) || 'test1234',
+      'process.env.PORT': process.env.PORT || 9000,
+      'process.env.GCID': (process.env.GCID && JSON.stringify(process.env.GCID)) || 'test1234',
     }),
   ],
 }

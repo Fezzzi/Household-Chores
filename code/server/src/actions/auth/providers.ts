@@ -8,9 +8,9 @@ import { ERROR } from 'shared/constants/localeMessages'
 import { findFacebookUser, findGoogleUser, assignUserProvider, updateLoginTime } from 'serverSrc/database/models'
 import { setSession } from 'serverSrc/helpers/auth'
 
-const config = dotenv.config()
+dotenv.config()
 
-const CLIENT_ID = (config.parsed && config.parsed.GCID) || ''
+const CLIENT_ID = process.env.GCID ?? ''
 const client = new OAuth2Client(CLIENT_ID)
 const getGoogleUserId = async (googleToken: string): Promise<number|string> => client.verifyIdToken({
   idToken: googleToken,
@@ -20,7 +20,7 @@ const getGoogleUserId = async (googleToken: string): Promise<number|string> => c
   return (payload && payload.aud === CLIENT_ID && payload.sub) || -1
 })).catch(() => -1)
 
-const APP_SECRET = (config.parsed && config.parsed.FB_APP_SECRET) || ''
+const APP_SECRET = process.env.FB_APP_SECRET ?? ''
 const getFacebookUserId = ({ userID, signedRequest }: any): number|string => {
   const [encodedSignature, encodedPayload] = signedRequest.split('.')
   const signature = base64url.decode(encodedSignature)
