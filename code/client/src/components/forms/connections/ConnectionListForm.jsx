@@ -9,8 +9,7 @@ import { useTableLogic } from 'clientSrc/helpers/table'
 import { COMMON } from 'shared/constants/localeMessages'
 
 import UserConnectionNode from './UserConnectionNode'
-import { MiniTextInput } from '../../common'
-import LocaleText from '../../common/LocaleText'
+import { MiniTextInput, LocaleText } from '../../common'
 
 const ConnectionListForm = ({ tab, data, dataKey, emptyMessage, headlineMessage }) => {
   const textInputRef = useRef(null)

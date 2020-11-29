@@ -10,9 +10,9 @@ import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 
 import FacebookLoginButton from './FacebookLoginButton'
 import GoogleLoginButton from './GoogleLoginButton'
-import { TextInput, PrimaryButton } from '../../common'
+import { PrimaryButton, LocaleText } from '../../common'
+import { TextInput } from '../../common/inputs'
 import Separator from '../Separator'
-import LocaleText from '../../common/LocaleText'
 
 const inputConfig = [
   { name: 'email', message: FORM.EMAIL, type: INPUT_TYPE.EMAIL },

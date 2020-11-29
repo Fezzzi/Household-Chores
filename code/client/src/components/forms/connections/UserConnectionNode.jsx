@@ -9,8 +9,7 @@ import {
 } from 'clientSrc/styles/blocks/users'
 import { SETTING_TABS, CONNECTION_STATE_TYPE } from 'shared/constants'
 
-import PrimaryButton from '../../common/buttons/PrimaryButton'
-import LocaleText from '../../common/LocaleText'
+import { LocaleText, PrimaryButton } from '../../common'
 import { InfoTooltip } from '../../portals'
 
 const UserConnectionNode = ({ tab, user }) => {

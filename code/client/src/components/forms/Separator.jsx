@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types'
 
 import { SeparatorWrapper, SeparatorLine, SeparatorText } from 'clientSrc/styles/blocks/form'
 
-import LocaleText from '../common/LocaleText'
+import { LocaleText } from '../common'
 
 const Separator = ({ message, line }) => (
   <SeparatorWrapper>

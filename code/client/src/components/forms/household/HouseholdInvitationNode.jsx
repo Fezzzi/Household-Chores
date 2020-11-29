@@ -10,8 +10,7 @@ import {
 import { SettingsActions } from 'clientSrc/actions'
 import { FORM } from 'shared/constants/localeMessages'
 
-import PrimaryButton from '../../common/buttons/PrimaryButton'
-import LocaleText from '../../common/LocaleText'
+import { PrimaryButton, LocaleText } from '../../common'
 import { InfoTooltip } from '../../portals'
 
 const HouseholdInvitationNode = ({ invitation: {

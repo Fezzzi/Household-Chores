@@ -9,9 +9,9 @@ import { AuthActions } from 'clientSrc/actions'
 import { INPUT_TYPE } from 'shared/constants'
 import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages'
 
-import { TextInput, PrimaryButton } from '../../common'
+import { PrimaryButton, LocaleText } from '../../common'
+import { TextInput } from '../../common/inputs'
 import Separator from '../Separator'
-import LocaleText from '../../common/LocaleText'
 
 const inputConfig = [
   { name: 'email', message: FORM.EMAIL, type: INPUT_TYPE.EMAIL },

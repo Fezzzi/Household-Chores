@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { SETTINGS } from 'shared/constants/localeMessages'
 import { ColumnWrapper, SettingIcon, SettingText, Column, SettingRow } from 'clientSrc/styles/blocks/settings'
 
-import LocaleText from '../common/LocaleText'
+import { LocaleText } from '../common'
 
 const SettingsColumn = ({
   type, rows, primary, icons, width, selected,

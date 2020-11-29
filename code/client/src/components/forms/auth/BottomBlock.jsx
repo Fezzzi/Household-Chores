@@ -5,7 +5,7 @@ import {
   BottomMessageWrapper, BottomMessageBlock, BottomMessageLink,
 } from 'clientSrc/styles/blocks/auth'
 
-import LocaleText from '../../common/LocaleText'
+import { LocaleText } from '../../common'
 
 const BottomBlock = ({ message, linkMessage, onClick }) => (
   <BottomMessageWrapper>

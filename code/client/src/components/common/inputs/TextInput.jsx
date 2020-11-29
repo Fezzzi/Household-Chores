@@ -11,8 +11,8 @@ import { INPUT_TYPE } from 'shared/constants'
 import { COMMON } from 'shared/constants/localeMessages'
 import { isInputValid } from 'shared/helpers/validation'
 
-import LocaleText from '../LocaleText'
 import { InfoTooltip } from '../../portals'
+import LocaleText from '../LocaleText'
 
 const TextInput = ({
   name, value, label, placeholder, type, reference,

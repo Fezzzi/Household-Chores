@@ -14,8 +14,7 @@ import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 
 import HouseholdFormHeader from './HouseholdFormHeader'
 import HouseholdInvitationForm from './HouseholdInvitationForm'
-import LocaleText from '../../common/LocaleText'
-import Table from '../../common/Table'
+import { LocaleText, Table } from '../../common'
 
 const HouseholdCreateForm = ({ connections }) => {
   const [timer, setTimer] = useState(null)

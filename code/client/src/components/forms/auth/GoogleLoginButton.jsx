@@ -7,8 +7,7 @@ import { AUTH } from 'shared/constants/localeMessages'
 import { AuthActions } from 'clientSrc/actions'
 import { GoogleIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/blocks/form'
 
-import LocaleText from '../../common/LocaleText'
-import PrimaryButton from '../../common/buttons/PrimaryButton'
+import { LocaleText, PrimaryButton } from '../../common'
 
 const GoogleLoginButton = ({ onError }) => {
   const dispatch = useDispatch()

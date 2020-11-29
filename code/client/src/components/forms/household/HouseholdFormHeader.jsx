@@ -11,8 +11,7 @@ import { getLabelColors } from 'clientSrc/helpers/household'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys'
 
-import LocaleText from '../../common/LocaleText'
-import { PrimaryButton, EditableTextField, EditablePhotoField } from '../../common'
+import { LocaleText, PrimaryButton, EditableTextField, EditablePhotoField } from '../../common'
 
 const HouseholdFormHeader = ({
   photo, name, inputs, errors, currentUser, membersCount, setFormState,

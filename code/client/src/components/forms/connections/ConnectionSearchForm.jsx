@@ -10,7 +10,7 @@ import { SettingsActions } from 'clientSrc/actions'
 import { FORM } from 'shared/constants/localeMessages'
 
 import UserConnectionNode from './UserConnectionNode'
-import LocaleText from '../../common/LocaleText'
+import { LocaleText } from '../../common'
 import SearchBar from '../SearchBar'
 
 const ConnectionSearchForm = ({ tab, data, dataKey, emptyMessage, headlineMessage }) => {

@@ -8,7 +8,7 @@ import {
   NotificationContent, NotificationClose, NotificationMessage,
 } from 'clientSrc/styles/blocks/notifications'
 
-import LocaleText from '../common/LocaleText'
+import { LocaleText } from '../common'
 
 const getNotificationColor = type => {
   switch (type) {

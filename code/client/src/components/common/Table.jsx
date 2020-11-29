@@ -8,7 +8,7 @@ import {
 import { COMMON } from 'shared/constants/localeMessages'
 import { useTableLogic } from 'clientSrc/helpers/table'
 
-import { MiniTextInput } from '.'
+import MiniTextInput from './inputs/MiniTextInput'
 
 const Table = ({ rows, keys, sortConfig, filterKey }) => {
   const {

@@ -9,9 +9,8 @@ import { TableBox, TableHeaderBox, TableHeaderCell, TableSorterIcon } from 'clie
 import { useTableLogic } from 'clientSrc/helpers/table'
 import { COMMON, FORM } from 'shared/constants/localeMessages'
 
-import { MiniTextInput } from '../../common'
+import { MiniTextInput, LocaleText } from '../../common'
 import HouseholdInvitationNode from './HouseholdInvitationNode'
-import LocaleText from '../../common/LocaleText'
 
 const HouseholdInvitationListForm = ({ invitations }) => {
   const textInputRef = useRef(null)
