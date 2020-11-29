@@ -4,24 +4,26 @@ import { NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 import { AuthActions, NotificationActions } from 'clientSrc/actions'
 import { signUp, logIn, resetPass } from 'clientSrc/effects/authEffects'
+import { generalSaga } from 'clientSrc/helpers/sagas'
 
-const getAuthenticationSaga = effect => function* authenticationSaga({ payload }) {
-  try {
-    const { data } = yield call(effect, payload)
-    if (!data[NOTIFICATION_TYPE.ERRORS] || !data[NOTIFICATION_TYPE.ERRORS].length) {
-      // We login user after both signUp and LogIn
-      yield put(NotificationActions.addNotifications(data))
-      yield put(AuthActions.logInSuccess())
-    } else {
-      yield put(NotificationActions.addNotifications({
-        [NOTIFICATION_TYPE.ERRORS]: data[NOTIFICATION_TYPE.ERRORS],
-      }))
-    }
-  } catch (error) {
-    yield put(NotificationActions.addNotifications({
-      [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR],
-    }))
-  }
+function* resetPassSaga({ payload }) {
+  yield call(generalSaga, resetPass, payload, function* (data) {
+    yield put(NotificationActions.addNotifications(data))
+  })
+}
+
+function* signUpSaga({ payload }) {
+  yield call(generalSaga, signUp, payload, function* (data) {
+    yield put(NotificationActions.addNotifications(data))
+    yield put(AuthActions.logInSuccess())
+  })
+}
+
+function* logInSaga({ payload }) {
+  yield call(generalSaga, logIn, payload, function* (data) {
+    yield put(NotificationActions.addNotifications(data))
+    yield put(AuthActions.logInSuccess())
+  })
 }
 
 function* logInFacebookSaga(action) {
@@ -60,20 +62,9 @@ function* logInGoogleSaga(action) {
   }
 }
 
-function* resetPassSaga(action) {
-  try {
-    const response = yield call(resetPass, action.payload)
-    yield put(NotificationActions.addNotifications(response.data))
-  } catch (error) {
-    yield put(NotificationActions.addNotifications({
-      [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR],
-    }))
-  }
-}
-
 export function* authSaga() {
-  yield takeEvery(AuthActions.signUp.toString(), getAuthenticationSaga(signUp))
-  yield takeEvery(AuthActions.logIn.toString(), getAuthenticationSaga(logIn))
+  yield takeEvery(AuthActions.signUp.toString(), signUpSaga)
+  yield takeEvery(AuthActions.logIn.toString(), logInSaga)
   yield takeEvery(AuthActions.logInFacebook.toString(), logInFacebookSaga)
   yield takeEvery(AuthActions.logInGoogle.toString(), logInGoogleSaga)
   yield takeEvery(AuthActions.resetPass.toString(), resetPassSaga)
