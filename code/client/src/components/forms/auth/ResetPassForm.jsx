@@ -17,7 +17,7 @@ const inputConfig = [
   { name: 'email', message: FORM.EMAIL, type: INPUT_TYPE.EMAIL },
 ]
 
-const ResetPassForm = ({ history }) => {
+const ResetPassForm = ({ switchTab }) => {
   const dispatch = useDispatch()
   const resetPass = useCallback(values => dispatch(AuthActions.resetPass(values)), [dispatch])
 
@@ -52,8 +52,6 @@ const ResetPassForm = ({ history }) => {
     ))
   })
 
-  const switchTab = () => history.push(AUTH_TABS.SIGNUP_TAB)
-
   return (
     <form method="post">
       <MessageBlock bigFont margin="0 40px 10px;">
@@ -74,7 +72,7 @@ const ResetPassForm = ({ history }) => {
         <LocaleText message={submitMessage} />
       </PrimaryButton>
       <Separator message={COMMON.OR} />
-      <LinkRow onClick={switchTab}>
+      <LinkRow onClick={() => switchTab(AUTH_TABS.SIGNUP_TAB)}>
         <LocaleText message={AUTH.CREATE_ACCOUNT} />
       </LinkRow>
     </form>
@@ -82,7 +80,7 @@ const ResetPassForm = ({ history }) => {
 }
 
 ResetPassForm.propTypes = {
-  history: PropTypes.object.isRequired,
+  switchTab: PropTypes.func.isRequired,
 }
 
 export default ResetPassForm

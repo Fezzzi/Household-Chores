@@ -20,7 +20,7 @@ const inputConfig = [
   { name: 'password', message: FORM.PASSWORD, type: INPUT_TYPE.PASSWORD },
 ]
 
-const LogInForm = ({ history }) => {
+const LogInForm = ({ switchTab }) => {
   const dispatch = useDispatch()
   const logIn = useCallback(values => dispatch(AuthActions.logIn(values)), [dispatch])
   const addNotification = useCallback((type, message) =>
@@ -60,8 +60,6 @@ const LogInForm = ({ history }) => {
     ))
   })
 
-  const switchTab = () => history.push(AUTH_TABS.RESET_TAB)
-
   return (
     <form method="post">
       {inputConfig.map(input => (
@@ -81,7 +79,7 @@ const LogInForm = ({ history }) => {
       <Separator message={COMMON.OR} />
       <FacebookLoginButton onError={handleError} />
       <GoogleLoginButton onError={handleError} />
-      <LinkRow onClick={switchTab}>
+      <LinkRow onClick={() => switchTab(AUTH_TABS.RESET_TAB)}>
         <LocaleText message={AUTH.FORGOT_PASS} />
       </LinkRow>
     </form>
@@ -89,7 +87,7 @@ const LogInForm = ({ history }) => {
 }
 
 LogInForm.propTypes = {
-  history: PropTypes.object.isRequired,
+  switchTab: PropTypes.func.isRequired,
 }
 
 export default LogInForm

@@ -39,17 +39,20 @@ const Router = () => {
             <Switch>
               <Route exact path={`/${API.SETTINGS_PREFIX}/:category?:tab`} component={Settings} />
               <Route path={`/${API.SETTINGS_PREFIX}`}>
-                <Redirect to={{
-                  pathname: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.PROFILE}`,
-                  search: `tab=${SETTING_TAB_ROWS[SETTING_CATEGORIES.PROFILE][0]}`,
-                }}
+                <Redirect
+                  to={{
+                    pathname: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.PROFILE}`,
+                    search: `tab=${SETTING_TAB_ROWS[SETTING_CATEGORIES.PROFILE][0]}`,
+                  }}
                 />
               </Route>
-
               <Route exact path="/" component={Home} />
-              <Route path="/*">
-                <Redirect to={{ pathname: '/' }} />
-              </Route>
+              <Route
+                path="/*"
+                component={({ location }) => location.hash.startsWith('#/')
+                  ? <Redirect to={location.hash.slice(2)} />
+                  : <Redirect to={{ pathname: '/' }} />}
+              />
             </Switch>
           ))}
       </Switch>

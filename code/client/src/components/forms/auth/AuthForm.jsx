@@ -18,17 +18,27 @@ const AuthForm = ({ history, location }) => {
   useEffect(() => {
     const path = location.pathname.split('/').filter(Boolean)[0]
     if (path !== AUTH_TABS.LOGIN_TAB && path !== AUTH_TABS.RESET_TAB && path !== AUTH_TABS.SIGNUP_TAB) {
-      history.push(`/${AUTH_TABS.LOGIN_TAB}`)
+      history.push({
+        pathname: `/${AUTH_TABS.LOGIN_TAB}`,
+        hash: location.pathname !== '/'
+          ? `${location.pathname}${location.search}`
+          : '',
+      })
     }
   }, [location])
 
   const renderTab = () => {
     switch (currentTab) {
       case AUTH_TABS.SIGNUP_TAB: return <SignUpForm />
-      case AUTH_TABS.RESET_TAB: return <ResetPassForm history={history} />
-      default: return <LogInForm history={history} />
+      case AUTH_TABS.RESET_TAB: return <ResetPassForm switchTab={switchTab} />
+      default: return <LogInForm switchTab={switchTab} />
     }
   }
+
+  const switchTab = newTab => history.push({
+    pathname: newTab,
+    hash: location.hash,
+  })
 
   const getTabBottom = () => {
     switch (currentTab) {
@@ -49,8 +59,6 @@ const AuthForm = ({ history, location }) => {
       }
     }
   }
-
-  const switchTab = newTab => history.push(newTab)
 
   return (
     <>
