@@ -9,8 +9,7 @@ import { INPUT_TYPE } from 'shared/constants'
 import { FORM } from 'shared/constants/localeMessages'
 import { NOTIFICATIONS } from 'shared/constants/settingsDataKeys'
 
-import Input from '../../common/Input'
-import { LocaleText } from '../../common'
+import { LocaleText, Input } from '../../common'
 import { SimpleFloatingElement } from '../../portals'
 
 const NotificationForm = ({ data, onSubmit }) => {

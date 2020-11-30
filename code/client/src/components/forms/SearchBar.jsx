@@ -6,8 +6,7 @@ import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { COMMON } from 'shared/constants/localeMessages'
 import { INPUT_TYPE } from 'shared/constants'
 
-import { LocaleText, PrimaryButton } from '../common'
-import Input from '../common/Input'
+import { LocaleText, PrimaryButton, Input } from '../common'
 
 const SearchBar = ({ onSearch }) => {
   const [timer, setTimer] = useState(null)

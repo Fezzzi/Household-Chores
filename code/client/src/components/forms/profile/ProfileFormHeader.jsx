@@ -12,8 +12,9 @@ import { INPUT_TYPE } from 'shared/constants'
 import { FORM } from 'shared/constants/localeMessages'
 import { PROFILE } from 'shared/constants/settingsDataKeys'
 
-import { LocaleText, LocaleSwitch, ThemeSwitch, EditableField, EditablePhotoField, EditableTextField } from '../../common'
-import Input from '../../common/Input'
+import {
+  LocaleText, Input, LocaleSwitch, ThemeSwitch, EditableField, EditablePhotoField, EditableTextField,
+} from '../../common'
 
 const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState }) => {
   const [passwordEditing, setPasswordEditing] = useState(false)
