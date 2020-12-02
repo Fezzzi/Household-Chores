@@ -1,5 +1,10 @@
 import React from 'react'
 
+import Navbar from './Navbar'
+
 export default () => (
-  <div>Home</div>
+  <>
+    <Navbar />
+    <div>Home</div>
+  </>
 )
