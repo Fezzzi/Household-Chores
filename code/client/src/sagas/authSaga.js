@@ -33,15 +33,15 @@ function* logInFacebookSaga(action) {
       [NOTIFICATION_TYPE.ERRORS]: [ERROR.LOG_IN_MISSING_FIELDS],
     }))
   } else {
-    yield put(AuthActions.signUp({
-      nickname: { value: nickname, valid: true },
-      email: { value: email, valid: true },
+    yield put(AuthActions.signUp({ inputs: {
+      nickname,
+      email,
       photo: `https://graph.facebook.com/${id}/picture`,
       facebook: {
         userID,
         signedRequest,
       },
-    })
+    } })
     )
   }
 }
@@ -53,12 +53,12 @@ function* logInGoogleSaga(action) {
       [NOTIFICATION_TYPE.ERRORS]: [ERROR.LOG_IN_MISSING_FIELDS],
     }))
   } else {
-    yield put(AuthActions.signUp({
-      nickname: { value: name, valid: true },
-      email: { value: email, valid: true },
+    yield put(AuthActions.signUp({ inputs: {
+      nickname: name,
+      email,
       photo: imageUrl,
       googleToken,
-    }))
+    } }))
   }
 }
 

@@ -2,12 +2,13 @@ import { NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 
 export const handleAction = async (
-  data: object,
+  inputs: any,
   validationFunc: (data: object) => Promise<boolean|number>,
-  handlerFunc: (data: any) => any,
+  handlerFunc: (data: any, req: any, res: any) => Promise<any>,
+  req: any,
   res: any
 ): Promise<boolean> => {
-  const valid = await validationFunc(data)
+  const valid = await validationFunc(inputs)
   if (valid === false || valid === null) {
     res.status(200).send({
       [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA],
@@ -17,7 +18,7 @@ export const handleAction = async (
       [NOTIFICATION_TYPE.ERRORS]: [ERROR.NO_ACCOUNT],
     })
   } else {
-    const response = await handlerFunc(data)
+    const response = await handlerFunc(inputs, req, res)
     res.status(200).send(response)
   }
   return true

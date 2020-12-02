@@ -10,7 +10,7 @@ import { handleAction, setSession } from 'serverSrc/helpers/auth'
 import { validateLoginData, validateResetData, validateSignupData } from './validation'
 import { getProvidersUserId, handleProvidersLogIn, logInWithIds } from './providers'
 
-const getResetPassFunc = ({ email: { value: email } }: any) => async () => {
+const resetPass = async ({ email }: any) => {
   const emailSent = await sendEmails(MAILS.RESET_PASSWORD, {
     resetLink: 'resetLink',
   }, [email])
@@ -21,7 +21,7 @@ const getResetPassFunc = ({ email: { value: email } }: any) => async () => {
   }
 }
 
-const getLogInFunc = (req: any, res: any, { email: { value: email }, password: { value: password } }: any) => async () => {
+const logIn = async ({ email, password }: any, req: any, res: any) => {
   const result = await logInUser(email, password)
   if (result === null) {
     return {
@@ -33,8 +33,8 @@ const getLogInFunc = (req: any, res: any, { email: { value: email }, password: {
   return {}
 }
 
-const getSignUpFunc = (req: any, res: any, body: any) => async () => {
-  const { email: { value: email }, nickname: { value: nickname }, password, photo, googleToken, facebook } = body
+const signUp = async (inputs: any, req: any, res: any) => {
+  const { email, nickname, password, photo, googleToken, facebook } = inputs
   const { googleId, facebookId } = await getProvidersUserId(googleToken, facebook)
   const result = await handleProvidersLogIn(req, res, googleId, facebookId, googleToken, facebook)
   if (result !== false) {
@@ -52,7 +52,7 @@ const getSignUpFunc = (req: any, res: any, body: any) => async () => {
         }
       }
     }
-    return getLogInFunc(req, res, body)()
+    return logIn(inputs, req, res)
   }
 
   const signUpResult = await SignUpUser(
@@ -71,14 +71,14 @@ const getSignUpFunc = (req: any, res: any, body: any) => async () => {
 export default () => {
   const router = express.Router()
   router.post('/:action', (req, res) => {
-    const { params: { action }, body } = req
+    const { params: { action }, body: { inputs } } = req
     switch (action) {
       case API.AUTH_LOG_IN:
-        return handleAction(body, validateLoginData, getLogInFunc(req, res, body), res)
+        return handleAction(inputs, validateLoginData, logIn, req, res)
       case API.AUTH_SIGN_UP:
-        return handleAction(body, validateSignupData, getSignUpFunc(req, req, body), res)
+        return handleAction(inputs, validateSignupData, signUp, req, res)
       case API.AUTH_RESET:
-        return handleAction(body, validateResetData, getResetPassFunc(body), res)
+        return handleAction(inputs, validateResetData, resetPass, req, res)
       default:
         res.status(404).send('Not Found')
         return false
