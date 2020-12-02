@@ -9,4 +9,4 @@ export default {
     photo: 'photo',
     date_joined: 'date_joined',
   },
-};
+}

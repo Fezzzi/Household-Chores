@@ -14,4 +14,4 @@ export default {
     household_deleting: 'household_deleting',
     household_expelling: 'household_expelling',
   },
-};
+}

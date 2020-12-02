@@ -7,4 +7,4 @@ export default {
     message: 'message',
     date_created: 'date_created',
   },
-};
+}

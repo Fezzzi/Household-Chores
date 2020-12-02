@@ -1,27 +1,27 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
+import React, { Fragment, useEffect, useRef, useState } from 'react'
+import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types'
 
-import { Tooltip, TooltipRow, TooltipAnchor } from 'clientSrc/styles/blocks/portals';
-import { useElementPosition } from 'clientSrc/helpers/dom';
-import * as PortalType from 'clientSrc/constants/portalType';
+import { Tooltip, TooltipRow, TooltipAnchor } from 'clientSrc/styles/blocks/portals'
+import { useElementPosition } from 'clientSrc/helpers/dom'
+import { PORTAL_TYPE } from 'clientSrc/constants'
 
-import LocaleText from '../../common/LocaleText';
+import LocaleText from '../../common/LocaleText'
 
 export const NestedTooltipOptions = ({ position, options, withArrow, blurHandler }) => {
   const [state, setState] = useState({
     visible: null,
     position: null,
-  });
+  })
 
   const showSubToolbar = index => e => {
     if (state.visible !== index) {
       setState({
         visible: index,
         position: useElementPosition(e.target.closest('div')),
-      });
+      })
     }
-  };
+  }
 
   const onBlur = e => {
     // Styled components generate classnames uniquely for each Component, thus classname equality => same Components
@@ -30,14 +30,14 @@ export const NestedTooltipOptions = ({ position, options, withArrow, blurHandler
       || e.relatedTarget.className !== e.currentTarget.className
       || (e.relatedTarget.parentNode && e.relatedTarget.parentNode.nextSibling && e.relatedTarget !== e.currentTarget)
     )) {
-      blurHandler();
+      blurHandler()
     }
-  };
+  }
 
-  const thisRef = useRef(null);
-  useEffect(() => thisRef.current && thisRef.current.focus(), [thisRef]);
+  const thisRef = useRef(null)
+  useEffect(() => thisRef.current && thisRef.current.focus(), [thisRef])
 
-  const tooltipRoot = document.getElementById(PortalType.TOOLTIPS);
+  const tooltipRoot = document.getElementById(PORTAL_TYPE.TOOLTIPS)
   return ReactDOM.createPortal((
     <TooltipAnchor position={position}>
       <Tooltip
@@ -71,8 +71,8 @@ export const NestedTooltipOptions = ({ position, options, withArrow, blurHandler
         ))}
       </Tooltip>
     </TooltipAnchor>
-  ), tooltipRoot);
-};
+  ), tooltipRoot)
+}
 
 export const optionsShape = PropTypes.shape({
   content: PropTypes.oneOfType([
@@ -80,8 +80,8 @@ export const optionsShape = PropTypes.shape({
     PropTypes.element,
   ]).isRequired,
   clickHandler: PropTypes.func,
-});
-optionsShape.nestedOptions = PropTypes.arrayOf(optionsShape);
+})
+optionsShape.nestedOptions = PropTypes.arrayOf(optionsShape)
 
 NestedTooltipOptions.propTypes = {
   position: PropTypes.shape({
@@ -91,4 +91,4 @@ NestedTooltipOptions.propTypes = {
   options: PropTypes.arrayOf(optionsShape).isRequired,
   withArrow: PropTypes.bool,
   blurHandler: PropTypes.func,
-};
+}

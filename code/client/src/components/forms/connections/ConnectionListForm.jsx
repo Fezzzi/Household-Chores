@@ -1,24 +1,23 @@
-import React, { useRef } from 'react';
-import PropTypes from 'prop-types';
-import { Search } from '@material-ui/icons';
+import React, { useRef } from 'react'
+import PropTypes from 'prop-types'
+import { Search } from '@material-ui/icons'
 
-import { UserList } from 'clientSrc/styles/blocks/users';
-import { FormBody, SectionHeadline } from 'clientSrc/styles/blocks/settings';
-import { TableBox, TableHeaderBox, TableHeaderCell, TableSorterIcon } from 'clientSrc/styles/blocks/table';
-import { useTableLogic } from 'clientSrc/helpers/table';
-import { COMMON } from 'shared/constants/localeMessages';
+import { UserList } from 'clientSrc/styles/blocks/users'
+import { FormBody, SectionHeadline } from 'clientSrc/styles/blocks/settings'
+import { TableBox, TableHeaderBox, TableHeaderCell, TableSorterIcon } from 'clientSrc/styles/blocks/table'
+import { useTableLogic } from 'clientSrc/helpers/table'
+import { COMMON } from 'shared/constants/localeMessages'
 
-import UserConnectionNode from './UserConnectionNode';
-import MiniTextInput from '../inputs/MiniTextInput';
-import LocaleText from '../../common/LocaleText';
+import UserConnectionNode from './UserConnectionNode'
+import { MiniTextInput, LocaleText } from '../../common'
 
 const ConnectionListForm = ({ tab, data, dataKey, emptyMessage, headlineMessage }) => {
-  const textInputRef = useRef(null);
+  const textInputRef = useRef(null)
 
   const {
     processedRows,
     setQuery,
-  } = useTableLogic(data[dataKey] || [], [], 'nickname');
+  } = useTableLogic(data[dataKey] || [], [], 'nickname')
 
   return (
     <>
@@ -41,7 +40,7 @@ const ConnectionListForm = ({ tab, data, dataKey, emptyMessage, headlineMessage 
                   <MiniTextInput
                     reference={textInputRef}
                     name="table-filter"
-                    message={COMMON.SEARCH}
+                    value={COMMON.SEARCH}
                     handleChange={setQuery}
                   />
                 </TableHeaderCell>
@@ -63,8 +62,8 @@ const ConnectionListForm = ({ tab, data, dataKey, emptyMessage, headlineMessage 
           </FormBody>
         )}
     </>
-  );
-};
+  )
+}
 
 ConnectionListForm.propTypes = {
   tab: PropTypes.string.isRequired,
@@ -72,6 +71,6 @@ ConnectionListForm.propTypes = {
   dataKey: PropTypes.string.isRequired,
   emptyMessage: PropTypes.string.isRequired,
   headlineMessage: PropTypes.string.isRequired,
-};
+}
 
-export default ConnectionListForm;
+export default ConnectionListForm

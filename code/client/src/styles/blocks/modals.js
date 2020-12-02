@@ -1,4 +1,6 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
+
+import { COLORS } from 'clientSrc/constants'
 
 export const ModalOverlay = styled.div`
   position: absolute;
@@ -7,11 +9,11 @@ export const ModalOverlay = styled.div`
   z-index: 50;
   background-color: rgba(37, 37, 37, 0.6);
   display: flex;
-`;
+`
 
 export const ModalBody = styled.div`
-  background-color: var(--cThemeFront);
-  border: 1px solid var(--cBorder);
+  background-color: ${COLORS.THEME_FRONT};
+  border: 1px solid ${COLORS.BORDER};
   width: ${props => props.width ?? 'max-content'};
   height: ${props => props.height ?? 'max-content'};
   display: flex;
@@ -20,7 +22,7 @@ export const ModalBody = styled.div`
   position: relative;
   margin: 50px auto;
   padding: 25px;
-`;
+`
 
 export const ModalCloseButton = styled.div`
   position: absolute;
@@ -39,7 +41,7 @@ export const ModalCloseButton = styled.div`
     height: 100%;
     width: 100%;
   }
-`;
+`
 
 export const ModalButtonsBlock = styled.div`
   width: 100%;
@@ -48,18 +50,18 @@ export const ModalButtonsBlock = styled.div`
   flex-flow: row;
   align-items: center;
   justify-content: center;
-`;
+`
 
 export const ModalNote = styled.p`
   text-align: center;
   font-size: 0.9em;
   margin: 0;
   user-select: none;
-`;
+`
 
 export const ModalPhotoControls = styled.div`
   display: flex;
-`;
+`
 
 export const ModalPhotoWrapper = styled.div`
   width: 250px;
@@ -67,7 +69,7 @@ export const ModalPhotoWrapper = styled.div`
   margin: 20px;
   display: flex;
   flex-flow: row;
-`;
+`
 
 export const ModalPhotoCanvas = styled.canvas`
   width: 100%;
@@ -76,7 +78,7 @@ export const ModalPhotoCanvas = styled.canvas`
   :hover {
     cursor: grab;
   }
-`;
+`
 
 export const ModalPhotoSliderWrapper = styled.div`
   width: 25px;
@@ -84,13 +86,13 @@ export const ModalPhotoSliderWrapper = styled.div`
   display: flex;
   position: relative;
   flex-flow: row;
-`;
+`
 
 export const ModalPhotoSlider = styled.input`
   height: 8px;
   width: 248px;
-  background: var(--cThemeBack);
-  border: 1px solid var(--cBorder);
+  background: ${COLORS.THEME_BACK};
+  border: 1px solid ${COLORS.BORDER};
   transform: rotate(90deg);
   appearance: none;
   left: -120px;
@@ -105,7 +107,7 @@ export const ModalPhotoSlider = styled.input`
     appearance: none;
     width: 10px;
     height: 20px;
-    background: var(--cBluePrimary);
+    background: ${COLORS.BLUE_PRIMARY};
     border-radius: 0;
   }
   
@@ -113,11 +115,11 @@ export const ModalPhotoSlider = styled.input`
     appearance: none;
     width: 10px;
     height: 20px;
-    background: var(--cBluePrimary);
+    background: ${COLORS.BLUE_PRIMARY};
     border-radius: 0;
   }
-`;
+`
 
 export const PhotoSizeValue = styled.span`
-  color: ${props => props.isOk ? 'var(--cGreenPrimary)' : 'var(--cRedPrimary)'}
-`;
+  color: ${props => props.isOk ? COLORS.GREEN_PRIMARY : COLORS.RED_PRIMARY}
+`

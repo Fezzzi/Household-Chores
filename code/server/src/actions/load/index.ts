@@ -1,31 +1,30 @@
-import express from 'express';
-import dotenv from 'dotenv';
+import express from 'express'
+import dotenv from 'dotenv'
 
-import { LOAD_STATE } from 'shared/constants/api';
-import { findProfileData } from 'serverSrc/database/models/users';
-import { getActivityForUser } from 'serverSrc/database/models/activity';
+import { API } from 'shared/constants'
+import { findProfileData, getActivityForUser } from 'serverSrc/database/models'
 
-dotenv.config();
+dotenv.config()
 
 export default () => {
-  const router = express.Router();
+  const router = express.Router()
   router.get('/:action', async (req, res) => {
-    const { params: { action } } = req;
+    const { params: { action } } = req
     switch (action) {
-      case LOAD_STATE: {
-        const userId = req.session && req.cookies.user_sid && req.session.user;
+      case API.LOAD_STATE: {
+        const userId = req.session && req.cookies.user_sid && req.session.user
         res.status(200).send({
           debug: process.env.DEBUG,
           loggedUser: !!(userId),
           user: userId && await findProfileData(userId),
           activityFeed: userId && await getActivityForUser(userId),
-        });
-        return;
+        })
+        return
       }
       default:
-        res.status(404).send('Not Found');
+        res.status(404).send('Not Found')
     }
-  });
+  })
 
-  return router;
-};
+  return router
+}

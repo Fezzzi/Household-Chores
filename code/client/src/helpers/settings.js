@@ -1,5 +1,5 @@
-import * as NotificationTypes from 'shared/constants/notificationTypes';
-import { ERROR } from 'shared/constants/localeMessages';
+import { NOTIFICATION_TYPE } from 'shared/constants'
+import { ERROR } from 'shared/constants/localeMessages'
 
 export const useSettingsLoader = loadSettings => (category, tab, setState, setData, setRenderedTabs, addNotification) => {
   loadSettings(category, tab)
@@ -8,9 +8,9 @@ export const useSettingsLoader = loadSettings => (category, tab, setState, setDa
         ...prevState,
         tabs: newTabs,
         ...otherData,
-      }));
-      setData(newData);
-      setRenderedTabs(newTabs);
+      }))
+      setData(newData)
+      setRenderedTabs(newTabs)
     })
-    .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR));
-};
+    .catch(() => addNotification(NOTIFICATION_TYPE.ERRORS, ERROR.CONNECTION_ERROR))
+}

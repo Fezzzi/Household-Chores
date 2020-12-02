@@ -1,16 +1,18 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
+
+import { COLORS } from 'clientSrc/constants'
 
 export const TableBox = styled.div`
   margin: 0 50px;
   min-width: 550px;
-`;
+`
 
 export const TableHeaderBox = styled.div`
   height: ${props => props.isBigger ? 42 : 32}px;
-  border-bottom: 1px solid var(--cBorder);
+  border-bottom: 1px solid ${COLORS.BORDER};
   margin-bottom: 10px;
   display: flex;
-`;
+`
 
 export const TableHeaderCell = styled.div`
   padding: 0 6px;
@@ -19,27 +21,27 @@ export const TableHeaderCell = styled.div`
   font-size: 1.1em;
   
   ${props => props.growing ? 'margin-right: auto' : 'flex-shrink: 0'};
-`;
+`
 
 export const TableSingleRowBox = styled.div`
   height: ${props => props.height};
   max-height: ${props => props.height};
   overflow-x: auto;
-`;
+`
 
 export const TableRowsBox = styled.div`
   height: max-content;
   max-height: 270px;
   overflow: auto;
-`;
+`
 
 export const TableRow = styled.div`
   padding: 5px 6px;
   display: flex;
-`;
+`
 
 export const TableRowIcon = styled.span`
-  color: ${props => props.color || 'var(--cFont)'};
+  color: ${props => props.color || COLORS.FONT};
   opacity: ${props => props.clickable ? 0.6 : 0.8};
   
   ${props => props.clickable && `
@@ -52,13 +54,13 @@ export const TableRowIcon = styled.span`
       opacity: 0.9;
     }
   `}
-`;
+`
 
 export const TableCell = styled.div`
   display: flex;
   line-height: 20px;
   height: 20px;
-  color: var(--cFont);
+  color: ${COLORS.FONT};
   font-weight: ${props => props.boldKey ? 700 : 400};
   font-size: ${props => props.boldKey ? 1.1 : props.fadeKey ? 0.9 : 1}em;
   opacity: ${props => props.fadeKey ? 0.6 : 1};
@@ -70,7 +72,7 @@ export const TableCell = styled.div`
   svg {
     height: 20px;
   }
-`;
+`
 
 export const TablePhoto = styled.img`
   width: 20px;
@@ -78,7 +80,7 @@ export const TablePhoto = styled.img`
   
   border-radius: 100%;
   object-fit: cover;
-`;
+`
 
 export const TableSorterIcon = styled.span`
   height: 22px;
@@ -88,7 +90,7 @@ export const TableSorterIcon = styled.span`
   position: relative;
   top: 5px;
   opacity: ${props => props.selected ? 1 : 0.8};
-  color: var(--${props => props.selected ? 'cBluePrimary' : 'cFont'});
+  color: ${props => props.selected ? COLORS.BLUE_PRIMARY : COLORS.FONT};
   
   svg {
     width: 100%;
@@ -99,4 +101,4 @@ export const TableSorterIcon = styled.span`
     cursor: pointer;
     opacity: 1;
   }
-`;
+`

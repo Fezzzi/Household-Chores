@@ -14,4 +14,4 @@ export default {
     date_last_active: 'date_last_active',
     fs_key: 'file_system_key',
   },
-};
+}

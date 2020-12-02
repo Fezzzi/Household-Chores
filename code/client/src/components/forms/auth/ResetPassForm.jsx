@@ -1,90 +1,65 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { PropTypes } from 'prop-types';
+import React from 'react'
+import { PropTypes } from 'prop-types'
 
-import { MessageBlock, LinkRow } from 'clientSrc/styles/blocks/auth';
-import { updateInput, handlerWrapper } from 'clientSrc/helpers/form';
-import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
-import * as AuthActions from 'clientSrc/actions/authActions';
-import * as InputTypes from 'shared/constants/inputTypes';
-import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages';
+import { MessageBlock, LinkRow } from 'clientSrc/styles/blocks/auth'
+import { useFormState, useFormValidOnFilled, useUpdateHandler, useSubmitHandler } from 'clientSrc/helpers/form'
+import { AUTH_TABS } from 'clientSrc/constants'
+import { AuthActions } from 'clientSrc/actions'
+import { INPUT_TYPE } from 'shared/constants'
+import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages'
 
-import TextInput from '../inputs/TextInput';
-import Separator from '../common/Separator';
-import PrimaryButton from '../common/PrimaryButton';
-import LocaleText from '../../common/LocaleText';
+import { PrimaryButton, LocaleText } from '../../common'
+import { TextInput } from '../../common/inputs'
+import Separator from '../Separator'
 
 const inputConfig = [
-  { name: 'email', message: FORM.EMAIL, type: InputTypes.EMAIL },
-];
+  { name: 'email', message: FORM.EMAIL, type: INPUT_TYPE.EMAIL },
+]
 
-class ResetPassForm extends Component {
-  constructor(props) {
-    super(props);
+const ResetPassForm = ({ switchTab }) => {
+  const {
+    submitMessage,
+    isFormValid,
+    isFormSending,
+    inputs,
+    errors,
+    setFormState,
+  } = useFormState([], AUTH.SEND_RESET_LINK, false)
 
-    this.timer = null;
-    this.state = {
-      submitMessage: AUTH.SEND_RESET_LINK,
-      isFormValid: false,
-      isFormSending: false,
-      inputs: Object.fromEntries(inputConfig.map(input =>
-        [input.name, { valid: false, value: '' }]
-      )),
-      errors: {},
-    };
-  }
+  const formValidFunc = useFormValidOnFilled(inputConfig.map(input => input.name))
+  const updateHandler = useUpdateHandler(setFormState, formValidFunc)
+  const submitHandler = useSubmitHandler(AuthActions.resetPass)
+  const handleSubmit = () => submitHandler(inputs, setFormState, AUTH.SEND_RESET_LINK, COMMON.SENDING)
 
-  componentWillUnmount() {
-    clearTimeout(this.timer);
-  }
-
-  handleClick = handlerWrapper(() => {
-    this.props.resetPass(this.state.inputs);
-    this.setState({ isFormSending: true, submitMessage: COMMON.SENDING });
-    this.timer = setTimeout(
-      () => this.setState({ isFormSending: false, submitMessage: AUTH.SEND_RESET_LINK }), SUBMIT_TIMEOUT
-    );
-  });
-
-  render() {
-    const { switchTab } = this.props;
-    const { submitMessage, isFormValid, isFormSending, errors } = this.state;
-
-    return (
-      <form method="post">
-        <MessageBlock bigFont margin="0 40px 10px;">
-          <LocaleText message={AUTH.ENTER_EMAIL_QUOTE} />
-        </MessageBlock>
-        {inputConfig.map(input => (
-          <TextInput
-            name={input.name}
-            key={input.name}
-            message={input.message}
-            type={input.type}
-            fixedPadding
-            inputError={errors[input.name] || ''}
-            updateInput={updateInput(this.setState.bind(this), input.name)}
-          />
-        ))}
-        <PrimaryButton disabled={!isFormValid || isFormSending} clickHandler={this.handleClick}>
-          <LocaleText message={submitMessage} />
-        </PrimaryButton>
-        <Separator message={COMMON.OR} />
-        <LinkRow onClick={switchTab}>
-          <LocaleText message={AUTH.CREATE_ACCOUNT} />
-        </LinkRow>
-      </form>
-    );
-  }
+  return (
+    <form method="post">
+      <MessageBlock bigFont margin="0 40px 10px;">
+        <LocaleText message={AUTH.ENTER_EMAIL_QUOTE} />
+      </MessageBlock>
+      {inputConfig.map(input => (
+        <TextInput
+          name={input.name}
+          key={input.name}
+          value={input.message}
+          type={input.type}
+          fixedPadding
+          inputError={errors[input.name] || ''}
+          onUpdate={updateHandler}
+        />
+      ))}
+      <PrimaryButton disabled={!isFormValid || isFormSending} onClick={handleSubmit}>
+        <LocaleText message={submitMessage} />
+      </PrimaryButton>
+      <Separator message={COMMON.OR} />
+      <LinkRow onClick={() => switchTab(AUTH_TABS.SIGNUP_TAB)}>
+        <LocaleText message={AUTH.CREATE_ACCOUNT} />
+      </LinkRow>
+    </form>
+  )
 }
 
 ResetPassForm.propTypes = {
-  switchTab: PropTypes.func,
-  resetPass: PropTypes.func,
-};
+  switchTab: PropTypes.func.isRequired,
+}
 
-const mapDispatchToProps = dispatch => ({
-  resetPass: values => dispatch(AuthActions.resetPass(values)),
-});
-
-export default connect(null, mapDispatchToProps)(ResetPassForm);
+export default ResetPassForm

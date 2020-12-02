@@ -1,136 +1,78 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
-import { push } from 'react-router-redux';
+import { takeEvery, call, put } from 'redux-saga/effects'
+import { push } from 'react-router-redux'
 
-import { handleResponse } from 'clientSrc/helpers/sagas';
-import { updateSettings, loadSettings } from 'clientSrc/effects/settingsEffects';
-import { findUsers, connectionRequest } from 'clientSrc/effects/conectionEffects';
-import { createHousehold, invitationApprove, invitationIgnore } from 'clientSrc/effects/householdEffects';
-import * as SettingsActions from 'clientSrc/actions/settingsActions';
-import * as NotificationActions from 'clientSrc/actions/notificationActions';
-import * as NotificationTypes from 'shared/constants/notificationTypes';
-import { ERROR, INFO, SUCCESS } from 'shared/constants/localeMessages';
+import { generalSaga } from 'clientSrc/helpers/sagas'
+import { updateSettings, loadSettings } from 'clientSrc/effects/settingsEffects'
+import { findUsers, connectionRequest } from 'clientSrc/effects/conectionEffects'
+import { createHousehold, invitationApprove, invitationIgnore } from 'clientSrc/effects/householdEffects'
+import { SettingsActions, NotificationActions } from 'clientSrc/actions'
+import { NOTIFICATION_TYPE } from 'shared/constants'
+import { INFO, SUCCESS } from 'shared/constants/localeMessages'
 
-function* loadSettingsSaga({ payload: { category, tab } }) {
-  try {
-    const { data } = yield call(loadSettings, category, tab);
-    yield call(handleResponse, data, function* (response) {
-      yield put(SettingsActions.loadSettingsSuccess(response));
-    });
-  } catch (error) {
-    yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
-    }));
-  }
+function* loadSettingsSaga({ payload }) {
+  yield call(generalSaga, loadSettings, payload, function* (data) {
+    yield put(SettingsActions.loadSettingsSuccess(data))
+  })
 }
 
-function* editSettingsSaga({ payload: { category, tab, inputs } }) {
-  try {
-    if (Object.values(inputs).length === 0) {
-      yield put(NotificationActions.addNotifications({
-        [NotificationTypes.ERRORS]: [INFO.NOTHING_TO_UPDATE],
-      }));
-    } else {
-      const { data } = yield call(updateSettings, category, tab, inputs);
-
-      yield call(handleResponse, data, function* (response) {
-        yield put(SettingsActions.loadSettingsSuccess(response));
-        yield put(NotificationActions.addNotifications({
-          [NotificationTypes.SUCCESSES]: [SUCCESS.SETTINGS_UPDATED],
-        }));
-      });
-    }
-  } catch (error) {
+function* editSettingsSaga({ payload }) {
+  if (Object.values(payload.inputs).length === 0) {
     yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
-    }));
+      [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE],
+    }))
+  } else {
+    yield call(generalSaga, updateSettings, payload, function* (data) {
+      yield put(SettingsActions.loadSettingsSuccess(data))
+      yield put(NotificationActions.addNotifications({
+        [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.SETTINGS_UPDATED],
+      }))
+    })
   }
 }
 
 function* connectionActionSaga({ payload: { effect, targetId } }) {
-  try {
-    const { data } = yield call(effect, targetId);
-    yield call(handleResponse, data, function* (response) {
-      yield put(SettingsActions.settingsDataUpdated(response));
-    });
-  } catch (error) {
-    yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
-    }));
-  }
+  yield call(generalSaga, effect, targetId, function* (data) {
+    yield put(SettingsActions.settingsDataUpdated(data))
+  })
 }
 
-function* searchConnectionActionSaga({ payload: query }) {
-  try {
-    const { data } = yield call(findUsers, query);
-    yield call(handleResponse, data, function* (response) {
-      yield put(SettingsActions.settingsDataUpdated(response));
-    });
-  } catch (error) {
-    yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
-    }));
-  }
+function* searchConnectionActionSaga({ payload }) {
+  yield call(generalSaga, findUsers, payload, function* (data) {
+    yield put(SettingsActions.settingsDataUpdated(data))
+  })
 }
 
-function* connectionRequestSaga({ payload: { targetId, message } }) {
-  try {
-    const { data } = yield call(connectionRequest, { targetId, message });
-    yield call(handleResponse, data, function* (response) {
-      yield put(SettingsActions.connectionRequestSuccess(response));
-    });
-  } catch (error) {
-    yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
-    }));
-  }
+function* connectionRequestSaga({ payload }) {
+  yield call(generalSaga, connectionRequest, payload, function* (data) {
+    yield put(SettingsActions.connectionRequestSuccess(data))
+  })
 }
 
 function* approveInvitationSaga({ payload }) {
-  try {
-    const { data } = yield call(invitationApprove, payload);
-    yield call(handleResponse, data, function* (response) {
-      yield put(SettingsActions.settingsDataUpdated(response));
-    });
-  } catch (error) {
-    yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
-    }));
-  }
+  yield call(generalSaga, invitationApprove, payload, function* (data) {
+    yield put(SettingsActions.settingsDataUpdated(data))
+  })
 }
 
 function* ignoreInvitationSaga({ payload }) {
-  try {
-    const { data } = yield call(invitationIgnore, payload);
-    yield call(handleResponse, data, function* (response) {
-      yield put(SettingsActions.ignoreInvitationSuccess(response));
-    });
-  } catch (error) {
-    yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
-    }));
-  }
+  yield call(generalSaga, invitationIgnore, payload, function* (data) {
+    yield put(SettingsActions.ignoreInvitationSuccess(data))
+  })
 }
 
 function* createHouseholdSaga({ payload }) {
-  try {
-    const { data } = yield call(createHousehold, payload);
-    yield call(handleResponse, data, function* ({ url }) {
-      yield put(push(url));
-    });
-  } catch (error) {
-    yield put(NotificationActions.addNotifications({
-      [NotificationTypes.ERRORS]: [ERROR.CONNECTION_ERROR],
-    }));
-  }
+  yield call(generalSaga, createHousehold, payload, function* ({ url }) {
+    yield put(push(url))
+  })
 }
 
 export function* settingsSaga() {
-  yield takeEvery(SettingsActions.loadSettings.toString(), loadSettingsSaga);
-  yield takeEvery(SettingsActions.editSettings.toString(), editSettingsSaga);
-  yield takeEvery(SettingsActions.connectionAction.toString(), connectionActionSaga);
-  yield takeEvery(SettingsActions.searchConnectionAction.toString(), searchConnectionActionSaga);
-  yield takeEvery(SettingsActions.connectionRequest.toString(), connectionRequestSaga);
-  yield takeEvery(SettingsActions.approveInvitation.toString(), approveInvitationSaga);
-  yield takeEvery(SettingsActions.ignoreInvitation.toString(), ignoreInvitationSaga);
-  yield takeEvery(SettingsActions.createHousehold.toString(), createHouseholdSaga);
+  yield takeEvery(SettingsActions.loadSettings.toString(), loadSettingsSaga)
+  yield takeEvery(SettingsActions.editSettings.toString(), editSettingsSaga)
+  yield takeEvery(SettingsActions.connectionAction.toString(), connectionActionSaga)
+  yield takeEvery(SettingsActions.searchConnectionAction.toString(), searchConnectionActionSaga)
+  yield takeEvery(SettingsActions.connectionRequest.toString(), connectionRequestSaga)
+  yield takeEvery(SettingsActions.approveInvitation.toString(), approveInvitationSaga)
+  yield takeEvery(SettingsActions.ignoreInvitation.toString(), ignoreInvitationSaga)
+  yield takeEvery(SettingsActions.createHousehold.toString(), createHouseholdSaga)
 }

@@ -1,24 +1,25 @@
-import React from 'react';
+import React from 'react'
 import {
-  Add, Home, HomeOutlined, Person, PersonAdd, PersonAddOutlined, PersonAddDisabled, Group, House, Settings, NotificationsActive,
-} from '@material-ui/icons';
+  Add, Home, HomeOutlined, Person, PersonAdd, PersonAddOutlined,
+  PersonAddDisabled, Group, House, Settings, NotificationsActive,
+} from '@material-ui/icons'
 
-import { CATEGORIES, TABS } from 'shared/constants/settingTypes';
+import { SETTING_CATEGORIES, SETTING_TABS } from 'shared/constants'
 
 export const CATEGORY_ICONS = {
-  [CATEGORIES.PROFILE]: <Person />,
-  [CATEGORIES.CONNECTIONS]: <Group />,
-  [CATEGORIES.HOUSEHOLDS]: <House />,
-};
+  [SETTING_CATEGORIES.PROFILE]: <Person />,
+  [SETTING_CATEGORIES.CONNECTIONS]: <Group />,
+  [SETTING_CATEGORIES.HOUSEHOLDS]: <House />,
+}
 
 export const TAB_ICONS = {
-  [TABS.NOTIFICATIONS]: <NotificationsActive />,
-  [TABS.GENERAL]: <Settings />,
-  [TABS.MY_CONNECTIONS]: <Group />,
-  [TABS.FIND_CONNECTION]: <PersonAdd />,
-  [TABS.PENDING]: <PersonAddOutlined />,
-  [TABS.BLOCKED]: <PersonAddDisabled />,
-  [TABS.INVITATIONS]: <HomeOutlined />,
-  [TABS.NEW_HOUSEHOLD]: <Add />,
-  [TABS._HOUSEHOLD]: <Home />,
-};
+  [SETTING_TABS.NOTIFICATIONS]: <NotificationsActive />,
+  [SETTING_TABS.GENERAL]: <Settings />,
+  [SETTING_TABS.MY_CONNECTIONS]: <Group />,
+  [SETTING_TABS.FIND_CONNECTION]: <PersonAdd />,
+  [SETTING_TABS.PENDING]: <PersonAddOutlined />,
+  [SETTING_TABS.BLOCKED]: <PersonAddDisabled />,
+  [SETTING_TABS.INVITATIONS]: <HomeOutlined />,
+  [SETTING_TABS.NEW_HOUSEHOLD]: <Add />,
+  [SETTING_TABS._HOUSEHOLD]: <Home />,
+}

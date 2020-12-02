@@ -1,55 +1,64 @@
-import React, { useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useMemo } from 'react'
+import PropTypes from 'prop-types'
 
-import { AuthContent, InputsBlock, LogoBlock, LogoTopBlock } from 'clientSrc/styles/blocks/auth';
-import * as TABS from 'clientSrc/constants/authTabs';
-import { AUTH } from 'shared/constants/localeMessages';
-import LogoTop from '~/static/logo-top.svgr';
+import LogoTop from '~/static/logo-top.svgr'
 
-import LogInForm from './LogInForm';
-import SignUpForm from './SignUpForm';
-import ResetPassForm from './ResetPassForm';
-import BottomBlock from './BottomBlock';
+import { AuthContent, InputsBlock, LogoBlock, LogoTopBlock } from 'clientSrc/styles/blocks/auth'
+import { AUTH_TABS } from 'clientSrc/constants'
+import { AUTH } from 'shared/constants/localeMessages'
+
+import LogInForm from './LogInForm'
+import SignUpForm from './SignUpForm'
+import ResetPassForm from './ResetPassForm'
+import BottomBlock from './BottomBlock'
 
 const AuthForm = ({ history, location }) => {
-  const currentTab = useMemo(() => location.pathname.split('/').filter(Boolean)[0], [location]);
+  const currentTab = useMemo(() => location.pathname.split('/').filter(Boolean)[0], [location])
 
   useEffect(() => {
-    const path = location.pathname.split('/').filter(Boolean)[0];
-    if (path !== TABS.LOGIN_TAB && path !== TABS.RESET_TAB && path !== TABS.SIGNUP_TAB) {
-      history.push(`/${TABS.LOGIN_TAB}`);
+    const path = location.pathname.split('/').filter(Boolean)[0]
+    if (path !== AUTH_TABS.LOGIN_TAB && path !== AUTH_TABS.RESET_TAB && path !== AUTH_TABS.SIGNUP_TAB) {
+      history.push({
+        pathname: `/${AUTH_TABS.LOGIN_TAB}`,
+        hash: location.pathname !== '/'
+          ? `${location.pathname}${location.search}`
+          : '',
+      })
     }
-  }, [location]);
+  }, [location])
 
   const renderTab = () => {
     switch (currentTab) {
-      case TABS.SIGNUP_TAB: return <SignUpForm />;
-      case TABS.RESET_TAB: return <ResetPassForm switchTab={() => switchTab(TABS.SIGNUP_TAB)} />;
-      default: return <LogInForm switchTab={() => switchTab(TABS.RESET_TAB)} />;
+      case AUTH_TABS.SIGNUP_TAB: return <SignUpForm />
+      case AUTH_TABS.RESET_TAB: return <ResetPassForm switchTab={switchTab} />
+      default: return <LogInForm switchTab={switchTab} />
     }
-  };
+  }
+
+  const switchTab = newTab => history.push({
+    pathname: newTab,
+    hash: location.hash,
+  })
 
   const getTabBottom = () => {
     switch (currentTab) {
-      case TABS.SIGNUP_TAB: return {
+      case AUTH_TABS.SIGNUP_TAB: return {
         message: AUTH.HAVE_ACCOUNT,
         linkMessage: AUTH.LOG_IN,
-        onClick: () => switchTab(TABS.LOGIN_TAB),
-      };
-      case TABS.RESET_TAB: return {
+        onClick: () => switchTab(AUTH_TABS.LOGIN_TAB),
+      }
+      case AUTH_TABS.RESET_TAB: return {
         message: '',
         linkMessage: AUTH.BACK_TO_LOGIN,
-        onClick: () => switchTab(TABS.LOGIN_TAB),
-      };
+        onClick: () => switchTab(AUTH_TABS.LOGIN_TAB),
+      }
       default: return {
         message: AUTH.DONT_HAVE_ACCOUNT,
         linkMessage: AUTH.SIGN_UP,
-        onClick: () => switchTab(TABS.SIGNUP_TAB),
-      };
+        onClick: () => switchTab(AUTH_TABS.SIGNUP_TAB),
+      }
     }
-  };
-
-  const switchTab = newTab => history.push(newTab);
+  }
 
   return (
     <>
@@ -68,12 +77,12 @@ const AuthForm = ({ history, location }) => {
         </InputsBlock>
       </AuthContent>
     </>
-  );
-};
+  )
+}
 
 AuthForm.propTypes = {
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-};
+}
 
-export default AuthForm;
+export default AuthForm

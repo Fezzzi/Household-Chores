@@ -1,3 +1,3 @@
-import SimpleFloatingElement from './SimpleFloatingElement';
+import SimpleFloatingElement from './SimpleFloatingElement'
 
-export { SimpleFloatingElement };
+export { SimpleFloatingElement }

@@ -1,9 +1,9 @@
-const path = require('path');
-const nodeExternals = require('webpack-node-externals');
-const NodemonPlugin = require('nodemon-webpack-plugin');
-const svgToMiniDataURI = require('mini-svg-data-uri');
+const path = require('path')
+const nodeExternals = require('webpack-node-externals')
+const NodemonPlugin = require('nodemon-webpack-plugin')
+const svgToMiniDataURI = require('mini-svg-data-uri')
 
-const webpackAliases = require('./webpack-aliases.config');
+const webpackAliases = require('./webpack-aliases.config')
 
 module.exports = {
   // Enable sourcemaps for debugging webpack's output.
@@ -54,4 +54,4 @@ module.exports = {
       script: path.resolve(__dirname, '../code/server/dist/bundle.js'),
     }),
   ],
-};
+}

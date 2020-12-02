@@ -1,85 +1,56 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Save } from '@material-ui/icons';
+import React, { useMemo, useState } from 'react'
+import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
+import { Save } from '@material-ui/icons'
 
-import { SectionHeadline } from 'clientSrc/styles/blocks/settings';
-import { handlerWrapper } from 'clientSrc/helpers/form';
-import { useMemberListProps, useInvitationListProps } from 'clientSrc/helpers/household';
-import { SUBMIT_TIMEOUT } from 'clientSrc/constants/common';
-import { FORM, HOUSEHOLD } from 'shared/constants/localeMessages';
+import { SectionHeadline } from 'clientSrc/styles/blocks/settings'
+import { useFormState } from 'clientSrc/helpers/form'
+import { useMemberListProps, useInvitationListProps } from 'clientSrc/helpers/household'
+import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
+import { HOUSEHOLD } from 'shared/constants/localeMessages'
+import { PROFILE } from 'shared/constants/settingsDataKeys'
 
-import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
-import { useSelector } from 'react-redux';
-import { PROFILE } from 'shared/constants/settingsDataKeys';
-import HouseholdFormHeader from './HouseholdFormHeader';
-import HouseholdInvitationForm from './HouseholdInvitationForm';
-import LocaleText from '../../common/LocaleText';
-import Table from '../../common/Table';
-import { SimpleFloatingElement } from '../../portals';
+import HouseholdFormHeader from './HouseholdFormHeader'
+import HouseholdInvitationForm from './HouseholdInvitationForm'
+import { LocaleText, Table } from '../../common'
+import { SimpleFloatingElement } from '../../portals'
 
-const HouseholdModificationForm = ({ household, connections }) => {
-  const [timer, setTimer] = useState(null);
-  const [state, setState] = useState({
-    submitMessage: FORM.SAVE,
-    isFormSending: false,
-    isFormValid: true,
-    inputs: {},
-    errors: {},
-  });
+const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
   // This state holds information about sending state of leave/delete buttons in household header
-  const [sendingField, setSendingField] = useState(null);
-  const [newInvitations, setNewInvitations] = useState([]);
+  const [sendingField, setSendingField] = useState(null)
+  const [newInvitations, setNewInvitations] = useState([])
 
-  useEffect(() => () => timer && clearTimeout(timer), []);
+  const {
+    submitMessage,
+    isFormValid,
+    isFormSending,
+    inputs,
+    errors,
+    setFormState,
+  } = useFormState([household, connections])
 
-  const handleSubmit = handlerWrapper(() => {
-    setState(prevState => ({
-      ...prevState,
-      isFormSending: true,
-      submitMessage: FORM.SAVING,
-    }));
+  const { photo, name, members, invitations } = household
+  const memberTableProps = useMemberListProps(members)
+  const invitationTableProps = useInvitationListProps(invitations)
 
-    setTimer(setTimeout(
-      () => {
-        if (setState) {
-          setState(prevState => ({
-            ...prevState,
-            isFormSending: false,
-            submitMessage: FORM.SAVE,
-          }));
-        }
-        if (setSendingField) {
-          setSendingField(null);
-        }
-      }, SUBMIT_TIMEOUT));
-  });
-
-  const { photo, name, members, invitations } = household;
-  const memberTableProps = useMemberListProps(members);
-  const invitationTableProps = useInvitationListProps(invitations);
-
-  const { inputs, errors, isFormSending, isFormValid, submitMessage } = state;
-
-  const userState = useSelector(({ app }) => app.user);
+  const userState = useSelector(({ app }) => app.user)
   // todo: Use members.find to find current user data by id from global store
   const currentUser = useMemo(() => ({
     id: userState[PROFILE.ID],
     photo: userState[PROFILE.PHOTO],
     name: userState[PROFILE.NAME],
     role: HOUSEHOLD_ROLE_TYPE.ADMIN,
-  }), [userState]);
+  }), [userState])
 
-  const handleLeaveHousehold = e => {
-    setSendingField({ [HOUSEHOLD.LEAVE]: HOUSEHOLD.LEAVING });
-    handleSubmit(e);
-    console.log('leaving...');
-  };
+  const handleLeaveHousehold = () => {
+    setSendingField({ [HOUSEHOLD.LEAVE]: HOUSEHOLD.LEAVING })
+    console.log('leaving...')
+  }
 
-  const handleDeleteHousehold = e => {
-    setSendingField({ [HOUSEHOLD.DELETE]: HOUSEHOLD.DELETING });
-    handleSubmit(e);
-    console.log('deleting...');
-  };
+  const handleDeleteHousehold = () => {
+    setSendingField({ [HOUSEHOLD.DELETE]: HOUSEHOLD.DELETING })
+    console.log('deleting...')
+  }
 
   return (
     <>
@@ -89,7 +60,7 @@ const HouseholdModificationForm = ({ household, connections }) => {
           sending={isFormSending}
           enabled={isFormValid}
           icon={<Save />}
-          onClick={handleSubmit}
+          onClick={onSubmit(inputs, setFormState)}
         />
       )}
       <HouseholdFormHeader
@@ -98,7 +69,7 @@ const HouseholdModificationForm = ({ household, connections }) => {
         errors={errors}
         inputs={inputs}
         membersCount={members.length}
-        setFormState={setState}
+        setFormState={setFormState}
         currentUser={currentUser}
         sendingField={sendingField}
         onLeaveHousehold={handleLeaveHousehold}
@@ -132,8 +103,8 @@ const HouseholdModificationForm = ({ household, connections }) => {
         <LocaleText message={HOUSEHOLD.ADD_MODULES} />
       </SectionHeadline>
     </>
-  );
-};
+  )
+}
 
 HouseholdModificationForm.defaultProps = {
   household: {
@@ -143,7 +114,7 @@ HouseholdModificationForm.defaultProps = {
     invitations: [],
   },
   connections: [],
-};
+}
 
 HouseholdModificationForm.propTypes = {
   household: PropTypes.shape({
@@ -171,6 +142,7 @@ HouseholdModificationForm.propTypes = {
     nickname: PropTypes.string.isRequired,
     photo: PropTypes.string,
   })),
-};
+  onSubmit: PropTypes.func.isRequired,
+}
 
-export default HouseholdModificationForm;
+export default HouseholdModificationForm

@@ -1,21 +1,20 @@
-import { createReducer } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit'
 
-import * as SettingsActions from 'clientSrc/actions/settingsActions';
-import * as SettingTypes from 'shared/constants/settingTypes';
-import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
+import { SettingsActions } from 'clientSrc/actions'
+import { SETTING_CATEGORIES, CONNECTION_STATE_TYPE } from 'shared/constants'
 
 const initialState = {
-  categories: Object.values(SettingTypes.CATEGORIES),
+  categories: Object.values(SETTING_CATEGORIES),
   tabs: [],
   tabMessages: {},
   tabTypes: {},
   data: {},
-};
+}
 
 const settingsLoaded = (state, { payload }) => ({
   ...state,
   ...payload,
-});
+})
 
 const settingsDataUpdated = (state, { payload }) => ({
   ...state,
@@ -23,7 +22,7 @@ const settingsDataUpdated = (state, { payload }) => ({
     ...state.data,
     ...payload,
   },
-});
+})
 
 const connectionRequested = (state, { payload: { targetId } }) => ({
   ...state,
@@ -36,7 +35,7 @@ const connectionRequested = (state, { payload: { targetId } }) => ({
         : connection.state,
     })),
   },
-});
+})
 
 const invitationIgnored = (state, { payload: { fromId, householdId } }) => ({
   ...state,
@@ -46,11 +45,11 @@ const invitationIgnored = (state, { payload: { fromId, householdId } }) => ({
       idHousehold !== householdId && id !== fromId
     ),
   },
-});
+})
 
 export default createReducer(initialState, {
   [SettingsActions.loadSettingsSuccess.toString()]: settingsLoaded,
   [SettingsActions.settingsDataUpdated.toString()]: settingsDataUpdated,
   [SettingsActions.connectionRequestSuccess.toString()]: connectionRequested,
   [SettingsActions.ignoreInvitationSuccess.toString()]: invitationIgnored,
-});
+})

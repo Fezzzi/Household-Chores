@@ -1,10 +1,10 @@
-const path = require('path');
-const dotenv = require('dotenv').config();
-const webpack = require('webpack');
-const HtmlWebPackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
+const path = require('path')
+const webpack = require('webpack')
+const HtmlWebPackPlugin = require('html-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+require('dotenv').config()
 
-const webpackAliases = require('./webpack-aliases.config');
+const webpackAliases = require('./webpack-aliases.config')
 
 module.exports = {
   // Enable sourcemaps for debugging webpack's output.
@@ -13,9 +13,23 @@ module.exports = {
   context: path.resolve(__dirname, '../code/client'),
   ...webpackAliases,
   output: {
-    filename: 'main.js',
+    filename: 'main.[contenthash].js',
+    chunkFilename: '[name].[contenthash].js',
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/',
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      maxInitialRequests: Infinity,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: module =>
+            `npm.${module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1].replace('@', '')}`,
+        },
+      },
+    },
   },
   entry: {
     js: ['babel-polyfill', 'clientSrc/index.jsx'],
@@ -79,8 +93,8 @@ module.exports = {
       },
     }),
     new webpack.DefinePlugin({
-      'process.env.PORT': (dotenv.parsed && dotenv.parsed.PORT) || 9000,
-      'process.env.GCID': (dotenv.parsed && JSON.stringify(dotenv.parsed.GCID)) || 'test1234',
+      'process.env.PORT': process.env.PORT || 9000,
+      'process.env.GCID': (process.env.GCID && JSON.stringify(process.env.GCID)) || 'test1234',
     }),
   ],
-};
+}

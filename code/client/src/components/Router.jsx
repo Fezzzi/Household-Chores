@@ -1,26 +1,25 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { Router, Switch, Route, Redirect } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { Router as BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { createBrowserHistory } from 'history'
 
-import { RESOURCES_PREFIX, SETTINGS_PREFIX } from 'shared/constants/api';
-import * as SettingTypes from 'shared/constants/settingTypes';
+import { API, SETTING_TAB_ROWS, SETTING_CATEGORIES } from 'shared/constants'
 
-import Home from './Home';
-import Resource from './Resource';
-import AuthForm from './forms/auth/AuthForm';
-import Settings from './settings/Settings';
+import Home from './Home'
+import Resource from './Resource'
+import { AuthForm } from './forms'
+import Settings from './settings/Settings'
 
-export const history = createBrowserHistory();
+export const history = createBrowserHistory()
 
-const RouterComponent = () => {
-  const { loggedUser, loaded } = useSelector(({ app: { loggedUser, loaded } }) => ({ loggedUser, loaded }));
+const Router = () => {
+  const { loggedUser, loaded } = useSelector(({ app: { loggedUser, loaded } }) => ({ loggedUser, loaded }))
 
   return (
-    <Router history={history}>
+    <BrowserRouter history={history}>
       <Switch>
         <Route
-          path={`/${RESOURCES_PREFIX}`}
+          path={`/${API.RESOURCES_PREFIX}`}
           render={({ match: { url } }) => (
             <>
               <Route path={`${url}/:resourceId`} component={Resource} />
@@ -38,24 +37,27 @@ const RouterComponent = () => {
           )
           : (
             <Switch>
-              <Route exact path={`/${SETTINGS_PREFIX}/:category?:tab`} component={Settings} />
-              <Route path={`/${SETTINGS_PREFIX}`}>
-                <Redirect to={{
-                  pathname: `/${SETTINGS_PREFIX}/${SettingTypes.CATEGORIES.PROFILE}`,
-                  search: `tab=${SettingTypes.TAB_ROWS[SettingTypes.CATEGORIES.PROFILE][0]}`,
-                }}
+              <Route exact path={`/${API.SETTINGS_PREFIX}/:category?:tab`} component={Settings} />
+              <Route path={`/${API.SETTINGS_PREFIX}`}>
+                <Redirect
+                  to={{
+                    pathname: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.PROFILE}`,
+                    search: `tab=${SETTING_TAB_ROWS[SETTING_CATEGORIES.PROFILE][0]}`,
+                  }}
                 />
               </Route>
-
               <Route exact path="/" component={Home} />
-              <Route path="/*">
-                <Redirect to={{ pathname: '/' }} />
-              </Route>
+              <Route
+                path="/*"
+                component={({ location }) => location.hash.startsWith('#/')
+                  ? <Redirect to={location.hash.slice(2)} />
+                  : <Redirect to={{ pathname: '/' }} />}
+              />
             </Switch>
           ))}
       </Switch>
-    </Router>
-  );
-};
+    </BrowserRouter>
+  )
+}
 
-export default RouterComponent;
+export default Router

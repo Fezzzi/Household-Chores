@@ -1,126 +1,123 @@
-import { database } from 'serverSrc/database';
-import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords';
-import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
-import { PROFILE } from 'shared/constants/settingsDataKeys';
-import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
+import { database } from 'serverSrc/database'
+import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords'
+import { CONNECTION_STATE_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
+import { PROFILE } from 'shared/constants/settingsDataKeys'
 
-import USERS_TABLE from './tables/users';
-import CONNECTIONS_TABLE from './tables/connections';
-import NOTIFICATION_SETTINGS_TABLE from './tables/notification_settings';
-
-const { name: tName, columns: tUserCols } = USERS_TABLE;
-const { name: tConnectionsName, columns: tConnectionCols } = CONNECTIONS_TABLE;
-
-const { columns: notifyCols, name: tNotifyName } = NOTIFICATION_SETTINGS_TABLE;
+import {
+  tUsersName, tUsersCols, tConnectionsName, tConnectionsCols, tNotifySettingsName, tNotifySettingsCols,
+} from './tables'
 
 export const isCorrectPassword = async (password: string, userId: number): Promise<boolean> => {
   const result = await database.query(`
-    SELECT ${tUserCols.password}
-    FROM ${tName}
-    WHERE ${tUserCols.id}=?
-  `, [userId]);
+    SELECT ${tUsersCols.password}
+    FROM ${tUsersName}
+    WHERE ${tUsersCols.id}=?
+  `, [userId])
 
-  return result && result.length && checkPass(password, result[0][tUserCols.password]);
-};
+  return result && result.length && checkPass(password, result[0][tUsersCols.password])
+}
 export const findProfileData = async (userId: number): Promise<Record<string, string | number>> => {
   const result = await database.query(`
-    SELECT ${tUserCols.nickname}, ${tUserCols.email}, ${tUserCols.photo}, ${tUserCols.visibility}
-    FROM ${tName}
-    WHERE ${tUserCols.id}=${userId}
-  `);
+    SELECT ${tUsersCols.nickname}, ${tUsersCols.email}, ${tUsersCols.photo}, ${tUsersCols.visibility}
+    FROM ${tUsersName}
+    WHERE ${tUsersCols.id}=${userId}
+  `)
 
   return result[0] && {
     [PROFILE.ID]: userId,
-    [PROFILE.NAME]: result[0][tUserCols.nickname],
-    [PROFILE.EMAIL]: result[0][tUserCols.email],
-    [PROFILE.PHOTO]: result[0][tUserCols.photo],
-    [PROFILE.CONNECTION_VISIBILITY]: result[0][tUserCols.visibility],
-  };
-};
+    [PROFILE.NAME]: result[0][tUsersCols.nickname],
+    [PROFILE.EMAIL]: result[0][tUsersCols.email],
+    [PROFILE.PHOTO]: result[0][tUsersCols.photo],
+    [PROFILE.CONNECTION_VISIBILITY]: result[0][tUsersCols.visibility],
+  }
+}
 
 export const findUser = async (email: string): Promise<{ userId: number; fsKey: string } | null> => {
   const result = await database.query(`
-    SELECT ${tUserCols.id}, ${tUserCols.fs_key}
-    FROM ${tName}
-    WHERE ${tUserCols.email}=?
-  `, [email]);
+    SELECT ${tUsersCols.id}, ${tUsersCols.fs_key}
+    FROM ${tUsersName}
+    WHERE ${tUsersCols.email}=?
+  `, [email])
 
   return result && result.length
     ? result[0]
-    : null;
-};
+    : null
+}
 
 export const findGoogleUser = async (googleId: string): Promise<{ userId: number; fsKey: string } | null> => {
   const result = await database.query(`
-    SELECT ${tUserCols.id}, ${tUserCols.fs_key}
-    FROM ${tName}
-    WHERE ${tUserCols.google_id}=?
-  `, [googleId]);
+    SELECT ${tUsersCols.id}, ${tUsersCols.fs_key}
+    FROM ${tUsersName}
+    WHERE ${tUsersCols.google_id}=?
+  `, [googleId])
 
   return result && result.length
     ? result[0]
-    : null;
-};
+    : null
+}
 
 export const findFacebookUser = async (facebookId: string): Promise<{ userId: number; fsKey: string } | null> => {
   const result = await database.query(`
-    SELECT ${tUserCols.id}, ${tUserCols.fs_key}
-    FROM ${tName}
-    WHERE ${tUserCols.facebook_id}=?
-  `, [facebookId]);
+    SELECT ${tUsersCols.id}, ${tUsersCols.fs_key}
+    FROM ${tUsersName}
+    WHERE ${tUsersCols.facebook_id}=?
+  `, [facebookId])
 
   return result && result.length
     ? result[0]
-    : null;
-};
+    : null
+}
 
-export const logInUser = async (email: string, password: string): Promise<{ userId: number; fsKey: string } | null> => {
+export const logInUser = async (
+  email: string,
+  password: string
+): Promise<{ userId: number; fsKey: string } | null> => {
   const result = await database.query(`
-    SELECT ${tUserCols.password}, ${tUserCols.id}, ${tUserCols.fs_key}
-    FROM ${tName}
-    WHERE ${tUserCols.email}=?
-  `, [email]);
+    SELECT ${tUsersCols.password}, ${tUsersCols.id}, ${tUsersCols.fs_key}
+    FROM ${tUsersName}
+    WHERE ${tUsersCols.email}=?
+  `, [email])
 
-  const validPass = result && result.length && await checkPass(password, result[0][tUserCols.password]);
+  const validPass = result && result.length && await checkPass(password, result[0][tUsersCols.password])
   if (!validPass) {
-    return null;
+    return null
   }
 
-  const userId = result[0][tUserCols.id];
-  updateLoginTime(userId);
+  const userId = result[0][tUsersCols.id]
+  updateLoginTime(userId)
   return {
     userId,
-    fsKey: result[0][tUserCols.fs_key],
-  };
-};
+    fsKey: result[0][tUsersCols.fs_key],
+  }
+}
 
 export const updateLoginTime = (userId: number) =>
   database.query(`
-    UPDATE ${tName}
-    SET ${tUserCols.date_last_active}=NOW()
-    WHERE ${tUserCols.id}=?
-  `, [userId]);
+    UPDATE ${tUsersName}
+    SET ${tUsersCols.date_last_active}=NOW()
+    WHERE ${tUsersCols.id}=?
+  `, [userId])
 
 export const updateUserData = async (
   data: Record<string, string | number>,
   userId: number
 ): Promise<boolean> => {
-  const newPass = data[PROFILE.NEW_PASSWORD] && await encryptPass(data[PROFILE.NEW_PASSWORD] as string);
+  const newPass = data[PROFILE.NEW_PASSWORD] && await encryptPass(data[PROFILE.NEW_PASSWORD] as string)
   return database.query(`
-    UPDATE ${tName} SET ${
+    UPDATE ${tUsersName} SET ${
   [
-    data[PROFILE.NAME] && `${tUserCols.nickname}=?`,
-    data[PROFILE.EMAIL] && `${tUserCols.email}=?`,
-    data[PROFILE.PHOTO] && `${tUserCols.photo}=?`,
-    data[PROFILE.NEW_PASSWORD] && `${tUserCols.password}=?`,
-    data[PROFILE.CONNECTION_VISIBILITY] && `${tUserCols.visibility}=?`,
+    data[PROFILE.NAME] && `${tUsersCols.nickname}=?`,
+    data[PROFILE.EMAIL] && `${tUsersCols.email}=?`,
+    data[PROFILE.PHOTO] && `${tUsersCols.photo}=?`,
+    data[PROFILE.NEW_PASSWORD] && `${tUsersCols.password}=?`,
+    data[PROFILE.CONNECTION_VISIBILITY] && `${tUsersCols.visibility}=?`,
   ].filter(Boolean).join(',')
-} WHERE ${tUserCols.id}=${userId}
+} WHERE ${tUsersCols.id}=${userId}
     `, [
     data[PROFILE.NAME], data[PROFILE.EMAIL], data[PROFILE.PHOTO], newPass, data[PROFILE.CONNECTION_VISIBILITY],
   ].filter(Boolean)
-  );
-};
+  )
+}
 
 export const SignUpUser = async (
   email: string,
@@ -131,74 +128,85 @@ export const SignUpUser = async (
   facebookId: string,
 ): Promise<{ insertId: number; fsKey: string } | null> =>
   database.withTransaction(async (): Promise<{ insertId: number; fsKey: string }> => {
-    const pass = await encryptPass(password || generatePass());
+    const pass = await encryptPass(password ?? generatePass())
     const result = await database.query(`
-    INSERT INTO ${tName} (
-      ${tUserCols.email}, ${tUserCols.nickname}, ${tUserCols.password}, ${tUserCols.photo},
-      ${tUserCols.google_id}, ${tUserCols.facebook_id}, ${tUserCols.date_registered}, ${tUserCols.date_last_active}
+    INSERT INTO ${tUsersName} (
+      ${tUsersCols.email}, ${tUsersCols.nickname}, ${tUsersCols.password}, ${tUsersCols.photo},
+      ${tUsersCols.google_id}, ${tUsersCols.facebook_id}, ${tUsersCols.date_registered}, ${tUsersCols.date_last_active}
     ) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
-  `, [email, nickname, pass, photo, googleId, facebookId], false);
+  `, [email, nickname, pass, photo, googleId, facebookId], false)
 
     if (result.insertId) {
-      const fsKey = generateFsKey(result.insertId);
-      await database.query(`UPDATE ${tName} SET ${tUserCols.fs_key}='${fsKey}' WHERE ${tUserCols.id}=${result.insertId}`);
-      await database.query(`INSERT INTO ${tNotifyName} (${notifyCols.id_user}) VALUES (${result.insertId})`);
+      const fsKey = generateFsKey(result.insertId)
+      await database.query(`
+        UPDATE ${tUsersName}
+        SET ${tUsersCols.fs_key}='${fsKey}'
+        WHERE ${tUsersCols.id}=${result.insertId}
+      `)
+      await database.query(`
+        INSERT INTO ${tNotifySettingsName} (${tNotifySettingsCols.id_user}) VALUES (${result.insertId})
+      `)
       return {
         insertId: result.insertId,
         fsKey,
-      };
+      }
     }
-    return result;
-  });
+    return result
+  })
 
 export const assignUserProvider = async (userId: number, googleId: string, facebookId: string): Promise<boolean> => {
   if (googleId !== null) {
     return !!database.query(`
-      UPDATE ${tName}
-      SET ${tUserCols.google_id}=?
-      WHERE ${tUserCols.id}=?
-    `, [googleId, userId]);
+      UPDATE ${tUsersName}
+      SET ${tUsersCols.google_id}=?
+      WHERE ${tUsersCols.id}=?
+    `, [googleId, userId])
   } else if (facebookId !== null) {
     return !!database.query(`
-      UPDATE ${tName}
-      SET ${tUserCols.facebook_id}=?
-      WHERE ${tUserCols.id}=?
-    `, [facebookId, userId]);
+      UPDATE ${tUsersName}
+      SET ${tUsersCols.facebook_id}=?
+      WHERE ${tUsersCols.id}=?
+    `, [facebookId, userId])
   }
-  return false;
-};
+  return false
+}
 
 export const queryUsers = async (query: string, userId: number): Promise<Array<object>> =>
   database.query(`
-    SELECT users.${tUserCols.id}, users.${tUserCols.nickname}, users.${tUserCols.photo},
-      connections.${tConnectionCols.state}, connections.${tConnectionCols.message}
-    FROM ${tName} AS users
+    SELECT users.${tUsersCols.id}, users.${tUsersCols.nickname}, users.${tUsersCols.photo},
+      connections.${tConnectionsCols.state}, connections.${tConnectionsCols.message}
+    FROM ${tUsersName} AS users
     LEFT JOIN ${tConnectionsName} AS connections
-      ON connections.${tConnectionCols.id_from}=${userId} AND connections.${tConnectionCols.id_to}=users.${tUserCols.id}
-        AND connections.${tConnectionCols.state}='${CONNECTION_STATE_TYPE.WAITING}'
-    WHERE (users.${tUserCols.nickname} LIKE ? OR users.${tUserCols.email} LIKE ?)
-      AND users.${tUserCols.id}!=${userId}
+      ON connections.${tConnectionsCols.id_from}=${userId}
+        AND connections.${tConnectionsCols.id_to}=users.${tUsersCols.id}
+        AND connections.${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.WAITING}'
+    WHERE (users.${tUsersCols.nickname} LIKE ? OR users.${tUsersCols.email} LIKE ?)
+      AND users.${tUsersCols.id}!=${userId}
       AND NOT EXISTS (
         SELECT * FROM ${tConnectionsName}
-        WHERE (${tConnectionCols.id_from}=${userId} AND ${tConnectionCols.id_to}=users.${tUserCols.id}
-            AND ${tConnectionCols.state}!='${CONNECTION_STATE_TYPE.WAITING}')
-          OR (${tConnectionCols.id_from}=users.${tUserCols.id} AND ${tConnectionCols.id_to}=${userId})
+        WHERE (${tConnectionsCols.id_from}=${userId} AND ${tConnectionsCols.id_to}=users.${tUsersCols.id}
+            AND ${tConnectionsCols.state}!='${CONNECTION_STATE_TYPE.WAITING}')
+          OR (${tConnectionsCols.id_from}=users.${tUsersCols.id} AND ${tConnectionsCols.id_to}=${userId})
       )
-      AND (${tUserCols.visibility}='${USER_VISIBILITY_TYPE.ALL}'
+      AND (${tUsersCols.visibility}='${USER_VISIBILITY_TYPE.ALL}'
         OR EXISTS (
           SELECT * FROM (
-            SELECT ${tConnectionCols.id_from} AS id FROM ${tConnectionsName}
-            WHERE ${tConnectionCols.id_to}=users.${tUserCols.id} AND ${tConnectionCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
+            SELECT ${tConnectionsCols.id_from} AS id FROM ${tConnectionsName}
+            WHERE ${tConnectionsCols.id_to}=users.${tUsersCols.id}
+              AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
             UNION
-            SELECT ${tConnectionCols.id_to} AS id FROM ${tConnectionsName}
-            WHERE ${tConnectionCols.id_from}=users.${tUserCols.id} AND ${tConnectionCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
+            SELECT ${tConnectionsCols.id_to} AS id FROM ${tConnectionsName}
+            WHERE ${tConnectionsCols.id_from}=users.${tUsersCols.id}
+              AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
           ) AS userFriends INNER JOIN (
-            SELECT ${tConnectionCols.id_from} AS id FROM ${tConnectionsName}
-            WHERE ${tConnectionCols.id_to}=${userId} AND ${tConnectionCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
+            SELECT ${tConnectionsCols.id_from} AS id FROM ${tConnectionsName}
+            WHERE ${tConnectionsCols.id_to}=${userId}
+              AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
             UNION
-            SELECT ${tConnectionCols.id_to} AS id FROM ${tConnectionsName}
-            WHERE ${tConnectionCols.id_from}=${userId} AND ${tConnectionCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
+            SELECT ${tConnectionsCols.id_to} AS id FROM ${tConnectionsName}
+            WHERE ${tConnectionsCols.id_from}=${userId}
+              AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
           ) AS targetFriends ON userFriends.id=targetFriends.id
         )
       )
-  `, [`%${query}%`, `%${query}%`]);
+  `, [`%${query}%`, `%${query}%`])

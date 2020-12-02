@@ -1,17 +1,16 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { Save } from '@material-ui/icons';
+import React, { useMemo } from 'react'
+import PropTypes from 'prop-types'
+import { Save } from '@material-ui/icons'
 
-import LocaleText from 'clientSrc/components/common/LocaleText';
-import { useFormState, useUpdateHandler } from 'clientSrc/helpers/form';
-import { NotificationGroupBox, SectionHeadline } from 'clientSrc/styles/blocks/settings';
-import { TableBox, TableHeaderBox, TableHeaderCell } from 'clientSrc/styles/blocks/table';
-import * as InputTypes from 'shared/constants/inputTypes';
-import { FORM } from 'shared/constants/localeMessages';
-import { NOTIFICATIONS } from 'shared/constants/settingsDataKeys';
+import { useFormState, useUpdateHandler } from 'clientSrc/helpers/form'
+import { NotificationGroupBox, SectionHeadline } from 'clientSrc/styles/blocks/settings'
+import { TableBox, TableHeaderBox, TableHeaderCell } from 'clientSrc/styles/blocks/table'
+import { INPUT_TYPE } from 'shared/constants'
+import { FORM } from 'shared/constants/localeMessages'
+import { NOTIFICATIONS } from 'shared/constants/settingsDataKeys'
 
-import Input from '../common/Input';
-import { SimpleFloatingElement } from '../../portals';
+import { LocaleText, Input } from '../../common'
+import { SimpleFloatingElement } from '../../portals'
 
 const NotificationForm = ({ data, onSubmit }) => {
   const {
@@ -20,26 +19,26 @@ const NotificationForm = ({ data, onSubmit }) => {
     isFormSending,
     inputs,
     setFormState,
-  } = useFormState(data);
+  } = useFormState([data])
 
   const {
     [NOTIFICATIONS.GENERAL]: general,
     [NOTIFICATIONS.CONNECTIONS]: connections,
     [NOTIFICATIONS.HOUSEHOLDS]: households,
-  } = data;
+  } = data
 
   const filteredGeneral = useMemo(() => {
-    const filtered = { ...general };
+    const filtered = { ...general }
     if (filtered) {
-      const isMobile = false;
+      const isMobile = false
       if (isMobile) {
-        delete filtered.browser_notifications;
+        delete filtered.browser_notifications
       } else {
-        delete filtered.mobile_notifications;
+        delete filtered.mobile_notifications
       }
     }
-    return filtered;
-  }, [general]);
+    return filtered
+  }, [general])
 
   const getNotificationsBlock = (group, groupHeadline) => (
     <>
@@ -55,17 +54,18 @@ const NotificationForm = ({ data, onSubmit }) => {
           {group && Object.entries(group).map(([name, value]) => (
             <Input
               key={name}
-              type={InputTypes.BOOL}
+              type={INPUT_TYPE.BOOL}
               name={name}
               label={`form.${name}`}
-              placeholder={Boolean(value)}
-              updateInput={useUpdateHandler(name, setFormState, undefined, Boolean(value))}
+              value={Boolean(value)}
+              hasDefaultValue
+              onUpdate={useUpdateHandler(setFormState)}
             />
           ))}
         </NotificationGroupBox>
       </TableBox>
     </>
-  );
+  )
 
   return (
     <>
@@ -87,8 +87,8 @@ const NotificationForm = ({ data, onSubmit }) => {
       {getNotificationsBlock(connections, FORM.CONNECTIONS)}
       {getNotificationsBlock(households, FORM.HOUSEHOLDS)}
     </>
-  );
-};
+  )
+}
 
 NotificationForm.propTypes = {
   data: PropTypes.shape({
@@ -97,6 +97,6 @@ NotificationForm.propTypes = {
     [NOTIFICATIONS.HOUSEHOLDS]: PropTypes.object,
   }).isRequired,
   onSubmit: PropTypes.func.isRequired,
-};
+}
 
-export default NotificationForm;
+export default NotificationForm

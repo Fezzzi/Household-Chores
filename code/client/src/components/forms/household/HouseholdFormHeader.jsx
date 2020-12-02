@@ -1,22 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { DeleteForever, MeetingRoom, Add } from '@material-ui/icons';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { DeleteForever, MeetingRoom, Add } from '@material-ui/icons'
 
+import { COLORS } from 'clientSrc/constants'
 import {
   ButtonIconSpan, CriticalButtonsBlock, CurrentUserBlock,
   HouseholdSubtitle, RoleLabel, UserName, UserPhoto,
-} from 'clientSrc/styles/blocks/households';
-import {
-  FormHeader, FormButtonContentWrapper, FormHeaderPhoto, FormHeaderTitle,
-} from 'clientSrc/styles/blocks/form';
-import { getLabelColors } from 'clientSrc/helpers/household';
-import { HOUSEHOLD } from 'shared/constants/localeMessages';
+} from 'clientSrc/styles/blocks/households'
+import { FormHeader, FormButtonContentWrapper, FormHeaderPhoto, FormHeaderTitle } from 'clientSrc/styles/blocks/form'
+import { getLabelColors } from 'clientSrc/helpers/household'
+import { HOUSEHOLD } from 'shared/constants/localeMessages'
+import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys'
 
-import EditableTextField from 'clientSrc/components/common/EditableTextField';
-import EditablePhotoField from 'clientSrc/components/common/EditablePhotoField';
-import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys';
-import LocaleText from '../../common/LocaleText';
-import PrimaryButton from '../common/PrimaryButton';
+import { LocaleText, PrimaryButton, EditableTextField, EditablePhotoField } from '../../common'
 
 const HouseholdFormHeader = ({
   photo, name, inputs, errors, currentUser, membersCount, setFormState,
@@ -27,7 +23,7 @@ const HouseholdFormHeader = ({
       background={color}
       backgroundHover={color}
       margin="0 0 15px"
-      clickHandler={handleClick}
+      onClick={handleClick}
       disabled={sendingField !== null}
     >
       <FormButtonContentWrapper>
@@ -37,14 +33,13 @@ const HouseholdFormHeader = ({
         <LocaleText message={sendingField?.[message] ?? message} />
       </FormButtonContentWrapper>
     </PrimaryButton>
-  );
+  )
 
   return (
     <FormHeader>
       <CurrentUserBlock>
         <EditablePhotoField
           name={HOUSEHOLD_KEYS.USER_PHOTO}
-          placeholder={currentUser.photo}
           error={errors[HOUSEHOLD_KEYS.USER_PHOTO]}
           setFormState={setFormState}
           size={100}
@@ -69,7 +64,6 @@ const HouseholdFormHeader = ({
 
       <EditablePhotoField
         name={HOUSEHOLD_KEYS.PHOTO}
-        placeholder={photo}
         error={errors[HOUSEHOLD_KEYS.PHOTO]}
         setFormState={setFormState}
       >
@@ -93,13 +87,13 @@ const HouseholdFormHeader = ({
       )}
 
       <CriticalButtonsBlock>
-        {onLeaveHousehold && criticalButton(onLeaveHousehold, 'var(--cRedPrimary)', HOUSEHOLD.LEAVE, <MeetingRoom />)}
-        {onDeleteHousehold && criticalButton(onDeleteHousehold, 'var(--cRedSecondary)', HOUSEHOLD.DELETE, <DeleteForever />)}
-        {onCreateHousehold && criticalButton(onCreateHousehold, 'var(--cGreenSecondary)', HOUSEHOLD.CREATE, <Add />)}
+        {onLeaveHousehold && criticalButton(onLeaveHousehold, COLORS.RED_PRIMARY, HOUSEHOLD.LEAVE, <MeetingRoom />)}
+        {onDeleteHousehold && criticalButton(onDeleteHousehold, COLORS.RED_SECONDARY, HOUSEHOLD.DELETE, <DeleteForever />)}
+        {onCreateHousehold && criticalButton(onCreateHousehold, COLORS.GREEN_SECONDARY, HOUSEHOLD.CREATE, <Add />)}
       </CriticalButtonsBlock>
     </FormHeader>
-  );
-};
+  )
+}
 
 HouseholdFormHeader.propTypes = {
   name: PropTypes.string.isRequired,
@@ -117,6 +111,6 @@ HouseholdFormHeader.propTypes = {
   onLeaveHousehold: PropTypes.func,
   onDeleteHousehold: PropTypes.func,
   onCreateHousehold: PropTypes.func,
-};
+}
 
-export default HouseholdFormHeader;
+export default HouseholdFormHeader

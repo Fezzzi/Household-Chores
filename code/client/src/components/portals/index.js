@@ -1,2 +1,2 @@
-export * from './floatingUI';
-export * from './tooltips';
+export * from './floatingUI'
+export * from './tooltips'

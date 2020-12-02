@@ -1,6 +1,5 @@
-import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages';
-import * as SettingTypes from 'shared/constants/settingTypes';
-import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
+import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
+import { USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS } from 'shared/constants'
 
 export default {
   [AUTH.BACK_TO_LOGIN]: 'Zpět na přihlášení',
@@ -11,8 +10,8 @@ export default {
   [AUTH.HAVE_ACCOUNT]: 'Máte účet?',
   [AUTH.LOADING_DOTS]: 'Načítání...',
   [AUTH.LOG_IN]: 'Přihlásit se',
-  [AUTH.LOG_IN_FACEBOOK]: 'Příhlásit se s Facebook',
-  [AUTH.LOG_IN_GOOGLE]: 'Přihlásit se s Google',
+  [AUTH.LOG_IN_FACEBOOK]: 'Příhlásit se účtem Facebook',
+  [AUTH.LOG_IN_GOOGLE]: 'Přihlásit se účtem Google',
   [AUTH.SEND_RESET_LINK]: 'Odeslat link',
   [AUTH.SIGN_UP]: 'Zaregistrovat se',
   [AUTH.TERMS_AGREEMENT]: 'Registrací potvrzujete naše ',
@@ -119,20 +118,20 @@ export default {
   [HOUSEHOLD.MODULES]: 'moduly',
   [HOUSEHOLD.ADD_MODULES]: 'přidat moduly',
 
-  [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]]: 'Profil',
-  [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.CONNECTIONS}`]]: 'Spojení',
-  [SETTINGS[`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.HOUSEHOLDS}`]]: 'Domácnosti',
-  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.GENERAL}`]]: 'Obecné',
-  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NOTIFICATIONS}`]]: 'Notifikace',
-  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.MY_CONNECTIONS}`]]: 'Moje spojení',
-  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.PENDING}`]]: 'Žádosti',
-  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.BLOCKED}`]]: 'Blokování',
-  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.FIND_CONNECTION}`]]: 'Hledat spojení',
-  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NEW_HOUSEHOLD}`]]: 'Vytvořit domácnost',
-  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.INVITATIONS}`]]: 'Pozvánky',
-  [SETTINGS[`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS._HOUSEHOLD}`]]: 'Domácnost',
+  [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.PROFILE}`]]: 'Profil',
+  [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.CONNECTIONS}`]]: 'Spojení',
+  [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.HOUSEHOLDS}`]]: 'Domácnosti',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.GENERAL}`]]: 'Obecné',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.NOTIFICATIONS}`]]: 'Notifikace',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.MY_CONNECTIONS}`]]: 'Moje spojení',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.PENDING}`]]: 'Žádosti',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.BLOCKED}`]]: 'Blokování',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.FIND_CONNECTION}`]]: 'Hledat spojení',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.NEW_HOUSEHOLD}`]]: 'Vytvořit domácnost',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.INVITATIONS}`]]: 'Pozvánky',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS._HOUSEHOLD}`]]: 'Domácnost',
 
   [SUCCESS.RESET_LINK]: 'Link pro obnovu hesla byl úspěšně zaslán na Vaši emailovou adresu.',
   [SUCCESS.SETTINGS_UPDATED]: 'Nastavaní bylo úspěšně upraveno.',
   [SUCCESS.ACCOUNT_CREATED]: 'Váš účet byl úspěšně vytvořen.',
-};
+}
