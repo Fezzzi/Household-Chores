@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { DeleteForever, MeetingRoom, Add } from '@material-ui/icons'
 
+import { COLORS } from 'clientSrc/constants'
 import {
   ButtonIconSpan, CriticalButtonsBlock, CurrentUserBlock,
   HouseholdSubtitle, RoleLabel, UserName, UserPhoto,
@@ -88,9 +89,9 @@ const HouseholdFormHeader = ({
       )}
 
       <CriticalButtonsBlock>
-        {onLeaveHousehold && criticalButton(onLeaveHousehold, 'var(--cRedPrimary)', HOUSEHOLD.LEAVE, <MeetingRoom />)}
-        {onDeleteHousehold && criticalButton(onDeleteHousehold, 'var(--cRedSecondary)', HOUSEHOLD.DELETE, <DeleteForever />)}
-        {onCreateHousehold && criticalButton(onCreateHousehold, 'var(--cGreenSecondary)', HOUSEHOLD.CREATE, <Add />)}
+        {onLeaveHousehold && criticalButton(onLeaveHousehold, COLORS.RED_PRIMARY, HOUSEHOLD.LEAVE, <MeetingRoom />)}
+        {onDeleteHousehold && criticalButton(onDeleteHousehold, COLORS.RED_SECONDARY, HOUSEHOLD.DELETE, <DeleteForever />)}
+        {onCreateHousehold && criticalButton(onCreateHousehold, COLORS.GREEN_SECONDARY, HOUSEHOLD.CREATE, <Add />)}
       </CriticalButtonsBlock>
     </FormHeader>
   )

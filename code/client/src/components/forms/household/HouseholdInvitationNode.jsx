@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Message } from '@material-ui/icons'
 
+import { COLORS } from 'clientSrc/constants'
 import {
   UserButtonsBox, UserName, UserNode, UserPhotoBox, UserPhoto, AppendMessageIcon, WrapperBox,
   AppendMessageAnchor, UserPhotoMoreBox, MiniUserName, MiniUserPhoto, UserFloatingNameBox,
@@ -51,17 +52,17 @@ const HouseholdInvitationNode = ({ invitation: {
           <PrimaryButton
             onClick={approveHandler}
             margin="0 0 6px"
-            background="var(--cBluePrimary)"
-            backgroundHover="var(--cBlueSecondary)"
+            background={COLORS.BLUE_PRIMARY}
+            backgroundHover={COLORS.BLUE_SECONDARY}
           >
             <LocaleText message={FORM.CONNECTION_APPROVE} />
           </PrimaryButton>
           <PrimaryButton
             onClick={removeHandler}
             margin="0 0 6px"
-            color="var(--cFont)"
-            background="var(--cLightPrimary)"
-            backgroundHover="var(--cLightSecondary)"
+            color={COLORS.FONT}
+            background={COLORS.LIGHT_PRIMARY}
+            backgroundHover={COLORS.LIGHT_SECONDARY}
           >
             <LocaleText message={FORM.CONNECTION_IGNORE} />
           </PrimaryButton>

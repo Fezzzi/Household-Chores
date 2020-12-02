@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 
+import { COLORS } from 'clientSrc/constants'
 import { FormHeaderLeftPanel, FormHeaderRightPanel } from 'clientSrc/styles/blocks/form'
 
 export const SettingsWrapper = styled.div`
@@ -16,7 +17,7 @@ export const ColumnWrapper = styled.div`
   height: calc(100% - 30px);;
   display: table-col;
   margin-right: 10px;
-  color: var(--cFont);
+  color: ${COLORS.FONT};
 `
 
 export const SettingIcon = styled.div`
@@ -40,11 +41,11 @@ export const Column = styled.div`
   width: 100%;
   max-height: calc(100% - 58px);
   overflow-y: auto;
-  background-color: var(--cThemeFront);
+  background-color: ${COLORS.THEME_FRONT};
   padding: 14px 0 4px;
   margin: 14px 0;
   user-select: none;
-  border: 1px solid var(--cBorder);
+  border: 1px solid ${COLORS.BORDER};
 `
 
 export const SettingRow = styled.div`
@@ -65,10 +66,10 @@ export const ContentColumn = styled.div`
   width: 100%;
   min-height: calc(100% - 58px);
   max-height: calc(100% - 58px);
-  background-color: var(--cThemeFront);
+  background-color: ${COLORS.THEME_FRONT};
   padding: 14px;
   margin: 14px 20px 14px 0;
-  border: 1px solid var(--cBorder);
+  border: 1px solid ${COLORS.BORDER};
   overflow-y: auto;
   overflow-x: hidden;
 `
@@ -83,22 +84,22 @@ export const IconButton = styled.button`
   height: 38px;
   position: relative;
   padding: 8px;
-  background-color: var(--cThemeFront);
-  border: 1px solid var(--${props => props.active ? 'cBorderActive' : 'cBorder'});
+  background-color: ${COLORS.THEME_FRONT};
+  border: 1px solid ${props => props.active ? COLORS.BORDER_ACTIVE : COLORS.BORDER};
   border-radius: 1px;
   
   &:hover {
     cursor: pointer;
-    background-color: var(--cThemeBack);
+    background-color: ${COLORS.THEME_BACK};
   }
   
   &:active, &:focus {
     outline: none;
-    border: 1px solid var(--cBorderActive);
+    border: 1px solid ${COLORS.BORDER_ACTIVE};
   }
   
   & > svg {
-    fill: var(--cFont);
+    fill: ${COLORS.FONT};
     stroke: none;
     width: 20px;
     height: 20px;
@@ -112,13 +113,13 @@ export const LocaleSelector = styled.div`
   top: -1px;
   right: 120%;
   padding-top: 8px;
-  background-color: var(--cThemeFront);
-  border: 1px solid var(--cBorder);
+  background-color: ${COLORS.THEME_FRONT};
+  border: 1px solid ${COLORS.BORDER};
   border-radius: 1px;
   
   :hover {
     cursor: pointer;
-    background-color: var(--cThemeBack);
+    background-color: ${COLORS.THEME_BACK};
   }
 `
 
@@ -140,7 +141,7 @@ export const LocaleLabel = styled.span`
   font-weight: 600;
   float: right;
   font-size: 13px;
-  color: var(--cFont);
+  color: ${COLORS.FONT};
 `
 
 export const SectionHeadline = styled.h2`

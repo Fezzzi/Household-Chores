@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { COLORS } from 'clientSrc/constants'
+
 export const TooltipWrapper = styled.div`
   position: relative;
   
@@ -27,8 +29,8 @@ export const Tooltip = styled.div`
   top: -3px;
   right: ${props => props.withHover ? 150 : 125}%;
   width: max-content;
-  background-color: var(--cThemeFront);
-  border: 1px solid var(--cBorder);
+  background-color: ${COLORS.THEME_FRONT};
+  border: 1px solid ${COLORS.BORDER};
   position: absolute;
   padding: ${props => props.hasRows ? 0 : '4px 6px'};
   z-index: 10;
@@ -43,7 +45,7 @@ export const Tooltip = styled.div`
       left: 100%;
       margin-top: -5px;
       border: 5px solid;
-      border-color: transparent transparent transparent var(--cBorder);
+      border-color: transparent transparent transparent ${COLORS.BORDER};
     }
   `}
   
@@ -60,7 +62,7 @@ export const TooltipRow = styled.div`
   ${props => props.selected && `
     opacity: 1;
     font-weight: 500;
-    background-color: var(--cThemeBack);
+    background-color: ${COLORS.THEME_BACK};
   `}
 
   ${props => props.clickable
@@ -69,7 +71,7 @@ export const TooltipRow = styled.div`
         cursor: pointer;
         font-weight: 400;
         opacity: 1;
-        background-color: var(--cThemeBack);
+        background-color: ${COLORS.THEME_BACK};
       }
     ` : 'filter: grayscale(100%);'
 }
@@ -82,7 +84,7 @@ export const TooltipRow = styled.div`
         top: 10px;
         left: 100%;
         border: 5px solid;
-        border-color: transparent transparent transparent var(--cBorder);
+        border-color: transparent transparent transparent ${COLORS.BORDER};
       }
     }
   `}
@@ -97,7 +99,7 @@ export const SimpleFloatingElementWrapper = styled.div`
   right: 20px;
   height: 36px;
   background-color: ${props => props.background};
-  color: var(--cLightPrimary);
+  color: ${COLORS.LIGHT_PRIMARY};
   position: absolute;
   display: flex;
   border-radius: 19px;

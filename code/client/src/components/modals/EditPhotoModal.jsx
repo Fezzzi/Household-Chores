@@ -5,6 +5,7 @@ import { HighlightOff } from '@material-ui/icons'
 
 import EditorOverlay from '~/static/editor-overlay.png'
 
+import { COLORS } from 'clientSrc/constants'
 import {
   ModalBody, ModalButtonsBlock, ModalCloseButton, ModalNote, ModalOverlay, ModalPhotoCanvas,
   ModalPhotoControls, ModalPhotoSlider, ModalPhotoSliderWrapper, ModalPhotoWrapper, PhotoSizeValue,
@@ -155,9 +156,9 @@ const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
         <ModalButtonsBlock>
           <PrimaryButton
             onClick={savePhoto}
-            background="var(--cBluePrimary)"
-            backgroundHover="var(--cBlueSecondary)"
-            color="var(--cFont)"
+            background={COLORS.BLUE_PRIMARY}
+            backgroundHover={COLORS.BLUE_SECONDARY}
+            color={COLORS.FONT}
             disabled={size > MAX_IMAGE_SIZE}
           >
             <LocaleText message={FORM.SAVE} />

@@ -1,7 +1,8 @@
 import React from 'react'
 import { CalendarToday, ChevronRight, Delete, Grade, MoreVert, SortByAlpha } from '@material-ui/icons'
 
-import OptionsTooltip from 'clientSrc/components/portals/tooltips/OptionsTooltip'
+import { COLORS } from 'clientSrc/constants'
+import { OptionsTooltip } from 'clientSrc/components/portals'
 import { TablePhoto, TableRowIcon } from 'clientSrc/styles/blocks/table'
 import { RoleLabel } from 'clientSrc/styles/blocks/households'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
@@ -72,7 +73,7 @@ export const useInvitationListProps = (invitations, handleDeletion) => {
     toPhoto: <TablePhoto src={invitation.toPhoto} />,
     delete: (
       <TableRowIcon
-        color="var(--cRedSecondary)"
+        color={COLORS.RED_SECONDARY}
         clickable
         onClick={() => deleteInvitation(invitation.fromId, invitation.toId, handleDeletion)}
       >
@@ -104,7 +105,7 @@ export const useInvitationListProps = (invitations, handleDeletion) => {
 }
 
 export const getLabelColors = role => role === HOUSEHOLD_ROLE_TYPE.ADMIN
-  ? { background: 'var(--cBluePrimary)', color: 'var(--cThemeBack)' }
+  ? { background: COLORS.BLUE_PRIMARY, color: COLORS.THEME_BACK }
   : role === HOUSEHOLD_ROLE_TYPE.MANAGER
-    ? { background: 'var(--cYellowPrimary)', color: 'var(--cThemeBack)' }
-    : { background: 'var(--cGreenPrimary)', color: 'var(--cThemeBack)' }
+    ? { background: COLORS.YELLOW_PRIMARY, color: COLORS.THEME_BACK }
+    : { background: COLORS.GREEN_PRIMARY, color: COLORS.THEME_BACK }

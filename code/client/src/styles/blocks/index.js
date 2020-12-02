@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { COLORS } from 'clientSrc/constants'
+
 export const ThemeWrapper = styled.div`
   height: 100%;
   display: flex;
@@ -7,13 +9,13 @@ export const ThemeWrapper = styled.div`
 `
 
 export const PageWrapper = styled.section`
-  background-color: var(--cThemeBack);
-  color: var(--cFont);
+  background-color: ${COLORS.THEME_BACK};
+  color: ${COLORS.FONT};
   min-height: 100%;
   overflow: auto;
   display: flex;
   flex-direction: column;
-  scrollbar-color: var(--cGreyPrimary) transparent;
+  scrollbar-color: ${COLORS.GREEN_PRIMARY} transparent;
   scrollbar-width: thin;
   
   > * div {
@@ -33,7 +35,7 @@ export const PageWrapper = styled.section`
   
   > * ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb {
     appearance: none;
-    background-color: var(--cGreyPrimary);
+    background-color: ${COLORS.GREEN_PRIMARY};
     border-radius: 5px;
   }
   
@@ -57,7 +59,7 @@ export const PortalAnchor = styled.div`
 export const PageFooter = styled.footer`
   order: 5;
   padding: 0 20px;
-  background-color: var(--cThemeBack);
+  background-color: ${COLORS.THEME_BACK};
 `
 
 export const FooterWrapper = styled.div`
@@ -72,5 +74,5 @@ export const FooterWrapper = styled.div`
 `
 
 export const CopyrightRow = styled.span`
-  color: var(--cGreyPrimary);
+  color: ${COLORS.GREY_PRIMARY};
 `

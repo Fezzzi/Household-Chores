@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 
+import { COLORS } from 'clientSrc/constants'
+
 export const AuthContent = styled.div`
-  color: var(--cFont);
+  color: ${COLORS.FONT};
   justify-content: flex-start;
   margin: 12px auto 0 auto;
   max-width: 350px;
@@ -37,7 +39,7 @@ export const LogoTopBlock = styled.div`
     & #logo-body line,
     & #logo-body path,
     & #logo-body rect {
-      stroke: var(--cFont);
+      stroke: ${COLORS.FONT};
     }
     
     & #logo-roof line,
@@ -53,15 +55,15 @@ export const LogoTopBlock = styled.div`
 `
 
 export const InputsBlock = styled.div`
-  background-color: var(--cThemeFront);
-  border: 1px solid var(--cBorder);
+  background-color: ${COLORS.THEME_FRONT};
+  border: 1px solid ${COLORS.BORDER};
   border-radius: 1px;
   margin: 10px 0;
   padding: ${props => props.extraPadding ? 25 : 10}px 0;
 `
 
 export const LinkRow = styled.a`
-  color: var(--cBlueSecondary);
+  color: ${COLORS.BLUE_SECONDARY};
   font-size: 12px;
   line-height: 14px;
   margin-top: 12px;
@@ -77,7 +79,7 @@ export const LinkRow = styled.a`
 
 export const BottomMessageWrapper = styled.div`
   display: block;
-  color: var(--cGreyPrimary);
+  color: ${COLORS.GREY_PRIMARY};
   font-weight: 300;
   font-size: 14px;
   line-height: 18px;
@@ -85,14 +87,14 @@ export const BottomMessageWrapper = styled.div`
 `
 
 export const BottomMessageBlock = styled.p`
-  color: var(--cFont);
+  color: ${COLORS.FONT};
   font-size: 14px;
   margin: 15px;
   text-align: center;
 `
 
 export const BottomMessageLink = styled.a`
-  color: var(--cBluePrimary);
+  color: ${COLORS.BLUE_PRIMARY};
   text-decoration: none;
   cursor: pointer;
 
@@ -102,7 +104,7 @@ export const BottomMessageLink = styled.a`
 `
 
 export const MessageBlock = styled.p`
-  color: var(--cGreyPrimary);
+  color: ${COLORS.GREY_PRIMARY};
   font-size: ${props => props.bigFont ? 14 : 12}px;
   margin: ${props => props.margin ?? '10px 40px'};
   line-height: ${props => props.bigFont ? 18 : 16}px;
@@ -110,7 +112,7 @@ export const MessageBlock = styled.p`
 `
 
 export const MessageBlockLink = styled.a`
-  color: var(--cGreyPrimary);
+  color: ${COLORS.GREY_PRIMARY};
   font-weight: 600;
   text-decoration: none;
 `

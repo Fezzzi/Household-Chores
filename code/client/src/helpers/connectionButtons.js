@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 
+import { COLORS } from 'clientSrc/constants'
 import {
   connectionApprove, connectionBlock, connectionIgnore, connectionRemove, connectionUnblock,
 } from 'clientSrc/effects/conectionEffects'
@@ -41,45 +42,45 @@ export const useConnectionButtons = (tab, { state, id: targetId }) => {
       active: isButtonActive(FORM.CONNECTION_CONNECT),
       disabled: requestSent,
       message: requestSent && FORM.CONNECTION_SENT,
-      background: 'var(--cBluePrimary)',
-      backgroundHover: 'var(--cBlueSecondary)',
+      background: COLORS.BLUE_PRIMARY,
+      backgroundHover: COLORS.BLUE_SECONDARY,
       clickHandler: connectHandler,
     },
     [FORM.CONNECTION_APPROVE]: {
       active: isButtonActive(FORM.CONNECTION_APPROVE),
       disabled: false,
-      background: 'var(--cBluePrimary)',
-      backgroundHover: 'var(--cBlueSecondary)',
+      background: COLORS.BLUE_PRIMARY,
+      backgroundHover: COLORS.BLUE_SECONDARY,
       clickHandler: approveHandler,
     },
     [FORM.CONNECTION_IGNORE]: {
       active: isButtonActive(FORM.CONNECTION_IGNORE),
       disabled: false,
-      color: 'var(--cFont)',
-      background: 'var(--cLightPrimary)',
-      backgroundHover: 'var(--cLightSecondary)',
+      color: COLORS.FONT,
+      background: COLORS.LIGHT_PRIMARY,
+      backgroundHover: COLORS.LIGHT_SECONDARY,
       clickHandler: ignoreHandler,
     },
     [FORM.CONNECTION_REMOVE]: {
       active: isButtonActive(FORM.CONNECTION_REMOVE),
       disabled: false,
-      color: 'var(--cFont)',
-      background: 'var(--cLightPrimary)',
-      backgroundHover: 'var(--cLightSecondary)',
+      color: COLORS.FONT,
+      background: COLORS.LIGHT_PRIMARY,
+      backgroundHover: COLORS.LIGHT_SECONDARY,
       clickHandler: removeHandler,
     },
     [FORM.CONNECTION_BLOCK]: {
       active: isButtonActive(FORM.CONNECTION_BLOCK),
       disabled: false,
-      background: 'var(--cRedPrimary)',
-      backgroundHover: 'var(--cRedSecondary)',
+      background: COLORS.RED_PRIMARY,
+      backgroundHover: COLORS.RED_SECONDARY,
       clickHandler: blockHandler,
     },
     [FORM.CONNECTION_UNBLOCK]: {
       active: isButtonActive(FORM.CONNECTION_UNBLOCK),
       disabled: false,
-      background: 'var(--cGreenPrimary)',
-      backgroundHover: 'var(--cGreenSecondary)',
+      background: COLORS.GREEN_PRIMARY,
+      backgroundHover: COLORS.RED_SECONDARY,
       clickHandler: unblockHandler,
     },
   }

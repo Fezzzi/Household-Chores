@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
-import { PORTAL_TYPE } from 'clientSrc/constants'
+import { COLORS, PORTAL_TYPE } from 'clientSrc/constants'
 import {
   SimpleFloatingElementWrapper, FloatingElementIcon, FloatingElementText,
 } from 'clientSrc/styles/blocks/portals'
@@ -47,8 +47,8 @@ const SimpleFloatingElement = ({ message, sending, enabled, background, backgrou
 }
 
 SimpleFloatingElement.defaultProps = {
-  background: 'var(--cBluePrimary)',
-  backgroundHover: 'var(--cBlueSecondary)',
+  background: COLORS.BLUE_PRIMARY,
+  backgroundHover: COLORS.BLUE_SECONDARY,
   sending: false,
   enabled: true,
   onClick: () => {},

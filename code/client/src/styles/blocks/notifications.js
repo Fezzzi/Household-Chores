@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { COLORS } from 'clientSrc/constants'
+
 export const NotificationsBlock = styled.div`
   position: fixed;
   top: 50px;
@@ -18,9 +20,9 @@ export const NotificationWrapper = styled.li`
   min-height: 60px;
   margin-bottom: 14px;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 3px 0px;
-  color: var(--cFont);
+  color: ${COLORS.FONT};
   z-index: 100;
-  background: var(--cThemeFront);
+  background: ${COLORS.THEME_FRONT};
   border-radius: 2px;
   transition: all 0.5s ease 0s;
   overflow: hidden;
@@ -71,17 +73,17 @@ export const NotificationClose = styled.div`
   width: 20px;
   height: 20px;
   font-size: 14px;
-  fill: var(--cBorder);
+  fill: ${COLORS.BORDER};
   transition: opacity 0.1s ease 0s;
 
   &:hover {
-    fill: var(--cBorderActive);
+    fill: ${COLORS.BORDER_ACTIVE};
   }
   
   & svg {
     width: 100%;
     height: 100%;
-    stroke: var(--cFont);
+    stroke: ${COLORS.FONT};
     stroke-width: 0.4;
   }
 `

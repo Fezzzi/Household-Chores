@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import FacebookIcon from '~/static/social/facebook-icon-white.png'
 import GoogleIcon from '~/static/social/google-icon.svg'
 
+import { COLORS } from 'clientSrc/constants'
+
 export const FormHeader = styled.div`
   display: flex;
   justify-content: center;
@@ -64,12 +66,12 @@ export const FixedInputBlock = styled.div`
 `
 
 export const InputWrapper = styled.div`
-  background: var(--cThemeBack);
+  background: ${COLORS.THEME_BACK};
   align-items: center;
-  border: 1px solid var(--${props => props.active ? 'cBorderActive' : 'cBorder'});
+  border: 1px solid ${props => props.active ? COLORS.BORDER_ACTIVE : COLORS.BORDER};
   border-radius: 3px;
   box-sizing: border-box;
-  color: var(--cFont);
+  color: ${COLORS.FONT};
   font-size: 14px;
   position: relative;
   width: 100%;
@@ -90,7 +92,7 @@ export const TextInputBox = styled.label`
 `
 
 export const TextInputValue = styled.span`
-  color: var(--cGreyPrimary);
+  color: ${COLORS.GREY_PRIMARY};
   font-size: 12px;
   height: ${props => props.lineHeight ?? 36}px;
   left: 8px;
@@ -110,8 +112,8 @@ export const TextInputValue = styled.span`
 `
 
 export const TextInputField = styled.input`
-  background: var(--cThemeBack);
-  color: var(--cFont);
+  background: ${COLORS.THEME_BACK};
+  color: ${COLORS.FONT};
   overflow: hidden;
   padding: ${props => props.shrunken && !props.miniInput ? '12px 8px 2px' : '9px 8px 7px'};
   text-overflow: ellipsis;
@@ -141,7 +143,7 @@ export const ShowPassButton = styled.button`
   outline: 0;
   border: 0;
   background-color: transparent;
-  color: var(--cFont);
+  color: ${COLORS.FONT};
   display: inline;
   padding: 0;
   position: relative;
@@ -166,8 +168,8 @@ export const PhotoInputWrapper = styled(InputWrapper)`
 
 export const PaddedInputWrapper = styled.div`
   position: relative;
-  background-color: var(--cThemeFront);
-  border: 1px solid var(--cBorder);
+  background-color: ${COLORS.THEME_FRONT};
+  border: 1px solid ${COLORS.BORDER};
   border-radius: 1px;  
   box-sizing: border-box;
   display: inline-block;
@@ -183,11 +185,11 @@ export const BoolInputBox = styled.label`
   min-width: 0;
   flex: 1 0 0;
   display: flex;
-  color: var(--cGreenPrimary);
-  background-color: var(--cThemeBack);
+  color: ${COLORS.GREEN_PRIMARY};
+  background-color: ${COLORS.THEME_BACK};
   
   &:hover {
-    color: var(--cGreenSecondary);
+    color: ${COLORS.GREEN_SECONDARY};
     cursor: pointer;
   }
 `
@@ -232,7 +234,7 @@ export const FileInputBox = styled.label`
   min-width: 0;
   
   &:hover svg {
-    color: var(--cBlueSecondary);
+    color: ${COLORS.BLUE_SECONDARY};
   }
   
   &:active svg {
@@ -251,13 +253,13 @@ export const FileInputLabel = styled.div`
   & svg {
     margin: auto;
     font-size: 50px;
-    color: var(--cBluePrimary);
+    color: ${COLORS.BLUE_PRIMARY};
   }
 `
 
 export const FileInputField = styled.input`
-  background: var(--cThemeBack);
-  color: var(--cFont);
+  background: ${COLORS.THEME_BACK};
+  color: ${COLORS.FONT};
   overflow: hidden;
   padding: 9px 0 7px 8px;
   text-overflow: ellipsis;
@@ -305,7 +307,7 @@ export const SwitchInputBox = styled.label`
   min-width: 0;
   flex: 1 0 0;
   display: flex;
-  background-color: var(--cThemeBack);
+  background-color: ${COLORS.THEME_BACK};
 `
 
 export const SwitchInputLabel = styled.div`
@@ -324,8 +326,8 @@ export const SwitchInputValue = styled.span`
   text-transform: uppercase;
   ${props => props.selected
     ? `
-      background-color: var(--cGreenSecondary);
-      color: var(--cThemeFront);
+      background-color: ${COLORS.GREEN_SECONDARY};
+      color: ${COLORS.THEME_FRONT};
       opacity: 1;
       font-weight: 500;
     ` : `
@@ -338,7 +340,7 @@ export const SwitchInputValue = styled.span`
 }
   
   :not(:last-child) {
-    border-right: 1px solid var(--cBorder);
+    border-right: 1px solid ${COLORS.BORDER};
   }
 `
 
@@ -365,7 +367,7 @@ export const FormButtonWrapper = styled.div`
 `
 
 export const FormButton = styled.button`
-  border: ${props => props.border ? '1px solid var(--cBorder)' : 'none'};
+  border: ${props => props.border ? `1px solid ${COLORS.BORDER}` : 'none'};
   background-color: ${props => props.background};
   border-radius: 4px;
   color: ${props => props.color};
@@ -423,7 +425,7 @@ export const SeparatorWrapper = styled.div`
 `
 
 export const SeparatorLine = styled.div`
-  background-color: var(--cBorder);
+  background-color: ${COLORS.BORDER};
   height: 1px;
   position: relative;
   top: .45em;
@@ -432,7 +434,7 @@ export const SeparatorLine = styled.div`
 `
 
 export const SeparatorText = styled.div`
-  color: var(--cGreyPrimary);
+  color: ${COLORS.GREY_PRIMARY};
   font-size: 13px;
   font-weight: 600;
   line-height: 15px;
@@ -464,7 +466,7 @@ export const ErrorSpan = styled.span`
   position: relative;
   
   > * svg {
-    fill: var(--cError);
+    fill: ${COLORS.ERROR};
   }
 `
 
@@ -488,7 +490,7 @@ export const ToggleInputIcon = styled.span`
   height: 20px;
   position: absolute;
   margin-left: ${props => props.left || 10}px;
-  color: var(--cFont);
+  color: ${COLORS.FONT};
   opacity: .8;
   
   &:hover {
@@ -509,7 +511,7 @@ export const RemoveFileButton = styled.div`
   top: -10px;
   left: -10px;
   z-index: 5;
-  color: var(--cFont);
+  color: ${COLORS.FONT};
   opacity: .8;
   
   &:hover {
@@ -525,12 +527,12 @@ export const PhotoPreviewBlock = styled.div`
   width: ${props => props.size}px;
   height: ${props => props.size}px;
   border-radius: 100%;
-  border: 1px solid var(--cBorder);
+  border: 1px solid ${COLORS.BORDER};
   overflow: hidden;
 `
 
 export const PhotoPreview = styled.img`
   height: 100%;
   width: 100%;
-  background-color: var(--cThemeFront)
+  background-color: ${COLORS.THEME_FRONT};
 `

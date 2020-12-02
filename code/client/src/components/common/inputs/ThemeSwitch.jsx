@@ -4,12 +4,12 @@ import Zoom from '@material-ui/core/Zoom'
 import { Brightness6 } from '@material-ui/icons'
 
 import { ThemeActions } from 'clientSrc/actions'
-import { THEME_TYPE } from 'clientSrc/constants'
+import { COLORS, THEME_TYPE } from 'clientSrc/constants'
 import { IconButtonWrapper, IconButton } from 'clientSrc/styles/blocks/settings'
 
 const reverseColorStyle = {
   position: 'absolute',
-  stroke: 'var(--cThemeFront)',
+  stroke: COLORS.THEME_FRONT,
 }
 
 const ThemeSwitch = () => {
