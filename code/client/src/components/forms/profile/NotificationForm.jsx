@@ -19,7 +19,7 @@ const NotificationForm = ({ data, onSubmit }) => {
     isFormSending,
     inputs,
     setFormState,
-  } = useFormState(data)
+  } = useFormState([data])
 
   const {
     [NOTIFICATIONS.GENERAL]: general,
@@ -58,7 +58,8 @@ const NotificationForm = ({ data, onSubmit }) => {
               name={name}
               label={`form.${name}`}
               value={Boolean(value)}
-              onUpdate={useUpdateHandler(name, setFormState, undefined, Boolean(value))}
+              hasDefaultValue
+              onUpdate={useUpdateHandler(setFormState)}
             />
           ))}
         </NotificationGroupBox>

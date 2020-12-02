@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React from 'react'
 import { PropTypes } from 'prop-types'
 
 import { MessageBlock, LinkRow } from 'clientSrc/styles/blocks/auth'
-import { updateInput, handlerWrapper } from 'clientSrc/helpers/form'
-import { SUBMIT_TIMEOUT, AUTH_TABS } from 'clientSrc/constants'
+import { useFormState, useFormValidOnFilled, useUpdateHandler, useSubmitHandler } from 'clientSrc/helpers/form'
+import { AUTH_TABS } from 'clientSrc/constants'
 import { AuthActions } from 'clientSrc/actions'
 import { INPUT_TYPE } from 'shared/constants'
 import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages'
@@ -18,39 +17,19 @@ const inputConfig = [
 ]
 
 const ResetPassForm = ({ switchTab }) => {
-  const dispatch = useDispatch()
-  const resetPass = useCallback(values => dispatch(AuthActions.resetPass(values)), [dispatch])
+  const {
+    submitMessage,
+    isFormValid,
+    isFormSending,
+    inputs,
+    errors,
+    setFormState,
+  } = useFormState([], AUTH.SEND_RESET_LINK, false)
 
-  const [timer, setTimer] = useState(null)
-  const [state, setState] = useState({
-    submitMessage: AUTH.SEND_RESET_LINK,
-    isFormValid: false,
-    isFormSending: false,
-    inputs: Object.fromEntries(inputConfig.map(input =>
-      [input.name, { valid: false, value: '' }]
-    )),
-    errors: {},
-  })
-
-  useEffect(() => { if (timer) { clearTimeout(timer) } }, [])
-
-  const { submitMessage, isFormValid, isFormSending, inputs, errors } = state
-
-  const handleClick = handlerWrapper(() => {
-    resetPass(inputs)
-    setState(prevState => ({
-      ...prevState,
-      isFormSending: true,
-      submitMessage: COMMON.SENDING,
-    }))
-    setTimer(setTimeout(
-      () => setState(prevState => ({
-        ...prevState,
-        isFormSending: false,
-        submitMessage: AUTH.SEND_RESET_LINK,
-      })), SUBMIT_TIMEOUT
-    ))
-  })
+  const formValidFunc = useFormValidOnFilled(inputConfig.map(input => input.name))
+  const updateHandler = useUpdateHandler(setFormState, formValidFunc)
+  const submitHandler = useSubmitHandler(AuthActions.resetPass)
+  const handleSubmit = () => submitHandler(inputs, setFormState, AUTH.SEND_RESET_LINK, COMMON.SENDING)
 
   return (
     <form method="post">
@@ -65,10 +44,10 @@ const ResetPassForm = ({ switchTab }) => {
           type={input.type}
           fixedPadding
           inputError={errors[input.name] || ''}
-          onUpdate={updateInput(setState.bind(this), input.name)}
+          onUpdate={updateHandler}
         />
       ))}
-      <PrimaryButton disabled={!isFormValid || isFormSending} onClick={handleClick}>
+      <PrimaryButton disabled={!isFormValid || isFormSending} onClick={handleSubmit}>
         <LocaleText message={submitMessage} />
       </PrimaryButton>
       <Separator message={COMMON.OR} />

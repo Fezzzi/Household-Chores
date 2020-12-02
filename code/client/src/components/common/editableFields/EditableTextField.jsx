@@ -15,7 +15,7 @@ const EditableTextField = ({
   const [hovering, setHovering] = useState(false)
   const [editing, setEditing] = useState(false)
   const inputRef = useRef(null)
-  const handleUpdate = useUpdateHandler(name, setFormState, isFormValidFunc, placeholder)
+  const handleUpdate = useUpdateHandler(setFormState, isFormValidFunc)
 
   useEffect(() => {
     if (inputRef.current) {
@@ -39,6 +39,7 @@ const EditableTextField = ({
             name={name}
             type={isEmail ? INPUT_TYPE.EMAIL : INPUT_TYPE.TEXT}
             value={placeholder}
+            hasDefaultValue
             inputError={error}
             onUpdate={handleUpdate}
             reference={inputRef}

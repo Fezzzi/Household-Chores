@@ -21,7 +21,7 @@ const ProfileForm = ({ data, onSubmit }) => {
     inputs,
     errors,
     setFormState,
-  } = useFormState(data)
+  } = useFormState([data])
 
   useEffect(() => {
     setHeaderKey(prevState => prevState + 1)
@@ -62,7 +62,8 @@ const ProfileForm = ({ data, onSubmit }) => {
           label={FORM.USER_VISIBILITY}
           values={[USER_VISIBILITY_TYPE.FOF, USER_VISIBILITY_TYPE.ALL]}
           value={visibility}
-          onUpdate={useUpdateHandler(PROFILE.CONNECTION_VISIBILITY, setFormState, undefined, visibility)}
+          hasDefaultValue
+          onUpdate={useUpdateHandler(setFormState)}
         />
       </FormBody>
     </>

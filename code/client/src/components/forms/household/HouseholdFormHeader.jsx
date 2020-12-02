@@ -40,7 +40,6 @@ const HouseholdFormHeader = ({
       <CurrentUserBlock>
         <EditablePhotoField
           name={HOUSEHOLD_KEYS.USER_PHOTO}
-          placeholder={currentUser.photo}
           error={errors[HOUSEHOLD_KEYS.USER_PHOTO]}
           setFormState={setFormState}
           size={100}
@@ -65,7 +64,6 @@ const HouseholdFormHeader = ({
 
       <EditablePhotoField
         name={HOUSEHOLD_KEYS.PHOTO}
-        placeholder={photo}
         error={errors[HOUSEHOLD_KEYS.PHOTO]}
         setFormState={setFormState}
       >

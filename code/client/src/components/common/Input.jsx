@@ -25,6 +25,7 @@ Input.propTypes = {
     PropTypes.number,
     PropTypes.bool,
   ]),
+  hasDefaultValue: PropTypes.bool,
   type: PropTypes.string.isRequired,
   inputError: PropTypes.string,
   onUpdate: PropTypes.func,

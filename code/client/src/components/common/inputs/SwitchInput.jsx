@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -9,17 +9,17 @@ import { FORM } from 'shared/constants/localeMessages'
 
 import LocaleText from '../LocaleText'
 
-const SwitchInput = ({ name, label, values, value, onUpdate }) => {
+const SwitchInput = ({ name, label, values, value, hasDefaultValue, onUpdate }) => {
   const [selectedValue, setSelectedValue] = useState(null)
 
-  const handleChange = newValue => {
+  const handleChange = useCallback(newValue => {
     if (newValue === selectedValue) {
       return
     }
 
     setSelectedValue(newValue)
-    onUpdate(true, newValue)
-  }
+    onUpdate(name, true, newValue, '', hasDefaultValue ? value : null)
+  }, [name, value, hasDefaultValue, onUpdate])
 
   return (
     <InputRow>
@@ -47,11 +47,16 @@ const SwitchInput = ({ name, label, values, value, onUpdate }) => {
   )
 }
 
+SwitchInput.defaultProps = {
+  hasDefaultValue: false,
+}
+
 SwitchInput.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   values: PropTypes.arrayOf(PropTypes.string).isRequired,
   value: PropTypes.string,
+  hasDefaultValue: PropTypes.bool,
   onUpdate: PropTypes.func.isRequired,
 }
 

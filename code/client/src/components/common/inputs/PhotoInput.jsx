@@ -48,7 +48,7 @@ const PhotoInput = ({
     reader.onload = ({ target: { result } }) => {
       if (type === 'image/gif') {
         setFile(result)
-        onUpdate(inputValid, {
+        onUpdate(name, inputValid, {
           type,
           size: result.length,
           name: photoName,
@@ -59,7 +59,7 @@ const PhotoInput = ({
         img.onload = () => {
           openPhotoEditor(result, img, (editedPhoto, newSize) => {
             setFile(editedPhoto)
-            onUpdate(inputValid, {
+            onUpdate(name, inputValid, {
               type,
               size: newSize,
               name,
@@ -72,16 +72,16 @@ const PhotoInput = ({
     }
     reader.readAsDataURL(files[0])
     event.target.value = ''
-  }, [])
+  }, [name, onUpdate])
 
-  const handleFileRemove = e => {
+  const handleFileRemove = useCallback(e => {
     setFile(null)
-    onUpdate(true, '')
+    onUpdate(name, true, '')
 
     if (onFileRemove) {
       onFileRemove(e)
     }
-  }
+  }, [name, onUpdate, onFileRemove])
 
   useEffect(() => reference && reference.current && reference.current.click(), [reference])
 

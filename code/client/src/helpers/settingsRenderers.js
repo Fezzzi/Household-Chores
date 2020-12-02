@@ -72,6 +72,7 @@ export const settingsRenderers = {
       <HouseholdModificationForm
         household={data.households?.find(({ key }) => key === tab)}
         connections={data.connections}
+        onSubmit={handleSubmit}
       />
     ),
   },

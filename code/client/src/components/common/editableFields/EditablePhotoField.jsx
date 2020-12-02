@@ -10,12 +10,12 @@ import { INPUT_TYPE } from 'shared/constants'
 import Input from '../Input'
 
 const EditablePhotoField = ({
-  name, size, iconRight, placeholder, error, setFormState, isFormValidFunc, children,
+  name, size, iconRight, error, setFormState, isFormValidFunc, children,
 }) => {
   const [hovering, setHovering] = useState(false)
   const [editing, setEditing] = useState(false)
   const inputRef = useRef(null)
-  const handleUpdate = useUpdateHandler(name, setFormState, isFormValidFunc, placeholder)
+  const handleUpdate = useUpdateHandler(setFormState, isFormValidFunc)
 
   const handleFileRemove = e => {
     setEditing(false)
@@ -37,7 +37,6 @@ const EditablePhotoField = ({
           <Input
             name={name}
             type={INPUT_TYPE.PHOTO}
-            value={placeholder}
             inputError={error}
             onUpdate={handleUpdate}
             onFileRemove={handleFileRemove}

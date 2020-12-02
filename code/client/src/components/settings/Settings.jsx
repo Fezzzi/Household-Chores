@@ -76,7 +76,7 @@ const Settings = memo(({ history, location }) => {
     search: `?tab=${newTab}`,
   }), [category, setState])
 
-  const submitHandler = useSubmitHandler(category, tab)
+  const submitHandler = useSubmitHandler(SettingsActions.editSettings, { category, tab })
 
   return (
     <SettingsWrapper>

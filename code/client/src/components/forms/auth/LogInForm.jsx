@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import { PropTypes } from 'prop-types'
 
@@ -6,8 +6,8 @@ import { INPUT_TYPE, NOTIFICATION_TYPE } from 'shared/constants'
 import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages'
 import { AuthActions, NotificationActions } from 'clientSrc/actions'
 import { LinkRow } from 'clientSrc/styles/blocks/auth'
-import { updateInput, handlerWrapper } from 'clientSrc/helpers/form'
-import { SUBMIT_TIMEOUT, AUTH_TABS } from 'clientSrc/constants'
+import { useFormState, useUpdateHandler, useSubmitHandler, useFormValidOnFilled } from 'clientSrc/helpers/form'
+import { AUTH_TABS } from 'clientSrc/constants'
 
 import FacebookLoginButton from './FacebookLoginButton'
 import GoogleLoginButton from './GoogleLoginButton'
@@ -16,49 +16,31 @@ import { TextInput } from '../../common/inputs'
 import Separator from '../Separator'
 
 const inputConfig = [
-  { name: 'email', message: FORM.EMAIL, type: INPUT_TYPE.EMAIL },
-  { name: 'password', message: FORM.PASSWORD, type: INPUT_TYPE.PASSWORD },
+  { name: 'email', value: FORM.EMAIL, type: INPUT_TYPE.EMAIL },
+  { name: 'password', value: FORM.PASSWORD, type: INPUT_TYPE.PASSWORD },
 ]
 
 const LogInForm = ({ switchTab }) => {
   const dispatch = useDispatch()
-  const logIn = useCallback(values => dispatch(AuthActions.logIn(values)), [dispatch])
   const addNotification = useCallback((type, message) =>
     dispatch(NotificationActions.addNotifications({ [type]: [message] })),
   [dispatch])
 
-  const [timer, setTimer] = useState(null)
-  const [state, setState] = useState({
-    submitMessage: AUTH.LOG_IN,
-    isFormValid: false,
-    isFormSending: false,
-    inputs: Object.fromEntries(inputConfig.map(input =>
-      [input.name, { valid: false, value: '' }]
-    )),
-    errors: {},
-  })
-
-  useEffect(() => { if (timer) { clearTimeout(timer) } }, [])
+  const {
+    submitMessage,
+    isFormValid,
+    isFormSending,
+    inputs,
+    errors,
+    setFormState,
+  } = useFormState([], AUTH.LOG_IN, false)
 
   const handleError = error => addNotification(NOTIFICATION_TYPE.ERRORS, error.message)
 
-  const { submitMessage, isFormValid, isFormSending, inputs, errors } = state
-
-  const handleClick = handlerWrapper(() => {
-    logIn(inputs)
-    setState(prevState => ({
-      ...prevState,
-      isFormSending: true,
-      submitMessage: COMMON.SENDING,
-    }))
-    setTimer(setTimeout(
-      () => setState(prevState => ({
-        ...prevState,
-        isFormSending: false,
-        submitMessage: AUTH.LOG_IN,
-      })), SUBMIT_TIMEOUT
-    ))
-  })
+  const formValidFunc = useFormValidOnFilled(inputConfig.map(input => input.name))
+  const updateHandler = useUpdateHandler(setFormState, formValidFunc)
+  const submitHandler = useSubmitHandler(AuthActions.logIn)
+  const handleSubmit = () => submitHandler(inputs, setFormState, AUTH.LOG_IN, COMMON.SENDING)
 
   return (
     <form method="post">
@@ -66,14 +48,14 @@ const LogInForm = ({ switchTab }) => {
         <TextInput
           name={input.name}
           key={input.name}
-          value={input.message}
+          value={input.value}
           type={input.type}
           fixedPadding
           inputError={errors[input.name] || ''}
-          onUpdate={updateInput(setState.bind(this), input.name)}
+          onUpdate={updateHandler}
         />
       ))}
-      <PrimaryButton disabled={!isFormValid || isFormSending} onClick={handleClick}>
+      <PrimaryButton disabled={!isFormValid || isFormSending} onClick={handleSubmit}>
         <LocaleText message={submitMessage} />
       </PrimaryButton>
       <Separator message={COMMON.OR} />

@@ -55,16 +55,6 @@ export const InputRow = styled.div`
   min-height: 38px;
 `
 
-export const FixedInputBlock = styled.div`
-  margin-right: 20px;
-  position: relative;
-  min-height: 38px;
-  max-width: ${props => props.maxWidth ?? 400}px;
-  width: fill-available;
-  display: inline-block;
-  vertical-align: top;
-`
-
 export const InputWrapper = styled.div`
   background: ${COLORS.THEME_BACK};
   align-items: center;
@@ -344,24 +334,10 @@ export const SwitchInputValue = styled.span`
   }
 `
 
-export const SwitchInputField = styled.input`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  outline: none;
-  opacity: 0;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  
-  &:active, &:focus {
-    outline: 0;
-  }
-`
-
 export const FormButtonWrapper = styled.div`
   margin: ${props => props.margin};
   display: ${props => props.inline ? 'inline-block' : 'block'};
+  padding: ${props => props.inline ? '0 25px' : ''};
   min-width: 100px;
   align-content: stretch;
 `
@@ -484,26 +460,6 @@ export const InputPlaceholder = styled.span`
   margin-left: 40px;
   position: absolute;
   white-space: nowrap;
-`
-
-export const ToggleInputIcon = styled.span`
-  height: 20px;
-  position: absolute;
-  margin-left: ${props => props.left || 10}px;
-  color: ${COLORS.FONT};
-  opacity: .8;
-  
-  &:hover {
-    cursor: pointer;
-    opacity: 1;
-  }
-  
-  & svg {
-    top: 0;
-    height: 20px;
-    padding-top: 10px;
-    position: absolute;
-  }
 `
 
 export const RemoveFileButton = styled.div`

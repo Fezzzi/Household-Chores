@@ -60,14 +60,14 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
                   type={INPUT_TYPE.PASSWORD}
                   value={FORM.OLD_PASSWORD}
                   inputError={errors[PROFILE.OLD_PASSWORD]}
-                  onUpdate={useUpdateHandler(PROFILE.OLD_PASSWORD, setFormState)}
+                  onUpdate={useUpdateHandler(setFormState)}
                 />
                 <Input
                   name={PROFILE.NEW_PASSWORD}
                   type={INPUT_TYPE.PASSWORD}
                   value={FORM.NEW_PASSWORD}
                   inputError={errors[PROFILE.NEW_PASSWORD]}
-                  onUpdate={useUpdateHandler(PROFILE.NEW_PASSWORD, setFormState)}
+                  onUpdate={useUpdateHandler(setFormState)}
                 />
               </ProfilePasswordInputs>
             ) : (
@@ -85,7 +85,6 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
 
       <EditablePhotoField
         name={PROFILE.PHOTO}
-        placeholder={photo}
         setFormState={setFormState}
         error={errors[PROFILE.PHOTO]}
       >
