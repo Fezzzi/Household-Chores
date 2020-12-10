@@ -76,5 +76,6 @@ export const NavbarLogOut = styled.div `
     
     :hover {
         cursor: pointer;
+        color: ${COLORS.LIGHT_PRIMARY};
         }
 `
