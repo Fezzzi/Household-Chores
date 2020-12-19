@@ -34,7 +34,7 @@ const SearchBar = ({ onSearch }) => {
       <Input
         type={INPUT_TYPE.TEXT}
         name="query"
-        onUpdate={(_, value) => setQuery(value)}
+        onUpdate={(_, __, value) => setQuery(value)}
         inline
         value={COMMON.SEARCH}
       />
