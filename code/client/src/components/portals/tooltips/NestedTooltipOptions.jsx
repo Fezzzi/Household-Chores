@@ -1,40 +1,63 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
 import { Tooltip, TooltipRow, TooltipAnchor } from 'clientSrc/styles/blocks/portals'
-import { useElementPosition } from 'clientSrc/helpers/dom'
+import { useScrollOffset } from 'clientSrc/helpers/dom'
 import { PORTAL_TYPE } from 'clientSrc/constants'
 
 import LocaleText from '../../common/LocaleText'
 
-export const NestedTooltipOptions = ({ position, options, withArrow, blurHandler }) => {
+export const NestedTooltipOptions = ({ position, options, withArrow, onBlur }) => {
   const [state, setState] = useState({
     visible: null,
     position: null,
   })
 
-  const showSubToolbar = index => e => {
+  const { scrollTop, scrollLeft } = useScrollOffset()
+  const showSubToolbar = useCallback(index => e => {
     if (state.visible !== index) {
+      const container = e.target.closest('div')?.getBoundingClientRect()
+      const position = {
+        x: container?.x + scrollLeft,
+        y: container?.y + scrollTop,
+      }
       setState({
         visible: index,
-        position: useElementPosition(e.target.closest('div')),
+        position,
       })
     }
-  }
+  }, [scrollTop, scrollLeft])
 
-  const onBlur = e => {
+  const thisRef = useRef(null)
+  const handleBlur = useCallback(e => {
     // Styled components generate classnames uniquely for each Component, thus classname equality => same Components
-    if (blurHandler && (
+    if (onBlur && (
       !e.relatedTarget
       || e.relatedTarget.className !== e.currentTarget.className
       || (e.relatedTarget.parentNode && e.relatedTarget.parentNode.nextSibling && e.relatedTarget !== e.currentTarget)
     )) {
-      blurHandler()
+      const blurred = onBlur(e)
+      if (!blurred) {
+        thisRef.current.focus()
+      }
     }
-  }
+  }, [thisRef])
 
-  const thisRef = useRef(null)
+  const nestedBlur = useCallback(e => {
+    if (e.relatedTarget === thisRef.current) {
+      return false
+    }
+    setState({ visible: null, position: null })
+    return true
+  }, [thisRef.current])
+
+  const handleClick = useCallback(clickHandler => {
+    setState({ visible: null, position: null })
+    thisRef.current.focus()
+    clickHandler()
+  }, [thisRef.current])
+
   useEffect(() => thisRef.current && thisRef.current.focus(), [thisRef])
 
   const tooltipRoot = document.getElementById(PORTAL_TYPE.TOOLTIPS)
@@ -44,7 +67,7 @@ export const NestedTooltipOptions = ({ position, options, withArrow, blurHandler
         hasRows
         tabIndex={-1}
         ref={thisRef}
-        onBlur={onBlur}
+        onBlur={handleBlur}
       >
         {options.map(({ content, clickHandler, nestedOptions }, index) => (
           <Fragment key={`nestedTooltip-${index}`}>
@@ -53,7 +76,9 @@ export const NestedTooltipOptions = ({ position, options, withArrow, blurHandler
               withArrow={!!withArrow}
               clickable={!!clickHandler || (nestedOptions && state.visible !== index)}
               selected={state.visible === index}
-              onClick={clickHandler ?? (nestedOptions && showSubToolbar(index))}
+              onClick={clickHandler
+                ? () => handleClick(clickHandler)
+                : (nestedOptions && showSubToolbar(index))}
             >
               {typeof content === 'string'
                 ? <LocaleText message={content} />
@@ -64,7 +89,7 @@ export const NestedTooltipOptions = ({ position, options, withArrow, blurHandler
                 position={state.position}
                 options={nestedOptions}
                 withArrow
-                blurHandler={() => setState({ visible: null, position: null })}
+                onBlur={nestedBlur}
               />
             )}
           </Fragment>
@@ -90,5 +115,5 @@ NestedTooltipOptions.propTypes = {
   }).isRequired,
   options: PropTypes.arrayOf(optionsShape).isRequired,
   withArrow: PropTypes.bool,
-  blurHandler: PropTypes.func,
+  onBlur: PropTypes.func,
 }

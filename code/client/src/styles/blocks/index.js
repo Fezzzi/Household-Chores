@@ -15,7 +15,7 @@ export const PageWrapper = styled.section`
   overflow: auto;
   display: flex;
   flex-direction: column;
-  scrollbar-color: ${COLORS.GREEN_PRIMARY} transparent;
+  scrollbar-color: ${COLORS.GREY_PRIMARY} transparent;
   scrollbar-width: thin;
   
   > * div {
@@ -35,7 +35,7 @@ export const PageWrapper = styled.section`
   
   > * ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb {
     appearance: none;
-    background-color: ${COLORS.GREEN_PRIMARY};
+    background-color: ${COLORS.GREY_PRIMARY};
     border-radius: 5px;
   }
   

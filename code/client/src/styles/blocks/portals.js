@@ -5,7 +5,7 @@ import { COLORS } from 'clientSrc/constants'
 export const TooltipWrapper = styled.div`
   position: relative;
   
-  :focus {
+  :focus, :active {
     outline: none;
   }
 `
@@ -16,6 +16,10 @@ export const OptionsTooltipIcon = styled.span`
   :hover {
     cursor: pointer;
     opacity: 0.9;
+  }
+  
+  :focus, :active {
+    outline: none;
   }
 `
 
