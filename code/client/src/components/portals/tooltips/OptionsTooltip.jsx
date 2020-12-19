@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { TooltipWrapper, OptionsTooltipIcon } from 'clientSrc/styles/blocks/portals'
-import { useElementPosition } from 'clientSrc/helpers/dom'
+import { useScrollOffset } from 'clientSrc/helpers/dom'
 
 import { NestedTooltipOptions, optionsShape } from './NestedTooltipOptions'
 
@@ -12,26 +12,42 @@ const OptionsTooltip = ({ icon, options }) => {
     position: null,
   })
 
-  const showToolbar = e => {
-    if (!state.visible) {
+  const { visible, position } = state
+  const { scrollTop, scrollLeft } = useScrollOffset()
+  const showToolbar = useCallback(e => {
+    if (!visible) {
+      const container = e.target.closest('svg')?.getBoundingClientRect()
+      const position = {
+        x: container?.x + scrollLeft,
+        y: container?.y + scrollTop,
+      }
       setState({
         visible: true,
-        position: useElementPosition(e.target.closest('svg')),
+        position,
       })
     }
-  }
+  }, [visible, scrollTop, scrollLeft])
+
+  const tooltipIconRef = useRef(null)
+  const handleBlur = useCallback(e => {
+    if (e.relatedTarget === tooltipIconRef.current) {
+      return false
+    }
+    setState({ visible: false, position: null })
+    return true
+  }, [tooltipIconRef.current])
 
   return (
     <TooltipWrapper>
-      <OptionsTooltipIcon active={state.visible} onClick={showToolbar}>
+      <OptionsTooltipIcon active={visible} onClick={showToolbar} tabIndex={-1} ref={tooltipIconRef}>
         {icon}
       </OptionsTooltipIcon>
-      {state.visible && (
+      {visible && (
         <NestedTooltipOptions
-          position={state.position}
+          position={position}
           options={options}
           withArrow={false}
-          blurHandler={() => setState({ visible: false, position: null })}
+          onBlur={handleBlur}
         />
       )}
     </TooltipWrapper>

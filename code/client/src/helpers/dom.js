@@ -2,20 +2,30 @@ import { useState, useMemo, useEffect } from 'react'
 
 import { DEVICES, MOBILE_WIDTH, TABLET_WIDTH } from 'clientSrc/constants'
 
-export const useScrollOffset = () =>
-  // todo: Implement scroll offset
-  ({
-    x: 0,
-    y: 0,
+export const useScrollOffset = () => {
+  const element = useMemo(() => document.getElementById('pageWrapper'), [])
+  const [scrolls, setScrolls] = useState(() => {
+    const { scrollTop, scrollLeft } = element
+    return {
+      scrollTop,
+      scrollLeft,
+    }
   })
 
-export const useElementPosition = element => {
-  const container = element.getBoundingClientRect()
-  const scrollOffset = useScrollOffset()
-  return {
-    x: container.x + scrollOffset.x,
-    y: container.y + scrollOffset.y,
-  }
+  useEffect(() => {
+    const handleScroll = () => {
+      const { scrollTop, scrollLeft } = document.getElementById('pageWrapper')
+      setScrolls({
+        scrollTop,
+        scrollLeft,
+      })
+    }
+
+    element.addEventListener('scroll', handleScroll)
+    return () => element.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  return scrolls
 }
 
 const getWindowDimensions = () => {
@@ -30,9 +40,7 @@ export const useWindowDimensions = () => {
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions())
 
   useEffect(() => {
-    function handleResize() {
-      setWindowDimensions(getWindowDimensions())
-    }
+    const handleResize = () => setWindowDimensions(getWindowDimensions())
 
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
