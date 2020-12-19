@@ -32,7 +32,7 @@ export default () => {
     }
   })
 
-  router.use(`/${API.LOAD_PREFIX}`, LoadRouter())
+  router.use(`/${API.GENERAL_PREFIX}`, LoadRouter())
   router.use(`/${API.AUTH_PREFIX}`, AuthRouter())
   router.use(`/${API.RESOURCES_PREFIX}`, ResourceRouter())
   router.use(`/${API.SETTINGS_PREFIX}`, sessionChecker, SettingsRouter())

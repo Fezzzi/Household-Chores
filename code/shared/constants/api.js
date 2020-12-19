@@ -1,5 +1,6 @@
-export const LOAD_PREFIX = 'load'
-export const LOAD_STATE = 'state'
+export const GENERAL_PREFIX = 'general'
+export const LOAD_STATE = 'load'
+export const MARK_ACTIVITY = 'activity'
 
 export const RESOURCES_PREFIX = 'resources'
 export const RESOURCE_TAC = 'terms-and-conditions'
@@ -11,6 +12,7 @@ export const AUTH_PREFIX = 'auth'
 export const AUTH_SIGN_UP = 'sign-up'
 export const AUTH_LOG_IN = 'log-in'
 export const AUTH_RESET = 'reset'
+export const AUTH_LOG_OFF = 'log-off'
 
 export const CONNECTIONS_PREFIX = 'connections'
 export const CONNECTION_FIND = 'find'

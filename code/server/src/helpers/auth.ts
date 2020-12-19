@@ -28,9 +28,15 @@ export const handleAction = async (
 // FE shouldn't let logged user access the /login url until explicit logout action, thus the condition should never be met
 export const setSession = (req: any, res: any, userId: number, fsKey: string) => {
   if (req.session.user && req.session.user !== userId && req.cookies.user_sid) {
-    res.clearCookie('user_sid')
+    unsetSession(req, res)
     return
   }
   req.session.user = userId
   req.session.fsKey = fsKey
+}
+
+export const unsetSession = (req: any, res: any) => {
+  req.session.user = null
+  req.session.fsKey = null
+  res.clearCookie('user_sid')
 }

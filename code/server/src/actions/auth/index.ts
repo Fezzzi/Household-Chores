@@ -5,7 +5,7 @@ import { ERROR, SUCCESS } from 'shared/constants/localeMessages'
 import { MAILS } from 'serverSrc/constants'
 import { sendEmails } from 'serverSrc/helpers/mailer'
 import { logInUser, SignUpUser, findUser } from 'serverSrc/database/models'
-import { handleAction, setSession } from 'serverSrc/helpers/auth'
+import { handleAction, setSession, unsetSession } from 'serverSrc/helpers/auth'
 
 import { validateLoginData, validateResetData, validateSignupData } from './validation'
 import { getProvidersUserId, handleProvidersLogIn, logInWithIds } from './providers'
@@ -79,6 +79,9 @@ export default () => {
         return handleAction(inputs, validateSignupData, signUp, req, res)
       case API.AUTH_RESET:
         return handleAction(inputs, validateResetData, resetPass, req, res)
+      case API.AUTH_LOG_OFF:
+        unsetSession(req, res)
+        return true
       default:
         res.status(404).send('Not Found')
         return false
