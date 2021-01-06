@@ -1,6 +1,6 @@
 import { database } from 'serverSrc/database'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
-import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys'
+import { HOUSEHOLD_KEYS, USER_HOUSEHOLD_INVITATIONS_KEYS as INV_KEYS} from 'shared/constants/settingsDataKeys'
 
 import {
   tHouseholdsName, tHouseholdsCols, tHouseInvName, tHouseInvCols,
@@ -8,25 +8,46 @@ import {
 } from './tables'
 
 export const findUserInvitations = async (currentUser: number): Promise<Array<object>> => {
-  return [{
-    [tHouseInvCols.id_household]: 1,
-    [tHouseholdsCols.name]: 'HOUSEHOLD 1',
-    [tHouseholdsCols.photo]: 'https://www.fondation-louisbonduelle.org/wp-content/uploads/2016/09/melon_194841866.png',
-    fromId: 1,
-    fromNickname: 'Uzivatel 1',
-    fromPhoto: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
-    [tHouseInvCols.message]: 'AHOJKY',
-  }, {
-    [tHouseInvCols.id_household]: 2,
-    [tHouseholdsCols.name]: 'HOUSEHOLD 2',
-    [tHouseholdsCols.photo]: 'https://www.fondation-louisbonduelle.org/wp-content/uploads/2016/09/melon_194841866.png',
-    fromId: 2,
-    fromNickname: 'Uzivatel 2',
-    fromPhoto: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
-    [tHouseInvCols.message]: 'AHOJKY',
-  }]
+  // return [{
+  //   [tHouseInvCols.id_household]: 1,
+  //   [tHouseholdsCols.name]: 'HOUSEHOLD 1',
+  //   [tHouseholdsCols.photo]: 'https://www.fondation-louisbonduelle.org/wp-content/uploads/2016/09/melon_194841866.png',
+  //   fromId: 1,
+  //   fromNickname: 'Uzivatel 1',
+  //   fromPhoto: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
+  //   [tHouseInvCols.message]: 'AHOJKY',
+  // }, {
+  //   [tHouseInvCols.id_household]: 2,
+  //   [tHouseholdsCols.name]: 'HOUSEHOLD 2',
+  //   [tHouseholdsCols.photo]: 'https://www.fondation-louisbonduelle.org/wp-content/uploads/2016/09/melon_194841866.png',
+  //   fromId: 2,
+  //   fromNickname: 'Uzivatel 2',
+  //   fromPhoto: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
+  //   [tHouseInvCols.message]: 'AHOJKY',
+  // }]
 
-  return database.query(`SELECT * FROM ${tHouseInvName} WHERE ${tHouseInvCols.id_to}=${currentUser}`)
+  const result = await database.query(`
+    SELECT ${tHouseInvCols.id_household}, h.${tHouseholdsCols.name}, h.${tHouseholdsCols.photo},
+      ${tHouseInvCols.id_from}, u.${tUsersCols.nickname}, u.${tUsersCols.photo} AS u_photo,
+      ${tHouseInvCols.message} 
+    FROM ${tHouseInvName}
+    INNER JOIN ${tHouseholdsName} AS h ON ${tHouseInvCols.id_household} = h.${tHouseholdsCols.id}
+    LEFT JOIN ${tUsersName} AS u ON ${tHouseInvCols.id_from} = u.${tUsersCols.id}
+    WHERE ${tHouseInvCols.id_to}=${currentUser}
+  `)
+
+    const householdInvitations = result.map((element: any) => ({
+        [INV_KEYS.HOUSEHOLD_ID]: element[tHouseInvCols.id_household],
+        [INV_KEYS.HOUSEHOLD_NAME]: element[tHouseholdsCols.name],
+        [INV_KEYS.HOUSEHOLD_PHOTO]: element[tHouseholdsCols.photo],
+        [INV_KEYS.FROM_ID]: element[tHouseInvCols.id_from],
+        [INV_KEYS.FROM_NICKNAME]: element[tUsersCols.nickname],
+        [INV_KEYS.FROM_PHOTO]: element['u_photo'],
+        [INV_KEYS.MESSAGE]: element[tHouseInvCols.message],
+    }))
+  console.log(result)
+  console.log(householdInvitations)
+  return householdInvitations
 }
 
 export const findUserHouseholds = async (currentUser: number): Promise<Array<object>> =>

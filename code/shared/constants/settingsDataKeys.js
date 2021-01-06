@@ -28,3 +28,13 @@ export const HOUSEHOLD_KEYS = {
   NAME: 'name',
   ID: 'id',
 }
+
+export const USER_HOUSEHOLD_INVITATIONS_KEYS = {
+  HOUSEHOLD_ID: 'household-id',
+  HOUSEHOLD_NAME: 'household-name',
+  HOUSEHOLD_PHOTO: 'household-photo',
+  FROM_ID: 'from-id',
+  FROM_NICKNAME: 'from-nickname',
+  FROM_PHOTO: 'from-photo',
+  MESSAGE: 'message',
+}

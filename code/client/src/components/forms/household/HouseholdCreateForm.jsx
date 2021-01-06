@@ -82,6 +82,7 @@ const HouseholdCreateForm = ({ connections }) => {
       ...inputs,
     }
 
+    //TODO: Add default photo to user after registering
     if (!inputs[HOUSEHOLD_KEYS.PHOTO]) {
       loadImageUrlWithCallback(newHouseholdIcon, 'image/svg+xml', householdPhoto => {
         if (!inputs[HOUSEHOLD_KEYS.USER_PHOTO]) {
