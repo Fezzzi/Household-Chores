@@ -9,3 +9,9 @@ export const invitationIgnore = data =>
 
 export const createHousehold = data =>
   clientApi.post(`${API.HOUSEHOLDS_PREFIX}/${API.HOUSEHOLD_CREATE}`, data)
+
+export const leaveHousehold = data =>
+  clientApi.post(`${API.HOUSEHOLDS_PREFIX}/${API.HOUSEHOLD_LEAVE}`, data)
+
+export const deleteHousehold = data =>
+  clientApi.post(`${API.HOUSEHOLDS_PREFIX}/${API.HOUSEHOLD_DELETE}`, data)

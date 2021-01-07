@@ -4,6 +4,7 @@ import { authSaga } from 'clientSrc/sagas/authSaga'
 import { themeSaga } from 'clientSrc/sagas/themeSaga'
 import { localeSaga } from 'clientSrc/sagas/localeSaga'
 import { settingsSaga } from 'clientSrc/sagas/settingsSaga'
+import { householdSaga } from 'clientSrc/sagas/householdSaga'
 import { loadState } from 'clientSrc/effects/rootEffects'
 import { RootActions } from 'clientSrc/actions'
 import { generalSaga } from 'clientSrc/helpers/sagas'
@@ -14,6 +15,7 @@ export default function* rootSaga() {
     fork(localeSaga),
     fork(authSaga),
     fork(settingsSaga),
+    fork(householdSaga),
   ])
 
   yield call(generalSaga, loadState, null, function* (data) {

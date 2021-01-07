@@ -7,15 +7,24 @@ import { TablePhoto, TableRowIcon } from 'clientSrc/styles/blocks/table'
 import { RoleLabel } from 'clientSrc/styles/blocks/households'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
+import { MEMBER_KEYS } from 'shared/constants/settingsDataKeys'
+import { formatDate } from 'shared/helpers/date'
 
 // todo: Add real clickHandlers
 export const useMemberListProps = members => {
-  const rows = members.map(member => ({
+  const rows = members.map(({
+    [MEMBER_KEYS.ID]: memberId,
+    [MEMBER_KEYS.ROLE]: memberRole,
+    [MEMBER_KEYS.PHOTO]: memberPhoto,
+    [MEMBER_KEYS.DATE_JOINED]: memberDateJoined,
+    ...member
+  }) => ({
     ...member,
-    photo: <TablePhoto src={member.photo} />,
-    role: <RoleLabel {...getLabelColors(member.role)}>{member.role}</RoleLabel>,
-    roleString: member.role,
+    photo: <TablePhoto src={memberPhoto} />,
+    role: <RoleLabel {...getLabelColors(memberRole)}>{memberRole}</RoleLabel>,
+    roleString: memberRole,
     delimiter: 'since',
+    dateJoined: formatDate(memberDateJoined, false),
     more: <OptionsTooltip
       icon={<MoreVert />}
       options={[
@@ -23,29 +32,29 @@ export const useMemberListProps = members => {
           content: HOUSEHOLD.CHANGE_ROLE,
           nestedOptions: Object.values(HOUSEHOLD_ROLE_TYPE).map(role => ({
             content: <RoleLabel {...getLabelColors(role)}>{role}</RoleLabel>,
-            clickHandler: role !== member.role
-              ? () => console.log('changing role to: ', role)
+            clickHandler: role !== memberRole
+              ? () => console.log('changing role of ', memberId, 'to: ', role)
               : null,
           })),
         }, {
           content: HOUSEHOLD.REMOVE_USER,
-          clickHandler: () => console.log('removing user'),
+          clickHandler: () => console.log('removing user', memberId),
         },
       ]}
     />,
   }))
   const keys = [
     { name: 'photo' },
-    { name: 'nickname', bold: true, growing: true },
+    { name: MEMBER_KEYS.NAME, bold: true, growing: true },
     { name: 'role' },
     { name: 'delimiter', fading: true },
-    { name: 'date_joined', fading: true },
+    { name: 'dateJoined', fading: true },
     { name: 'more' },
   ]
   const sortConfig = [
-    { key: 'nickname', icon: <SortByAlpha /> },
+    { key: MEMBER_KEYS.NAME, icon: <SortByAlpha /> },
     { key: 'roleString', icon: <Grade /> },
-    { key: 'date_joined', icon: <CalendarToday /> },
+    { key: 'dateJoined', icon: <CalendarToday /> },
   ]
   const filterKey = 'nickname'
 

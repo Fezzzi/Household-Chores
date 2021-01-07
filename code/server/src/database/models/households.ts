@@ -1,6 +1,6 @@
 import { database } from 'serverSrc/database'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
-import { HOUSEHOLD_KEYS, USER_HOUSEHOLD_INVITATIONS_KEYS as INV_KEYS} from 'shared/constants/settingsDataKeys'
+import { HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS } from 'shared/constants/settingsDataKeys'
 
 import {
   tHouseholdsName, tHouseholdsCols, tHouseInvName, tHouseInvCols,
@@ -8,24 +8,6 @@ import {
 } from './tables'
 
 export const findUserInvitations = async (currentUser: number): Promise<Array<object>> => {
-  // return [{
-  //   [tHouseInvCols.id_household]: 1,
-  //   [tHouseholdsCols.name]: 'HOUSEHOLD 1',
-  //   [tHouseholdsCols.photo]: 'https://www.fondation-louisbonduelle.org/wp-content/uploads/2016/09/melon_194841866.png',
-  //   fromId: 1,
-  //   fromNickname: 'Uzivatel 1',
-  //   fromPhoto: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
-  //   [tHouseInvCols.message]: 'AHOJKY',
-  // }, {
-  //   [tHouseInvCols.id_household]: 2,
-  //   [tHouseholdsCols.name]: 'HOUSEHOLD 2',
-  //   [tHouseholdsCols.photo]: 'https://www.fondation-louisbonduelle.org/wp-content/uploads/2016/09/melon_194841866.png',
-  //   fromId: 2,
-  //   fromNickname: 'Uzivatel 2',
-  //   fromPhoto: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
-  //   [tHouseInvCols.message]: 'AHOJKY',
-  // }]
-
   const result = await database.query(`
     SELECT ${tHouseInvCols.id_household}, h.${tHouseholdsCols.name}, h.${tHouseholdsCols.photo},
       ${tHouseInvCols.id_from}, u.${tUsersCols.nickname}, u.${tUsersCols.photo} AS u_photo,
@@ -36,116 +18,68 @@ export const findUserInvitations = async (currentUser: number): Promise<Array<ob
     WHERE ${tHouseInvCols.id_to}=${currentUser}
   `)
 
-    const householdInvitations = result.map((element: any) => ({
-        [INV_KEYS.HOUSEHOLD_ID]: element[tHouseInvCols.id_household],
-        [INV_KEYS.HOUSEHOLD_NAME]: element[tHouseholdsCols.name],
-        [INV_KEYS.HOUSEHOLD_PHOTO]: element[tHouseholdsCols.photo],
-        [INV_KEYS.FROM_ID]: element[tHouseInvCols.id_from],
-        [INV_KEYS.FROM_NICKNAME]: element[tUsersCols.nickname],
-        [INV_KEYS.FROM_PHOTO]: element['u_photo'],
-        [INV_KEYS.MESSAGE]: element[tHouseInvCols.message],
-    }))
-  console.log(result)
-  console.log(householdInvitations)
-  return householdInvitations
+  return result.map((invitation: any) => ({
+    [INVITATION_KEYS.HOUSEHOLD_ID]: invitation[tHouseInvCols.id_household],
+    [INVITATION_KEYS.HOUSEHOLD_NAME]: invitation[tHouseholdsCols.name],
+    [INVITATION_KEYS.HOUSEHOLD_PHOTO]: invitation[tHouseholdsCols.photo],
+    [INVITATION_KEYS.FROM_ID]: invitation[tHouseInvCols.id_from],
+    [INVITATION_KEYS.FROM_NICKNAME]: invitation[tUsersCols.nickname],
+    [INVITATION_KEYS.FROM_PHOTO]: invitation.u_photo,
+    [INVITATION_KEYS.MESSAGE]: invitation[tHouseInvCols.message],
+  }))
 }
 
-export const findUserHouseholds = async (currentUser: number): Promise<Array<object>> =>
-  [{
-    [tHouseholdsCols.id]: 1,
-    [tHouseholdsCols.name]: 'household 1',
-    key: 'household-1',
-    [tHouseholdsCols.date_created]: '21.6. 2020 18:56:42',
-    [tHouseholdsCols.photo]: 'https://www.fondation-louisbonduelle.org/wp-content/uploads/2016/09/melon_194841866.png',
-    members: [
-      { [tHouseMemCols.role]: HOUSEHOLD_ROLE_TYPE.ADMIN, [tHouseMemCols.date_joined]: '21. 1. 2020 16:32:58', [tUsersCols.id]: 1, [tUsersCols.nickname]: 'Uzivatel 1', [tUsersCols.photo]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
-      { [tHouseMemCols.role]: HOUSEHOLD_ROLE_TYPE.MEMBER, [tHouseMemCols.date_joined]: '21. 1. 2020 16:32:58', [tUsersCols.id]: 1, [tUsersCols.nickname]: 'Uzivatel 1', [tUsersCols.photo]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
-    ],
-    invitations: [{
-      fromId: 1,
-      fromNickname: 'Uzivatel 1',
-      fromPhoto: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
-      toId: 2,
-      toNickname: 'Uzivatel 2',
-      toPhoto: 'https://images.ctfassets.net/6jpeaipefazr/3KUmXmc2mO7wmAC1nT3NNH/b3d928a1bcb1d7260eb9ce00fda51cca/F3-melon.jpg?fm=jpg&fl=progressive&q=60&w=400&h=400&fit=scale',
-      [tHouseInvCols.message]: 'AHOJKY',
-      dateCreated: '21.6. 2020 18:56:42',
-    }, {
-      fromId: 1,
-      fromNickname: 'Uzivatel 1',
-      fromPhoto: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
-      toId: 2,
-      toNickname: 'Uzivatel 2',
-      toPhoto: 'https://images.ctfassets.net/6jpeaipefazr/3KUmXmc2mO7wmAC1nT3NNH/b3d928a1bcb1d7260eb9ce00fda51cca/F3-melon.jpg?fm=jpg&fl=progressive&q=60&w=400&h=400&fit=scale',
-      [tHouseInvCols.message]: 'AHOJKY',
-      dateCreated: '21.6. 2020 18:56:42',
-    }],
-  }, {
-    [tHouseholdsCols.id]: 2,
-    [tHouseholdsCols.name]: 'household 2',
-    key: 'household-2',
-    [tHouseholdsCols.date_created]: '21.6. 2021 18:56:42',
-    [tHouseholdsCols.photo]: 'https://www.johnnyseeds.com/dw/image/v2/BBBW_PRD/on/demandware.static/-/Sites-jss-master/default/dw22620c58/images/products/vegetables/00053_01_brilliantfield.jpg?sw=387&cx=226&cy=0&cw=1196&ch=1196',
-    members: [
-      { [tHouseMemCols.role]: HOUSEHOLD_ROLE_TYPE.ADMIN, [tHouseMemCols.date_joined]: '21. 1. 2020 16:32:58', [tUsersCols.id]: 1, [tUsersCols.nickname]: 'Uzivatel 1', [tUsersCols.photo]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
-      { [tHouseMemCols.role]: HOUSEHOLD_ROLE_TYPE.MEMBER, [tHouseMemCols.date_joined]: '21. 1. 2020 16:32:58', [tUsersCols.id]: 1, [tUsersCols.nickname]: 'Uzivatel 1', [tUsersCols.photo]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
-    ],
-    invitations: [{
-      fromId: 1,
-      fromNickname: 'Uzivatel 1',
-      fromPhoto: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
-      toId: 2,
-      toNickname: 'Uzivatel 2',
-      toPhoto: 'https://images.ctfassets.net/6jpeaipefazr/3KUmXmc2mO7wmAC1nT3NNH/b3d928a1bcb1d7260eb9ce00fda51cca/F3-melon.jpg?fm=jpg&fl=progressive&q=60&w=400&h=400&fit=scale',
-      [tHouseInvCols.message]: 'AHOJKY',
-      dateCreated: '21.6. 2020 18:56:42',
-    }, {
-      fromId: 1,
-      fromNickname: 'Uzivatel 1',
-      fromPhoto: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
-      toId: 2,
-      toNickname: 'Uzivatel 2',
-      toPhoto: 'https://images.ctfassets.net/6jpeaipefazr/3KUmXmc2mO7wmAC1nT3NNH/b3d928a1bcb1d7260eb9ce00fda51cca/F3-melon.jpg?fm=jpg&fl=progressive&q=60&w=400&h=400&fit=scale',
-      [tHouseInvCols.message]: 'AHOJKY',
-      dateCreated: '21.6. 2020 18:56:42',
-    }],
-  }, {
-    [tHouseholdsCols.id]: 3,
-    [tHouseholdsCols.name]: 'household 3',
-    key: 'household-3',
-    [tHouseholdsCols.date_created]: '21.6. 2022 18:56:42',
-    [tHouseholdsCols.photo]: 'https://www.rareseeds.com/media/catalog/product/cache/4f71e30e38ffe1b90b59b74efe76a4b8/m/e/melon-tigger-lss-dsc_3440.jpg',
-    members: [
-      { [tHouseMemCols.role]: HOUSEHOLD_ROLE_TYPE.ADMIN, [tHouseMemCols.date_joined]: '21. 1. 2020 16:32:58', [tUsersCols.id]: 1, [tUsersCols.nickname]: 'Uzivatel 1', [tUsersCols.photo]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
-      { [tHouseMemCols.role]: HOUSEHOLD_ROLE_TYPE.MEMBER, [tHouseMemCols.date_joined]: '21. 1. 2020 16:32:58', [tUsersCols.id]: 1, [tUsersCols.nickname]: 'Uzivatel 1', [tUsersCols.photo]: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg' },
-    ],
-    invitations: [{
-      fromId: 1,
-      fromNickname: 'Uzivatel 1',
-      fromPhoto: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
-      toId: 2,
-      toNickname: 'Uzivatel 2',
-      toPhoto: 'https://images.ctfassets.net/6jpeaipefazr/3KUmXmc2mO7wmAC1nT3NNH/b3d928a1bcb1d7260eb9ce00fda51cca/F3-melon.jpg?fm=jpg&fl=progressive&q=60&w=400&h=400&fit=scale',
-      [tHouseInvCols.message]: 'AHOJKY',
-      dateCreated: '21.6. 2020 18:56:42',
-    }, {
-      fromId: 1,
-      fromNickname: 'Uzivatel 1',
-      fromPhoto: 'https://assets.sainsburys-groceries.co.uk/gol/3476/1/640x640.jpg',
-      toId: 2,
-      toNickname: 'Uzivatel 2',
-      toPhoto: 'https://images.ctfassets.net/6jpeaipefazr/3KUmXmc2mO7wmAC1nT3NNH/b3d928a1bcb1d7260eb9ce00fda51cca/F3-melon.jpg?fm=jpg&fl=progressive&q=60&w=400&h=400&fit=scale',
-      [tHouseInvCols.message]: 'AHOJKY',
-      dateCreated: '21.6. 2020 18:56:42',
-    }],
-  }]
-  /* await database.query(`
-      SELECT households.${tabID}, households.${tabName}, households.${tabPhoto}, households.${tabDateCreated},
-        (SELECT * FROM ${tHouseMemName} AS mems WHERE households.${tabID}=mems.${tabHouseMemIDHousehold}) AS members,
-        (SELECT * FROM ${tHouseInvName} AS invs WHERE households.${tabID}=invs.${tabHouseInvIDHousehold}) AS invitations
-      FROM ${tHouseholdsName} AS households
-      INNER JOIN ${tHouseMemName} ON households.${tabID}=${tabHouseMemIDHousehold} AND ${tabHouseMemIDUser}=${currentUser}
-  `); */
+export const findUserHouseholds = async (currentUser: number): Promise<Array<object>> => {
+  const households = await database.query(`
+    SELECT households.${tHouseholdsCols.id}, households.${tHouseholdsCols.name} AS h_name,
+      households.${tHouseholdsCols.photo} AS h_photo, CONCAT('household-', households.${tHouseholdsCols.id}) AS "key",
+      households.${tHouseholdsCols.date_created} AS h_created,
+      invitations.${tHouseInvCols.id_from}, invitations.${tHouseInvCols.id_to}, invitations.${tHouseInvCols.message},
+      invitations.${tHouseInvCols.date_created}, users.${tUsersCols.nickname}, users.${tUsersCols.photo} AS u_photo,
+      members.${tHouseMemCols.role}, members.${tHouseMemCols.id_user}, members.${tHouseMemCols.date_joined},
+      members.${tHouseMemCols.name}, members.${tHouseMemCols.photo}
+    FROM ${tHouseholdsName} AS households
+    INNER JOIN ${tHouseMemName} AS mems
+      ON households.${tHouseholdsCols.id}=mems.${tHouseMemCols.id_household} AND mems.${tHouseMemCols.id_user}=${currentUser}
+    LEFT JOIN ${tHouseInvName} AS invitations ON households.${tHouseholdsCols.id}=invitations.${tHouseInvCols.id_household}
+    LEFT JOIN ${tUsersName} AS users ON users.${tUsersCols.id}=invitations.${tHouseInvCols.id_to}
+    LEFT JOIN ${tHouseMemName} AS members ON households.${tHouseholdsCols.id}=members.${tHouseInvCols.id_household}
+  `)
+  return Object.values(households.reduce((acc: any, household: any) => {
+    const householdId = household[tHouseholdsCols.id]
+    if (acc[householdId] === undefined) {
+      acc[householdId] = {
+        [HOUSEHOLD_KEYS.ID]: household[tHouseholdsCols.id],
+        [HOUSEHOLD_KEYS.NAME]: household.h_name,
+        [HOUSEHOLD_KEYS.PHOTO]: household.h_photo,
+        [HOUSEHOLD_KEYS.KEY]: household.key,
+        [HOUSEHOLD_KEYS.DATE_CREATED]: household.h_created,
+        [HOUSEHOLD_GROUP_KEYS.MEMBERS]: [],
+        [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: [],
+      }
+    }
+    if (household[tHouseInvCols.id_to] && household[tHouseInvCols.id_from]) {
+      acc[householdId][HOUSEHOLD_GROUP_KEYS.INVITATIONS].push({
+        [INVITATION_KEYS.FROM_ID]: household[tHouseInvCols.id_from],
+        [INVITATION_KEYS.TO_ID]: household[tHouseInvCols.id_to],
+        [INVITATION_KEYS.TO_NICKNAME]: household[tUsersCols.nickname],
+        [INVITATION_KEYS.TO_PHOTO]: household.u_photo,
+        [INVITATION_KEYS.MESSAGE]: household[tHouseInvCols.message],
+        [INVITATION_KEYS.DATE_CREATED]: household[tHouseInvCols.date_created],
+      })
+    }
+    if (household[tHouseMemCols.id_user]) {
+      acc[householdId][HOUSEHOLD_GROUP_KEYS.MEMBERS].push({
+        [MEMBER_KEYS.ID]: household[tHouseMemCols.id_user],
+        [MEMBER_KEYS.ROLE]: household[tHouseMemCols.role],
+        [MEMBER_KEYS.NAME]: household[tHouseMemCols.name],
+        [MEMBER_KEYS.PHOTO]: household[tHouseMemCols.photo],
+        [MEMBER_KEYS.DATE_JOINED]: household[tHouseMemCols.date_joined],
+      })
+    }
+    return acc
+  }, {}))
+}
 
 export const addHouseholdInvitations = async (
   householdId: number,
@@ -177,13 +111,20 @@ export const createHousehold = async (
     return success && result.insertId
   })
 
-export const deleteHousehold = async (
-  householdId: number
-): Promise<boolean> =>
+export const deleteHousehold = async (householdId: number): Promise<boolean> =>
   database.query(`
     DELETE FROM ${tHouseholdsName}
     WHERE ${tHouseholdsCols.id}=?
   `, [householdId])
+
+export const findHouseholdAdmins = async (householdId: number): Promise<number[]> => {
+  const admins = await database.query(`
+    SELECT ${tHouseMemCols.id_user}
+    FROM ${tHouseMemName}
+    WHERE  ${tHouseMemCols.id_household}=? AND ${tHouseMemCols.role}='${HOUSEHOLD_ROLE_TYPE.ADMIN}'
+  `, [householdId])
+  return admins?.map((admin: any) => admin[tHouseMemCols.id_user])
+}
 
 export const leaveHousehold = async (
   userId: number,
@@ -196,7 +137,8 @@ export const leaveHousehold = async (
 
 export const deleteInvitation = async (
   currentId: number,
-  { fromId, householdId }: { fromId: number; householdId: number },
+  fromId: number,
+  householdId: number,
 ): Promise<boolean> =>
   database.query(`
     DELETE FROM ${tHouseInvName}
@@ -205,28 +147,30 @@ export const deleteInvitation = async (
 
 export const approveInvitation = async (
   currentId: number,
-  data: { fromId: number; householdId: number; name: string; photo: string },
+  fromId: number,
+  householdId: number,
+  name: string,
+  photo: string,
 ): Promise<boolean | null> =>
   database.withTransaction(async (): Promise<boolean> => {
-    const success = await deleteInvitation(currentId, data)
-    if (success) {
-      const { fromId, householdId, name, photo } = data
-      return database.query(`
-        INSERT INTO ${tHouseMemName} (
-          ${tHouseMemCols.id_household}, ${tHouseMemCols.id_user}, ${tHouseMemCols.id_from}, ${tHouseMemCols.role},
-          ${tHouseMemCols.name}, ${tHouseMemCols.photo}, ${tHouseMemCols.date_joined}
-        ) VALUES (?, ${currentId}, ?, '${HOUSEHOLD_ROLE_TYPE.MEMBER}', ?, ?, NOW())
-      `, [householdId, fromId, name, photo])
-    }
-    return false
+    const deleted = await deleteInvitation(currentId, fromId, householdId)
+    return deleted && database.query(`
+      INSERT INTO ${tHouseMemName} (
+        ${tHouseMemCols.id_household}, ${tHouseMemCols.id_user}, ${tHouseMemCols.id_from}, ${tHouseMemCols.role},
+        ${tHouseMemCols.name}, ${tHouseMemCols.photo}, ${tHouseMemCols.date_joined}
+      ) VALUES (?, ${currentId}, ?, '${HOUSEHOLD_ROLE_TYPE.MEMBER}', ?, ?, NOW())
+    `, [householdId, fromId, name, photo])
   })
 
 export const getUserRole = async (
   userId: number,
   householdId: number
-): Promise<string | null> =>
-  database.query(`
+): Promise<string | null> => {
+  const role = await database.query(`
     SELECT ${tHouseMemCols.role}
     FROM ${tHouseMemName}
     WHERE ${tHouseMemCols.id_user}=${userId} AND ${tHouseMemCols.id_household}=?
+    LIMIT 1
   `, [householdId])
+  return role?.[0][tHouseMemCols.role]
+}

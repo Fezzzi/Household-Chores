@@ -46,6 +46,7 @@ export const PageWrapper = styled.section`
 
 export const PageContent = styled.main`
   order: 4;
+  max-height: calc(100% - 50px);
   display: flex;
   flex-grow: 1;
 `

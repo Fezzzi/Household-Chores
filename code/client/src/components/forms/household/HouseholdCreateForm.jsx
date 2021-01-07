@@ -7,7 +7,7 @@ import newHouseholdIcon from '~/static/icons/icon-150.png'
 import { SectionHeadline } from 'clientSrc/styles/blocks/settings'
 import { useInvitationListProps } from 'clientSrc/helpers/household'
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
-import { SettingsActions } from 'clientSrc/actions'
+import { HouseholdActions } from 'clientSrc/actions'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
@@ -87,7 +87,7 @@ const HouseholdCreateForm = ({ connections }) => {
       loadImageUrlWithCallback(newHouseholdIcon, 'image/svg+xml', householdPhoto => {
         if (!inputs[HOUSEHOLD_KEYS.USER_PHOTO]) {
           loadImageUrlWithCallback(currentUser.photo, `image/${currentUser.photo.split('.').splice(-1)[0]}`, userPhoto => {
-            dispatch(SettingsActions.createHousehold({
+            dispatch(HouseholdActions.createHousehold({
               inputs: {
                 ...inputsData,
                 [HOUSEHOLD_KEYS.PHOTO]: householdPhoto,
@@ -97,7 +97,7 @@ const HouseholdCreateForm = ({ connections }) => {
             }))
           })
         } else {
-          dispatch(SettingsActions.createHousehold({
+          dispatch(HouseholdActions.createHousehold({
             inputs: {
               ...inputsData,
               [HOUSEHOLD_KEYS.PHOTO]: householdPhoto,
@@ -108,7 +108,7 @@ const HouseholdCreateForm = ({ connections }) => {
       })
     } else if (!inputs[HOUSEHOLD_KEYS.USER_PHOTO]) {
       loadImageUrlWithCallback(currentUser.photo, `image/${currentUser.photo.split('.').splice(-1)[0]}`, userPhoto => {
-        dispatch(SettingsActions.createHousehold({
+        dispatch(HouseholdActions.createHousehold({
           inputs: {
             ...inputsData,
             [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
@@ -117,7 +117,7 @@ const HouseholdCreateForm = ({ connections }) => {
         }))
       })
     } else {
-      dispatch(SettingsActions.createHousehold({ inputs: inputsData, invitations }))
+      dispatch(HouseholdActions.createHousehold({ inputs: inputsData, invitations }))
     }
 
     setTimer(setTimeout(

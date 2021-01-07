@@ -39,10 +39,10 @@ export const SettingText = styled.div`
 
 export const Column = styled.div`
   width: 100%;
-  max-height: calc(100% - 58px);
+  max-height: calc(100% - 14px);
   overflow-y: auto;
   background-color: ${COLORS.THEME_FRONT};
-  padding: 14px 0 4px;
+  padding: 14px 0 0;
   margin: 14px 0;
   user-select: none;
   border: 1px solid ${COLORS.BORDER};

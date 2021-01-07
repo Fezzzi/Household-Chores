@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { SettingsActions } from 'clientSrc/actions'
+import { HouseholdActions, SettingsActions } from 'clientSrc/actions'
 import { SETTING_CATEGORIES, CONNECTION_STATE_TYPE } from 'shared/constants'
 
 const initialState = {
@@ -51,5 +51,4 @@ export default createReducer(initialState, {
   [SettingsActions.loadSettingsSuccess.toString()]: settingsLoaded,
   [SettingsActions.settingsDataUpdated.toString()]: settingsDataUpdated,
   [SettingsActions.connectionRequestSuccess.toString()]: connectionRequested,
-  [SettingsActions.ignoreInvitationSuccess.toString()]: invitationIgnored,
 })

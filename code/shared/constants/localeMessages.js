@@ -31,6 +31,7 @@ export const COMMON = {
 }
 
 export const ERROR = {
+  ADMIN_REQUIRED: 'error.adminRequired',
   CONNECTION_ERROR: 'error.connectionError',
   CONNECTION_REQUEST_ERROR: 'error.connectionRequestError',
   ACTION_ERROR: 'error.actionError',

@@ -1,14 +1,16 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
 import { Save } from '@material-ui/icons'
 
 import { SectionHeadline } from 'clientSrc/styles/blocks/settings'
+import { HouseholdActions } from 'clientSrc/actions'
 import { useFormState } from 'clientSrc/helpers/form'
 import { useMemberListProps, useInvitationListProps } from 'clientSrc/helpers/household'
-import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
-import { PROFILE } from 'shared/constants/settingsDataKeys'
+import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
+import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
+import { HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, MEMBER_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
 
 import HouseholdFormHeader from './HouseholdFormHeader'
 import HouseholdInvitationForm from './HouseholdInvitationForm'
@@ -19,6 +21,9 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
   // This state holds information about sending state of leave/delete buttons in household header
   const [sendingField, setSendingField] = useState(null)
   const [newInvitations, setNewInvitations] = useState([])
+  const [timer, setTimer] = useState(0)
+
+  useEffect(() => () => timer && clearTimeout(timer), [])
 
   const {
     submitMessage,
@@ -29,28 +34,46 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     setFormState,
   } = useFormState([household, connections])
 
-  const { photo, name, members, invitations } = household
+  const {
+    [HOUSEHOLD_KEYS.ID]: householdId,
+    [HOUSEHOLD_KEYS.PHOTO]: photo,
+    [HOUSEHOLD_KEYS.NAME]: name,
+    [HOUSEHOLD_GROUP_KEYS.MEMBERS]: members,
+    [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations,
+  } = household
   const memberTableProps = useMemberListProps(members)
   const invitationTableProps = useInvitationListProps(invitations)
 
   const userState = useSelector(({ app }) => app.user)
-  // todo: Use members.find to find current user data by id from global store
-  const currentUser = useMemo(() => ({
-    id: userState[PROFILE.ID],
-    photo: userState[PROFILE.PHOTO],
-    name: userState[PROFILE.NAME],
-    role: HOUSEHOLD_ROLE_TYPE.ADMIN,
-  }), [userState])
+  const currentUser = useMemo(() => {
+    const member = members.find(member => member[MEMBER_KEYS.ID] === userState[PROFILE.ID])
+    return {
+      id: userState[PROFILE.ID],
+      photo: member?.[MEMBER_KEYS.PHOTO] ?? userState[PROFILE.PHOTO],
+      name: member?.[MEMBER_KEYS.NAME] ?? userState[PROFILE.NAME],
+      role: member?.[MEMBER_KEYS.ROLE],
+    }
+  }, [members, userState])
 
-  const handleLeaveHousehold = () => {
+  const dispatch = useDispatch()
+  const handleLeaveHousehold = useCallback(() => {
     setSendingField({ [HOUSEHOLD.LEAVE]: HOUSEHOLD.LEAVING })
-    console.log('leaving...')
-  }
+    dispatch(HouseholdActions.leaveHousehold({ householdId }))
+    setTimer(setTimeout(() => setSendingField && setSendingField(null), SUBMIT_TIMEOUT))
+  }, [householdId, dispatch])
 
-  const handleDeleteHousehold = () => {
+  const handleDeleteHousehold = useCallback(() => {
     setSendingField({ [HOUSEHOLD.DELETE]: HOUSEHOLD.DELETING })
-    console.log('deleting...')
-  }
+    dispatch(HouseholdActions.deleteHousehold({ householdId }))
+    setTimer(setTimeout(() => setSendingField && setSendingField(null), SUBMIT_TIMEOUT))
+  }, [householdId, dispatch])
+
+  const canDeleteHousehold = useMemo(() => {
+    const admins = members
+      .filter(member => member[MEMBER_KEYS.ROLE] === HOUSEHOLD_ROLE_TYPE.ADMIN)
+      .map(admin => admin[MEMBER_KEYS.ID])
+    return admins.length > 1 || admins.indexOf(currentUser.id) === -1
+  }, [members, currentUser])
 
   return (
     <>
@@ -72,8 +95,8 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
         setFormState={setFormState}
         currentUser={currentUser}
         sendingField={sendingField}
-        onLeaveHousehold={handleLeaveHousehold}
-        onDeleteHousehold={handleDeleteHousehold}
+        onLeaveHousehold={canDeleteHousehold && handleLeaveHousehold}
+        onDeleteHousehold={currentUser.role === HOUSEHOLD_ROLE_TYPE.ADMIN && handleDeleteHousehold}
       />
 
       <SectionHeadline>
@@ -120,22 +143,8 @@ HouseholdModificationForm.propTypes = {
   household: PropTypes.shape({
     photo: PropTypes.string,
     name: PropTypes.string,
-    members: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      photo: PropTypes.string.isRequired,
-      nickname: PropTypes.string.isRequired,
-      role: PropTypes.string.isRequired,
-      date_joined: PropTypes.string.isRequired,
-    })),
-    invitations: PropTypes.arrayOf(PropTypes.shape({
-      fromId: PropTypes.number.isRequired,
-      fromNickname: PropTypes.string.isRequired,
-      fromPhoto: PropTypes.string.isRequired,
-      toId: PropTypes.number.isRequired,
-      toNickname: PropTypes.string.isRequired,
-      toPhoto: PropTypes.string.isRequired,
-      dateCreated: PropTypes.string.isRequired,
-    })),
+    members: PropTypes.array,
+    invitations: PropTypes.array,
   }),
   connections: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,

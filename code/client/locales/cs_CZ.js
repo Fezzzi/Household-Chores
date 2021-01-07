@@ -28,6 +28,7 @@ export default {
   [COMMON.TERMS_AND_CONDITIONS]: 'podmínky použití',
   [COMMON.PHOTO_SIZE]: 'velikost obrázku',
 
+  [ERROR.ADMIN_REQUIRED]: 'Každá domácnost musí mít alespoň jednoho správce.',
   [ERROR.CONNECTION_ERROR]: 'Chyba spojení, zkuste to prosím později.',
   [ERROR.CONNECTION_REQUEST_ERROR]: 'Žádost o spojení se nezdařila, zkuste to prosím později.',
   [ERROR.INVALID_REQUEST]: 'Požadovanou akci nelze provést.',

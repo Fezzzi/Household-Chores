@@ -67,17 +67,7 @@ const HouseholdInvitationListForm = ({ invitations }) => {
 }
 
 HouseholdInvitationListForm.propTypes = {
-  invitations: PropTypes.arrayOf(
-    PropTypes.shape({
-      fromId: PropTypes.number.isRequired,
-      fromNickname: PropTypes.string.isRequired,
-      fromPhoto: PropTypes.string.isRequired,
-      id_household: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      message: PropTypes.string,
-      photo: PropTypes.string,
-    })
-  ).isRequired,
+  invitations: PropTypes.array.isRequired,
 }
 
 export default HouseholdInvitationListForm
