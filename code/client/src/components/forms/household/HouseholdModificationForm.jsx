@@ -5,12 +5,15 @@ import { Save } from '@material-ui/icons'
 
 import { SectionHeadline } from 'clientSrc/styles/blocks/settings'
 import { HouseholdActions } from 'clientSrc/actions'
-import { useFormState } from 'clientSrc/helpers/form'
+import { useFormState, useUpdateHandler } from 'clientSrc/helpers/form'
 import { useMemberListProps, useInvitationListProps } from 'clientSrc/helpers/household'
+import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
-import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
-import { HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, MEMBER_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
+import { formatDate } from 'shared/helpers/date'
+import {
+  HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS, PROFILE,
+} from 'shared/constants/settingsDataKeys'
 
 import HouseholdFormHeader from './HouseholdFormHeader'
 import HouseholdInvitationForm from './HouseholdInvitationForm'
@@ -18,9 +21,16 @@ import { LocaleText, Table } from '../../common'
 import { SimpleFloatingElement } from '../../portals'
 
 const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
+  const {
+    [HOUSEHOLD_KEYS.ID]: householdId,
+    [HOUSEHOLD_KEYS.PHOTO]: photo,
+    [HOUSEHOLD_KEYS.NAME]: name,
+    [HOUSEHOLD_GROUP_KEYS.MEMBERS]: members,
+    [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations,
+  } = household
+
   // This state holds information about sending state of leave/delete buttons in household header
   const [sendingField, setSendingField] = useState(null)
-  const [newInvitations, setNewInvitations] = useState([])
   const [timer, setTimer] = useState(0)
 
   useEffect(() => () => timer && clearTimeout(timer), [])
@@ -33,27 +43,78 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     errors,
     setFormState,
   } = useFormState([household, connections])
-
-  const {
-    [HOUSEHOLD_KEYS.ID]: householdId,
-    [HOUSEHOLD_KEYS.PHOTO]: photo,
-    [HOUSEHOLD_KEYS.NAME]: name,
-    [HOUSEHOLD_GROUP_KEYS.MEMBERS]: members,
-    [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations,
-  } = household
-  const memberTableProps = useMemberListProps(members)
-  const invitationTableProps = useInvitationListProps(invitations)
+  const { invitedConnections, removedInvitations, removedMembers } = inputs
+  const updateInput = useMemo(() => useUpdateHandler(setFormState), [setFormState])
+  const updateArrayValue = useCallback((key, value, add = true) => {
+    const newValue = add
+      ? inputs[key] ? [...inputs[key], value] : [value]
+      : inputs[key]?.filter(input => input !== value)
+    updateInput(key, true, newValue, null, [])
+  }, [invitedConnections, removedInvitations, removedMembers, updateInput])
 
   const userState = useSelector(({ app }) => app.user)
   const currentUser = useMemo(() => {
     const member = members.find(member => member[MEMBER_KEYS.ID] === userState[PROFILE.ID])
     return {
       id: userState[PROFILE.ID],
-      photo: member?.[MEMBER_KEYS.PHOTO] ?? userState[PROFILE.PHOTO],
-      name: member?.[MEMBER_KEYS.NAME] ?? userState[PROFILE.NAME],
-      role: member?.[MEMBER_KEYS.ROLE],
+      photo: member[MEMBER_KEYS.PHOTO] ?? userState[PROFILE.PHOTO],
+      name: member[MEMBER_KEYS.NAME] ?? userState[PROFILE.NAME],
+      role: member[MEMBER_KEYS.ROLE],
     }
   }, [members, userState])
+
+  const invitableConnections = useMemo(() => connections.filter(({ id }) =>
+    !members.find(member => member[MEMBER_KEYS.ID] === id)
+    && !invitations.find(invitation => invitation[INVITATION_KEYS.TO_ID] === id)
+    && !invitedConnections?.find(user => user === id)
+  ), [connections, members, invitations, invitedConnections])
+
+  const memberTableProps = useMemo(() => useMemberListProps(members), [members])
+  const invitationTableProps = useMemo(() =>
+    useInvitationListProps([
+      ...(invitedConnections
+        ? invitedConnections.map(id => {
+          const connectedUser = connections.find(user => user.id === id)
+          return {
+            fromPhoto: currentUser.photo,
+            fromNickname: currentUser.name,
+            fromId: currentUser.id,
+            toPhoto: connectedUser.photo,
+            toNickname: connectedUser.nickname,
+            toId: id,
+            dateCreated: '(PENDING)',
+          }
+        })
+        : []
+      ),
+      ...invitations.map(invitation => {
+        const invitor = members.find(member => member[MEMBER_KEYS.ID] === invitation[INVITATION_KEYS.FROM_ID])
+        const allowCancellation = removedInvitations?.includes(invitation[INVITATION_KEYS.TO_ID])
+        const disableDeletion = allowCancellation || [HOUSEHOLD_ROLE_TYPE.MEMBER].includes(currentUser.role)
+        return invitor && {
+          fromPhoto: invitor[MEMBER_KEYS.PHOTO],
+          fromNickname: invitor[MEMBER_KEYS.NAME],
+          fromId: invitation[INVITATION_KEYS.FROM_ID],
+          toPhoto: invitation[INVITATION_KEYS.TO_PHOTO],
+          toNickname: invitation[INVITATION_KEYS.TO_NICKNAME],
+          toId: invitation[INVITATION_KEYS.TO_ID],
+          dateCreated: formatDate(invitation[INVITATION_KEYS.DATE_CREATED]),
+          disableDeletion,
+          allowCancellation,
+        }
+      }).filter(Boolean),
+    ],
+    toId => {
+      const isExistingInvitation = invitations.find(invitation => invitation[INVITATION_KEYS.TO_ID] === toId)
+      if (isExistingInvitation) {
+        updateArrayValue('removedInvitations', toId)
+      } else {
+        updateArrayValue('invitedConnections', toId, false)
+      }
+    },
+    toId => updateArrayValue('removedInvitations', toId, false)
+    ),
+  [invitedConnections, removedInvitations, invitations, members, currentUser])
 
   const dispatch = useDispatch()
   const handleLeaveHousehold = useCallback(() => {
@@ -83,20 +144,21 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
           sending={isFormSending}
           enabled={isFormValid}
           icon={<Save />}
-          onClick={onSubmit(inputs, setFormState)}
+          onClick={() => onSubmit(inputs, setFormState)}
         />
       )}
       <HouseholdFormHeader
         name={name}
         photo={photo}
+        editableRole
         errors={errors}
         inputs={inputs}
         membersCount={members.length}
         setFormState={setFormState}
         currentUser={currentUser}
         sendingField={sendingField}
-        onLeaveHousehold={canDeleteHousehold && handleLeaveHousehold}
-        onDeleteHousehold={currentUser.role === HOUSEHOLD_ROLE_TYPE.ADMIN && handleDeleteHousehold}
+        onLeaveHousehold={canDeleteHousehold ? handleLeaveHousehold : undefined}
+        onDeleteHousehold={currentUser.role === HOUSEHOLD_ROLE_TYPE.ADMIN ? handleDeleteHousehold : undefined}
       />
 
       <SectionHeadline>
@@ -108,14 +170,13 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
         <LocaleText message={HOUSEHOLD.INVITE_USERS} />
       </SectionHeadline>
       <HouseholdInvitationForm
-        connections={connections.filter(({ id }) => !newInvitations.find(user => user.id === id))}
-        onInvite={id => setNewInvitations(prevState => [...prevState, connections.find(user => user.id === id)])}
+        connections={invitableConnections}
+        onInvite={id => updateArrayValue('invitedConnections', id)}
       />
 
       <SectionHeadline>
         <LocaleText message={HOUSEHOLD.INVITATIONS} />
       </SectionHeadline>
-      {/* todo: Add real clickHandlers */}
       <Table {...invitationTableProps} />
 
       <SectionHeadline>

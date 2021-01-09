@@ -32,7 +32,8 @@ const PhotoInput = ({
   ), [dispatch])
 
   const handleInputChange = useCallback(event => {
-    const { target: { files } } = event
+    const { target: { files, ...rest } } = event
+    console.log('HANDLING INPUT CHANGE', files, rest)
     if (!files[0]) {
       event.target.value = ''
       return
@@ -84,10 +85,10 @@ const PhotoInput = ({
   }, [name, onUpdate, onFileRemove])
 
   useEffect(() => reference && reference.current && reference.current.click(), [reference])
-
+  // todo: Images dropped from other tabs get opened in new tab instead of getting uploaded
   return (
     <InputRow>
-      <PhotoInputWrapper active={inputActive} size={size}>
+      <PhotoInputWrapper active={inputActive} size={size} hasPreview={file}>
         {(file || closable) && (
           <RemoveFileButton onClick={handleFileRemove}>
             <HighlightOff />
@@ -110,7 +111,7 @@ const PhotoInput = ({
             name={name}
             type="file"
             ref={reference}
-            onChange={handleInputChange}
+            onChange={e => handleInputChange(e)}
             onFocus={() => setInputActive(true)}
             onBlur={() => setInputActive(false)}
             onDrop={() => setDragActive(false)}

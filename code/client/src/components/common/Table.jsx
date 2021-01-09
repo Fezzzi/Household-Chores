@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Search } from '@material-ui/icons'
 
 import {
-  TableBox, TableHeaderBox, TableHeaderCell, TableRow, TableCell, TableSorterIcon, TableRowsBox,
+  TableBox, TableHeaderBox, TableHeaderCell, TableRow, TableCell, TableSorterIcon, TableRowsBox, TableRowStrikethrough,
 } from 'clientSrc/styles/blocks/table'
 import { COMMON } from 'shared/constants/localeMessages'
 import { useTableLogic } from 'clientSrc/helpers/table'
@@ -39,7 +39,7 @@ const Table = ({ rows, keys, sortConfig, filterKey }) => {
       </TableHeaderBox>
       <TableRowsBox>
         {processedRows.map((row, index) => (
-          <TableRow key={index}>
+          <TableRow key={index} strikethrough={keys.find(({ name }) => name === 'cancel' && row[name])}>
             {keys.map(({ name, bold, fading, growing }) => row[name] && (
               <TableCell key={`${index}-${name}`} boldKey={bold} fadeKey={fading} growing={growing}>{row[name]}</TableCell>
             ))}

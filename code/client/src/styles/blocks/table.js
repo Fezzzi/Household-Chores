@@ -38,6 +38,13 @@ export const TableRowsBox = styled.div`
 export const TableRow = styled.div`
   padding: 5px 6px;
   display: flex;
+  ${props => props.strikethrough && `
+    text-decoration: line-through;
+
+    > * img {
+      filter: opacity(0.5);
+    }
+  `}
 `
 
 export const TableRowIcon = styled.span`

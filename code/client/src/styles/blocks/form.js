@@ -154,6 +154,7 @@ export const PhotoInputWrapper = styled(InputWrapper)`
   margin: auto;
   display: flex;
   margin-bottom: ${props => props.size / 8}px;
+  border-radius: ${props => props.hasPreview ? '50%' : '0'};
 `
 
 export const PaddedInputWrapper = styled.div`
@@ -285,6 +286,7 @@ export const FileImagePreview = styled.img`
   height: 100%;
   margin-left: auto;
   margin-right: auto;
+  border-radius: 50%;
   display: block;
 `
 

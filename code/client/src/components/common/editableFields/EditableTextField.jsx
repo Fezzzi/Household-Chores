@@ -25,6 +25,7 @@ const EditableTextField = ({
 
   return (
     <EditableFieldWrapper
+      editing={editing}
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
       onClick={() => {

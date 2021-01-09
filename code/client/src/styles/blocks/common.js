@@ -25,9 +25,33 @@ export const EditableFieldWrapper = styled.div`
   position: relative;
   max-width: 100%;
   
-  :hover {
-    cursor: pointer;
+  ${props => !props.editing && `
+    :hover {
+      cursor: pointer;
+    }
+  `}
+`
+
+export const EditableLabelBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-around;
+  font-weight: 400;
+  user-select: none;
+  
+  :focus {
+    outline: none;
   }
+`
+
+export const EditableLabel = styled.div`
+  ${props => props.clickable
+    ? `
+      :hover {
+        cursor: pointer;
+      }
+    ` : 'filter: grayscale(100%);'}
 `
 
 export const EditableFieldIcon = styled.div`

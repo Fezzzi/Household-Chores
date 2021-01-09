@@ -1,5 +1,5 @@
 import React from 'react'
-import { CalendarToday, ChevronRight, Delete, Grade, MoreVert, SortByAlpha } from '@material-ui/icons'
+import { CalendarToday, ChevronRight, Delete, Cancel, Grade, MoreVert, SortByAlpha } from '@material-ui/icons'
 
 import { COLORS } from 'clientSrc/constants'
 import { OptionsTooltip } from 'clientSrc/components/portals'
@@ -66,29 +66,42 @@ export const useMemberListProps = members => {
   }
 }
 
-const deleteInvitation = (fromId, toId, handleDeletion) => {
-  if (handleDeletion !== undefined) {
-    handleDeletion(fromId, toId)
-  } else {
-    // todo: Dispatch some generic invitation deletion action
-  }
-}
-
-export const useInvitationListProps = (invitations, handleDeletion) => {
-  const rows = invitations.map(invitation => ({
+export const useInvitationListProps = (invitations, handleDeletion, handleCancellation) => {
+  const rows = invitations.map(({
+    fromPhoto,
+    toPhoto,
+    fromId,
+    toId,
+    disableDeletion,
+    allowCancellation,
+    ...invitation
+  }) => ({
     ...invitation,
-    fromPhoto: <TablePhoto src={invitation.fromPhoto} />,
+    fromPhoto: <TablePhoto src={fromPhoto} />,
     delimiter: <TableRowIcon><ChevronRight /></TableRowIcon>,
-    toPhoto: <TablePhoto src={invitation.toPhoto} />,
-    delete: (
-      <TableRowIcon
-        color={COLORS.RED_SECONDARY}
-        clickable
-        onClick={() => deleteInvitation(invitation.fromId, invitation.toId, handleDeletion)}
-      >
-        <Delete />
-      </TableRowIcon>
-    ),
+    toPhoto: <TablePhoto src={toPhoto} />,
+    delete: disableDeletion || !handleDeletion
+      ? undefined
+      : (
+        <TableRowIcon
+          color={COLORS.RED_SECONDARY}
+          clickable
+          onClick={() => handleDeletion(toId)}
+        >
+          <Delete />
+        </TableRowIcon>
+      ),
+    cancel: !allowCancellation || !handleCancellation
+      ? undefined
+      : (
+        <TableRowIcon
+          color={COLORS.GREEN_SECONDARY}
+          clickable
+          onClick={() => handleCancellation(toId)}
+        >
+          <Cancel />
+        </TableRowIcon>
+      ),
   }))
   const keys = [
     { name: 'fromPhoto' },
@@ -98,6 +111,7 @@ export const useInvitationListProps = (invitations, handleDeletion) => {
     { name: 'toNickname', bold: true, growing: true },
     { name: 'dateCreated', fading: true },
     { name: 'delete' },
+    { name: 'cancel' },
   ]
   const sortConfig = [
     { key: 'toNickname', icon: <SortByAlpha /> },

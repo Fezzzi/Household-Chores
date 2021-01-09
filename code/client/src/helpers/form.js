@@ -35,6 +35,9 @@ export const useFormState = (data, submitMessage = FORM.SAVE, isFormValid = true
   }
 }
 
+const isShallowEqual = (arrA, arrB) =>
+  Array.isArray(arrA) && Array.isArray(arrB) && arrA.every(a => arrB.includes(a)) && arrB?.every(b => arrA.includes(b))
+
 /**
  * Returns update handler for single input
  *
@@ -46,7 +49,7 @@ export const useUpdateHandler = (setFormState, formValidFunc) =>
   (name, isValid, value, errorMessage, defaultValue = null) => {
     setFormState(prevState => {
       const newInputs = { ...prevState.inputs }
-      if (value !== '' && (defaultValue === null || value !== defaultValue)) {
+      if (value !== '' && (defaultValue === null || (value !== defaultValue && !isShallowEqual(value, defaultValue)))) {
         newInputs[name] = value
       } else {
         delete newInputs[name]

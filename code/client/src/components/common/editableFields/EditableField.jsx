@@ -9,6 +9,7 @@ const EditableField = ({ editing, setEditing, iconRight, centered, children }) =
 
   return (
     <EditableFieldWrapper
+      editing={editing}
       onMouseEnter={() => !editing && setHovering(true)}
       onMouseLeave={() => !editing && setHovering(false)}
       onClick={() => {

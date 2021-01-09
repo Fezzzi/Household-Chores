@@ -47,7 +47,7 @@ const HouseholdCreateForm = ({ connections }) => {
       fromId: currentUser.id,
       dateCreated: '(PENDING)',
     })),
-    (fromId, toId) => setInvitations(prevState => prevState.filter(user => user.id !== toId))
+    toId => setInvitations(prevState => prevState.filter(user => user.id !== toId))
   ), [connections, invitations])
 
   const loadImageUrlWithCallback = (image, type, callback) => {
@@ -134,6 +134,7 @@ const HouseholdCreateForm = ({ connections }) => {
         photo={newHouseholdIcon}
         errors={errors}
         inputs={inputs}
+        editableRole={false}
         currentUser={currentUser}
         setFormState={setState}
         membersCount={0}

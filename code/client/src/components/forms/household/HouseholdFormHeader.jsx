@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { DeleteForever, MeetingRoom, Add } from '@material-ui/icons'
 
@@ -11,13 +11,24 @@ import { FormHeader, FormButtonContentWrapper, FormHeaderPhoto, FormHeaderTitle 
 import { getLabelColors } from 'clientSrc/helpers/household'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys'
+import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 
-import { LocaleText, PrimaryButton, EditableTextField, EditablePhotoField } from '../../common'
+import { LocaleText, PrimaryButton, EditableTextField, EditablePhotoField, EditableLabelField } from '../../common'
 
 const HouseholdFormHeader = ({
-  photo, name, inputs, errors, currentUser, membersCount, setFormState,
+  photo, name, inputs, errors, currentUser, membersCount, editableRole, setFormState,
   sendingField, onLeaveHousehold, onDeleteHousehold, onCreateHousehold,
 }) => {
+  const currentRole = useMemo(() =>
+    inputs[HOUSEHOLD_KEYS.USER_ROLE] ?? currentUser.role,
+  [inputs, currentUser])
+
+  const availableRoles = useMemo(() => {
+    const allRoles = Object.values(HOUSEHOLD_ROLE_TYPE)
+    const currentRoleIndex = allRoles.indexOf(currentUser.role)
+    return allRoles.filter(role => allRoles.indexOf(role) >= currentRoleIndex)
+  }, [currentUser])
+
   const criticalButton = (handleClick, color, message, icon) => (
     <PrimaryButton
       background={color}
@@ -59,7 +70,18 @@ const HouseholdFormHeader = ({
           </EditableTextField>
         </UserName>
 
-        <RoleLabel {...getLabelColors(currentUser.role)}>{currentUser.role}</RoleLabel>
+        {editableRole && availableRoles.length > 1
+          ? (
+            <EditableLabelField
+              name={HOUSEHOLD_KEYS.USER_ROLE}
+              defaultValue={currentUser.role}
+              placeholder={currentRole}
+              values={availableRoles}
+              setFormState={setFormState}
+            >
+              <RoleLabel {...getLabelColors(currentRole)}>{currentRole}</RoleLabel>
+            </EditableLabelField>
+          ) : <RoleLabel {...getLabelColors(currentUser.role)}>{currentUser.role}</RoleLabel>}
       </CurrentUserBlock>
 
       <EditablePhotoField
@@ -103,6 +125,7 @@ HouseholdFormHeader.propTypes = {
     name: PropTypes.string,
     role: PropTypes.string,
   }).isRequired,
+  editableRole: PropTypes.bool.isRequired,
   inputs: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   membersCount: PropTypes.number.isRequired,

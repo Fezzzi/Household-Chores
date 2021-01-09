@@ -39,7 +39,7 @@ export const ButtonIconSpan = styled.span`
 export const CurrentUserBlock = styled(FormHeaderLeftPanel)`
   justify-content: center;
   align-items: center;
-  width: 200px;
+  width: 210px;
 `
 
 export const UserPhoto = styled.img`
@@ -60,6 +60,12 @@ export const UserName = styled.div`
   word-break: break-all;
 `
 
+export const UserRole = styled.div`
+  margin: 0 auto;
+  width: fit-content;
+  position: relative;
+`
+
 export const RoleLabel = styled.div`
   background-color: ${props => props.background};
   color: ${props => props.color};
@@ -69,7 +75,7 @@ export const RoleLabel = styled.div`
   width: fit-content;
   line-height: 18px;
   height: 20px;
-  margin: 0 auto;
+  margin: 0 auto;;
 `
 
 export const InvitationNodesWrapper = styled.div`
