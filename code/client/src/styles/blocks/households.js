@@ -60,13 +60,14 @@ export const UserName = styled.div`
   word-break: break-all;
 `
 
-export const UserRole = styled.div`
+export const UserLabel = styled.div`
   margin: 0 auto;
   width: fit-content;
   position: relative;
 `
 
 export const RoleLabel = styled.div`
+  display: inline-block;
   background-color: ${props => props.background};
   color: ${props => props.color};
   padding: 0 8px;

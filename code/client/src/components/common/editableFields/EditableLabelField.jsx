@@ -2,14 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Edit } from '@material-ui/icons'
 
-import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { editableFieldProps } from 'clientSrc/helpers/editableField'
 import { useUpdateHandler } from 'clientSrc/helpers/form'
 import { getLabelColors } from 'clientSrc/helpers/household'
-import {
-  EditableFieldIcon, EditableFieldWrapper, EditableLabel, EditableLabelBox,
-} from 'clientSrc/styles/blocks/common'
-import { RoleLabel, UserRole } from 'clientSrc/styles/blocks/households'
+import { EditableFieldIcon, EditableFieldWrapper, EditableLabel, EditableLabelBox } from 'clientSrc/styles/blocks/common'
+import { RoleLabel, UserLabel } from 'clientSrc/styles/blocks/households'
 
 const EditableLabelField = ({
   name, defaultValue, values, placeholder, setFormState, isFormValidFunc, children,
@@ -50,10 +47,10 @@ const EditableLabelField = ({
             ))}
           </EditableLabelBox>
         ) : (
-          <UserRole>
+          <UserLabel>
             {children}
             {hovering && <EditableFieldIcon centered><Edit /></EditableFieldIcon>}
-          </UserRole>
+          </UserLabel>
         )}
     </EditableFieldWrapper>
   )

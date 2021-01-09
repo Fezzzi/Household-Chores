@@ -43,14 +43,20 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     errors,
     setFormState,
   } = useFormState([household, connections])
-  const { invitedConnections, removedInvitations, removedMembers } = inputs
+  const { invitedConnections, removedInvitations, removedMembers, changedRoles } = inputs
   const updateInput = useMemo(() => useUpdateHandler(setFormState), [setFormState])
+
   const updateArrayValue = useCallback((key, value, add = true) => {
-    const newValue = add
-      ? inputs[key] ? [...inputs[key], value] : [value]
-      : inputs[key]?.filter(input => input !== value)
+    const newValue = (
+      inputs[key]?.filter(input => typeof input === 'object'
+        ? input?.id !== value?.id
+        : input !== value)
+    ) ?? []
+    if (add) {
+      newValue.push(value)
+    }
     updateInput(key, true, newValue, null, [])
-  }, [invitedConnections, removedInvitations, removedMembers, updateInput])
+  }, [invitedConnections, removedInvitations, removedMembers, changedRoles, updateInput])
 
   const userState = useSelector(({ app }) => app.user)
   const currentUser = useMemo(() => {
@@ -69,7 +75,30 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     && !invitedConnections?.find(user => user === id)
   ), [connections, members, invitations, invitedConnections])
 
-  const memberTableProps = useMemo(() => useMemberListProps(members), [members])
+  const memberTableProps = useMemo(() =>
+    useMemberListProps(
+      members.map(member => ({
+        memberId: member[MEMBER_KEYS.ID],
+        memberRole: changedRoles?.find(obj => obj.id === member[MEMBER_KEYS.ID])?.role ?? member[MEMBER_KEYS.ROLE],
+        memberPhoto: member[MEMBER_KEYS.PHOTO],
+        memberDateJoined: member[MEMBER_KEYS.DATE_JOINED],
+        memberName: member[MEMBER_KEYS.NAME],
+      })),
+      currentUser,
+      toId => removedMembers?.includes(toId),
+      (toId, role) => {
+        const isChangedRole = role !== members.find(member => member[MEMBER_KEYS.ID])?.[MEMBER_KEYS.ROLE]
+        if (isChangedRole) {
+          updateArrayValue('changedRoles', { id: toId, role })
+        } else {
+          updateArrayValue('changedRoles', { id: toId, role }, false)
+        }
+      },
+      toId => updateArrayValue('removedMembers', toId),
+      toId => updateArrayValue('removedMembers', toId, false)
+    ),
+  [members, removedMembers, changedRoles, currentUser])
+
   const invitationTableProps = useMemo(() =>
     useInvitationListProps([
       ...(invitedConnections
@@ -154,6 +183,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
         errors={errors}
         inputs={inputs}
         membersCount={members.length}
+        isAdmin={currentUser.role === HOUSEHOLD_ROLE_TYPE.ADMIN}
         setFormState={setFormState}
         currentUser={currentUser}
         sendingField={sendingField}

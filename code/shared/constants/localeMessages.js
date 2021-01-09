@@ -124,6 +124,7 @@ export const HOUSEHOLD = {
   MEMBERS_SECTION: 'household.membersSection',
   CHANGE_ROLE: 'household.changeRole',
   REMOVE_USER: 'household.removeUser',
+  CANCEL_REMOVE_USER: 'household.cancelRemoveUser',
   INVITATIONS: 'household.invitations',
   INVITE_USERS: 'household.inviteUser',
   INVITE: 'household.invite',

@@ -63,8 +63,9 @@ export const TableRowIcon = styled.span`
   `}
 `
 
+// inline-block display style is required for child element to be able to override parent's line-through style
 export const TableCell = styled.div`
-  display: flex;
+  display: inline-block;
   line-height: 20px;
   height: 20px;
   color: ${COLORS.FONT};

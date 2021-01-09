@@ -4,55 +4,84 @@ import { CalendarToday, ChevronRight, Delete, Cancel, Grade, MoreVert, SortByAlp
 import { COLORS } from 'clientSrc/constants'
 import { OptionsTooltip } from 'clientSrc/components/portals'
 import { TablePhoto, TableRowIcon } from 'clientSrc/styles/blocks/table'
-import { RoleLabel } from 'clientSrc/styles/blocks/households'
+import { RoleLabel, UserLabel } from 'clientSrc/styles/blocks/households'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
-import { MEMBER_KEYS } from 'shared/constants/settingsDataKeys'
 import { formatDate } from 'shared/helpers/date'
 
-// todo: Add real clickHandlers
-export const useMemberListProps = members => {
+export const useMemberListProps = (
+  members,
+  currentUser,
+  checkCancellability,
+  handleRoleChange,
+  handleDeletion,
+  handleCancellation
+) => {
   const rows = members.map(({
-    [MEMBER_KEYS.ID]: memberId,
-    [MEMBER_KEYS.ROLE]: memberRole,
-    [MEMBER_KEYS.PHOTO]: memberPhoto,
-    [MEMBER_KEYS.DATE_JOINED]: memberDateJoined,
-    ...member
-  }) => ({
-    ...member,
-    photo: <TablePhoto src={memberPhoto} />,
-    role: <RoleLabel {...getLabelColors(memberRole)}>{memberRole}</RoleLabel>,
-    roleString: memberRole,
-    delimiter: 'since',
-    dateJoined: formatDate(memberDateJoined, false),
-    more: <OptionsTooltip
-      icon={<MoreVert />}
-      options={[
-        {
+    memberId,
+    memberName,
+    memberRole,
+    memberPhoto,
+    memberDateJoined,
+  }) => {
+    const moreOptions = []
+    const allowCancellation = checkCancellability(memberId) && handleCancellation
+    if (currentUser.id === memberId) {
+      const allRoles = Object.values(HOUSEHOLD_ROLE_TYPE)
+      const userRoleIndex = allRoles.indexOf(currentUser.role)
+      const availableRoles = allRoles.filter(role => userRoleIndex <= allRoles.indexOf(role))
+      if (availableRoles.length > 1 && handleRoleChange) {
+        moreOptions.push({
           content: HOUSEHOLD.CHANGE_ROLE,
-          nestedOptions: Object.values(HOUSEHOLD_ROLE_TYPE).map(role => ({
-            content: <RoleLabel {...getLabelColors(role)}>{role}</RoleLabel>,
+          nestedOptions: availableRoles.map(role => ({
+            content: <UserLabel><RoleLabel {...getLabelColors(role)}>{role}</RoleLabel></UserLabel>,
             clickHandler: role !== memberRole
-              ? () => console.log('changing role of ', memberId, 'to: ', role)
+              ? () => handleRoleChange(memberId, role)
               : null,
           })),
-        }, {
+        })
+      }
+
+      if (allowCancellation) {
+        moreOptions.push({
+          content: HOUSEHOLD.CANCEL_REMOVE_USER,
+          clickHandler: () => handleCancellation(memberId),
+        })
+      }
+
+      const deletable = !allowCancellation && currentUser.role === HOUSEHOLD_ROLE_TYPE.ADMIN && handleDeletion
+      if (deletable) {
+        moreOptions.push({
           content: HOUSEHOLD.REMOVE_USER,
-          clickHandler: () => console.log('removing user', memberId),
-        },
-      ]}
-    />,
-  }))
+          clickHandler: () => handleDeletion(memberId),
+        })
+      }
+    }
+
+    return {
+      name: memberName,
+      photo: <TablePhoto src={memberPhoto} />,
+      role: <RoleLabel {...getLabelColors(memberRole)}>{memberRole}</RoleLabel>,
+      roleString: memberRole,
+      delimiter: 'since',
+      dateJoined: formatDate(memberDateJoined, false),
+      more: moreOptions.length < 1
+        ? undefined
+        : <OptionsTooltip icon={<MoreVert />} options={moreOptions} />,
+      strikethrough: allowCancellation,
+    }
+  })
+
   const keys = [
     { name: 'photo' },
-    { name: MEMBER_KEYS.NAME, bold: true, growing: true },
+    { name: 'name', bold: true, growing: true },
     { name: 'role' },
     { name: 'delimiter', fading: true },
     { name: 'dateJoined', fading: true },
     { name: 'more' },
   ]
   const sortConfig = [
-    { key: MEMBER_KEYS.NAME, icon: <SortByAlpha /> },
+    { key: 'name', icon: <SortByAlpha /> },
     { key: 'roleString', icon: <Grade /> },
     { key: 'dateJoined', icon: <CalendarToday /> },
   ]
@@ -102,6 +131,7 @@ export const useInvitationListProps = (invitations, handleDeletion, handleCancel
           <Cancel />
         </TableRowIcon>
       ),
+    strikethrough: allowCancellation && handleCancellation,
   }))
   const keys = [
     { name: 'fromPhoto' },

@@ -32,8 +32,7 @@ const PhotoInput = ({
   ), [dispatch])
 
   const handleInputChange = useCallback(event => {
-    const { target: { files, ...rest } } = event
-    console.log('HANDLING INPUT CHANGE', files, rest)
+    const { target: { files } } = event
     if (!files[0]) {
       event.target.value = ''
       return

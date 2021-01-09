@@ -82,7 +82,7 @@ const HouseholdCreateForm = ({ connections }) => {
       ...inputs,
     }
 
-    //TODO: Add default photo to user after registering
+    // TODO: Add default photo to user after registering
     if (!inputs[HOUSEHOLD_KEYS.PHOTO]) {
       loadImageUrlWithCallback(newHouseholdIcon, 'image/svg+xml', householdPhoto => {
         if (!inputs[HOUSEHOLD_KEYS.USER_PHOTO]) {
@@ -134,10 +134,10 @@ const HouseholdCreateForm = ({ connections }) => {
         photo={newHouseholdIcon}
         errors={errors}
         inputs={inputs}
-        editableRole={false}
         currentUser={currentUser}
         setFormState={setState}
         membersCount={0}
+        isAdmin
         sendingField={isFormSending ? { [HOUSEHOLD.CREATE]: HOUSEHOLD.CREATING } : null}
         onCreateHousehold={handleCreateHousehold}
       />

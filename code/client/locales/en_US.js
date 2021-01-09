@@ -113,6 +113,7 @@ export default {
   [HOUSEHOLD.MEMBERS_SECTION]: 'members',
   [HOUSEHOLD.CHANGE_ROLE]: 'Change role',
   [HOUSEHOLD.REMOVE_USER]: 'Remove user',
+  [HOUSEHOLD.CANCEL_REMOVE_USER]: 'Cancel removal',
   [HOUSEHOLD.INVITATIONS]: 'invitations',
   [HOUSEHOLD.INVITE_USERS]: 'invite users',
   [HOUSEHOLD.INVITE]: 'invite',

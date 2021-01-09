@@ -5,7 +5,7 @@ import { DeleteForever, MeetingRoom, Add } from '@material-ui/icons'
 import { COLORS } from 'clientSrc/constants'
 import {
   ButtonIconSpan, CriticalButtonsBlock, CurrentUserBlock,
-  HouseholdSubtitle, RoleLabel, UserName, UserPhoto,
+  HouseholdSubtitle, RoleLabel, UserLabel, UserName, UserPhoto,
 } from 'clientSrc/styles/blocks/households'
 import { FormHeader, FormButtonContentWrapper, FormHeaderPhoto, FormHeaderTitle } from 'clientSrc/styles/blocks/form'
 import { getLabelColors } from 'clientSrc/helpers/household'
@@ -16,8 +16,8 @@ import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { LocaleText, PrimaryButton, EditableTextField, EditablePhotoField, EditableLabelField } from '../../common'
 
 const HouseholdFormHeader = ({
-  photo, name, inputs, errors, currentUser, membersCount, editableRole, setFormState,
-  sendingField, onLeaveHousehold, onDeleteHousehold, onCreateHousehold,
+  photo, name, inputs, errors, currentUser, membersCount, editableRole, isAdmin,
+  setFormState, sendingField, onLeaveHousehold, onDeleteHousehold, onCreateHousehold,
 }) => {
   const currentRole = useMemo(() =>
     inputs[HOUSEHOLD_KEYS.USER_ROLE] ?? currentUser.role,
@@ -81,26 +81,32 @@ const HouseholdFormHeader = ({
             >
               <RoleLabel {...getLabelColors(currentRole)}>{currentRole}</RoleLabel>
             </EditableLabelField>
-          ) : <RoleLabel {...getLabelColors(currentUser.role)}>{currentUser.role}</RoleLabel>}
+          ) : <UserLabel><RoleLabel {...getLabelColors(currentUser.role)}>{currentUser.role}</RoleLabel></UserLabel>}
       </CurrentUserBlock>
 
-      <EditablePhotoField
-        name={HOUSEHOLD_KEYS.PHOTO}
-        error={errors[HOUSEHOLD_KEYS.PHOTO]}
-        setFormState={setFormState}
-      >
-        <FormHeaderPhoto src={photo} />
-      </EditablePhotoField>
+      {isAdmin
+        ? (
+          <EditablePhotoField
+            name={HOUSEHOLD_KEYS.PHOTO}
+            error={errors[HOUSEHOLD_KEYS.PHOTO]}
+            setFormState={setFormState}
+          >
+            <FormHeaderPhoto src={photo} />
+          </EditablePhotoField>
+        ) : <FormHeaderPhoto src={photo} />}
       <FormHeaderTitle>
-        <EditableTextField
-          name={HOUSEHOLD_KEYS.NAME}
-          edited={!!inputs[HOUSEHOLD_KEYS.NAME]}
-          placeholder={name}
-          error={errors[HOUSEHOLD_KEYS.NAME]}
-          setFormState={setFormState}
-        >
-          {name}
-        </EditableTextField>
+        {isAdmin
+          ? (
+            <EditableTextField
+              name={HOUSEHOLD_KEYS.NAME}
+              edited={!!inputs[HOUSEHOLD_KEYS.NAME]}
+              placeholder={name}
+              error={errors[HOUSEHOLD_KEYS.NAME]}
+              setFormState={setFormState}
+            >
+              {name}
+            </EditableTextField>
+          ) : name}
       </FormHeaderTitle>
       {membersCount > 0 && (
         <HouseholdSubtitle>
@@ -125,10 +131,11 @@ HouseholdFormHeader.propTypes = {
     name: PropTypes.string,
     role: PropTypes.string,
   }).isRequired,
-  editableRole: PropTypes.bool.isRequired,
+  editableRole: PropTypes.bool,
   inputs: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   membersCount: PropTypes.number.isRequired,
+  isAdmin: PropTypes.bool,
   setFormState: PropTypes.func.isRequired,
   sendingField: PropTypes.object,
   onLeaveHousehold: PropTypes.func,

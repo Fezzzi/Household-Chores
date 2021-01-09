@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { HouseholdActions, SettingsActions } from 'clientSrc/actions'
+import { SettingsActions } from 'clientSrc/actions'
 import { SETTING_CATEGORIES, CONNECTION_STATE_TYPE } from 'shared/constants'
 
 const initialState = {
@@ -34,16 +34,6 @@ const connectionRequested = (state, { payload: { targetId } }) => ({
         ? CONNECTION_STATE_TYPE.WAITING
         : connection.state,
     })),
-  },
-})
-
-const invitationIgnored = (state, { payload: { fromId, householdId } }) => ({
-  ...state,
-  data: {
-    ...state.data,
-    invitations: state.data.invitations.filter(({ id_household: idHousehold, from: { id } }) =>
-      idHousehold !== householdId && id !== fromId
-    ),
   },
 })
 

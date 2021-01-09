@@ -113,6 +113,7 @@ export default {
   [HOUSEHOLD.MEMBERS_SECTION]: 'členové',
   [HOUSEHOLD.CHANGE_ROLE]: 'Změnit roli',
   [HOUSEHOLD.REMOVE_USER]: 'Smazat uživatele',
+  [HOUSEHOLD.CANCEL_REMOVE_USER]: 'Zrušit smazání',
   [HOUSEHOLD.INVITATIONS]: 'pozvánky',
   [HOUSEHOLD.INVITE_USERS]: 'pozvat členy',
   [HOUSEHOLD.INVITE]: 'pozvat',
