@@ -103,20 +103,21 @@ export const updateUserData = async (
   userId: number
 ): Promise<boolean> => {
   const newPass = data[PROFILE.NEW_PASSWORD] && await encryptPass(data[PROFILE.NEW_PASSWORD] as string)
+  /* eslint-disable indent */
   return database.query(`
     UPDATE ${tUsersName} SET ${
-  [
-    data[PROFILE.NAME] && `${tUsersCols.nickname}=?`,
-    data[PROFILE.EMAIL] && `${tUsersCols.email}=?`,
-    data[PROFILE.PHOTO] && `${tUsersCols.photo}=?`,
-    data[PROFILE.NEW_PASSWORD] && `${tUsersCols.password}=?`,
-    data[PROFILE.CONNECTION_VISIBILITY] && `${tUsersCols.visibility}=?`,
-  ].filter(Boolean).join(',')
-} WHERE ${tUsersCols.id}=${userId}
-    `, [
+      [
+        data[PROFILE.NAME] && `${tUsersCols.nickname}=?`,
+        data[PROFILE.EMAIL] && `${tUsersCols.email}=?`,
+        data[PROFILE.PHOTO] && `${tUsersCols.photo}=?`,
+        data[PROFILE.NEW_PASSWORD] && `${tUsersCols.password}=?`,
+        data[PROFILE.CONNECTION_VISIBILITY] && `${tUsersCols.visibility}=?`,
+      ].filter(Boolean).join(',')
+    } WHERE ${tUsersCols.id}=${userId}
+  `, [
     data[PROFILE.NAME], data[PROFILE.EMAIL], data[PROFILE.PHOTO], newPass, data[PROFILE.CONNECTION_VISIBILITY],
-  ].filter(Boolean)
-  )
+  ].filter(Boolean))
+  /* eslint-enable indent */
 }
 
 export const SignUpUser = async (

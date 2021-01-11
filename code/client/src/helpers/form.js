@@ -102,7 +102,7 @@ export const useSubmitHandler = (action, payload) => {
         isFormSending: false,
         submitMessage,
       })), SUBMIT_TIMEOUT))
-  }, [dispatch])
+  }, [dispatch, payload])
 }
 
 /**
@@ -116,10 +116,4 @@ export const useFormValidOnFilled = requiredKeys => (inputs, errors) => {
   return filledInputs.length === requiredKeys.length
     && filledInputs.every(input => requiredKeys.indexOf(input) !== -1)
     && Object.values(errors).length === 0
-}
-
-// todo: Remove when removing updateInput
-export const handlerWrapper = handlerFunc => e => {
-  e.preventDefault()
-  handlerFunc()
 }

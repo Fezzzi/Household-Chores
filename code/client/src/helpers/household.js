@@ -21,21 +21,26 @@ export const useMemberListProps = (
     memberId,
     memberName,
     memberRole,
+    changedRole,
     memberPhoto,
     memberDateJoined,
   }) => {
     const moreOptions = []
     const allowCancellation = checkCancellability(memberId) && handleCancellation
-    if (currentUser.id === memberId) {
+    const currentMemberRole = changedRole ?? memberRole
+    if (currentUser.id !== memberId) {
       const allRoles = Object.values(HOUSEHOLD_ROLE_TYPE)
       const userRoleIndex = allRoles.indexOf(currentUser.role)
-      const availableRoles = allRoles.filter(role => userRoleIndex <= allRoles.indexOf(role))
+      const memberRoleIndex = allRoles.indexOf(memberRole)
+      const availableRoles = memberRoleIndex > userRoleIndex
+        ? allRoles.filter(role => userRoleIndex <= allRoles.indexOf(role))
+        : []
       if (availableRoles.length > 1 && handleRoleChange) {
         moreOptions.push({
           content: HOUSEHOLD.CHANGE_ROLE,
           nestedOptions: availableRoles.map(role => ({
             content: <UserLabel><RoleLabel {...getLabelColors(role)}>{role}</RoleLabel></UserLabel>,
-            clickHandler: role !== memberRole
+            clickHandler: role !== currentMemberRole
               ? () => handleRoleChange(memberId, role)
               : null,
           })),
@@ -61,8 +66,8 @@ export const useMemberListProps = (
     return {
       name: memberName,
       photo: <TablePhoto src={memberPhoto} />,
-      role: <RoleLabel {...getLabelColors(memberRole)}>{memberRole}</RoleLabel>,
-      roleString: memberRole,
+      role: <RoleLabel {...getLabelColors(currentMemberRole)}>{currentMemberRole}</RoleLabel>,
+      roleString: currentMemberRole,
       delimiter: 'since',
       dateJoined: formatDate(memberDateJoined, false),
       more: moreOptions.length < 1

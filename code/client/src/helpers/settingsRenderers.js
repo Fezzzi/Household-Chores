@@ -4,7 +4,9 @@ import {
   ConnectionListForm, ConnectionSearchForm, HouseholdCreateForm, HouseholdModificationForm,
   HouseholdInvitationListForm, ProfileForm, NotificationForm,
 } from 'clientSrc/components/forms'
-import { SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, CONNECTION_STATE_TYPE } from 'shared/constants'
+import {
+  SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, HOUSEHOLD_TABS, CONNECTION_STATE_TYPE,
+} from 'shared/constants'
 import { FORM, SETTINGS } from 'shared/constants/localeMessages'
 
 const renderConnectionListForm = (dataKey, emptyMessage, tab, headlineMessage) => data => (
@@ -63,12 +65,12 @@ export const settingsRenderers = {
     ),
   },
   [SETTING_CATEGORIES.HOUSEHOLDS]: {
-    tabModifiers: data => tab => tab === SETTING_TABS.INVITATIONS && ` (${data.invitations?.length || 0})`,
-    [SETTING_TABS.NEW_HOUSEHOLD]: data =>
+    tabModifiers: data => tab => tab === HOUSEHOLD_TABS.INVITATIONS && ` (${data.invitations?.length || 0})`,
+    [HOUSEHOLD_TABS.NEW_HOUSEHOLD]: data =>
       <HouseholdCreateForm connections={data.connections} />,
-    [SETTING_TABS.INVITATIONS]: data =>
+    [HOUSEHOLD_TABS.INVITATIONS]: data =>
       <HouseholdInvitationListForm invitations={data.invitations || []} />,
-    [SETTING_TABS._HOUSEHOLD]: (data, handleSubmit, tab) => (
+    [HOUSEHOLD_TABS._HOUSEHOLD]: (data, handleSubmit, tab) => (
       <HouseholdModificationForm
         household={data.households?.find(({ key }) => key === tab)}
         connections={data.connections}

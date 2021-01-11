@@ -32,9 +32,13 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
   // This state holds information about sending state of leave/delete buttons in household header
   const [sendingField, setSendingField] = useState(null)
   const [timer, setTimer] = useState(0)
+  const [headerKey, setHeaderKey] = useState(0)
+
+  useEffect(() => {
+    setHeaderKey(prevState => prevState + 1)
+  }, [household])
 
   useEffect(() => () => timer && clearTimeout(timer), [])
-
   const {
     submitMessage,
     isFormValid,
@@ -43,7 +47,17 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     errors,
     setFormState,
   } = useFormState([household, connections])
-  const { invitedConnections, removedInvitations, removedMembers, changedRoles } = inputs
+
+  const handleSubmit = useCallback(() =>
+    onSubmit({ ...inputs, [HOUSEHOLD_KEYS.ID]: householdId }, setFormState),
+  [inputs, setFormState])
+
+  const {
+    [HOUSEHOLD_KEYS.INVITED_CONNECTIONS]: invitedConnections,
+    [HOUSEHOLD_KEYS.REMOVED_INVITATIONS]: removedInvitations,
+    [HOUSEHOLD_KEYS.REMOVED_MEMBERS]: removedMembers,
+    [HOUSEHOLD_KEYS.CHANGED_ROLES]: changedRoles,
+  } = inputs
   const updateInput = useMemo(() => useUpdateHandler(setFormState), [setFormState])
 
   const updateArrayValue = useCallback((key, value, add = true) => {
@@ -79,7 +93,8 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     useMemberListProps(
       members.map(member => ({
         memberId: member[MEMBER_KEYS.ID],
-        memberRole: changedRoles?.find(obj => obj.id === member[MEMBER_KEYS.ID])?.role ?? member[MEMBER_KEYS.ROLE],
+        memberRole: member[MEMBER_KEYS.ROLE],
+        changedRole: changedRoles?.find(obj => obj.id === member[MEMBER_KEYS.ID])?.role,
         memberPhoto: member[MEMBER_KEYS.PHOTO],
         memberDateJoined: member[MEMBER_KEYS.DATE_JOINED],
         memberName: member[MEMBER_KEYS.NAME],
@@ -87,15 +102,15 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
       currentUser,
       toId => removedMembers?.includes(toId),
       (toId, role) => {
-        const isChangedRole = role !== members.find(member => member[MEMBER_KEYS.ID])?.[MEMBER_KEYS.ROLE]
+        const isChangedRole = role !== members.find(member => toId === member[MEMBER_KEYS.ID])?.[MEMBER_KEYS.ROLE]
         if (isChangedRole) {
-          updateArrayValue('changedRoles', { id: toId, role })
+          updateArrayValue(HOUSEHOLD_KEYS.CHANGED_ROLES, { id: toId, role })
         } else {
-          updateArrayValue('changedRoles', { id: toId, role }, false)
+          updateArrayValue(HOUSEHOLD_KEYS.CHANGED_ROLES, { id: toId, role }, false)
         }
       },
-      toId => updateArrayValue('removedMembers', toId),
-      toId => updateArrayValue('removedMembers', toId, false)
+      toId => updateArrayValue(HOUSEHOLD_KEYS.REMOVED_MEMBERS, toId),
+      toId => updateArrayValue(HOUSEHOLD_KEYS.REMOVED_MEMBERS, toId, false)
     ),
   [members, removedMembers, changedRoles, currentUser])
 
@@ -119,7 +134,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
       ...invitations.map(invitation => {
         const invitor = members.find(member => member[MEMBER_KEYS.ID] === invitation[INVITATION_KEYS.FROM_ID])
         const allowCancellation = removedInvitations?.includes(invitation[INVITATION_KEYS.TO_ID])
-        const disableDeletion = allowCancellation || [HOUSEHOLD_ROLE_TYPE.MEMBER].includes(currentUser.role)
+        const disableDeletion = allowCancellation || currentUser.role === HOUSEHOLD_ROLE_TYPE.MEMBER
         return invitor && {
           fromPhoto: invitor[MEMBER_KEYS.PHOTO],
           fromNickname: invitor[MEMBER_KEYS.NAME],
@@ -136,12 +151,12 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     toId => {
       const isExistingInvitation = invitations.find(invitation => invitation[INVITATION_KEYS.TO_ID] === toId)
       if (isExistingInvitation) {
-        updateArrayValue('removedInvitations', toId)
+        updateArrayValue(HOUSEHOLD_KEYS.REMOVED_INVITATIONS, toId)
       } else {
-        updateArrayValue('invitedConnections', toId, false)
+        updateArrayValue(HOUSEHOLD_KEYS.INVITED_CONNECTIONS, toId, false)
       }
     },
-    toId => updateArrayValue('removedInvitations', toId, false)
+    toId => updateArrayValue(HOUSEHOLD_KEYS.REMOVED_INVITATIONS, toId, false)
     ),
   [invitedConnections, removedInvitations, invitations, members, currentUser])
 
@@ -165,6 +180,10 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     return admins.length > 1 || admins.indexOf(currentUser.id) === -1
   }, [members, currentUser])
 
+  const memberAdmins = useMemo(() =>
+    members.filter(member => member[MEMBER_KEYS.ROLE] === HOUSEHOLD_ROLE_TYPE.ADMIN),
+  [members])
+
   return (
     <>
       {Object.keys(inputs).length > 0 && (
@@ -173,13 +192,14 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
           sending={isFormSending}
           enabled={isFormValid}
           icon={<Save />}
-          onClick={() => onSubmit(inputs, setFormState)}
+          onClick={handleSubmit}
         />
       )}
       <HouseholdFormHeader
+        key={`profileFormHeader-${headerKey}`}
         name={name}
         photo={photo}
-        editableRole
+        editableRole={currentUser.role !== HOUSEHOLD_ROLE_TYPE.ADMIN || memberAdmins.length > 1}
         errors={errors}
         inputs={inputs}
         membersCount={members.length}
@@ -196,13 +216,17 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
       </SectionHeadline>
       <Table {...memberTableProps} />
 
-      <SectionHeadline>
-        <LocaleText message={HOUSEHOLD.INVITE_USERS} />
-      </SectionHeadline>
-      <HouseholdInvitationForm
-        connections={invitableConnections}
-        onInvite={id => updateArrayValue('invitedConnections', id)}
-      />
+      {currentUser.role !== HOUSEHOLD_ROLE_TYPE.MEMBER && (
+        <>
+          <SectionHeadline>
+            <LocaleText message={HOUSEHOLD.INVITE_USERS} />
+          </SectionHeadline>
+          <HouseholdInvitationForm
+            connections={invitableConnections}
+            onInvite={id => updateArrayValue(HOUSEHOLD_KEYS.INVITED_CONNECTIONS, id)}
+          />
+        </>
+      )}
 
       <SectionHeadline>
         <LocaleText message={HOUSEHOLD.INVITATIONS} />

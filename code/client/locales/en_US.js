@@ -1,5 +1,7 @@
 import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
-import { USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS } from 'shared/constants'
+import {
+  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, HOUSEHOLD_TABS,
+} from 'shared/constants'
 
 export default {
   [AUTH.BACK_TO_LOGIN]: 'Back to Login',
@@ -129,9 +131,9 @@ export default {
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.PENDING}`]]: 'Requests',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.BLOCKED}`]]: 'Blocked',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.FIND_CONNECTION}`]]: 'Find connection',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.NEW_HOUSEHOLD}`]]: 'Create household',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.INVITATIONS}`]]: 'Invitations',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS._HOUSEHOLD}`]]: 'Household',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.NEW_HOUSEHOLD}`]]: 'Create household',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.INVITATIONS}`]]: 'Invitations',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS._HOUSEHOLD}`]]: 'Household',
 
   [SUCCESS.RESET_LINK]: 'A reset link has been sent to your email address.',
   [SUCCESS.SETTINGS_UPDATED]: 'Settings have been successfully updated.',

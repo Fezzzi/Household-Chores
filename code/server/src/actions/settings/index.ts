@@ -23,12 +23,9 @@ export default () => {
     const { body: { category, tab, inputs } } = req
 
     if (inputs && Object.values(inputs).length > 0) {
-      if (category && tab
-        && SETTING_TAB_ROWS[category] !== undefined
-        && SETTING_TAB_ROWS[category].indexOf(tab) !== -1
-      ) {
-        const success = await handleSettingsDataUpdate(category, tab, inputs, req, res)
-        if (success) {
+      if (category && tab && SETTING_TAB_ROWS[category] !== undefined) {
+        const handled = await handleSettingsDataUpdate(category, tab, inputs, req, res)
+        if (!handled) {
           return handleSettingsDataFetch(category, tab, req, res)
         }
       } else {

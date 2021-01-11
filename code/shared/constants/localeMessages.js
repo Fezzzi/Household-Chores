@@ -1,4 +1,6 @@
-import { USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_TABS, SETTING_CATEGORIES } from 'shared/constants'
+import {
+  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_TABS, HOUSEHOLD_TABS, SETTING_CATEGORIES,
+} from 'shared/constants'
 
 export const AUTH = {
   BACK_TO_LOGIN: 'auth.backToLogin',
@@ -144,9 +146,9 @@ export const SETTINGS = {
   [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.BLOCKED}`]: 'settings.tabBlocked',
   [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.FIND_CONNECTION}`]: 'settings.tabFindConnection',
 
-  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.NEW_HOUSEHOLD}`]: 'settings.newHousehold',
-  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.INVITATIONS}`]: 'settings.invitations',
-  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS._HOUSEHOLD}`]: 'settings.household',
+  [`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.NEW_HOUSEHOLD}`]: 'settings.newHousehold',
+  [`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.INVITATIONS}`]: 'settings.invitations',
+  [`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS._HOUSEHOLD}`]: 'settings.household',
 }
 
 export const SUCCESS = {

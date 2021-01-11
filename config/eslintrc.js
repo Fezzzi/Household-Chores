@@ -46,6 +46,7 @@ module.exports = {
     'no-bitwise': 0,
     'func-names': 0,
     'no-plusplus': 0,
+    'default-case': 0,
     'no-fallthrough': 0,
     'no-else-return': 0,
     'global-require': 0,

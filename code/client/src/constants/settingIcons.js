@@ -4,7 +4,7 @@ import {
   PersonAddDisabled, Group, House, Settings, NotificationsActive,
 } from '@material-ui/icons'
 
-import { SETTING_CATEGORIES, SETTING_TABS } from 'shared/constants'
+import { SETTING_CATEGORIES, SETTING_TABS, HOUSEHOLD_TABS } from 'shared/constants'
 
 export const CATEGORY_ICONS = {
   [SETTING_CATEGORIES.PROFILE]: <Person />,
@@ -19,7 +19,7 @@ export const TAB_ICONS = {
   [SETTING_TABS.FIND_CONNECTION]: <PersonAdd />,
   [SETTING_TABS.PENDING]: <PersonAddOutlined />,
   [SETTING_TABS.BLOCKED]: <PersonAddDisabled />,
-  [SETTING_TABS.INVITATIONS]: <HomeOutlined />,
-  [SETTING_TABS.NEW_HOUSEHOLD]: <Add />,
-  [SETTING_TABS._HOUSEHOLD]: <Home />,
+  [HOUSEHOLD_TABS.INVITATIONS]: <HomeOutlined />,
+  [HOUSEHOLD_TABS.NEW_HOUSEHOLD]: <Add />,
+  [HOUSEHOLD_TABS._HOUSEHOLD]: <Home />,
 }
