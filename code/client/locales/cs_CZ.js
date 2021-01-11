@@ -56,6 +56,7 @@ export default {
 
   [INFO.NOTHING_TO_UPDATE]: 'Žádné pole nebylo změněno.',
 
+  [FORM.DELETE_ACCOUNT]: 'Smazat účet',
   [FORM.DROP_PHOTO_HERE]: 'Přetáhněte obrázek sem',
   [FORM.CLICK_TO_UPLOAD]: 'Klikněte pro nahrání obrázku',
   [FORM.EMAIL]: 'Email',
@@ -106,7 +107,7 @@ export default {
 
   [HOUSEHOLD.LEAVE]: 'Opustit domácnost',
   [HOUSEHOLD.LEAVING]: 'Opouštím',
-  [HOUSEHOLD.DELETE]: 'Vymazat domácnost',
+  [HOUSEHOLD.DELETE]: 'Smazat domácnost',
   [HOUSEHOLD.DELETING]: 'Vymazávám',
   [HOUSEHOLD.CREATE]: 'Vytvořit domácnost',
   [HOUSEHOLD.CREATING]: 'Vytvářím',
@@ -119,6 +120,7 @@ export default {
   [HOUSEHOLD.INVITATIONS]: 'pozvánky',
   [HOUSEHOLD.INVITE_USERS]: 'pozvat členy',
   [HOUSEHOLD.INVITE]: 'pozvat',
+  [HOUSEHOLD.SINCE]: 'od',
   [HOUSEHOLD.MODULES]: 'moduly',
   [HOUSEHOLD.ADD_MODULES]: 'přidat moduly',
 

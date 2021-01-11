@@ -63,6 +63,7 @@ export const INFO = {
 }
 
 export const FORM = {
+  DELETE_ACCOUNT: 'form.deleteAccount',
   DROP_PHOTO_HERE: 'form.dropPhotoHere',
   CLICK_TO_UPLOAD: 'form.clickToUpload',
   CONNECTIONS: 'form.connections',
@@ -130,6 +131,7 @@ export const HOUSEHOLD = {
   INVITATIONS: 'household.invitations',
   INVITE_USERS: 'household.inviteUser',
   INVITE: 'household.invite',
+  SINCE: 'household.since',
   MODULES: 'household.modules',
   ADD_MODULES: 'household.addModule',
 }

@@ -11,6 +11,7 @@ export const AUTH_PREFIX = 'auth'
 export const AUTH_SIGN_UP = 'sign-up'
 export const AUTH_LOG_IN = 'log-in'
 export const AUTH_RESET = 'reset'
+export const AUTH_DELETE = 'delete'
 
 export const CONNECTIONS_PREFIX = 'connections'
 export const CONNECTION_FIND = 'find'

@@ -79,6 +79,9 @@ export default () => {
         return handleAction(inputs, validateSignupData, signUp, req, res)
       case API.AUTH_RESET:
         return handleAction(inputs, validateResetData, resetPass, req, res)
+      case API.AUTH_DELETE:
+        // todo: Finish within navbar issue when logging off is implemented
+        return false
       default:
         res.status(404).send('Not Found')
         return false

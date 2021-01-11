@@ -1,5 +1,7 @@
 import { createAction } from '@reduxjs/toolkit'
 
+export const deleteAccount = createAction('DELETE_ACCOUNT')
+
 export const editSettings = createAction('EDIT_SETTINGS')
 export const settingsDataUpdated = createAction('SETTINGS_DATA_UPDATED')
 

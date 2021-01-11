@@ -2,8 +2,8 @@ import { takeEvery, call, put } from 'redux-saga/effects'
 
 import { NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { AuthActions, NotificationActions } from 'clientSrc/actions'
-import { signUp, logIn, resetPass } from 'clientSrc/effects/authEffects'
+import { AuthActions, NotificationActions, SettingsActions } from 'clientSrc/actions'
+import { signUp, logIn, resetPass, deleteAccount } from 'clientSrc/effects/authEffects'
 import { generalSaga } from 'clientSrc/helpers/sagas'
 
 function* resetPassSaga({ payload }) {
@@ -62,10 +62,17 @@ function* logInGoogleSaga(action) {
   }
 }
 
+function* deleteAccountSaga() {
+  yield call(generalSaga, deleteAccount, null, function* (data) {
+    yield put(SettingsActions.settingsDataUpdated(data))
+  })
+}
+
 export function* authSaga() {
   yield takeEvery(AuthActions.signUp.toString(), signUpSaga)
   yield takeEvery(AuthActions.logIn.toString(), logInSaga)
   yield takeEvery(AuthActions.logInFacebook.toString(), logInFacebookSaga)
   yield takeEvery(AuthActions.logInGoogle.toString(), logInGoogleSaga)
   yield takeEvery(AuthActions.resetPass.toString(), resetPassSaga)
+  yield takeEvery(SettingsActions.deleteAccount.toString(), deleteAccountSaga)
 }

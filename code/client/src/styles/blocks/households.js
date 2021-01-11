@@ -10,7 +10,7 @@ export const HouseholdSubtitle = styled.div`
 `
 
 export const CriticalButtonsBlock = styled(FormHeaderRightPanel)`
-  width: 160px;
+  width: 170px;
   
   button {
     opacity: 0.7;

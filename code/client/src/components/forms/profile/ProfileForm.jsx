@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Save } from '@material-ui/icons'
+import PropTypes from 'prop-types'
 
 import { useFormState, useUpdateHandler } from 'clientSrc/helpers/form'
-import { FormBody } from 'clientSrc/styles/blocks/settings'
+import { FormWrapper, BottomFormButton, FormBody } from 'clientSrc/styles/blocks/settings'
 import { INPUT_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
+import { COLORS, SUBMIT_TIMEOUT } from 'clientSrc/constants'
+import { SettingsActions } from 'clientSrc/actions'
 import { FORM } from 'shared/constants/localeMessages'
 import { PROFILE } from 'shared/constants/settingsDataKeys'
 
 import { SimpleFloatingElement } from '../../portals'
 import ProfileFormHeader from './ProfileFormHeader'
-import { Input } from '../../common'
+import { Input, LocaleText, PrimaryButton } from '../../common'
 
 const ProfileForm = ({ data, onSubmit }) => {
   const [headerKey, setHeaderKey] = useState(0)
@@ -34,8 +37,25 @@ const ProfileForm = ({ data, onSubmit }) => {
     [PROFILE.CONNECTION_VISIBILITY]: visibility,
   } = data
 
+  const [timer, setTimer] = useState(null)
+  useEffect(() => () => timer && clearTimeout(timer), [])
+
+  const dispatch = useDispatch()
+  const handleAccountDeletion = useCallback(() => {
+    setFormState(prevState => ({
+      ...prevState,
+      isFormSending: true,
+    }))
+    setTimer(setTimeout(
+      () => setFormState && setFormState(prevState => ({
+        ...prevState,
+        isFormSending: false,
+      })), SUBMIT_TIMEOUT))
+    dispatch(SettingsActions.deleteAccount())
+  }, [setFormState, dispatch])
+
   return (
-    <>
+    <FormWrapper>
       {Object.keys(inputs).length > 0 && (
         <SimpleFloatingElement
           message={submitMessage}
@@ -66,7 +86,18 @@ const ProfileForm = ({ data, onSubmit }) => {
           onUpdate={useUpdateHandler(setFormState)}
         />
       </FormBody>
-    </>
+
+      <BottomFormButton>
+        <PrimaryButton
+          disabled={isFormSending}
+          onClick={handleAccountDeletion}
+          background={COLORS.RED_PRIMARY}
+          backgroundHover={COLORS.RED_SECONDARY}
+        >
+          <LocaleText message={FORM.DELETE_ACCOUNT} />
+        </PrimaryButton>
+      </BottomFormButton>
+    </FormWrapper>
   )
 }
 

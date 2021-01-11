@@ -56,6 +56,7 @@ export default {
 
   [INFO.NOTHING_TO_UPDATE]: 'Nothing to update.',
 
+  [FORM.DELETE_ACCOUNT]: 'Delete account',
   [FORM.DROP_PHOTO_HERE]: 'Drop photo here',
   [FORM.CLICK_TO_UPLOAD]: 'Click to upload photo',
   [FORM.EMAIL]: 'Email',
@@ -119,6 +120,7 @@ export default {
   [HOUSEHOLD.INVITATIONS]: 'invitations',
   [HOUSEHOLD.INVITE_USERS]: 'invite users',
   [HOUSEHOLD.INVITE]: 'invite',
+  [HOUSEHOLD.SINCE]: 'since',
   [HOUSEHOLD.MODULES]: 'modules',
   [HOUSEHOLD.ADD_MODULES]: 'add modules',
 

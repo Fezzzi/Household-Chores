@@ -63,6 +63,7 @@ export const SettingRow = styled.div`
 `
 
 export const ContentColumn = styled.div`
+  position: relative;
   width: 100%;
   min-height: calc(100% - 58px);
   max-height: calc(100% - 58px);
@@ -224,8 +225,21 @@ export const ProfileSwitchesBlock = styled(FormHeaderRightPanel)`
   }
 `
 
+export const FormWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+`
+
 export const FormBody = styled.div`
+   height: 100%;
    margin: 40px 100px 0;
+`
+
+export const BottomFormButton = styled.div`
+  margin: 0 auto;
+  width: 250px;
 `
 
 export const NotificationGroupBox = styled.div`

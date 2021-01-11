@@ -3,6 +3,7 @@ import { CalendarToday, ChevronRight, Delete, Cancel, Grade, MoreVert, SortByAlp
 
 import { COLORS } from 'clientSrc/constants'
 import { OptionsTooltip } from 'clientSrc/components/portals'
+import LocaleText from 'clientSrc/components/common/LocaleText'
 import { TablePhoto, TableRowIcon } from 'clientSrc/styles/blocks/table'
 import { RoleLabel, UserLabel } from 'clientSrc/styles/blocks/households'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
@@ -68,7 +69,7 @@ export const useMemberListProps = (
       photo: <TablePhoto src={memberPhoto} />,
       role: <RoleLabel {...getLabelColors(currentMemberRole)}>{currentMemberRole}</RoleLabel>,
       roleString: currentMemberRole,
-      delimiter: 'since',
+      delimiter: <LocaleText message={HOUSEHOLD.SINCE} />,
       dateJoined: formatDate(memberDateJoined, false),
       more: moreOptions.length < 1
         ? undefined
