@@ -89,13 +89,13 @@ export const findUserHouseholds = async (currentUser: number): Promise<Array<obj
 
 export const addHouseholdInvitations = async (
   householdId: number,
-  users: Array<Record<string, string | number>>,
+  invitations: Array<Record<string, string | number>>,
   currentId: number,
 ): Promise<boolean> =>
   database.query(`
     INSERT INTO ${tHouseInvName}
-    VALUES (${users.map(() => `${householdId}, ${currentId}, ?, ?, NOW()`).join('),(')})
-  `, users.flatMap(user => [user.id, user.invitationMessage || '']))
+    VALUES (${invitations.map(() => `${householdId}, ${currentId}, ?, ?, NOW()`).join('),(')})
+  `, invitations.flatMap(user => [user.id, user.invitationMessage || '']))
 
 export const createHousehold = async (
   data: Record<string, string | number>,

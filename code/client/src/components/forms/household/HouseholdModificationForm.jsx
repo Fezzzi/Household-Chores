@@ -12,6 +12,7 @@ import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { formatDate } from 'shared/helpers/date'
 import {
+  CONNECTION_KEYS,
   HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS, PROFILE,
 } from 'shared/constants/settingsDataKeys'
 
@@ -83,7 +84,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     }
   }, [members, userState])
 
-  const invitableConnections = useMemo(() => connections.filter(({ id }) =>
+  const invitableConnections = useMemo(() => connections.filter(({ [CONNECTION_KEYS.ID]: id }) =>
     !members.find(member => member[MEMBER_KEYS.ID] === id)
     && !invitations.find(invitation => invitation[INVITATION_KEYS.TO_ID] === id)
     && !invitedConnections?.find(user => user === id)
@@ -118,13 +119,13 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     useInvitationListProps([
       ...(invitedConnections
         ? invitedConnections.map(id => {
-          const connectedUser = connections.find(user => user.id === id)
+          const connectedUser = connections.find(user => user[CONNECTION_KEYS.ID] === id)
           return {
             fromPhoto: currentUser.photo,
             fromNickname: currentUser.name,
             fromId: currentUser.id,
-            toPhoto: connectedUser.photo,
-            toNickname: connectedUser.nickname,
+            toPhoto: connectedUser[CONNECTION_KEYS.PHOTO],
+            toNickname: connectedUser[CONNECTION_KEYS.NICKNAME],
             toId: id,
             dateCreated: '(PENDING)',
           }
@@ -246,25 +247,26 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
 
 HouseholdModificationForm.defaultProps = {
   household: {
-    photo: '',
-    name: '',
-    members: [],
-    invitations: [],
+    [HOUSEHOLD_KEYS.PHOTO]: '',
+    [HOUSEHOLD_KEYS.NAME]: '',
+    [HOUSEHOLD_GROUP_KEYS.MEMBERS]: [],
+    [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: [],
   },
   connections: [],
 }
 
 HouseholdModificationForm.propTypes = {
   household: PropTypes.shape({
-    photo: PropTypes.string,
-    name: PropTypes.string,
-    members: PropTypes.array,
-    invitations: PropTypes.array,
+    [HOUSEHOLD_KEYS.ID]: PropTypes.number,
+    [HOUSEHOLD_KEYS.PHOTO]: PropTypes.string,
+    [HOUSEHOLD_KEYS.NAME]: PropTypes.string,
+    [HOUSEHOLD_GROUP_KEYS.MEMBERS]: PropTypes.array,
+    [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: PropTypes.array,
   }),
   connections: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    nickname: PropTypes.string.isRequired,
-    photo: PropTypes.string,
+    [CONNECTION_KEYS.ID]: PropTypes.number.isRequired,
+    [CONNECTION_KEYS.NICKNAME]: PropTypes.string.isRequired,
+    [CONNECTION_KEYS.PHOTO]: PropTypes.string,
   })),
   onSubmit: PropTypes.func.isRequired,
 }

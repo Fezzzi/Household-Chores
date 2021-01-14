@@ -10,15 +10,16 @@ import {
 } from 'clientSrc/styles/blocks/table'
 import { useTableLogic } from 'clientSrc/helpers/table'
 import { COMMON, HOUSEHOLD } from 'shared/constants/localeMessages'
+import { CONNECTION_KEYS } from 'shared/constants/settingsDataKeys'
 
 import { MiniTextInput, MiniButton, LocaleText } from '../../common'
 
 const HouseholdInvitationForm = ({ connections, onInvite }) => {
-  const {
-    processedRows,
-    setQuery,
-    sorters,
-  } = useTableLogic(connections, [{ key: 'nickname', icon: <SortByAlpha /> }], 'nickname')
+  const { processedRows, setQuery, sorters } = useTableLogic(
+    connections,
+    [{ key: CONNECTION_KEYS.NICKNAME, icon: <SortByAlpha /> }],
+    CONNECTION_KEYS.NICKNAME
+  )
 
   const textInputRef = useRef(null)
 
@@ -40,7 +41,11 @@ const HouseholdInvitationForm = ({ connections, onInvite }) => {
       </TableHeaderBox>
       <TableSingleRowBox height={connections.length ? '130px' : '0px'}>
         <InvitationNodesWrapper>
-          {processedRows.map(({ id, nickname, photo }) => (
+          {processedRows.map(({
+            [CONNECTION_KEYS.ID]: id,
+            [CONNECTION_KEYS.NICKNAME]: nickname,
+            [CONNECTION_KEYS.PHOTO]: photo,
+          }) => (
             <InvitationFormNode key={`connection-${id}`}>
               <InvitationFormNodePhoto src={photo} />
               <InvitationFormNodeName>{nickname}</InvitationFormNodeName>
@@ -57,9 +62,9 @@ const HouseholdInvitationForm = ({ connections, onInvite }) => {
 
 HouseholdInvitationForm.propTypes = {
   connections: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    nickname: PropTypes.string.isRequired,
-    photo: PropTypes.string,
+    [CONNECTION_KEYS.ID]: PropTypes.number.isRequired,
+    [CONNECTION_KEYS.NICKNAME]: PropTypes.string.isRequired,
+    [CONNECTION_KEYS.PHOTO]: PropTypes.string,
   })).isRequired,
   onInvite: PropTypes.func.isRequired,
 }

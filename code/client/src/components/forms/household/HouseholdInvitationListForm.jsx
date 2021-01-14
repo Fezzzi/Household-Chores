@@ -8,6 +8,7 @@ import { SectionHeadline } from 'clientSrc/styles/blocks/settings'
 import { TableBox, TableHeaderBox, TableHeaderCell, TableSorterIcon } from 'clientSrc/styles/blocks/table'
 import { useTableLogic } from 'clientSrc/helpers/table'
 import { COMMON, FORM } from 'shared/constants/localeMessages'
+import { INVITATION_KEYS } from 'shared/constants/settingsDataKeys'
 
 import { MiniTextInput, LocaleText } from '../../common'
 import HouseholdInvitationNode from './HouseholdInvitationNode'
@@ -18,7 +19,7 @@ const HouseholdInvitationListForm = ({ invitations }) => {
   const {
     processedRows,
     setQuery,
-  } = useTableLogic(invitations || [], [], 'name')
+  } = useTableLogic(invitations || [], [], INVITATION_KEYS.HOUSEHOLD_NAME)
 
   return (
     <>

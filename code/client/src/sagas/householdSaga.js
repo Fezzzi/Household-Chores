@@ -31,7 +31,7 @@ function* leaveHouseholdSaga({ payload }) {
   })
 }
 
-function* deleteeHouseholdSaga({ payload }) {
+function* deleteHouseholdSaga({ payload }) {
   yield call(generalSaga, deleteHousehold, payload, function* ({ url }) {
     yield put(push(url))
   })
@@ -42,5 +42,5 @@ export function* householdSaga() {
   yield takeEvery(HouseholdActions.ignoreInvitation.toString(), ignoreInvitationSaga)
   yield takeEvery(HouseholdActions.createHousehold.toString(), createHouseholdSaga)
   yield takeEvery(HouseholdActions.leaveHousehold.toString(), leaveHouseholdSaga)
-  yield takeEvery(HouseholdActions.deleteHousehold.toString(), deleteeHouseholdSaga)
+  yield takeEvery(HouseholdActions.deleteHousehold.toString(), deleteHouseholdSaga)
 }

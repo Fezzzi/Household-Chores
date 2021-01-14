@@ -9,7 +9,7 @@ import { useInvitationListProps } from 'clientSrc/helpers/household'
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { HouseholdActions } from 'clientSrc/actions'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
-import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
+import { CONNECTION_KEYS, HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 
 import HouseholdFormHeader from './HouseholdFormHeader'
@@ -93,7 +93,7 @@ const HouseholdCreateForm = ({ connections }) => {
                 [HOUSEHOLD_KEYS.PHOTO]: householdPhoto,
                 [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
               },
-              invitations,
+              [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations,
             }))
           })
         } else {
@@ -102,7 +102,7 @@ const HouseholdCreateForm = ({ connections }) => {
               ...inputsData,
               [HOUSEHOLD_KEYS.PHOTO]: householdPhoto,
             },
-            invitations,
+            [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations,
           }))
         }
       })
@@ -113,11 +113,11 @@ const HouseholdCreateForm = ({ connections }) => {
             ...inputsData,
             [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
           },
-          invitations,
+          [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations,
         }))
       })
     } else {
-      dispatch(HouseholdActions.createHousehold({ inputs: inputsData, invitations }))
+      dispatch(HouseholdActions.createHousehold({ inputs: inputsData, [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations }))
     }
 
     setTimer(setTimeout(
@@ -147,7 +147,9 @@ const HouseholdCreateForm = ({ connections }) => {
       </SectionHeadline>
       <HouseholdInvitationForm
         connections={connections.filter(({ id }) => !invitations.find(user => user.id === id))}
-        onInvite={id => setInvitations(prevState => [...prevState, connections.find(user => user.id === id)])}
+        onInvite={id => setInvitations(prevState =>
+          [...prevState, connections.find(user => user[CONNECTION_KEYS.ID] === id)]
+        )}
       />
 
       <SectionHeadline>
@@ -168,9 +170,9 @@ HouseholdCreateForm.defaultProps = {
 
 HouseholdCreateForm.propTypes = {
   connections: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    nickname: PropTypes.string.isRequired,
-    photo: PropTypes.string,
+    [CONNECTION_KEYS.ID]: PropTypes.number.isRequired,
+    [CONNECTION_KEYS.NICKNAME]: PropTypes.string.isRequired,
+    [CONNECTION_KEYS.PHOTO]: PropTypes.string,
   })),
 }
 

@@ -57,3 +57,9 @@ export const MEMBER_KEYS = {
   ROLE: 'member-role',
   DATE_JOINED: 'date-joined',
 }
+
+export const CONNECTION_KEYS = {
+  ID: 'id',
+  NICKNAME: 'nickname',
+  PHOTO: 'photo',
+}
