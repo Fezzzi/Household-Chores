@@ -1,9 +1,10 @@
-const path = require('path');
-const dotenv = require('dotenv').config();
-const webpack = require('webpack');
-const HtmlWebPackPlugin = require('html-webpack-plugin');
+const path = require('path')
+const webpack = require('webpack')
+const HtmlWebPackPlugin = require('html-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+require('dotenv').config()
 
-const webpackAliases = require('./webpack-aliases.config');
+const webpackAliases = require('./webpack-aliases.config')
 
 module.exports = {
   // Enable sourcemaps for debugging webpack's output.
@@ -12,15 +13,30 @@ module.exports = {
   context: path.resolve(__dirname, '../code/client'),
   ...webpackAliases,
   output: {
-    filename: 'main.js',
+    filename: 'main.[contenthash].js',
+    chunkFilename: '[name].[contenthash].js',
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/',
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      maxInitialRequests: Infinity,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: module =>
+            `npm.${module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1].replace('@', '')}`,
+        },
+      },
+    },
   },
   entry: {
     js: ['babel-polyfill', 'clientSrc/index.jsx'],
   },
   devServer: {
     historyApiFallback: true,
+    port: 8081,
   },
 
   module: {
@@ -40,7 +56,7 @@ module.exports = {
         test: /\.(png|svg|jpg|gif)$/,
         use: ['file-loader'],
       },
-      // Enables inputing svg files (.svgr) as components to further style them
+      // Enables inputting svg files (.svgr) as components to further style them
       // without blocking standard way of .svg files importing
       {
         test: /\.svgr$/,
@@ -63,11 +79,22 @@ module.exports = {
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: path.resolve(__dirname, '../code/client/src/index.html'),
+      template: path.resolve(__dirname, '../static/index.html'),
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: '../../static/manifest.json' },
+        { from: '../../static/favicon.ico' },
+        { from: '../../static/icons/icon-192.png' },
+        { from: '../../static/icons/icon-512.png' },
+      ],
+      options: {
+        concurrency: 100,
+      },
     }),
     new webpack.DefinePlugin({
-      'process.env.PORT': (dotenv.parsed && dotenv.parsed.PORT) || 9000,
-      'process.env.GCID': (dotenv.parsed && JSON.stringify(dotenv.parsed.GCID)) || 'test1234',
+      'process.env.PORT': process.env.PORT || 9000,
+      'process.env.GCID': (process.env.GCID && JSON.stringify(process.env.GCID)) || 'test1234',
     }),
   ],
-};
+}

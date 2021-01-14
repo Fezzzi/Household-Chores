@@ -1,35 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Message } from '@material-ui/icons';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Message } from '@material-ui/icons'
 
-import { useConnectionButtons } from 'clientSrc/helpers/connectionButtons';
+import { useConnectionButtons } from 'clientSrc/helpers/connectionButtons'
 import {
   UserButtonsBox, UserName, UserNode, UserPhotoBox,
   UserPhoto, WrapperBox, AppendMessageAnchor, AppendMessageIcon,
-} from 'clientSrc/styles/blocks/users';
-import * as NotificationActions from 'clientSrc/actions/notificationActions';
-import * as CONNECTION_STATE_TYPE from 'shared/constants/connectionStateType';
-import { TABS } from 'shared/constants/settingTypes';
+} from 'clientSrc/styles/blocks/users'
+import { SETTING_TABS, CONNECTION_STATE_TYPE } from 'shared/constants'
 
-import PrimaryButton from '../common/PrimaryButton';
-import LocaleText from '../../common/LocaleText';
-import { InfoTooltip } from '../../portals';
+import { LocaleText, PrimaryButton } from '../../common'
+import { InfoTooltip } from '../../portals'
 
-const UserConnectionNode = ({ tab, user, setData, addNotification }) => {
-  const [buttons, setButtons] = useState({});
+const UserConnectionNode = ({ tab, user }) => {
+  const buttons = useConnectionButtons(tab, user)
 
-  useEffect(() => setButtons(
-    useConnectionButtons(tab, user, setData, setButtons, addNotification)
-  ), [setData]);
+  const handleClick = clickHandler => () => {
+    /* todo: Implement connection messages and pass it here */
+    clickHandler()
+  }
 
-  const { id, nickname, photo, state, message: userMessage } = user;
+  const { id, nickname, photo, state, message: userMessage } = user
   return (
     <WrapperBox>
       <UserNode>
         <UserPhotoBox>
           <UserPhoto src={photo} />
-          {(tab === TABS.FIND_CONNECTION || tab === TABS.PENDING) && state === CONNECTION_STATE_TYPE.WAITING && userMessage && (
+          {(tab === SETTING_TABS.FIND_CONNECTION || tab === SETTING_TABS.PENDING)
+          && state === CONNECTION_STATE_TYPE.WAITING && userMessage && (
             <AppendMessageAnchor>
               <InfoTooltip
                 icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
@@ -43,13 +41,12 @@ const UserConnectionNode = ({ tab, user, setData, addNotification }) => {
           {Object.keys(buttons).map(label => {
             const {
               active, message: buttonMessage, color, background, backgroundHover, disabled, clickHandler,
-            } = buttons[label];
+            } = buttons[label]
             return active && (
               <PrimaryButton
                 key={`${id}-${label}`}
                 disabled={disabled}
-                /* todo: Implement connection messages and pass it here */
-                clickHandler={clickHandler('')}
+                onClick={handleClick(clickHandler)}
                 margin="0 0 6px"
                 color={color}
                 background={background}
@@ -57,13 +54,13 @@ const UserConnectionNode = ({ tab, user, setData, addNotification }) => {
               >
                 <LocaleText message={buttonMessage || label} />
               </PrimaryButton>
-            );
+            )
           })}
         </UserButtonsBox>
       </UserNode>
     </WrapperBox>
-  );
-};
+  )
+}
 
 UserConnectionNode.propTypes = {
   tab: PropTypes.string.isRequired,
@@ -75,14 +72,6 @@ UserConnectionNode.propTypes = {
     message: PropTypes.string,
     state: PropTypes.string,
   }).isRequired,
-  setData: PropTypes.func.isRequired,
-  addNotification: PropTypes.func.isRequired,
-};
+}
 
-const mapDispatchToProps = dispatch => ({
-  addNotification: (type, message) => dispatch(NotificationActions.addNotifications({
-    [type]: [message],
-  })),
-});
-
-export default connect(null, mapDispatchToProps)(UserConnectionNode);
+export default UserConnectionNode

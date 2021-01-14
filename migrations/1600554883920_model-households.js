@@ -1,48 +1,44 @@
-import { migrateWithQueries } from "serverSrc/helpers/migrations";
-import HOUSEHOLDS_TABLE from 'serverSrc/database/models/tables/households';
-import HOUSEHOLD_MEMBERS_TABLE from 'serverSrc/database/models/tables/household_members';
-import HOUSEHOLD_INVITATIONS_TABLE from 'serverSrc/database/models/tables/household_invitations';
-import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
-
-const { columns: householdColumns } = HOUSEHOLDS_TABLE;
-const { columns: memberColumns } = HOUSEHOLD_MEMBERS_TABLE;
-const { columns: invitationColumns } = HOUSEHOLD_INVITATIONS_TABLE;
+import { migrateWithQueries } from 'serverSrc/helpers/migrations'
+import {
+  tHouseMemName, tHouseMemCols, tHouseholdsName, tHouseholdsCols, tHouseInvName, tHouseInvCols,
+} from 'serverSrc/database/models/tables'
+import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 
 module.exports = {
-  up: (conn, cb) => migrateWithQueries(cb,
-    conn.query(`
-      CREATE TABLE ${HOUSEHOLDS_TABLE.name} (
-        ${householdColumns.id} INT AUTO_INCREMENT PRIMARY KEY,
-        ${householdColumns.name} VARCHAR(255) NOT NULL,
-        ${householdColumns.photo} VARCHAR(2083),
-        ${householdColumns.date_created} DATETIME NOT NULL
+  up: async (conn, cb) => migrateWithQueries(cb,
+    await conn.query(`
+      CREATE TABLE ${tHouseholdsName} (
+        ${tHouseholdsCols.id} INT AUTO_INCREMENT PRIMARY KEY,
+        ${tHouseholdsCols.name} VARCHAR(255) NOT NULL,
+        ${tHouseholdsCols.photo} VARCHAR(2083),
+        ${tHouseholdsCols.date_created} DATETIME NOT NULL
       )
     `)
-    && conn.query(`
-      CREATE TABLE ${HOUSEHOLD_MEMBERS_TABLE.name} (
-        ${memberColumns.id_household} INT NOT NULL,
-        ${memberColumns.id_user} INT NOT NULL,
-        ${memberColumns.id_from} INT NOT NULL,
-        ${memberColumns.role} ENUM('${HOUSEHOLD_ROLE_TYPE.ADMIN}', '${HOUSEHOLD_ROLE_TYPE.MANAGER}', '${HOUSEHOLD_ROLE_TYPE.MEMBER}') NOT NULL DEFAULT '${HOUSEHOLD_ROLE_TYPE.MEMBER}',
-        ${memberColumns.photo} VARCHAR(2083),
-        ${memberColumns.date_joined} DATETIME NOT NULL,
-        PRIMARY KEY (${memberColumns.id_household}, ${memberColumns.id_user})
+    && await conn.query(`
+      CREATE TABLE ${tHouseMemName} (
+        ${tHouseMemCols.id_household} INT NOT NULL,
+        ${tHouseMemCols.id_user} INT NOT NULL,
+        ${tHouseMemCols.id_from} INT NOT NULL,
+        ${tHouseMemCols.role} ENUM('${HOUSEHOLD_ROLE_TYPE.ADMIN}', '${HOUSEHOLD_ROLE_TYPE.MANAGER}', '${HOUSEHOLD_ROLE_TYPE.MEMBER}') NOT NULL DEFAULT '${HOUSEHOLD_ROLE_TYPE.MEMBER}',
+        ${tHouseMemCols.photo} VARCHAR(2083),
+        ${tHouseMemCols.date_joined} DATETIME NOT NULL,
+        PRIMARY KEY (${tHouseMemCols.id_household}, ${tHouseMemCols.id_user})
       )
     `)
-    && conn.query(`
-      CREATE TABLE ${HOUSEHOLD_INVITATIONS_TABLE.name} (
-        ${invitationColumns.id_household} INT NOT NULL,
-        ${invitationColumns.id_from} INT NOT NULL,
-        ${invitationColumns.id_to} INT NOT NULL,
-        ${invitationColumns.message} VARCHAR(255) DEFAULT NULL,
-        ${invitationColumns.date_created} DATETIME NOT NULL,
-        PRIMARY KEY (${invitationColumns.id_household}, ${invitationColumns.id_to})
+    && await conn.query(`
+      CREATE TABLE ${tHouseInvName} (
+        ${tHouseInvCols.id_household} INT NOT NULL,
+        ${tHouseInvCols.id_from} INT NOT NULL,
+        ${tHouseInvCols.id_to} INT NOT NULL,
+        ${tHouseInvCols.message} VARCHAR(255) DEFAULT NULL,
+        ${tHouseInvCols.date_created} DATETIME NOT NULL,
+        PRIMARY KEY (${tHouseInvCols.id_household}, ${tHouseInvCols.id_to})
       )
     `)
   ),
-  down: (conn, cb) => migrateWithQueries(cb,
-    conn.query(`DROP TABLE ${HOUSEHOLDS_TABLE.name}`)
-    && conn.query(`DROP TABLE ${HOUSEHOLD_MEMBERS_TABLE.name}`)
-    && conn.query(`DROP TABLE ${HOUSEHOLD_INVITATIONS_TABLE.name}`)
+  down: async (conn, cb) => migrateWithQueries(cb,
+    await conn.query(`DROP TABLE ${tHouseholdsName}`)
+    && await conn.query(`DROP TABLE ${tHouseMemName}`)
+    && await conn.query(`DROP TABLE ${tHouseInvName}`)
   ),
 }

@@ -7,4 +7,4 @@ export default {
     state: 'state',
     date_created: 'date_created',
   },
-};
+}

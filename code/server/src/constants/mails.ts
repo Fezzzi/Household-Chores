@@ -1,1 +1,5 @@
-export const RESET_PASSWORD = 'resetPassword';
+enum MAILS {
+  RESET_PASSWORD = 'resetPassword'
+}
+
+export default MAILS

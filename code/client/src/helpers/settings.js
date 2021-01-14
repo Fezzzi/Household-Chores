@@ -1,36 +1,16 @@
-import { settingsRenderers } from 'clientSrc/constants/settingsRenderers';
-import { loadSettings } from 'clientSrc/effects/settingsEffects';
-import * as NotificationTypes from 'shared/constants/notificationTypes';
-import { ERROR } from 'shared/constants/localeMessages';
+import { NOTIFICATION_TYPE } from 'shared/constants'
+import { ERROR } from 'shared/constants/localeMessages'
 
-export const useContentRendererKeys = (category, tab, categoryTypes, tabTypes) => {
-  const categoryKey = settingsRenderers[category]
-    ? category
-    : settingsRenderers[categoryTypes[category]]
-      ? categoryTypes[category]
-      : null;
-
-  const tabKey = settingsRenderers[categoryKey][tab]
-    ? tab
-    : settingsRenderers[categoryKey][tabTypes[tab]]
-      ? tabTypes[tab]
-      : null;
-
-  return {
-    categoryKey,
-    tabKey,
-  };
-};
-
-export const useSettingsLoader = () => (category, tab, setState, setData, setRenderedTabs, addNotification) =>
+export const useSettingsLoader = loadSettings => (category, tab, setState, setData, setRenderedTabs, addNotification) => {
   loadSettings(category, tab)
     .then(({ data: { tabs: newTabs, data: newData, ...otherData } }) => {
       setState(prevState => ({
         ...prevState,
         tabs: newTabs,
         ...otherData,
-      }));
-      setData(newData);
-      setRenderedTabs(newTabs);
+      }))
+      setData(newData)
+      setRenderedTabs(newTabs)
     })
-    .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR));
+    .catch(() => addNotification(NOTIFICATION_TYPE.ERRORS, ERROR.CONNECTION_ERROR))
+}

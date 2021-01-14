@@ -1,29 +1,41 @@
-import express from 'express';
-import dotenv from 'dotenv';
+import express from 'express'
+import dotenv from 'dotenv'
 
-import * as SettingTypes from 'shared/constants/settingTypes';
+import { handleSettingsDataFetch, handleSettingsDataUpdate } from 'serverSrc/actions/settings/handlers'
+import { ERROR, INFO } from 'shared/constants/localeMessages'
+import { SETTING_CATEGORIES, SETTING_TAB_ROWS, NOTIFICATION_TYPE } from 'shared/constants'
 
-import { handleSettingsDataFetch } from 'serverSrc/actions/settings/handlers';
-
-dotenv.config();
+dotenv.config()
 
 export default () => {
-  const router = express.Router();
+  const router = express.Router()
   router.get(/.*/, (req: { query: { category: string; tab: string }}, res) => {
-    const { query: { category, tab } } = req;
-    if (Object.values(SettingTypes.CATEGORIES).find(cat => cat === category) !== null) {
-      handleSettingsDataFetch(category, tab, req, res);
+    const { query: { category, tab } } = req
+    if (Object.values(SETTING_CATEGORIES).find(cat => cat === category) !== null) {
+      return handleSettingsDataFetch(category, tab, req, res)
     } else {
-      res.status(200).send([]);
+      res.status(200).send([])
+      return true
     }
-  });
+  })
 
-  router.post(/.*/, (req, res) => {
-    const { body } = req;
-    console.log(`Attempt to update data ${body}`);
+  router.post(/.*/, async (req, res) => {
+    const { body: { category, tab, inputs } } = req
 
-    res.status(404).send('Not Found');
-  });
+    if (inputs && Object.values(inputs).length > 0) {
+      if (category && tab && SETTING_TAB_ROWS[category] !== undefined) {
+        const handled = await handleSettingsDataUpdate(category, tab, inputs, req, res)
+        if (!handled) {
+          return handleSettingsDataFetch(category, tab, req, res)
+        }
+      } else {
+        res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
+      }
+    } else {
+      res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
+    }
+    return true
+  })
 
-  return router;
-};
+  return router
+}

@@ -1,4 +1,5 @@
-import axios from 'axios';
-import { config } from './config';
+import axios from 'axios'
 
-export const clientApi = axios.create(config);
+import { config } from './config'
+
+export const clientApi = axios.create(config)

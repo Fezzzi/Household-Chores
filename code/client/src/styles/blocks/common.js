@@ -1,12 +1,14 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
+
+import { COLORS } from 'clientSrc/constants'
 
 export const MiniInputWrapper = styled.div`
-  background: var(--cThemeBack);
+  background: ${COLORS.THEME_BACK};
   align-items: center;
-  border: 1px solid var(--${props => props.active ? 'cBorderActive' : 'cBorder'});
+  border: 1px solid ${props => props.active ? COLORS.BORDER_ACTIVE : COLORS.BORDER};
   border-radius: 3px;
   box-sizing: border-box;
-  color: var(--cFont);
+  color: ${COLORS.FONT};
   font-size: 14px;
   position: relative;
   max-width: 400px;
@@ -17,16 +19,40 @@ export const MiniInputWrapper = styled.div`
   &input {
     font-size: .9em;
   }
-`;
+`
 
 export const EditableFieldWrapper = styled.div`
   position: relative;
   max-width: 100%;
   
-  :hover {
-    cursor: pointer;
+  ${props => !props.editing && `
+    :hover {
+      cursor: pointer;
+    }
+  `}
+`
+
+export const EditableLabelBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-around;
+  font-weight: 400;
+  user-select: none;
+  
+  :focus {
+    outline: none;
   }
-`;
+`
+
+export const EditableLabel = styled.div`
+  ${props => props.clickable
+    ? `
+      :hover {
+        cursor: pointer;
+      }
+    ` : 'filter: grayscale(100%);'}
+`
 
 export const EditableFieldIcon = styled.div`
   position: absolute;
@@ -34,11 +60,11 @@ export const EditableFieldIcon = styled.div`
   right: ${props => props.iconRight ?? -22}px;
   width: 15px;
   height: ${props => props.centered ? '100%' : '15px'};
-  color: var(--cFont);
+  color: ${COLORS.FONT};
   opacity: .4; 
   
   svg {
     width: 100%;
     height: 100%;
   }
-`;
+`

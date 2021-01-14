@@ -12,5 +12,6 @@ export default {
     visibility: 'visibility',
     date_registered: 'date_registered',
     date_last_active: 'date_last_active',
+    fs_key: 'file_system_key',
   },
-};
+}

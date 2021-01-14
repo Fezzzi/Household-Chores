@@ -1,5 +1,6 @@
-import * as SettingTypes from 'shared/constants/settingTypes';
-import USER_VISIBILITY_TYPE from 'shared/constants/userVisibilityType';
+import {
+  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_TABS, HOUSEHOLD_TABS, SETTING_CATEGORIES,
+} from 'shared/constants'
 
 export const AUTH = {
   BACK_TO_LOGIN: 'auth.backToLogin',
@@ -15,7 +16,7 @@ export const AUTH = {
   SEND_RESET_LINK: 'auth.sendResetLink',
   SIGN_UP: 'auth.signUp',
   TERMS_AGREEMENT: 'auth.termsAgreement',
-};
+}
 
 export const COMMON = {
   OR: 'common.or',
@@ -23,19 +24,28 @@ export const COMMON = {
   HIDE: 'common.hide',
   MESSAGE: 'common.message',
   ADD_MESSAGE: 'common.addMessage',
+  NO_CONTENT: 'common.noContent',
   SENDING: 'common.sending',
   SEARCH: 'common.search',
   SEARCHING: 'common.searching',
   TERMS_AND_CONDITIONS: 'common.termsAndConditions',
-};
+  PHOTO_SIZE: 'common.photoSize',
+}
 
 export const ERROR = {
+  ADMIN_REQUIRED: 'error.adminRequired',
   CONNECTION_ERROR: 'error.connectionError',
+  CONNECTION_REQUEST_ERROR: 'error.connectionRequestError',
+  ACTION_ERROR: 'error.actionError',
+  BAD_PERMISSIONS: 'error.badPermissions',
+  INVALID_REQUEST: 'error.invalidRequest',
   GOOGLE_API_INIT_ERROR: 'error.googleAPIInitError',
   IMAGE_INVALID: 'error.imageInvalid',
   INCORRECT_PASS: 'error.incorrectPass',
   INVALID_DATA: 'error.invalidData',
   INVALID_EMAIL: 'error.invalidEmail',
+  UPLOADING_ERROR: 'error.uploadingError',
+  EMAIL_USED: 'error.emailUsed',
   INVALID_FACEBOOK_DATA: 'error.invalidFacebookData',
   INVALID_GOOGLE_DATA: 'error.invalidGoogleData',
   LOG_IN_ERROR: 'error.logInError',
@@ -46,9 +56,14 @@ export const ERROR = {
   SMTH_BROKE_LOGIN: 'error.smthBrokeLogIn',
   VALUE_TOO_SHORT: 'error.valueTooShort',
   VALUE_TOO_LONG: 'error.valueTooLong',
-};
+}
+
+export const INFO = {
+  NOTHING_TO_UPDATE: 'info.nothingToUpdate',
+}
 
 export const FORM = {
+  DELETE_ACCOUNT: 'form.deleteAccount',
   DROP_PHOTO_HERE: 'form.dropPhotoHere',
   CLICK_TO_UPLOAD: 'form.clickToUpload',
   CONNECTIONS: 'form.connections',
@@ -60,7 +75,6 @@ export const FORM = {
   USER_VISIBILITY: 'form.userVisibility',
   NOTIFICATIONS: 'form.notifications',
   HOUSEHOLDS: 'form.households',
-  EMAIL_NOTIFICATIONS: 'form.emailNotifications',
   PASSWORD: 'form.password',
   THEME: 'form.theme',
   OLD_PASSWORD: 'form.oldPassword',
@@ -86,9 +100,20 @@ export const FORM = {
   BLOCKED_CONNECTIONS: 'form.blockedConnections',
   HOUSEHOLD_INVITATIONS: 'form.householdInvitations',
 
+  EMAIL_NOTIFICATIONS: 'form.email_notifications',
+  BROWSER_NOTIFICATIONS: 'form.browser_notifications',
+  MOBILE_NOTIFICATIONS: 'form.mobile_notifications',
+  CONNECTION_APPROVAL: 'form.connection_approval',
+  CONNECTION_REQUEST: 'form.connection_request',
+  HOUSEHOLD_DELETING: 'form.household_deleting',
+  HOUSEHOLD_EXPELLING: 'form.household_expelling',
+  HOUSEHOLD_INVITATION: 'form.household_invitation',
+  HOUSEHOLD_JOINING: 'form.household_joining',
+  HOUSEHOLD_LEAVING: 'form.household_leaving',
+
   [USER_VISIBILITY_TYPE.FOF]: 'form.userVisibilityFOF',
   [USER_VISIBILITY_TYPE.ALL]: 'form.userVisibilityALL',
-};
+}
 
 export const HOUSEHOLD = {
   LEAVE: 'household.leave',
@@ -102,30 +127,34 @@ export const HOUSEHOLD = {
   MEMBERS_SECTION: 'household.membersSection',
   CHANGE_ROLE: 'household.changeRole',
   REMOVE_USER: 'household.removeUser',
+  CANCEL_REMOVE_USER: 'household.cancelRemoveUser',
   INVITATIONS: 'household.invitations',
   INVITE_USERS: 'household.inviteUser',
   INVITE: 'household.invite',
+  SINCE: 'household.since',
   MODULES: 'household.modules',
   ADD_MODULES: 'household.addModule',
-};
+}
 
 export const SETTINGS = {
-  [`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.PROFILE}`]: 'settings.categoryProfile',
-  [`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.CONNECTIONS}`]: 'settings.categoryConnections',
-  [`${SettingTypes.COLUMNS.CATEGORY}_${SettingTypes.CATEGORIES.HOUSEHOLDS}`]: 'settings.categoryHouseholds',
+  [`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.PROFILE}`]: 'settings.categoryProfile',
+  [`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.CONNECTIONS}`]: 'settings.categoryConnections',
+  [`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.HOUSEHOLDS}`]: 'settings.categoryHouseholds',
 
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.GENERAL}`]: 'settings.tabGeneral',
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NOTIFICATIONS}`]: 'settings.tabNotifications',
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.MY_CONNECTIONS}`]: 'settings.tabMyConnections',
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.PENDING}`]: 'settings.tabPending',
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.BLOCKED}`]: 'settings.tabBlocked',
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.FIND_CONNECTION}`]: 'settings.tabFindConnection',
+  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.GENERAL}`]: 'settings.tabGeneral',
+  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.NOTIFICATIONS}`]: 'settings.tabNotifications',
+  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.MY_CONNECTIONS}`]: 'settings.tabMyConnections',
+  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.PENDING}`]: 'settings.tabPending',
+  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.BLOCKED}`]: 'settings.tabBlocked',
+  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.FIND_CONNECTION}`]: 'settings.tabFindConnection',
 
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.NEW_HOUSEHOLD}`]: 'settings.newHousehold',
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS.INVITATIONS}`]: 'settings.invitations',
-  [`${SettingTypes.COLUMNS.TAB}_${SettingTypes.TABS._HOUSEHOLD}`]: 'settings.household',
-};
+  [`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.NEW_HOUSEHOLD}`]: 'settings.newHousehold',
+  [`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.INVITATIONS}`]: 'settings.invitations',
+  [`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS._HOUSEHOLD}`]: 'settings.household',
+}
 
 export const SUCCESS = {
   RESET_LINK: 'success.resetLink',
-};
+  SETTINGS_UPDATED: 'success.settingsUpdated',
+  ACCOUNT_CREATED: 'success.accountCreated',
+}

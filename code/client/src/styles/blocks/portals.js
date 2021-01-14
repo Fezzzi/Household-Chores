@@ -1,12 +1,14 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
+
+import { COLORS } from 'clientSrc/constants'
 
 export const TooltipWrapper = styled.div`
   position: relative;
   
-  :focus {
+  :focus, :active {
     outline: none;
   }
-`;
+`
 
 export const OptionsTooltipIcon = styled.span`
   opacity: ${props => props.active ? 0.9 : 0.6};
@@ -15,20 +17,24 @@ export const OptionsTooltipIcon = styled.span`
     cursor: pointer;
     opacity: 0.9;
   }
-`;
+  
+  :focus, :active {
+    outline: none;
+  }
+`
 
 export const TooltipAnchor = styled.div`
   position: absolute;
   top: ${props => props.position?.y ? props.position.y + 2 : 180}px;
   left: ${props => props.position?.x ?? 1400}px;
-`;
+`
 
 export const Tooltip = styled.div`
   top: -3px;
   right: ${props => props.withHover ? 150 : 125}%;
   width: max-content;
-  background-color: var(--cThemeFront);
-  border: 1px solid var(--cBorder);
+  background-color: ${COLORS.THEME_FRONT};
+  border: 1px solid ${COLORS.BORDER};
   position: absolute;
   padding: ${props => props.hasRows ? 0 : '4px 6px'};
   z-index: 10;
@@ -43,14 +49,14 @@ export const Tooltip = styled.div`
       left: 100%;
       margin-top: -5px;
       border: 5px solid;
-      border-color: transparent transparent transparent var(--cBorder);
+      border-color: transparent transparent transparent ${COLORS.BORDER};
     }
   `}
   
   :focus {
     outline: none;
   }
-`;
+`
 
 export const TooltipRow = styled.div`
   padding: 6px 11px;
@@ -60,7 +66,7 @@ export const TooltipRow = styled.div`
   ${props => props.selected && `
     opacity: 1;
     font-weight: 500;
-    background-color: var(--cThemeBack);
+    background-color: ${COLORS.THEME_BACK};
   `}
 
   ${props => props.clickable
@@ -69,7 +75,7 @@ export const TooltipRow = styled.div`
         cursor: pointer;
         font-weight: 400;
         opacity: 1;
-        background-color: var(--cThemeBack);
+        background-color: ${COLORS.THEME_BACK};
       }
     ` : 'filter: grayscale(100%);'
 }
@@ -82,7 +88,7 @@ export const TooltipRow = styled.div`
         top: 10px;
         left: 100%;
         border: 5px solid;
-        border-color: transparent transparent transparent var(--cBorder);
+        border-color: transparent transparent transparent ${COLORS.BORDER};
       }
     }
   `}
@@ -90,19 +96,19 @@ export const TooltipRow = styled.div`
   :last-child {
     margin-bottom: 0;
   }
-`;
+`
 
 export const SimpleFloatingElementWrapper = styled.div`
   top: 10px;
   right: 20px;
   height: 36px;
   background-color: ${props => props.background};
-  color: var(--cLightPrimary);
+  color: ${COLORS.LIGHT_PRIMARY};
   position: absolute;
   display: flex;
   border-radius: 19px;
   padding: 2px;
-  z-index: 10;
+  z-index: 25;
   opacity: ${props => props.enabled ? 1 : 0.8};
   
   :focus {
@@ -117,7 +123,7 @@ export const SimpleFloatingElementWrapper = styled.div`
   :active, :focus {
     opacity: 0.8;
   }
-`;
+`
 
 export const FloatingElementIcon = styled.span`
   width: 28px;
@@ -130,7 +136,7 @@ export const FloatingElementIcon = styled.span`
     height: 100%;
     width: 100%;
   }
-`;
+`
 
 export const FloatingElementText = styled.span`
   display: inline-flex;
@@ -140,4 +146,4 @@ export const FloatingElementText = styled.span`
   font-weight: 500;
   user-select: none;
   
-`;
+`

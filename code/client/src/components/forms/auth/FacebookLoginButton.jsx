@@ -1,51 +1,47 @@
-import React from 'react';
-import FacebookProvider, { Login } from 'react-facebook-sdk';
-import { connect } from 'react-redux';
-import { PropTypes } from 'prop-types';
+import React, { useCallback } from 'react'
+import FacebookProvider, { Login } from 'react-facebook-sdk'
+import { useDispatch, useSelector } from 'react-redux'
+import { PropTypes } from 'prop-types'
 
-import { AUTH } from 'shared/constants/localeMessages';
-import * as AuthActions from 'clientSrc/actions/authActions';
-import { FacebookIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/blocks/form';
+import { AUTH } from 'shared/constants/localeMessages'
+import { AuthActions } from 'clientSrc/actions'
+import { FacebookIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/blocks/form'
 
-import LocaleText from '../../common/LocaleText';
-import PrimaryButton from '../common/PrimaryButton';
+import { LocaleText, PrimaryButton } from '../../common'
 
-const FacebookButtonComponent = ({ locale, handleError, logInFacebook }) => (
-  <FacebookProvider appId="694001678055824" language={locale}>
-    <Login
-      scope="email"
-      onResponse={data => logInFacebook(data)}
-      onError={handleError}
-      render={({ isLoading, isWorking, onClick }) => (
-        <PrimaryButton
-          clickHandler={onClick}
-          background="#3B4998"
-          backgroundHover="#303B7C"
-          color="#FAFAFA"
-          disabled={isLoading || isWorking}
-        >
-          <FormButtonContentWrapper>
-            <FacebookIconSpan />
-            <LocaleText message={isLoading || isWorking ? AUTH.LOADING_DOTS : AUTH.LOG_IN_FACEBOOK} />
-          </FormButtonContentWrapper>
-        </PrimaryButton>
-      )}
-    />
-  </FacebookProvider>
-);
+const FacebookLoginButton = ({ onError }) => {
+  const locale = useSelector(({ locale: { locale } }) => locale)
+  const dispatch = useDispatch()
+  const logInFacebook = useCallback(data => dispatch(AuthActions.logInFacebook(data)), [dispatch])
 
-FacebookButtonComponent.propTypes = {
-  locale: PropTypes.string,
-  handleError: PropTypes.func.isRequired,
-  logInFacebook: PropTypes.func,
-};
+  return (
+    <FacebookProvider appId="694001678055824" language={locale}>
+      <Login
+        scope="email"
+        onResponse={data => logInFacebook(data)}
+        onError={onError}
+        render={({ isLoading, isWorking, onClick }) => (
+          <PrimaryButton
+            onClick={onClick}
+            background="#3B4998"
+            backgroundHover="#303B7C"
+            color="#FAFAFA"
+            disabled={isLoading || isWorking}
+            margin="0 40px 14px"
+          >
+            <FormButtonContentWrapper>
+              <FacebookIconSpan />
+              <LocaleText message={isLoading || isWorking ? AUTH.LOADING_DOTS : AUTH.LOG_IN_FACEBOOK} />
+            </FormButtonContentWrapper>
+          </PrimaryButton>
+        )}
+      />
+    </FacebookProvider>
+  )
+}
 
-const mapStateToProps = ({ locale: { locale } }) => ({
-  locale,
-});
+FacebookLoginButton.propTypes = {
+  onError: PropTypes.func.isRequired,
+}
 
-const mapDispatchToProps = dispatch => ({
-  logInFacebook: data => dispatch(AuthActions.logInFacebook(data)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(FacebookButtonComponent);
+export default FacebookLoginButton

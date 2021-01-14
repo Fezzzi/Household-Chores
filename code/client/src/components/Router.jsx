@@ -1,89 +1,63 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { PropTypes } from 'prop-types';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { Router as BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { createBrowserHistory } from 'history'
 
-import * as SettingTypes from 'shared/constants/settingTypes';
-import { RESOURCES_PREFIX, SETTINGS_PREFIX } from 'shared/constants/api';
-import * as TABS from 'clientSrc/constants/authTabs';
+import { API, SETTING_TAB_ROWS, SETTING_CATEGORIES } from 'shared/constants'
 
-import Home from './Home';
-import Resource from './Resource';
-import AuthForm from './forms/auth/AuthForm';
-import Settings from './settings';
+import Home from './Home'
+import Resource from './Resource'
+import { AuthForm } from './forms'
+import Settings from './settings/Settings'
 
-const getTabQuery = queries =>
-  queries.split(/\?&/)?.find(query => query.match(/tab=.+/))?.split('=')[1];
+export const history = createBrowserHistory()
 
-const RouterComponent = ({ loggedUser }) => (
-  <Router>
-    <Switch>
-      <Route
-        path={`/${RESOURCES_PREFIX}`}
-        render={({ match: { url } }) => (
-          <>
-            <Route path={`${url}/:resourceId`} component={Resource} />
-            <Route exact path={`${url}`}>
-              <Redirect to={{ pathname: '/' }} />
-            </Route>
-          </>
-        )}
-      />
-      {!loggedUser
-        ? (
-          <Switch>
-            <Route
-              path={`/${TABS.LOGIN_TAB}`}
-              render={props => <AuthForm {...props} tab={TABS.LOGIN_TAB} />}
-            />
-            <Route
-              path={`/${TABS.SIGNUP_TAB}`}
-              render={props => <AuthForm {...props} tab={TABS.SIGNUP_TAB} />}
-            />
-            <Route
-              path={`/${TABS.RESET_TAB}`}
-              render={props => <AuthForm {...props} tab={TABS.RESET_TAB} />}
-            />
-            <Route path="/*">
-              <Redirect to={`/${TABS.LOGIN_TAB}`} />
-            </Route>
-          </Switch>
-        )
-        : (
-          <Switch>
-            <Route
-              path={`/${SETTINGS_PREFIX}`}
-              render={({ match: { url } }) => (
-                <>
-                  {Object.values(SettingTypes.CATEGORIES).map(category => (
-                    <Route
-                      path={`${url}/${category}`}
-                      key={`settings-${category}`}
-                      render={params =>
-                        <Settings {...params} categoryId={category} tabId={getTabQuery(params.location.search)} />}
-                    />
-                  ))}
-                  <Route exact path={`${url}`}>
-                    <Redirect to={{ pathname: `${url}/${SettingTypes.CATEGORIES.PROFILE}` }} />
-                  </Route>
-                </>
-              )}
-            />
+const Router = () => {
+  const { loggedUser, loaded } = useSelector(({ app: { loggedUser, loaded } }) => ({ loggedUser, loaded }))
 
-            <Route exact path="/" component={Home} />
-            <Route path="/*">
-              <Redirect to={{ pathname: '/' }} />
-            </Route>
-          </Switch>
-        )}
-    </Switch>
-  </Router>
-);
+  return (
+    <BrowserRouter history={history}>
+      <Switch>
+        <Route
+          path={`/${API.RESOURCES_PREFIX}`}
+          render={({ match: { url } }) => (
+            <>
+              <Route path={`${url}/:resourceId`} component={Resource} />
+              <Route exact path={`${url}`}>
+                <Redirect to={{ pathname: '/' }} />
+              </Route>
+            </>
+          )}
+        />
+        {loaded && (!loggedUser
+          ? (
+            <Switch>
+              <Route path="/*" component={AuthForm} />
+            </Switch>
+          )
+          : (
+            <Switch>
+              <Route exact path={`/${API.SETTINGS_PREFIX}/:category?:tab`} component={Settings} />
+              <Route path={`/${API.SETTINGS_PREFIX}`}>
+                <Redirect
+                  to={{
+                    pathname: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.PROFILE}`,
+                    search: `tab=${SETTING_TAB_ROWS[SETTING_CATEGORIES.PROFILE][0]}`,
+                  }}
+                />
+              </Route>
+              <Route exact path="/" component={Home} />
+              <Route
+                path="/*"
+                component={({ location }) => location.hash.startsWith('#/')
+                  ? <Redirect to={location.hash.slice(2)} />
+                  : <Redirect to={{ pathname: '/' }} />}
+              />
+            </Switch>
+          ))}
+      </Switch>
+    </BrowserRouter>
+  )
+}
 
-RouterComponent.propTypes = {
-  loggedUser: PropTypes.bool,
-};
-
-const mapStateToProps = ({ app: { loggedUser } }) => ({ loggedUser });
-
-export default connect(mapStateToProps)(RouterComponent);
+export default Router

@@ -1,91 +1,144 @@
-import React from 'react';
-import { CalendarToday, ChevronRight, Delete, Grade, MoreVert, SortByAlpha } from '@material-ui/icons';
+import React from 'react'
+import { CalendarToday, ChevronRight, Delete, Cancel, Grade, MoreVert, SortByAlpha } from '@material-ui/icons'
 
-import { invitationApprove, invitationIgnore } from 'clientSrc/effects/householdEffects';
-import { TablePhoto, TableRowIcon } from 'clientSrc/styles/blocks/table';
-import { RoleLabel } from 'clientSrc/styles/blocks/households';
-import OptionsTooltip from 'clientSrc/components/portals/tooltips/OptionsTooltip';
-import * as NotificationTypes from 'shared/constants/notificationTypes';
-import HOUSEHOLD_ROLE_TYPE from 'shared/constants/householdRoleType';
-import { ERROR, HOUSEHOLD } from 'shared/constants/localeMessages';
+import { COLORS } from 'clientSrc/constants'
+import { OptionsTooltip } from 'clientSrc/components/portals'
+import LocaleText from 'clientSrc/components/common/LocaleText'
+import { TablePhoto, TableRowIcon } from 'clientSrc/styles/blocks/table'
+import { RoleLabel, UserLabel } from 'clientSrc/styles/blocks/households'
+import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
+import { HOUSEHOLD } from 'shared/constants/localeMessages'
+import { formatDate } from 'shared/helpers/date'
 
-export const useHouseholdButtonHandlers = (householdId, fromId, setData, addNotification) => {
-  const approveHandler = () => invitationApprove({ householdId, fromId, photo: '' })
-    .then(({ data: { success, data } }) => success && setData(data))
-    .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR));
-
-  const removeHandler = () => invitationIgnore({ householdId, fromId })
-    .then(({ data: { success } }) => success && setData(prevData => ({
-      ...prevData,
-      invitations: prevData.invitations.filter(({ id_household: idHousehold, from: { id } }) =>
-        idHousehold !== householdId && id !== fromId
-      ),
-    })))
-    .catch(() => addNotification(NotificationTypes.ERRORS, ERROR.CONNECTION_ERROR));
-
-  return {
-    approveHandler,
-    removeHandler,
-  };
-};
-
-// todo: Add real clickHandlers
-export const useMemberListProps = members => {
-  const rows = members.map(member => ({
-    ...member,
-    photo: <TablePhoto src={member.photo} />,
-    role: <RoleLabel {...getLabelColors(member.role)}>{member.role}</RoleLabel>,
-    roleString: member.role,
-    delimiter: 'since',
-    more: <OptionsTooltip
-      icon={<MoreVert />}
-      options={[
-        {
+export const useMemberListProps = (
+  members,
+  currentUser,
+  checkCancellability,
+  handleRoleChange,
+  handleDeletion,
+  handleCancellation
+) => {
+  const rows = members.map(({
+    memberId,
+    memberName,
+    memberRole,
+    changedRole,
+    memberPhoto,
+    memberDateJoined,
+  }) => {
+    const moreOptions = []
+    const allowCancellation = checkCancellability(memberId) && handleCancellation
+    const currentMemberRole = changedRole ?? memberRole
+    if (currentUser.id !== memberId) {
+      const allRoles = Object.values(HOUSEHOLD_ROLE_TYPE)
+      const userRoleIndex = allRoles.indexOf(currentUser.role)
+      const memberRoleIndex = allRoles.indexOf(memberRole)
+      const availableRoles = memberRoleIndex > userRoleIndex
+        ? allRoles.filter(role => userRoleIndex <= allRoles.indexOf(role))
+        : []
+      if (availableRoles.length > 1 && handleRoleChange) {
+        moreOptions.push({
           content: HOUSEHOLD.CHANGE_ROLE,
-          nestedOptions: Object.values(HOUSEHOLD_ROLE_TYPE).map(role => ({
-            content: <RoleLabel {...getLabelColors(role)}>{role}</RoleLabel>,
-            clickHandler: role !== member.role
-              ? () => console.log('changing role to: ', role)
+          nestedOptions: availableRoles.map(role => ({
+            content: <UserLabel><RoleLabel {...getLabelColors(role)}>{role}</RoleLabel></UserLabel>,
+            clickHandler: role !== currentMemberRole
+              ? () => handleRoleChange(memberId, role)
               : null,
           })),
-        }, {
+        })
+      }
+
+      if (allowCancellation) {
+        moreOptions.push({
+          content: HOUSEHOLD.CANCEL_REMOVE_USER,
+          clickHandler: () => handleCancellation(memberId),
+        })
+      }
+
+      const deletable = !allowCancellation && currentUser.role === HOUSEHOLD_ROLE_TYPE.ADMIN && handleDeletion
+      if (deletable) {
+        moreOptions.push({
           content: HOUSEHOLD.REMOVE_USER,
-          clickHandler: () => console.log('removing user'),
-        },
-      ]}
-    />,
-  }));
+          clickHandler: () => handleDeletion(memberId),
+        })
+      }
+    }
+
+    return {
+      name: memberName,
+      photo: <TablePhoto src={memberPhoto} />,
+      role: <RoleLabel {...getLabelColors(currentMemberRole)}>{currentMemberRole}</RoleLabel>,
+      roleString: currentMemberRole,
+      delimiter: <LocaleText message={HOUSEHOLD.SINCE} />,
+      dateJoined: formatDate(memberDateJoined, false),
+      more: moreOptions.length < 1
+        ? undefined
+        : <OptionsTooltip icon={<MoreVert />} options={moreOptions} />,
+      strikethrough: allowCancellation,
+    }
+  })
+
   const keys = [
     { name: 'photo' },
-    { name: 'nickname', bold: true, growing: true },
+    { name: 'name', bold: true, growing: true },
     { name: 'role' },
     { name: 'delimiter', fading: true },
-    { name: 'date_joined', fading: true },
+    { name: 'dateJoined', fading: true },
     { name: 'more' },
-  ];
+  ]
   const sortConfig = [
-    { key: 'nickname', icon: <SortByAlpha /> },
+    { key: 'name', icon: <SortByAlpha /> },
     { key: 'roleString', icon: <Grade /> },
-    { key: 'date_joined', icon: <CalendarToday /> },
-  ];
-  const filterKey = 'nickname';
+    { key: 'dateJoined', icon: <CalendarToday /> },
+  ]
+  const filterKey = 'nickname'
 
   return {
     rows,
     keys,
     sortConfig,
     filterKey,
-  };
-};
+  }
+}
 
-export const useInvitationListProps = invitations => {
-  const rows = invitations.map(invitation => ({
+export const useInvitationListProps = (invitations, handleDeletion, handleCancellation) => {
+  const rows = invitations.map(({
+    fromPhoto,
+    toPhoto,
+    fromId,
+    toId,
+    disableDeletion,
+    allowCancellation,
+    ...invitation
+  }) => ({
     ...invitation,
-    fromPhoto: <TablePhoto src={invitation.fromPhoto} />,
+    fromPhoto: <TablePhoto src={fromPhoto} />,
     delimiter: <TableRowIcon><ChevronRight /></TableRowIcon>,
-    toPhoto: <TablePhoto src={invitation.toPhoto} />,
-    delete: <TableRowIcon color="var(--cRedSecondary)" clickable onClick={() => console.log('clicked')}><Delete /></TableRowIcon>,
-  }));
+    toPhoto: <TablePhoto src={toPhoto} />,
+    delete: disableDeletion || !handleDeletion
+      ? undefined
+      : (
+        <TableRowIcon
+          color={COLORS.RED_SECONDARY}
+          clickable
+          onClick={() => handleDeletion(toId)}
+        >
+          <Delete />
+        </TableRowIcon>
+      ),
+    cancel: !allowCancellation || !handleCancellation
+      ? undefined
+      : (
+        <TableRowIcon
+          color={COLORS.GREEN_SECONDARY}
+          clickable
+          onClick={() => handleCancellation(toId)}
+        >
+          <Cancel />
+        </TableRowIcon>
+      ),
+    strikethrough: allowCancellation && handleCancellation,
+  }))
   const keys = [
     { name: 'fromPhoto' },
     { name: 'fromNickname' },
@@ -94,23 +147,24 @@ export const useInvitationListProps = invitations => {
     { name: 'toNickname', bold: true, growing: true },
     { name: 'dateCreated', fading: true },
     { name: 'delete' },
-  ];
+    { name: 'cancel' },
+  ]
   const sortConfig = [
     { key: 'toNickname', icon: <SortByAlpha /> },
     { key: 'dateCreated', icon: <CalendarToday /> },
-  ];
-  const filterKey = 'toNickname';
+  ]
+  const filterKey = 'toNickname'
 
   return {
     rows,
     keys,
     sortConfig,
     filterKey,
-  };
-};
+  }
+}
 
 export const getLabelColors = role => role === HOUSEHOLD_ROLE_TYPE.ADMIN
-  ? { background: 'var(--cBluePrimary)', color: 'var(--cThemeBack)' }
+  ? { background: COLORS.BLUE_PRIMARY, color: COLORS.THEME_BACK }
   : role === HOUSEHOLD_ROLE_TYPE.MANAGER
-    ? { background: 'var(--cYellowPrimary)', color: 'var(--cThemeBack)' }
-    : { background: 'var(--cGreenPrimary)', color: 'var(--cThemeBack)' };
+    ? { background: COLORS.YELLOW_PRIMARY, color: COLORS.THEME_BACK }
+    : { background: COLORS.GREEN_PRIMARY, color: COLORS.THEME_BACK }

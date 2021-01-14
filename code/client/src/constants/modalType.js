@@ -1,0 +1,1 @@
+export const PHOTO_EDITOR = 'PHOTO_EDITOR'

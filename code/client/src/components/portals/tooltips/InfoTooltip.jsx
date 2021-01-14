@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
-import { Tooltip, TooltipWrapper } from 'clientSrc/styles/blocks/portals';
+import { Tooltip, TooltipWrapper } from 'clientSrc/styles/blocks/portals'
 
-import LocaleText from '../../common/LocaleText';
+import LocaleText from '../../common/LocaleText'
 
 const InfoTooltip = ({ icon, text }) => {
-  const [hovered, setHovered] = useState(false);
+  const [hovered, setHovered] = useState(false)
 
   return (
     <TooltipWrapper>
@@ -19,12 +19,12 @@ const InfoTooltip = ({ icon, text }) => {
         </Tooltip>
       )}
     </TooltipWrapper>
-  );
-};
+  )
+}
 
 InfoTooltip.propTypes = {
   icon: PropTypes.element.isRequired,
   text: PropTypes.string.isRequired,
-};
+}
 
-export default InfoTooltip;
+export default InfoTooltip
