@@ -22,14 +22,7 @@ export const settingsRenderers = {
       }
     },
     [SETTING_TABS.MY_CONNECTIONS]: data => <ConnectionsListForm data={data[CONNECTION_STATE_TYPE.APPROVED]} />,
-    [SETTING_TABS.FIND_CONNECTION]: data => (
-      <ConnectionSearchForm
-        data={data}
-        dataKey={CONNECTION_STATE_TYPE.FOUND}
-        headlineMessage={SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.FIND_CONNECTION}`]}
-        tab={SETTING_TABS.FIND_CONNECTION}
-      />
-    ),
+    [SETTING_TABS.FIND_CONNECTION]: data => <ConnectionSearchForm data={data[CONNECTION_STATE_TYPE.FOUND]} />,
     [SETTING_TABS.PENDING]: data => <ConnectionRequestsForm data={data[CONNECTION_STATE_TYPE.WAITING]} />,
     [SETTING_TABS.BLOCKED]: data => <ConnectionBlocksForm data={data[CONNECTION_STATE_TYPE.BLOCKED]} />,
   },

@@ -1,19 +1,19 @@
 import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
-import { CalendarToday, Message, SortByAlpha } from '@material-ui/icons'
+import { CalendarToday, Message, SortByAlpha, Group } from '@material-ui/icons'
 
 import { SettingsActions } from 'clientSrc/actions'
 import { connectionApprove, connectionBlock, connectionIgnore } from 'clientSrc/effects/conectionEffects'
 import { AppendMessageAnchor, AppendMessageIcon } from 'clientSrc/styles/blocks/users'
 import { FormBody, FormWrapper, SectionHeadline } from 'clientSrc/styles/blocks/settings'
 import { TableBigPhoto } from 'clientSrc/styles/blocks/table'
-import { InfoTooltip } from 'clientSrc/components/portals'
 import { getTimeString, getButtonForUser } from 'clientSrc/helpers/connections'
 import { FORM } from 'shared/constants/localeMessages'
 import { CONNECTION_KEYS } from 'shared/constants/settingsDataKeys'
 
 import { LocaleText, Table } from '../../common'
+import { InfoTooltip } from '../../portals'
 
 const ConnectionRequestsForm = ({ data }) => {
   const dispatch = useDispatch()
@@ -44,10 +44,12 @@ const ConnectionRequestsForm = ({ data }) => {
             [CONNECTION_KEYS.ID]: userId,
             [CONNECTION_KEYS.PHOTO]: userPhoto,
             [CONNECTION_KEYS.MESSAGE]: userMessage,
+            [CONNECTION_KEYS.MUTUAL_CONNECTIONS]: userMutualConnections,
             ...user
           }) => ({
             ...user,
             userPhoto: <TableBigPhoto src={userPhoto} />,
+            userMutualConnections: <>({userMutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
             userMessage: userMessage && (
               <AppendMessageAnchor>
                 <InfoTooltip
@@ -65,7 +67,8 @@ const ConnectionRequestsForm = ({ data }) => {
           }))}
           keys={[
             { name: 'userPhoto' },
-            { name: CONNECTION_KEYS.NICKNAME, bold: true, growing: true },
+            { name: CONNECTION_KEYS.NICKNAME, bold: true },
+            { name: 'userMutualConnections', fading: true, growing: true },
             { name: 'userMessage' },
             { name: 'date', fading: true },
             { name: 'approveBtn' },
@@ -75,6 +78,7 @@ const ConnectionRequestsForm = ({ data }) => {
           sortConfig={[
             { key: CONNECTION_KEYS.NICKNAME, icon: <SortByAlpha /> },
             { key: CONNECTION_KEYS.DATE_CREATED, icon: <CalendarToday /> },
+            { key: CONNECTION_KEYS.MUTUAL_CONNECTIONS, icon: <Group /> },
           ]}
           defaultSorter={-2}
           filterKey={CONNECTION_KEYS.NICKNAME}

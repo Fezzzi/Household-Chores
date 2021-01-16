@@ -99,9 +99,11 @@ export const FORM = {
   CONNECTION_REMOVE: 'form.connectionRemove',
   CONNECTION_SENT: 'form.connectionSent',
   MY_CONNECTIONS: 'form.myConnections',
+  FIND_CONNECTION: 'form.findConnection',
   PENDING_CONNECTIONS: 'form.pendingConnections',
   BLOCKED_CONNECTIONS: 'form.blockedConnections',
   HOUSEHOLD_INVITATIONS: 'form.householdInvitations',
+  MUTUAL_FRIENDS: 'form.mutualFriends',
 
   EMAIL_NOTIFICATIONS: 'form.email_notifications',
   BROWSER_NOTIFICATIONS: 'form.browser_notifications',

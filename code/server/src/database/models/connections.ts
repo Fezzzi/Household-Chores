@@ -1,10 +1,8 @@
 import { database } from 'serverSrc/database'
 import { CONNECTION_STATE_TYPE } from 'shared/constants'
+import { CONNECTION_KEYS } from 'shared/constants/settingsDataKeys'
 
-import { tConnectionsName, tConnectionsCols } from './tables'
-import USERS_TABLE from './tables/users'
-
-const { name: tUsersName, columns: tUserCols } = USERS_TABLE
+import { tConnectionsName, tConnectionsCols, tUsersName, tUsersCols } from './tables'
 
 export const findBlockedConnections = async (userId: number): Promise<Array<number>> =>
   database.query(`
@@ -14,11 +12,11 @@ export const findBlockedConnections = async (userId: number): Promise<Array<numb
 
 export const findApprovedConnections = async (userId: number): Promise<Array<Record<string, string | number>>> =>
   database.query(`
-    SELECT users.${tUserCols.id}, users.${tUserCols.nickname}, users.${tUserCols.photo}, ${tConnectionsCols.date_created}
+    SELECT users.${tUsersCols.id}, users.${tUsersCols.nickname}, users.${tUsersCols.photo}, ${tConnectionsCols.date_created}
     FROM ${tConnectionsName}
     INNER JOIN ${tUsersName} AS users
-      ON (users.${tUserCols.id}=${tConnectionsCols.id_from} AND ${tConnectionsCols.id_to}=${userId})
-        OR (users.${tUserCols.id}=${tConnectionsCols.id_to} AND ${tConnectionsCols.id_from}=${userId})
+      ON (users.${tUsersCols.id}=${tConnectionsCols.id_from} AND ${tConnectionsCols.id_to}=${userId})
+        OR (users.${tUsersCols.id}=${tConnectionsCols.id_to} AND ${tConnectionsCols.id_from}=${userId})
     WHERE (${tConnectionsCols.id_to}=${userId}
       OR ${tConnectionsCols.id_from}=${userId})
       AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
@@ -32,18 +30,37 @@ type ConnectionsType = {
 export const findConnections = async (userId: number): Promise<ConnectionsType | null> =>
   database.withTransaction(async (): Promise<ConnectionsType> => {
     const approvedFromConnections = await database.query(`
-    SELECT ${tUserCols.id}, ${tUserCols.nickname}, ${tUserCols.photo}, ${tConnectionsCols.message},
+    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.photo}, ${tConnectionsCols.message},
       ${tConnectionsCols.state}, ${tConnectionsCols.date_created}
     FROM ${tConnectionsName}
-    JOIN ${tUsersName} ON ${tUserCols.id}=${tConnectionsCols.id_to}
+    JOIN ${tUsersName} ON ${tUsersCols.id}=${tConnectionsCols.id_to}
     WHERE ${tConnectionsCols.id_from}=${userId} AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
   `)
 
     const otherConnections = await database.query(`
-    SELECT ${tUserCols.id}, ${tUserCols.nickname}, ${tUserCols.photo}, ${tConnectionsCols.message},
-      ${tConnectionsCols.state}, ${tConnectionsCols.date_created}
+    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.photo}, ${tConnectionsCols.message},
+      ${tConnectionsCols.state}, ${tConnectionsCols.date_created},
+      (SELECT COUNT(*) FROM (
+        SELECT * FROM (
+          SELECT ${tConnectionsCols.id_from} AS uf_id FROM ${tConnectionsName}
+          WHERE ${tConnectionsCols.id_to}=users.${tUsersCols.id}
+            AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
+          UNION
+          SELECT ${tConnectionsCols.id_to} AS uf_id FROM ${tConnectionsName}
+          WHERE ${tConnectionsCols.id_from}=users.${tUsersCols.id}
+            AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
+        ) AS userFriends INNER JOIN (
+          SELECT ${tConnectionsCols.id_from} AS tf_id FROM ${tConnectionsName}
+          WHERE ${tConnectionsCols.id_to}=${userId}
+            AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
+          UNION
+          SELECT ${tConnectionsCols.id_to} AS tf_id FROM ${tConnectionsName}
+          WHERE ${tConnectionsCols.id_from}=${userId}
+            AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
+        ) AS targetFriends ON userFriends.uf_id=targetFriends.tf_id
+      ) AS mc) AS mutualConnections
     FROM ${tConnectionsName}
-    JOIN ${tUsersName} ON ${tUserCols.id}=${tConnectionsCols.id_from}
+    JOIN ${tUsersName} ON ${tUsersCols.id}=${tConnectionsCols.id_from}
     WHERE ${tConnectionsCols.id_to}=${userId}
   `)
 
@@ -57,7 +74,14 @@ export const findConnections = async (userId: number): Promise<ConnectionsType |
 
     return connections.length
       ? connections.reduce((acc: any, connection: any) =>
-        acc[connection[tConnectionsCols.state]].push(connection) && acc, groupedConnections
+        acc[connection[tConnectionsCols.state]].push({
+          [CONNECTION_KEYS.ID]: connection[tUsersCols.id],
+          [CONNECTION_KEYS.NICKNAME]: connection[tUsersCols.nickname],
+          [CONNECTION_KEYS.PHOTO]: connection[tUsersCols.photo],
+          [CONNECTION_KEYS.MESSAGE]: connection[tConnectionsCols.message],
+          [CONNECTION_KEYS.MUTUAL_CONNECTIONS]: connection.mutualConnections ?? 0,
+          [CONNECTION_KEYS.DATE_CREATED]: connection[tConnectionsCols.date_created],
+        }) && acc, groupedConnections
       ) : groupedConnections
   })
 

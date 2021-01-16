@@ -9,6 +9,7 @@ import { ERROR } from 'shared/constants/localeMessages'
 
 const findUsers = async (req: any, res: any, { query }: { query: string }) => {
   const foundUsers = await queryUsers(query, req.session.user)
+  console.log('FOUND USERS', foundUsers)
   res.status(200).send({ [CONNECTION_STATE_TYPE.FOUND]: foundUsers })
   return true
 }

@@ -4,16 +4,11 @@ import { LocaleText, PrimaryButton } from 'clientSrc/components/common'
 import { COLORS } from 'clientSrc/constants'
 import { COMMON, FORM } from 'shared/constants/localeMessages'
 
-const handleClick = (userId, clickHandler) => () => {
-  /* todo: Implement connection messages and pass it here */
-  clickHandler(userId)
-}
-
 export const getButtonForUser = (label, userId, clickHandler) => {
   const { color, background, backgroundHover } = BUTTONS_CONFIG[label]
   return (
     <PrimaryButton
-      onClick={handleClick(userId, clickHandler)}
+      onClick={() => clickHandler(userId)}
       margin="2px 0 1px"
       color={color}
       background={background}
@@ -26,7 +21,9 @@ export const getButtonForUser = (label, userId, clickHandler) => {
 
 const formatTime = timeStr => (
   <>
-    (<LocaleText message={COMMON.TIME_PREFIX} /> {timeStr} <LocaleText message={COMMON.TIME_SUFFIX} />)
+    <LocaleText message={COMMON.TIME_PREFIX} modifierFunc={val => val && `${val} `} />
+    {timeStr}
+    <LocaleText message={COMMON.TIME_SUFFIX} modifierFunc={val => val && ` ${val}`} />
   </>
 )
 

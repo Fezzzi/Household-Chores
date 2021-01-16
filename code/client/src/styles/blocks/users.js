@@ -70,6 +70,15 @@ export const UserName = styled.div`
   line-height: 1.4em;
 `
 
+export const UserMutualFriends = styled.div`
+  width: 100%;
+  font-weight: 400;
+  font-size: 0.9em;
+  opacity: 0.6;
+  text-align: center;
+  line-height: 0.9em;
+`
+
 export const MiniUserName = styled.div`
   width: max-content;
   font-weight: 500;

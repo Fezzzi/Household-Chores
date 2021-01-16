@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
-import { CalendarToday, Message, SortByAlpha } from '@material-ui/icons'
+import { CalendarToday, Group, Message, SortByAlpha } from '@material-ui/icons'
 
 import { SettingsActions } from 'clientSrc/actions'
 import { connectionUnblock } from 'clientSrc/effects/conectionEffects'
@@ -36,10 +36,12 @@ const ConnectionBlocksForm = ({ data }) => {
             [CONNECTION_KEYS.ID]: userId,
             [CONNECTION_KEYS.PHOTO]: userPhoto,
             [CONNECTION_KEYS.MESSAGE]: userMessage,
+            [CONNECTION_KEYS.MUTUAL_CONNECTIONS]: userMutualConnections,
             ...user
           }) => ({
             ...user,
             userPhoto: <TableBigPhoto src={userPhoto} />,
+            userMutualConnections: <>({userMutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
             userMessage: userMessage && (
               <AppendMessageAnchor>
                 <InfoTooltip
@@ -55,14 +57,16 @@ const ConnectionBlocksForm = ({ data }) => {
           }))}
           keys={[
             { name: 'userPhoto' },
+            { name: CONNECTION_KEYS.NICKNAME, bold: true },
+            { name: 'userMutualConnections', fading: true, growing: true },
             { name: 'userMessage' },
-            { name: CONNECTION_KEYS.NICKNAME, bold: true, growing: true },
             { name: 'date', fading: true },
             { name: 'unblockBtn' },
           ]}
           sortConfig={[
             { key: CONNECTION_KEYS.NICKNAME, icon: <SortByAlpha /> },
             { key: CONNECTION_KEYS.DATE_CREATED, icon: <CalendarToday /> },
+            { key: CONNECTION_KEYS.MUTUAL_CONNECTIONS, icon: <Group /> },
           ]}
           defaultSorter={-2}
           filterKey={CONNECTION_KEYS.NICKNAME}

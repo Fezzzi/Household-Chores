@@ -175,7 +175,27 @@ export const assignUserProvider = async (userId: number, googleId: string, faceb
 export const queryUsers = async (query: string, userId: number): Promise<Array<object>> =>
   database.query(`
     SELECT users.${tUsersCols.id}, users.${tUsersCols.nickname}, users.${tUsersCols.photo},
-      connections.${tConnectionsCols.state}, connections.${tConnectionsCols.message}
+      connections.${tConnectionsCols.state}, connections.${tConnectionsCols.message},
+      users.${tUsersCols.visibility} AS visibility,
+      (SELECT COUNT(*) FROM (
+        SELECT * FROM (
+          SELECT ${tConnectionsCols.id_from} AS uf_id FROM ${tConnectionsName}
+          WHERE ${tConnectionsCols.id_to}=users.${tUsersCols.id}
+            AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
+          UNION
+          SELECT ${tConnectionsCols.id_to} AS uf_id FROM ${tConnectionsName}
+          WHERE ${tConnectionsCols.id_from}=users.${tUsersCols.id}
+            AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
+        ) AS userFriends INNER JOIN (
+          SELECT ${tConnectionsCols.id_from} AS tf_id FROM ${tConnectionsName}
+          WHERE ${tConnectionsCols.id_to}=${userId}
+            AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
+          UNION
+          SELECT ${tConnectionsCols.id_to} AS tf_id FROM ${tConnectionsName}
+          WHERE ${tConnectionsCols.id_from}=${userId}
+            AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
+        ) AS targetFriends ON userFriends.uf_id=targetFriends.tf_id
+      ) AS mc) AS mutualConnections
     FROM ${tUsersName} AS users
     LEFT JOIN ${tConnectionsName} AS connections
       ON connections.${tConnectionsCols.id_from}=${userId}
@@ -189,25 +209,6 @@ export const queryUsers = async (query: string, userId: number): Promise<Array<o
             AND ${tConnectionsCols.state}!='${CONNECTION_STATE_TYPE.WAITING}')
           OR (${tConnectionsCols.id_from}=users.${tUsersCols.id} AND ${tConnectionsCols.id_to}=${userId})
       )
-      AND (${tUsersCols.visibility}='${USER_VISIBILITY_TYPE.ALL}'
-        OR EXISTS (
-          SELECT * FROM (
-            SELECT ${tConnectionsCols.id_from} AS id FROM ${tConnectionsName}
-            WHERE ${tConnectionsCols.id_to}=users.${tUsersCols.id}
-              AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
-            UNION
-            SELECT ${tConnectionsCols.id_to} AS id FROM ${tConnectionsName}
-            WHERE ${tConnectionsCols.id_from}=users.${tUsersCols.id}
-              AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
-          ) AS userFriends INNER JOIN (
-            SELECT ${tConnectionsCols.id_from} AS id FROM ${tConnectionsName}
-            WHERE ${tConnectionsCols.id_to}=${userId}
-              AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
-            UNION
-            SELECT ${tConnectionsCols.id_to} AS id FROM ${tConnectionsName}
-            WHERE ${tConnectionsCols.id_from}=${userId}
-              AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
-          ) AS targetFriends ON userFriends.id=targetFriends.id
-        )
-      )
+    HAVING visibility='${USER_VISIBILITY_TYPE.ALL}' OR (visibility='${USER_VISIBILITY_TYPE.FOF}' AND mutualConnections > 0)
+    ORDER BY mutualConnections DESC
   `, [`%${query}%`, `%${query}%`])
