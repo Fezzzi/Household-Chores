@@ -62,4 +62,6 @@ export const CONNECTION_KEYS = {
   ID: 'id',
   NICKNAME: 'nickname',
   PHOTO: 'photo',
+  MESSAGE: 'message',
+  DATE_CREATED: 'date_created',
 }

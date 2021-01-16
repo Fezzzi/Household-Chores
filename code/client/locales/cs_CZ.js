@@ -28,6 +28,8 @@ export default {
   [COMMON.SENDING]: 'Odesílání',
   [COMMON.SHOW]: 'Zobrazit',
   [COMMON.TERMS_AND_CONDITIONS]: 'podmínky použití',
+  [COMMON.TIME_PREFIX]: 'před',
+  [COMMON.TIME_SUFFIX]: '',
   [COMMON.PHOTO_SIZE]: 'velikost obrázku',
 
   [ERROR.ADMIN_REQUIRED]: 'Každá domácnost musí mít alespoň jednoho správce.',
@@ -90,6 +92,7 @@ export default {
   [FORM.CONNECTION_REMOVE]: 'Odstranit',
   [FORM.CONNECTION_SENT]: 'Žádost odeslána',
   [FORM.PENDING_CONNECTIONS]: 'Žádosti o spojení',
+  [FORM.MY_CONNECTIONS]: 'Moje spojení',
   [FORM.BLOCKED_CONNECTIONS]: 'Blokovaní uživatelé',
   [FORM.HOUSEHOLD_INVITATIONS]: 'Pozvánky do domácností',
   [FORM.EMAIL_NOTIFICATIONS]: 'Emailové notifikace',

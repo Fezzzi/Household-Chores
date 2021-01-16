@@ -78,9 +78,7 @@ export const MiniUserName = styled.div`
 `
 
 export const AppendMessageAnchor = styled.div`
-  position: absolute;
-  right: 5px;
-  top: 8px;
+  margin: 7px 0;
 `
 
 export const AppendMessageIcon = styled.div`

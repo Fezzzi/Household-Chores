@@ -30,9 +30,11 @@ export const TooltipAnchor = styled.div`
 `
 
 export const Tooltip = styled.div`
-  top: -3px;
+  top: ${props => props.customOffsetY ?? -3}px;
   right: ${props => props.withHover ? 150 : 125}%;
   width: max-content;
+  height: ${props => props.customHeight ? `${props.customHeight}px` : 'inherit'};
+  line-height: ${props => props.customHeight ? `${props.customHeight - 2}px` : 'inherit'};
   background-color: ${COLORS.THEME_FRONT};
   border: 1px solid ${COLORS.BORDER};
   position: absolute;

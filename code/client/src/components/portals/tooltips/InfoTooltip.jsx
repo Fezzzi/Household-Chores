@@ -5,7 +5,7 @@ import { Tooltip, TooltipWrapper } from 'clientSrc/styles/blocks/portals'
 
 import LocaleText from '../../common/LocaleText'
 
-const InfoTooltip = ({ icon, text }) => {
+const InfoTooltip = ({ icon, text, customHeight, customOffsetY }) => {
   const [hovered, setHovered] = useState(false)
 
   return (
@@ -14,7 +14,7 @@ const InfoTooltip = ({ icon, text }) => {
         {icon}
       </span>
       {hovered && (
-        <Tooltip withArrow withHover>
+        <Tooltip withArrow withHover customHeight={customHeight} customOffsetY={customOffsetY}>
           <LocaleText message={text} />
         </Tooltip>
       )}
@@ -25,6 +25,8 @@ const InfoTooltip = ({ icon, text }) => {
 InfoTooltip.propTypes = {
   icon: PropTypes.element.isRequired,
   text: PropTypes.string.isRequired,
+  customHeight: PropTypes.number,
+  customOffsetY: PropTypes.number,
 }
 
 export default InfoTooltip

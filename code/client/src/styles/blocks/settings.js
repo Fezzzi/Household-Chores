@@ -234,7 +234,7 @@ export const FormWrapper = styled.div`
 
 export const FormBody = styled.div`
    height: 100%;
-   margin: 40px 100px 0;
+   margin: 30px 100px 0;
 `
 
 export const BottomFormButton = styled.div`

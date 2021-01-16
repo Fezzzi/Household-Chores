@@ -28,6 +28,8 @@ export default {
   [COMMON.SENDING]: 'Sending',
   [COMMON.SHOW]: 'Show',
   [COMMON.TERMS_AND_CONDITIONS]: 'Terms and Conditions',
+  [COMMON.TIME_PREFIX]: '',
+  [COMMON.TIME_SUFFIX]: 'ago',
   [COMMON.PHOTO_SIZE]: 'photo size',
 
   [ERROR.ADMIN_REQUIRED]: 'Every household must have at least one admin.',
@@ -90,6 +92,7 @@ export default {
   [FORM.CONNECTION_REMOVE]: 'Remove',
   [FORM.CONNECTION_SENT]: 'Request sent',
   [FORM.PENDING_CONNECTIONS]: 'Connection requests',
+  [FORM.MY_CONNECTIONS]: 'My connections',
   [FORM.BLOCKED_CONNECTIONS]: 'Blocked users',
   [FORM.HOUSEHOLD_INVITATIONS]: 'Household invitations',
   [FORM.EMAIL_NOTIFICATIONS]: 'Email notifications',

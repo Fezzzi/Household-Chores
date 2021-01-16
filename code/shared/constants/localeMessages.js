@@ -29,6 +29,8 @@ export const COMMON = {
   SEARCH: 'common.search',
   SEARCHING: 'common.searching',
   TERMS_AND_CONDITIONS: 'common.termsAndConditions',
+  TIME_PREFIX: 'common.timePrefix',
+  TIME_SUFFIX: 'common.timeSuffix',
   PHOTO_SIZE: 'common.photoSize',
 }
 
@@ -96,6 +98,7 @@ export const FORM = {
   CONNECTION_IGNORE: 'form.connectionIgnore',
   CONNECTION_REMOVE: 'form.connectionRemove',
   CONNECTION_SENT: 'form.connectionSent',
+  MY_CONNECTIONS: 'form.myConnections',
   PENDING_CONNECTIONS: 'form.pendingConnections',
   BLOCKED_CONNECTIONS: 'form.blockedConnections',
   HOUSEHOLD_INVITATIONS: 'form.householdInvitations',

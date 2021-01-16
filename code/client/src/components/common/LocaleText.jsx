@@ -7,7 +7,7 @@ const LocaleText = ({ message, modifierFunc, clickHandler }) => {
 
   return (
     <span onClick={clickHandler}>
-      {modifierFunc(applicationTexts[message]) || message}
+      {modifierFunc(applicationTexts[message]) ?? message}
     </span>
   )
 }
