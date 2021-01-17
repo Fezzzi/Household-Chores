@@ -8,8 +8,9 @@ import {
 } from 'clientSrc/styles/blocks/form'
 
 import LocaleText from '../LocaleText'
+import { InputHintTooltip } from '../../portals'
 
-const BoolInput = ({ name, label, value, hasDefaultValue, onUpdate }) => {
+const BoolInput = ({ name, label, value, hint, hasDefaultValue, onUpdate }) => {
   const [inputActive, setInputActive] = useState(false)
   const [isOn, setIsOn] = useState(null)
 
@@ -25,6 +26,7 @@ const BoolInput = ({ name, label, value, hasDefaultValue, onUpdate }) => {
       </InputLabel>
       <PaddedInputWrapper active={inputActive}>
         <BoolInputBox htmlFor={name}>
+          {hint && <InputHintTooltip text={hint} />}
           <BoolInputLabel>
             {(isOn !== null ? isOn : value) && <Check />}
           </BoolInputLabel>
@@ -51,6 +53,7 @@ BoolInput.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   value: PropTypes.bool,
+  hint: PropTypes.string,
   hasDefaultValue: PropTypes.bool,
   onUpdate: PropTypes.func.isRequired,
 }

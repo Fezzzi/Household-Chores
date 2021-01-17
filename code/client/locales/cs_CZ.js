@@ -1,4 +1,4 @@
-import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
+import { AUTH, COMMON, ERROR, FORM, HINT, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
 import {
   USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, HOUSEHOLD_TABS,
 } from 'shared/constants'
@@ -28,6 +28,8 @@ export default {
   [COMMON.SENDING]: 'Odesílání',
   [COMMON.SHOW]: 'Zobrazit',
   [COMMON.TERMS_AND_CONDITIONS]: 'podmínky použití',
+  [COMMON.TIME_PREFIX]: 'před',
+  [COMMON.TIME_SUFFIX]: '',
   [COMMON.PHOTO_SIZE]: 'velikost obrázku',
 
   [ERROR.ADMIN_REQUIRED]: 'Každá domácnost musí mít alespoň jednoho správce.',
@@ -82,16 +84,19 @@ export default {
   [FORM.SELECT_PHOTO]: 'Nahrajte nebo přetáhněte obrázek',
   [FORM.SAVE]: 'Uložit',
   [FORM.SAVING]: 'Ukládám',
-  [FORM.CONNECTION_APPROVE]: 'Schválit',
-  [FORM.CONNECTION_BLOCK]: 'Zablokovat',
-  [FORM.CONNECTION_UNBLOCK]: 'Odblokovat',
-  [FORM.CONNECTION_CONNECT]: 'Spojit se',
-  [FORM.CONNECTION_IGNORE]: 'Ignorovat',
-  [FORM.CONNECTION_REMOVE]: 'Odstranit',
+  [FORM.APPROVE]: 'Schválit',
+  [FORM.BLOCK]: 'Zablokovat',
+  [FORM.UNBLOCK]: 'Odblokovat',
+  [FORM.CONNECT]: 'Spojit se',
+  [FORM.IGNORE]: 'Ignorovat',
+  [FORM.REMOVE]: 'Odstranit',
   [FORM.CONNECTION_SENT]: 'Žádost odeslána',
   [FORM.PENDING_CONNECTIONS]: 'Žádosti o spojení',
+  [FORM.MY_CONNECTIONS]: 'Moje spojení',
+  [FORM.FIND_CONNECTION]: 'Hledat spojení',
   [FORM.BLOCKED_CONNECTIONS]: 'Blokovaní uživatelé',
   [FORM.HOUSEHOLD_INVITATIONS]: 'Pozvánky do domácností',
+  [FORM.MUTUAL_FRIENDS]: 'Společných přátel',
   [FORM.EMAIL_NOTIFICATIONS]: 'Emailové notifikace',
   [FORM.BROWSER_NOTIFICATIONS]: 'Notifikace prohlížeče',
   [FORM.MOBILE_NOTIFICATIONS]: 'Mobilní notifikace',
@@ -104,6 +109,8 @@ export default {
   [FORM.HOUSEHOLD_LEAVING]: 'Odchod člena z rodiny',
   [FORM[USER_VISIBILITY_TYPE.FOF]]: 'přátelé přátel',
   [FORM[USER_VISIBILITY_TYPE.ALL]]: 'všichni',
+
+  [HINT.VISIBILITY]: 'Nastavuje kdo bude schopen Váš účet vyhledat a poslat žádost o spojení.',
 
   [HOUSEHOLD.LEAVE]: 'Opustit domácnost',
   [HOUSEHOLD.LEAVING]: 'Opouštím',

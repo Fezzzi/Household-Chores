@@ -8,7 +8,7 @@ import { FormWrapper, BottomFormButton, FormBody } from 'clientSrc/styles/blocks
 import { INPUT_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
 import { COLORS, SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { SettingsActions } from 'clientSrc/actions'
-import { FORM } from 'shared/constants/localeMessages'
+import { FORM, HINT } from 'shared/constants/localeMessages'
 import { PROFILE } from 'shared/constants/settingsDataKeys'
 
 import { SimpleFloatingElement } from '../../portals'
@@ -80,6 +80,7 @@ const ProfileForm = ({ data, onSubmit }) => {
           name={PROFILE.CONNECTION_VISIBILITY}
           type={INPUT_TYPE.SWITCH}
           label={FORM.USER_VISIBILITY}
+          hint={HINT.VISIBILITY}
           values={[USER_VISIBILITY_TYPE.FOF, USER_VISIBILITY_TYPE.ALL]}
           value={visibility}
           hasDefaultValue

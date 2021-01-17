@@ -1,4 +1,4 @@
-import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
+import { AUTH, COMMON, ERROR, FORM, HINT, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
 import {
   USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, HOUSEHOLD_TABS,
 } from 'shared/constants'
@@ -28,6 +28,8 @@ export default {
   [COMMON.SENDING]: 'Sending',
   [COMMON.SHOW]: 'Show',
   [COMMON.TERMS_AND_CONDITIONS]: 'Terms and Conditions',
+  [COMMON.TIME_PREFIX]: '',
+  [COMMON.TIME_SUFFIX]: 'ago',
   [COMMON.PHOTO_SIZE]: 'photo size',
 
   [ERROR.ADMIN_REQUIRED]: 'Every household must have at least one admin.',
@@ -82,16 +84,19 @@ export default {
   [FORM.SELECT_PHOTO]: 'Upload or drop photo',
   [FORM.SAVE]: 'Save',
   [FORM.SAVING]: 'Saving',
-  [FORM.CONNECTION_APPROVE]: 'Approve',
-  [FORM.CONNECTION_BLOCK]: 'Block',
-  [FORM.CONNECTION_UNBLOCK]: 'Unblock',
-  [FORM.CONNECTION_CONNECT]: 'Connect',
-  [FORM.CONNECTION_IGNORE]: 'Ignore',
-  [FORM.CONNECTION_REMOVE]: 'Remove',
+  [FORM.APPROVE]: 'Approve',
+  [FORM.BLOCK]: 'Block',
+  [FORM.UNBLOCK]: 'Unblock',
+  [FORM.CONNECT]: 'Connect',
+  [FORM.IGNORE]: 'Ignore',
+  [FORM.REMOVE]: 'Remove',
   [FORM.CONNECTION_SENT]: 'Request sent',
   [FORM.PENDING_CONNECTIONS]: 'Connection requests',
+  [FORM.MY_CONNECTIONS]: 'My connections',
+  [FORM.FIND_CONNECTION]: 'Find connections',
   [FORM.BLOCKED_CONNECTIONS]: 'Blocked users',
   [FORM.HOUSEHOLD_INVITATIONS]: 'Household invitations',
+  [FORM.MUTUAL_FRIENDS]: 'Mutual friends',
   [FORM.EMAIL_NOTIFICATIONS]: 'Email notifications',
   [FORM.BROWSER_NOTIFICATIONS]: 'Browser notifications',
   [FORM.MOBILE_NOTIFICATIONS]: 'Mobile notifications',
@@ -104,6 +109,8 @@ export default {
   [FORM.HOUSEHOLD_LEAVING]: 'Member leaving household',
   [FORM[USER_VISIBILITY_TYPE.FOF]]: 'friends of friends',
   [FORM[USER_VISIBILITY_TYPE.ALL]]: 'all',
+
+  [HINT.VISIBILITY]: 'Controls who will be able to find Your account and send connection request.',
 
   [HOUSEHOLD.LEAVE]: 'Leave household',
   [HOUSEHOLD.LEAVING]: 'Leaving',

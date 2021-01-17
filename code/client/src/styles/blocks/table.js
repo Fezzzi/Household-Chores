@@ -31,7 +31,7 @@ export const TableSingleRowBox = styled.div`
 
 export const TableRowsBox = styled.div`
   height: max-content;
-  max-height: 270px;
+  max-height: ${props => props.freeHeight ? '100%' : '270px'};
   overflow: auto;
 `
 
@@ -65,6 +65,7 @@ export const TableRowIcon = styled.span`
 
 // inline-block display style is required for child element to be able to override parent's line-through style
 export const TableCell = styled.div`
+  position: relative;
   display: inline-block;
   line-height: 20px;
   height: 20px;
@@ -82,9 +83,37 @@ export const TableCell = styled.div`
   }
 `
 
+// inline-block display style is required for child element to be able to override parent's line-through style
+export const TableBigCell = styled.div`
+  position: relative;
+  display: inline-block;
+  line-height: 35px;
+  height: 35px;
+  color: ${COLORS.FONT};
+  font-weight: ${props => props.boldKey ? 700 : 400};
+  font-size: ${props => props.boldKey ? 1.1 : props.fadeKey ? 0.9 : 1}em;
+  opacity: ${props => props.fadeKey ? 0.6 : 1};
+  margin-left: 2px;
+  margin-right: 6px;
+  
+  ${props => props.growing ? 'margin-right: auto' : 'flex-shrink: 0'};
+  
+  svg {
+    height: 35px;
+  }
+`
+
 export const TablePhoto = styled.img`
   width: 20px;
   height: 20px;
+  
+  border-radius: 100%;
+  object-fit: cover;
+`
+
+export const TableBigPhoto = styled.img`
+  width: 35px;
+  height: 35px;
   
   border-radius: 100%;
   object-fit: cover;

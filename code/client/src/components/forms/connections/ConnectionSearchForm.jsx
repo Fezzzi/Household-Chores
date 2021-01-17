@@ -1,71 +1,110 @@
 import React, { useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
+import { Message } from '@material-ui/icons'
 
-import { InputRow } from 'clientSrc/styles/blocks/form'
-import { UserList } from 'clientSrc/styles/blocks/users'
-import { SectionHeadline } from 'clientSrc/styles/blocks/settings'
-import { TableBox, TableHeaderBox } from 'clientSrc/styles/blocks/table'
 import { SettingsActions } from 'clientSrc/actions'
+import { COLORS } from 'clientSrc/constants'
+import {
+  AppendMessageAnchor, AppendMessageIcon, UserButtonsBox, UserList, UserMutualFriends,
+  UserName, UserNode, UserPhoto, UserPhotoBox, WrapperBox,
+} from 'clientSrc/styles/blocks/users'
+import { FormBody, FormWrapper, SectionHeadline } from 'clientSrc/styles/blocks/settings'
+import { TableBox, TableHeaderBox } from 'clientSrc/styles/blocks/table'
 import { FORM } from 'shared/constants/localeMessages'
+import { CONNECTION_STATE_TYPE } from 'shared/constants'
 
-import UserConnectionNode from './UserConnectionNode'
-import { LocaleText } from '../../common'
+import { LocaleText, PrimaryButton } from '../../common'
+import { InfoTooltip } from '../../portals'
 import SearchBar from '../SearchBar'
 
-const ConnectionSearchForm = ({ tab, data, dataKey, emptyMessage, headlineMessage }) => {
+const ConnectionSearchForm = ({ data }) => {
   const dispatch = useDispatch()
   const searchQuery = useCallback(query =>
     dispatch(SettingsActions.searchConnectionAction(query)),
   [dispatch])
 
-  const emptyResultMessage = useMemo(() => {
-    if (data[dataKey]?.length === 0) {
-      return FORM.NO_CONNECTIONS_FOUND
-    }
-    return emptyMessage
-  }, [data[dataKey]])
+  const connectHandler = useCallback((targetId, message) =>
+    dispatch(SettingsActions.connectionRequest({ targetId, message })),
+  [dispatch])
+
+  const handleClick = userId => () => {
+    /* todo: Implement connection messages and pass it here */
+    connectHandler(userId)
+  }
+
+  const emptyResultMessage = useMemo(() => data?.length === 0
+    ? FORM.NO_CONNECTIONS_FOUND
+    : '',
+  [data])
 
   return (
-    <>
+    <FormWrapper>
       <SectionHeadline first>
-        <LocaleText message={headlineMessage} />
+        <LocaleText message={FORM.FIND_CONNECTION} />
       </SectionHeadline>
       <TableBox>
         <TableHeaderBox isBigger>
           <SearchBar onSearch={searchQuery} />
         </TableHeaderBox>
       </TableBox>
-      {data[dataKey]?.length
+
+      {data?.length
         ? (
           <UserList>
-            {data[dataKey].map((user, index) => (
-              <UserConnectionNode
-                key={`${dataKey}-${index}`}
-                user={user}
-                tab={tab}
-              />
+            {data.map(({
+              id: userId,
+              nickname: userName,
+              photo: userPhoto,
+              mutualConnections: userMutualConnections,
+              state: userState,
+              message: userMessage,
+            }) => (
+              <WrapperBox key={`userResult-${userId}`}>
+                <UserNode>
+                  <UserPhotoBox>
+                    <UserPhoto src={userPhoto} />
+                    {userMessage && (
+                      <AppendMessageAnchor>
+                        <InfoTooltip
+                          icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
+                          text={userMessage}
+                        />
+                      </AppendMessageAnchor>
+                    )}
+                  </UserPhotoBox>
+                  <UserName>{userName}</UserName>
+                  {userMutualConnections > 0 && (
+                    <UserMutualFriends>
+                      ({userMutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)
+                    </UserMutualFriends>
+                  )}
+                  <UserButtonsBox>
+                    <PrimaryButton
+                      disabled={userState === CONNECTION_STATE_TYPE.WAITING}
+                      onClick={handleClick(userId)}
+                      margin="0 0 6px"
+                      background={COLORS.BLUE_PRIMARY}
+                      backgroundHover={COLORS.BLUE_SECONDARY}
+                    >
+                      <LocaleText message={userState === CONNECTION_STATE_TYPE.WAITING && FORM.CONNECTION_SENT || FORM.CONNECT} />
+                    </PrimaryButton>
+                  </UserButtonsBox>
+                </UserNode>
+              </WrapperBox>
             ))}
           </UserList>
         ) : (
-          <InputRow>
+          <FormBody>
             <LocaleText message={emptyResultMessage} />
-          </InputRow>
+          </FormBody>
         )}
-    </>
+    </FormWrapper>
   )
 }
 
-ConnectionSearchForm.defaultProps = {
-  emptyMessage: '',
-}
-
 ConnectionSearchForm.propTypes = {
-  tab: PropTypes.string.isRequired,
-  data: PropTypes.object,
-  dataKey: PropTypes.string.isRequired,
-  emptyMessage: PropTypes.string,
-  headlineMessage: PropTypes.string.isRequired,
+  data: PropTypes.array,
 }
 
 export default ConnectionSearchForm

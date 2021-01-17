@@ -9,10 +9,10 @@ import {
 
 export const findUserInvitations = async (currentUser: number): Promise<Array<object>> => {
   const result = await database.query(`
-    SELECT ${tHouseInvCols.id_household}, h.${tHouseholdsCols.name}, h.${tHouseholdsCols.photo},
-      ${tHouseInvCols.id_from}, u.${tUsersCols.nickname}, u.${tUsersCols.photo} AS u_photo,
-      ${tHouseInvCols.message} 
-    FROM ${tHouseInvName}
+    SELECT i.${tHouseInvCols.id_household}, h.${tHouseholdsCols.name}, h.${tHouseholdsCols.photo},
+      i.${tHouseInvCols.id_from}, u.${tUsersCols.nickname}, u.${tUsersCols.photo} AS u_photo,
+      i.${tHouseInvCols.message}, i.${tHouseInvCols.date_created}
+    FROM ${tHouseInvName} AS i
     INNER JOIN ${tHouseholdsName} AS h ON ${tHouseInvCols.id_household} = h.${tHouseholdsCols.id}
     LEFT JOIN ${tUsersName} AS u ON ${tHouseInvCols.id_from} = u.${tUsersCols.id}
     WHERE ${tHouseInvCols.id_to}=${currentUser}
@@ -26,6 +26,7 @@ export const findUserInvitations = async (currentUser: number): Promise<Array<ob
     [INVITATION_KEYS.FROM_NICKNAME]: invitation[tUsersCols.nickname],
     [INVITATION_KEYS.FROM_PHOTO]: invitation.u_photo,
     [INVITATION_KEYS.MESSAGE]: invitation[tHouseInvCols.message],
+    [INVITATION_KEYS.DATE_CREATED]: invitation[tHouseInvCols.date_created],
   }))
 }
 

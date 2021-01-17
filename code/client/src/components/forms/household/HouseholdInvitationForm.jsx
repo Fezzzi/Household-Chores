@@ -1,18 +1,16 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { Search, SortByAlpha } from '@material-ui/icons'
+import { Search, SortByAlpha, Add } from '@material-ui/icons'
 
 import {
-  InvitationFormNode, InvitationFormNodeName, InvitationFormNodePhoto, InvitationNodesWrapper,
+  InvitationFormButton, InvitationFormNode, InvitationFormNodeName, InvitationFormNodePhoto, InvitationNodesWrapper,
 } from 'clientSrc/styles/blocks/households'
-import {
-  TableBox, TableHeaderBox, TableHeaderCell, TableSingleRowBox, TableSorterIcon,
-} from 'clientSrc/styles/blocks/table'
+import { TableBox, TableHeaderBox, TableHeaderCell, TableSingleRowBox, TableSorterIcon } from 'clientSrc/styles/blocks/table'
 import { useTableLogic } from 'clientSrc/helpers/table'
-import { COMMON, HOUSEHOLD } from 'shared/constants/localeMessages'
+import { COMMON } from 'shared/constants/localeMessages'
 import { CONNECTION_KEYS } from 'shared/constants/settingsDataKeys'
 
-import { MiniTextInput, MiniButton, LocaleText } from '../../common'
+import { MiniTextInput } from '../../common'
 
 const HouseholdInvitationForm = ({ connections, onInvite }) => {
   const { processedRows, setQuery, sorters } = useTableLogic(
@@ -22,6 +20,28 @@ const HouseholdInvitationForm = ({ connections, onInvite }) => {
   )
 
   const textInputRef = useRef(null)
+  const nodesRef = useRef([])
+
+  const [hoveredNode, setHoveredNode] = useState(null)
+
+  useEffect(() => {
+    nodesRef.current = nodesRef.current.slice(0, processedRows.length)
+  }, [processedRows])
+
+  useLayoutEffect(() => {
+    if (nodesRef.current) {
+      nodesRef.current.forEach(node => {
+        if (node) {
+          let fontSize = Number.parseFloat(getComputedStyle(node)['font-size'])
+          while (node.clientHeight >= 60 && fontSize > 6) {
+            fontSize -= 1
+            node.style.fontSize = `${fontSize}px`
+            node.style.lineHeight = `${fontSize}px`
+          }
+        }
+      })
+    }
+  }, [nodesRef.current, processedRows])
 
   return (
     <TableBox>
@@ -45,13 +65,19 @@ const HouseholdInvitationForm = ({ connections, onInvite }) => {
             [CONNECTION_KEYS.ID]: id,
             [CONNECTION_KEYS.NICKNAME]: nickname,
             [CONNECTION_KEYS.PHOTO]: photo,
-          }) => (
-            <InvitationFormNode key={`connection-${id}`}>
+          }, index) => (
+            <InvitationFormNode
+              key={`connection-${id}`}
+              onMouseEnter={() => setHoveredNode(index)}
+              onMouseLeave={() => setHoveredNode(null)}
+              onClick={() => {
+                onInvite(id)
+                setHoveredNode(null)
+              }}
+            >
+              {hoveredNode === index && (<InvitationFormButton><Add /></InvitationFormButton>)}
               <InvitationFormNodePhoto src={photo} />
-              <InvitationFormNodeName>{nickname}</InvitationFormNodeName>
-              <MiniButton margin={0} onClick={() => onInvite(id)}>
-                <LocaleText message={HOUSEHOLD.INVITE} />
-              </MiniButton>
+              <InvitationFormNodeName ref={node => nodesRef.current[index] = node}>{nickname}</InvitationFormNodeName>
             </InvitationFormNode>
           ))}
         </InvitationNodesWrapper>

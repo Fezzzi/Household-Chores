@@ -6,6 +6,7 @@ import { EditableFieldIcon, EditableFieldWrapper } from 'clientSrc/styles/blocks
 import { editableFieldProps } from 'clientSrc/helpers/editableField'
 import { useUpdateHandler } from 'clientSrc/helpers/form'
 import { INPUT_TYPE } from 'shared/constants'
+import { HINT } from 'shared/constants/localeMessages'
 
 import Input from '../Input'
 
@@ -40,6 +41,7 @@ const EditableTextField = ({
             name={name}
             type={isEmail ? INPUT_TYPE.EMAIL : INPUT_TYPE.TEXT}
             value={placeholder}
+            hint={HINT.VISIBILITY}
             hasDefaultValue
             inputError={error}
             onUpdate={handleUpdate}

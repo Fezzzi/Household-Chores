@@ -29,6 +29,8 @@ export const COMMON = {
   SEARCH: 'common.search',
   SEARCHING: 'common.searching',
   TERMS_AND_CONDITIONS: 'common.termsAndConditions',
+  TIME_PREFIX: 'common.timePrefix',
+  TIME_SUFFIX: 'common.timeSuffix',
   PHOTO_SIZE: 'common.photoSize',
 }
 
@@ -89,16 +91,19 @@ export const FORM = {
   NO_CONNECTION_REQUESTS: 'form.noConnectionRequests',
   NO_CONNECTIONS: 'form.noConnections',
   NO_CONNECTIONS_FOUND: 'form.noConnectionsFound',
-  CONNECTION_APPROVE: 'form.approve',
-  CONNECTION_BLOCK: 'form.connectionBlock',
-  CONNECTION_UNBLOCK: 'form.connectionUnblock',
-  CONNECTION_CONNECT: 'form.connectionConnect',
-  CONNECTION_IGNORE: 'form.connectionIgnore',
-  CONNECTION_REMOVE: 'form.connectionRemove',
+  APPROVE: 'form.approve',
+  BLOCK: 'form.block',
+  UNBLOCK: 'form.unblock',
+  CONNECT: 'form.connect',
+  IGNORE: 'form.ignore',
+  REMOVE: 'form.connectionRemove',
   CONNECTION_SENT: 'form.connectionSent',
+  MY_CONNECTIONS: 'form.myConnections',
+  FIND_CONNECTION: 'form.findConnection',
   PENDING_CONNECTIONS: 'form.pendingConnections',
   BLOCKED_CONNECTIONS: 'form.blockedConnections',
   HOUSEHOLD_INVITATIONS: 'form.householdInvitations',
+  MUTUAL_FRIENDS: 'form.mutualFriends',
 
   EMAIL_NOTIFICATIONS: 'form.email_notifications',
   BROWSER_NOTIFICATIONS: 'form.browser_notifications',
@@ -113,6 +118,10 @@ export const FORM = {
 
   [USER_VISIBILITY_TYPE.FOF]: 'form.userVisibilityFOF',
   [USER_VISIBILITY_TYPE.ALL]: 'form.userVisibilityALL',
+}
+
+export const HINT = {
+  VISIBILITY: 'hint.visibility',
 }
 
 export const HOUSEHOLD = {

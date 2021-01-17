@@ -30,9 +30,11 @@ export const TooltipAnchor = styled.div`
 `
 
 export const Tooltip = styled.div`
-  top: -3px;
+  top: ${props => props.customOffsetY ?? -3}px;
   right: ${props => props.withHover ? 150 : 125}%;
   width: max-content;
+  height: ${props => props.customHeight ? `${props.customHeight}px` : 'inherit'};
+  line-height: ${props => props.customHeight ? `${props.customHeight - 2}px` : 'inherit'};
   background-color: ${COLORS.THEME_FRONT};
   border: 1px solid ${COLORS.BORDER};
   position: absolute;
@@ -146,4 +148,34 @@ export const FloatingElementText = styled.span`
   font-weight: 500;
   user-select: none;
   
+`
+
+export const InputHintAnchor = styled.div`
+  position: relative;
+  color: ${COLORS.FONT}
+`
+
+export const InputHintWrapper = styled.div`
+  position: absolute;
+  top: -10px;
+  left: -14px;
+  z-index: 10;
+  width: 20px;
+`
+
+export const InputHintIcon = styled.div`
+  opacity: 0.6;
+  height: 15px;
+  width: 15px;
+  float: right;
+    
+  > svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  :hover {
+    cursor: pointer;
+    opacity: 1;
+  }
 `

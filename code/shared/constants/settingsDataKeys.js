@@ -62,4 +62,7 @@ export const CONNECTION_KEYS = {
   ID: 'id',
   NICKNAME: 'nickname',
   PHOTO: 'photo',
+  MESSAGE: 'message',
+  MUTUAL_CONNECTIONS: 'mutual-connections',
+  DATE_CREATED: 'date-created',
 }

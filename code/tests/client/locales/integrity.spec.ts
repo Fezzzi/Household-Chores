@@ -15,7 +15,7 @@ describe('Locales > integrity', () => {
     it('no missing translations', () => {
       Object.values(MESSAGES).forEach(msgType =>
         Object.values(msgType).forEach(msgKey => {
-          if (!defaultLocaleTexts[msgKey]) {
+          if (defaultLocaleTexts[msgKey] == null) {
             assert.fail(`missing translation of key ${msgKey}`)
           }
         })
@@ -34,7 +34,7 @@ describe('Locales > integrity', () => {
         }
 
         keys.forEach(key => {
-          if (!localeTexts[key]) {
+          if (localeTexts[key] == null) {
             assert.fail(`locale ${locale} is missing translations for message ${key}`)
           }
         })
@@ -51,7 +51,7 @@ describe('Locales > integrity', () => {
         const localeKeys = Object.keys(localeTexts)
 
         localeKeys.forEach(key => {
-          if (!defaultLocaleTexts[key]) {
+          if (defaultLocaleTexts[key] == null) {
             assert.fail(`message ${key} present in locale ${locale} is missing in default locale!`)
           }
         })

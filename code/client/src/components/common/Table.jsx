@@ -3,19 +3,19 @@ import PropTypes from 'prop-types'
 import { Search } from '@material-ui/icons'
 
 import {
-  TableBox, TableHeaderBox, TableHeaderCell, TableRow, TableCell, TableSorterIcon, TableRowsBox,
+  TableBox, TableHeaderBox, TableHeaderCell, TableRow, TableCell, TableSorterIcon, TableRowsBox, TableBigCell,
 } from 'clientSrc/styles/blocks/table'
 import { COMMON } from 'shared/constants/localeMessages'
 import { useTableLogic } from 'clientSrc/helpers/table'
 
 import { MiniTextInput } from './inputs'
 
-const Table = ({ rows, keys, sortConfig, filterKey }) => {
+const Table = ({ rows, keys, sortConfig, filterKey, defaultSorter, freeHeight, bigCells }) => {
   const {
     processedRows,
     setQuery,
     sorters,
-  } = useTableLogic(rows, sortConfig, filterKey)
+  } = useTableLogic(rows, sortConfig, filterKey, defaultSorter)
 
   const textInputRef = useRef(null)
 
@@ -37,11 +37,12 @@ const Table = ({ rows, keys, sortConfig, filterKey }) => {
           </TableHeaderCell>
         )}
       </TableHeaderBox>
-      <TableRowsBox>
+      <TableRowsBox freeHeight={freeHeight}>
         {processedRows.map((row, index) => (
           <TableRow key={index} strikethrough={row.strikethrough}>
-            {keys.map(({ name, bold, fading, growing }) => row[name] && (
-              <TableCell key={`${index}-${name}`} boldKey={bold} fadeKey={fading} growing={growing}>{row[name]}</TableCell>
+            {keys.map(({ name, bold, fading, growing }) => row[name] && (bigCells
+              ? <TableBigCell key={`${index}-${name}`} boldKey={bold} fadeKey={fading} growing={growing}>{row[name]}</TableBigCell>
+              : <TableCell key={`${index}-${name}`} boldKey={bold} fadeKey={fading} growing={growing}>{row[name]}</TableCell>
             ))}
           </TableRow>
         ))}
@@ -53,6 +54,7 @@ const Table = ({ rows, keys, sortConfig, filterKey }) => {
 Table.defaultProps = {
   rows: [],
   sortConfig: [],
+  defaultSorter: 1,
 }
 
 Table.propTypes = {
@@ -68,7 +70,10 @@ Table.propTypes = {
     key: PropTypes.string.isRequired,
     icon: PropTypes.element.isRequired,
   })),
+  defaultSorter: PropTypes.number,
   filterKey: PropTypes.string,
+  freeHeight: PropTypes.bool,
+  bigCells: PropTypes.bool,
 }
 
 export default Table
