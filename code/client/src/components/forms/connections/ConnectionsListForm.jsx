@@ -43,8 +43,8 @@ const ConnectionsListForm = ({ data }) => {
               ...user,
               userPhoto: <TableBigPhoto src={userPhoto} />,
               date: getTimeString(user[CONNECTION_KEYS.DATE_CREATED]),
-              removeBtn: getButtonForUser(FORM.CONNECTION_REMOVE, userId, removeHandler),
-              blockBtn: getButtonForUser(FORM.CONNECTION_BLOCK, userId, blockHandler),
+              removeBtn: getButtonForUser(FORM.REMOVE, userId, removeHandler),
+              blockBtn: getButtonForUser(FORM.BLOCK, userId, blockHandler),
             }))}
             keys={[
               { name: 'userPhoto' },

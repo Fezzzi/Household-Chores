@@ -53,7 +53,7 @@ const ConnectionBlocksForm = ({ data }) => {
               </AppendMessageAnchor>
             ),
             date: getTimeString(user[CONNECTION_KEYS.DATE_CREATED]),
-            unblockBtn: getButtonForUser(FORM.CONNECTION_UNBLOCK, userId, unblockHandler),
+            unblockBtn: getButtonForUser(FORM.UNBLOCK, userId, unblockHandler),
           }))}
           keys={[
             { name: 'userPhoto' },

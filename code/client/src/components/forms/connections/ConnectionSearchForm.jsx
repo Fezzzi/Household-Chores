@@ -87,7 +87,7 @@ const ConnectionSearchForm = ({ data }) => {
                       background={COLORS.BLUE_PRIMARY}
                       backgroundHover={COLORS.BLUE_SECONDARY}
                     >
-                      <LocaleText message={userState === CONNECTION_STATE_TYPE.WAITING && FORM.CONNECTION_SENT || FORM.CONNECTION_CONNECT} />
+                      <LocaleText message={userState === CONNECTION_STATE_TYPE.WAITING && FORM.CONNECTION_SENT || FORM.CONNECT} />
                     </PrimaryButton>
                   </UserButtonsBox>
                 </UserNode>

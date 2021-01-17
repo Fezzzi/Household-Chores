@@ -49,29 +49,29 @@ export const getTimeString = time => {
 }
 
 const BUTTONS_CONFIG = {
-  [FORM.CONNECTION_CONNECT]: {
+  [FORM.CONNECT]: {
     background: COLORS.BLUE_PRIMARY,
     backgroundHover: COLORS.BLUE_SECONDARY,
   },
-  [FORM.CONNECTION_APPROVE]: {
+  [FORM.APPROVE]: {
     background: COLORS.BLUE_PRIMARY,
     backgroundHover: COLORS.BLUE_SECONDARY,
   },
-  [FORM.CONNECTION_IGNORE]: {
+  [FORM.IGNORE]: {
     color: COLORS.FONT,
     background: COLORS.LIGHT_PRIMARY,
     backgroundHover: COLORS.LIGHT_SECONDARY,
   },
-  [FORM.CONNECTION_REMOVE]: {
+  [FORM.REMOVE]: {
     color: COLORS.FONT,
     background: COLORS.LIGHT_PRIMARY,
     backgroundHover: COLORS.LIGHT_SECONDARY,
   },
-  [FORM.CONNECTION_BLOCK]: {
+  [FORM.BLOCK]: {
     background: COLORS.RED_PRIMARY,
     backgroundHover: COLORS.RED_SECONDARY,
   },
-  [FORM.CONNECTION_UNBLOCK]: {
+  [FORM.UNBLOCK]: {
     background: COLORS.GREEN_PRIMARY,
     backgroundHover: COLORS.GREEN_SECONDARY,
   },

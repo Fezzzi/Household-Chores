@@ -99,7 +99,7 @@ export const TableBigCell = styled.div`
   ${props => props.growing ? 'margin-right: auto' : 'flex-shrink: 0'};
   
   svg {
-    height: 20px;
+    height: 35px;
   }
 `
 

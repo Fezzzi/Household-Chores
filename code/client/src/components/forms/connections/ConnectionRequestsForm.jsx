@@ -39,53 +39,54 @@ const ConnectionRequestsForm = ({ data }) => {
         />
       </SectionHeadline>
       {data?.length
-        ? <Table
-          rows={data.map(({
-            [CONNECTION_KEYS.ID]: userId,
-            [CONNECTION_KEYS.PHOTO]: userPhoto,
-            [CONNECTION_KEYS.MESSAGE]: userMessage,
-            [CONNECTION_KEYS.MUTUAL_CONNECTIONS]: userMutualConnections,
-            ...user
-          }) => ({
-            ...user,
-            userPhoto: <TableBigPhoto src={userPhoto} />,
-            userMutualConnections: <>({userMutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
-            userMessage: userMessage && (
-              <AppendMessageAnchor>
-                <InfoTooltip
-                  icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
-                  text={userMessage}
-                  customHeight={24}
-                  customOffsetY={-5}
-                />
-              </AppendMessageAnchor>
-            ),
-            date: getTimeString(user[CONNECTION_KEYS.DATE_CREATED]),
-            approveBtn: getButtonForUser(FORM.CONNECTION_APPROVE, userId, approveHandler),
-            ignoreBtn: getButtonForUser(FORM.CONNECTION_IGNORE, userId, ignoreHandler),
-            blockBtn: getButtonForUser(FORM.CONNECTION_BLOCK, userId, blockHandler),
-          }))}
-          keys={[
-            { name: 'userPhoto' },
-            { name: CONNECTION_KEYS.NICKNAME, bold: true },
-            { name: 'userMutualConnections', fading: true, growing: true },
-            { name: 'userMessage' },
-            { name: 'date', fading: true },
-            { name: 'approveBtn' },
-            { name: 'ignoreBtn' },
-            { name: 'blockBtn' },
-          ]}
-          sortConfig={[
-            { key: CONNECTION_KEYS.NICKNAME, icon: <SortByAlpha /> },
-            { key: CONNECTION_KEYS.DATE_CREATED, icon: <CalendarToday /> },
-            { key: CONNECTION_KEYS.MUTUAL_CONNECTIONS, icon: <Group /> },
-          ]}
-          defaultSorter={-2}
-          filterKey={CONNECTION_KEYS.NICKNAME}
-          bigCells
-          freeHeight
-        />
-        : (
+        ? (
+          <Table
+            rows={data.map(({
+              [CONNECTION_KEYS.ID]: userId,
+              [CONNECTION_KEYS.PHOTO]: userPhoto,
+              [CONNECTION_KEYS.MESSAGE]: userMessage,
+              [CONNECTION_KEYS.MUTUAL_CONNECTIONS]: userMutualConnections,
+              ...user
+            }) => ({
+              ...user,
+              userPhoto: <TableBigPhoto src={userPhoto} />,
+              userMutualConnections: <>({userMutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
+              userMessage: userMessage && (
+                <AppendMessageAnchor>
+                  <InfoTooltip
+                    icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
+                    text={userMessage}
+                    customHeight={24}
+                    customOffsetY={-5}
+                  />
+                </AppendMessageAnchor>
+              ),
+              date: getTimeString(user[CONNECTION_KEYS.DATE_CREATED]),
+              approveBtn: getButtonForUser(FORM.APPROVE, userId, approveHandler),
+              ignoreBtn: getButtonForUser(FORM.IGNORE, userId, ignoreHandler),
+              blockBtn: getButtonForUser(FORM.BLOCK, userId, blockHandler),
+            }))}
+            keys={[
+              { name: 'userPhoto' },
+              { name: CONNECTION_KEYS.NICKNAME, bold: true },
+              { name: 'userMutualConnections', fading: true, growing: true },
+              { name: 'userMessage' },
+              { name: 'date', fading: true },
+              { name: 'approveBtn' },
+              { name: 'ignoreBtn' },
+              { name: 'blockBtn' },
+            ]}
+            sortConfig={[
+              { key: CONNECTION_KEYS.NICKNAME, icon: <SortByAlpha /> },
+              { key: CONNECTION_KEYS.DATE_CREATED, icon: <CalendarToday /> },
+              { key: CONNECTION_KEYS.MUTUAL_CONNECTIONS, icon: <Group /> },
+            ]}
+            defaultSorter={-2}
+            filterKey={CONNECTION_KEYS.NICKNAME}
+            bigCells
+            freeHeight
+          />
+        ) : (
           <FormBody>
             <LocaleText message={FORM.NO_CONNECTION_REQUESTS} />
           </FormBody>

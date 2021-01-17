@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react'
 
 import { TableSorterIcon } from 'clientSrc/styles/blocks/table'
 
-export const useTableLogic = (rows, sortConfig, filterKey, defaultSorter) => {
+export const useTableLogic = (rows, sortConfig, filterKey, defaultSorter = 1) => {
   const [sorter, setSorter] = useState(defaultSorter)
   const [query, setQuery] = useState('')
 

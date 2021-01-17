@@ -146,7 +146,7 @@ const HouseholdCreateForm = ({ connections }) => {
         <LocaleText message={HOUSEHOLD.INVITE_USERS} />
       </SectionHeadline>
       <HouseholdInvitationForm
-        connections={connections.filter(({ id }) => !invitations.find(user => user.id === id))}
+        connections={connections.filter(({ [CONNECTION_KEYS.ID]: id }) => !invitations.find(user => user.id === id))}
         onInvite={id => setInvitations(prevState =>
           [...prevState, connections.find(user => user[CONNECTION_KEYS.ID] === id)]
         )}
