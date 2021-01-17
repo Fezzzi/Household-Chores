@@ -120,6 +120,10 @@ export const FORM = {
   [USER_VISIBILITY_TYPE.ALL]: 'form.userVisibilityALL',
 }
 
+export const HINT = {
+  VISIBILITY: 'hint.visibility',
+}
+
 export const HOUSEHOLD = {
   LEAVE: 'household.leave',
   LEAVING: 'household.leaving',

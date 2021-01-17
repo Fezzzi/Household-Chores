@@ -46,7 +46,7 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
         <EditableField
           editing={passwordEditing}
           setEditing={setPasswordEditing}
-          iconRight={40}
+          iconRight={10}
           centered={false}
         >
           {passwordEditing

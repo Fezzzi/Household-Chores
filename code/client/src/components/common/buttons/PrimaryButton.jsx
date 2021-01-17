@@ -4,8 +4,11 @@ import PropTypes from 'prop-types'
 import { COLORS } from 'clientSrc/constants'
 import { FormButtonWrapper, FormButton } from 'clientSrc/styles/blocks/form'
 
-const PrimaryButton = ({ children, onClick, margin, inline, ...props }) => (
+import { InputHintTooltip } from '../../portals'
+
+const PrimaryButton = ({ children, hint, onClick, margin, inline, ...props }) => (
   <FormButtonWrapper margin={margin} inline={inline}>
+    {hint && <InputHintTooltip text={hint} />}
     <FormButton onClick={onClick} {...props}>
       {children}
     </FormButton>
@@ -23,6 +26,7 @@ PrimaryButton.defaultProps = {
 }
 
 PrimaryButton.propTypes = {
+  hint: PropTypes.string,
   background: PropTypes.string,
   backgroundHover: PropTypes.string,
   color: PropTypes.string,

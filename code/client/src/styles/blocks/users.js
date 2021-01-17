@@ -23,26 +23,12 @@ export const UserPhotoBox = styled.div`
   position: relative;
 `
 
-export const UserPhotoMoreBox = styled.div`
-  position: absolute;
-  top: 0;
-  left: 5px;
-  display: flex;
-  flex-flow: column;
-`
-
 export const UserPhoto = styled.img`
   border-radius: 50%;
   width: 80px;
   height: 80px;
   margin: 10px auto;
   display: block;
-`
-
-export const MiniUserPhoto = styled.img`
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
 `
 
 export const UserInfoBox = styled.div`
@@ -79,13 +65,6 @@ export const UserMutualFriends = styled.div`
   line-height: 0.9em;
 `
 
-export const MiniUserName = styled.div`
-  width: max-content;
-  font-weight: 500;
-  font-size: 1.1em;
-  margin: 5px 0;
-`
-
 export const AppendMessageAnchor = styled.div`
   margin: 7px 0;
 `
@@ -105,15 +84,6 @@ export const AppendMessageIcon = styled.div`
     cursor: pointer;
     opacity: 1;
   }
-`
-
-export const AppendMessage = styled.div`
-  display: block;
-  width: 100%;
-  opacity: '0.8';
-  font-weight: 400;
-  font-size: 1.1em;
-  word-break: break-all;
 `
 
 export const WrapperBox = styled.div`

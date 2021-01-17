@@ -1,4 +1,4 @@
-import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
+import { AUTH, COMMON, ERROR, FORM, HINT, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
 import {
   USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, HOUSEHOLD_TABS,
 } from 'shared/constants'
@@ -109,6 +109,8 @@ export default {
   [FORM.HOUSEHOLD_LEAVING]: 'Member leaving household',
   [FORM[USER_VISIBILITY_TYPE.FOF]]: 'friends of friends',
   [FORM[USER_VISIBILITY_TYPE.ALL]]: 'all',
+
+  [HINT.VISIBILITY]: 'Controls who will be able to find Your account and send connection request.',
 
   [HOUSEHOLD.LEAVE]: 'Leave household',
   [HOUSEHOLD.LEAVING]: 'Leaving',

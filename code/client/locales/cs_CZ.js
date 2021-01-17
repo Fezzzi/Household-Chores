@@ -1,4 +1,4 @@
-import { AUTH, COMMON, ERROR, FORM, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
+import { AUTH, COMMON, ERROR, FORM, HINT, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
 import {
   USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, HOUSEHOLD_TABS,
 } from 'shared/constants'
@@ -109,6 +109,8 @@ export default {
   [FORM.HOUSEHOLD_LEAVING]: 'Odchod člena z rodiny',
   [FORM[USER_VISIBILITY_TYPE.FOF]]: 'přátelé přátel',
   [FORM[USER_VISIBILITY_TYPE.ALL]]: 'všichni',
+
+  [HINT.VISIBILITY]: 'Nastavuje kdo bude schopen Váš účet vyhledat a poslat žádost o spojení.',
 
   [HOUSEHOLD.LEAVE]: 'Opustit domácnost',
   [HOUSEHOLD.LEAVING]: 'Opouštím',

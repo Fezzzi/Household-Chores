@@ -312,6 +312,7 @@ export const SwitchInputValue = styled.span`
   display: flex;
   flex-flow: row;
   font-size: 1em;
+  font-weight: 500;
   padding: 0 15px;
   height: 100%;
   align-items: center;
@@ -321,7 +322,6 @@ export const SwitchInputValue = styled.span`
       background-color: ${COLORS.GREEN_SECONDARY};
       color: ${COLORS.THEME_FRONT};
       opacity: 1;
-      font-weight: 500;
     ` : `
       opacity: 0.5;
       

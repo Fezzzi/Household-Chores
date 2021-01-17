@@ -8,8 +8,9 @@ import {
 import { FORM } from 'shared/constants/localeMessages'
 
 import LocaleText from '../LocaleText'
+import { InputHintTooltip } from '../../portals'
 
-const SwitchInput = ({ name, label, values, value, hasDefaultValue, onUpdate }) => {
+const SwitchInput = ({ name, label, values, value, hint, hasDefaultValue, onUpdate }) => {
   const [selectedValue, setSelectedValue] = useState(null)
 
   const handleChange = useCallback(newValue => {
@@ -28,6 +29,7 @@ const SwitchInput = ({ name, label, values, value, hasDefaultValue, onUpdate }) 
       </InputLabel>
       <PaddedInputWrapper>
         <SwitchInputBox>
+          {hint && <InputHintTooltip text={hint} />}
           <SwitchInputLabel>
             {values.map(switchValue => (
               <SwitchInputValue
@@ -56,6 +58,7 @@ SwitchInput.propTypes = {
   label: PropTypes.string.isRequired,
   values: PropTypes.arrayOf(PropTypes.string).isRequired,
   value: PropTypes.string,
+  hint: PropTypes.string,
   hasDefaultValue: PropTypes.bool,
   onUpdate: PropTypes.func.isRequired,
 }

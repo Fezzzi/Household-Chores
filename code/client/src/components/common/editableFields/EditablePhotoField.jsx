@@ -6,6 +6,7 @@ import { EditableFieldIcon, EditableFieldWrapper } from 'clientSrc/styles/blocks
 import { editableFieldProps } from 'clientSrc/helpers/editableField'
 import { useUpdateHandler } from 'clientSrc/helpers/form'
 import { INPUT_TYPE } from 'shared/constants'
+import { HINT } from 'shared/constants/localeMessages'
 
 import Input from '../Input'
 
@@ -38,6 +39,7 @@ const EditablePhotoField = ({
           <Input
             name={name}
             type={INPUT_TYPE.PHOTO}
+            hint={HINT.VISIBILITY}
             inputError={error}
             onUpdate={handleUpdate}
             onFileRemove={handleFileRemove}

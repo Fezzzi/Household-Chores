@@ -149,3 +149,33 @@ export const FloatingElementText = styled.span`
   user-select: none;
   
 `
+
+export const InputHintAnchor = styled.div`
+  position: relative;
+  color: ${COLORS.FONT}
+`
+
+export const InputHintWrapper = styled.div`
+  position: absolute;
+  top: -10px;
+  left: -14px;
+  z-index: 10;
+  width: 20px;
+`
+
+export const InputHintIcon = styled.div`
+  opacity: 0.6;
+  height: 15px;
+  width: 15px;
+  float: right;
+    
+  > svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  :hover {
+    cursor: pointer;
+    opacity: 1;
+  }
+`
