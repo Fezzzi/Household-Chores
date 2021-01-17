@@ -48,7 +48,7 @@ const ConnectionSearchForm = ({ data }) => {
           <SearchBar onSearch={searchQuery} />
         </TableHeaderBox>
       </TableBox>
-      {console.log(data)}
+
       {data?.length
         ? (
           <UserList>

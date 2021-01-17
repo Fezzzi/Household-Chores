@@ -4,8 +4,7 @@ import {
   ConnectionRequestsForm, ConnectionSearchForm, HouseholdCreateForm, HouseholdModificationForm,
   HouseholdInvitationListForm, ProfileForm, NotificationForm, ConnectionsListForm, ConnectionBlocksForm,
 } from 'clientSrc/components/forms'
-import { SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, HOUSEHOLD_TABS, CONNECTION_STATE_TYPE } from 'shared/constants'
-import { SETTINGS } from 'shared/constants/localeMessages'
+import { SETTING_CATEGORIES, SETTING_TABS, HOUSEHOLD_TABS, CONNECTION_STATE_TYPE } from 'shared/constants'
 
 export const settingsRenderers = {
   [SETTING_CATEGORIES.PROFILE]: {

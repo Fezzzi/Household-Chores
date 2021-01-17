@@ -172,6 +172,7 @@ export const assignUserProvider = async (userId: number, googleId: string, faceb
   return false
 }
 
+// todo: Sort secondary by size of matching query
 export const queryUsers = async (query: string, userId: number): Promise<Array<object>> =>
   database.query(`
     SELECT users.${tUsersCols.id}, users.${tUsersCols.nickname}, users.${tUsersCols.photo},
