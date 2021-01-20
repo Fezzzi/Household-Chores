@@ -9,6 +9,7 @@ import ResourceRouter from './resources'
 import SettingsRouter from './settings'
 import ConnectionsRouter from './connections'
 import HouseholdsRouter from './households'
+import DialogsRouter from './dialogs'
 
 // Middleware function to check for logged-in users
 const sessionChecker = (req: any, res: any, next: NextFunction) => {
@@ -38,6 +39,7 @@ export default () => {
   router.use(`/${API.SETTINGS_PREFIX}`, sessionChecker, SettingsRouter())
   router.use(`/${API.CONNECTIONS_PREFIX}`, sessionChecker, ConnectionsRouter())
   router.use(`/${API.HOUSEHOLDS_PREFIX}`, sessionChecker, HouseholdsRouter())
+  router.use(`/${API.DIALOGS_PREFIX}`, sessionChecker, DialogsRouter())
 
   router.all(/.*/, (_req, res) => {
     res.status(404).send('Not Found')

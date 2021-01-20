@@ -28,3 +28,6 @@ export const HOUSEHOLD_DELETE = 'delete'
 export const HOUSEHOLD_LEAVE = 'leave'
 export const INVITATION_APPROVE = 'approve'
 export const INVITATION_IGNORE = 'ignore'
+
+export const DIALOGS_PREFIX = 'dialogs'
+export const DIALOGS_DISABLE = 'disable'

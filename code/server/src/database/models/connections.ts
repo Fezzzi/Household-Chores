@@ -1,7 +1,7 @@
-import { database } from 'serverSrc/database'
 import { CONNECTION_STATE_TYPE } from 'shared/constants'
 import { CONNECTION_KEYS } from 'shared/constants/settingsDataKeys'
 
+import { database } from '..'
 import { tConnectionsName, tConnectionsCols, tUsersName, tUsersCols } from './tables'
 
 export const findBlockedConnections = async (userId: number): Promise<Array<number>> =>
