@@ -11,8 +11,8 @@ export default () => {
     const userId = req.session!.user
     switch (action) {
       case API.DIALOGS_DISABLE: {
-        const success = await disableDialog(userId, body)
-        res.status(200).send(success ?? { [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+        const success = await disableDialog(userId, body.key)
+        res.status(200).send(success ? {} : { [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
         return true
       }
       default:

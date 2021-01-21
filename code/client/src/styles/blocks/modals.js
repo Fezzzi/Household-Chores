@@ -20,7 +20,7 @@ export const ModalBody = styled.div`
   flex-flow: column;
   margin: auto;
   position: relative;
-  margin: 50px auto;
+  margin: 75px auto;
   padding: 25px;
 `
 
@@ -45,18 +45,29 @@ export const ModalCloseButton = styled.div`
 
 export const ModalButtonsBlock = styled.div`
   width: 100%;
-  padding-top: 15px;
   display: flex;
   flex-flow: row;
   align-items: center;
   justify-content: center;
 `
 
-export const ModalNote = styled.p`
+export const ModalHeadline = styled.h2`
+  text-align: center;
+  margin-bottom: 20px;
+`
+
+export const ModalMessage = styled.h3`
+  text-align: center;
+  margin: 0 0 25px;
+`
+
+export const ModalNote = styled.div`
   text-align: center;
   font-size: 0.9em;
-  margin: 0;
+  margin: 0 auto;
+  opacity: 0.6;
   user-select: none;
+  width: fit-content;
 `
 
 export const ModalPhotoControls = styled.div`

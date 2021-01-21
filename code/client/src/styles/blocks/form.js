@@ -52,7 +52,7 @@ export const FormHeaderRightPanel = styled.div`
 export const InputRow = styled.div`
   margin: 0 ${props => props.fixedPadding ? '42px' : 'auto'} 6px;
   position: relative;
-  min-height: 38px;
+  min-height: ${props => props.isSmall ? 22 : 38}px;
 `
 
 export const InputWrapper = styled.div`
@@ -164,12 +164,13 @@ export const PaddedInputWrapper = styled.div`
   border-radius: 1px;  
   box-sizing: border-box;
   display: inline-block;
-  float: right;
+  float: ${props => props.alignLeft ? 'left' : 'right'};
+  margin: ${props => props.alignLeft ? '0 15px 0 0' : '0 0 0 15px'};
 `
 
 export const BoolInputBox = styled.label`
-  height: 36px;
-  width: 36px;
+  height: ${props => props.isSmall ? 20 : 36}px;
+  width: ${props => props.isSmall ? 20 : 36}px;
   padding: 0;
   position: relative;
   margin: 0;
@@ -185,17 +186,23 @@ export const BoolInputBox = styled.label`
   }
 `
 
+export const BoolInputMessage = styled.span`
+  font-weight: 500;
+  display: inline-block;
+  line-height: ${props => props.isSmall ? 21 : 34}px;
+  font-size: ${props => props.isSmall ? 1 : 1.2}em;
+`
+
 export const BoolInputLabel = styled.span`
   position: absolute;
-  width: 100%;
+  padding: ${props => props.isSmall ? '0 2px' : '0 4px'};
+  width: fill-available;
   height: 100%;
   user-select: none;
   
   & svg {
     height: 100%;
-    width: 26px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
     display: block;
   }
 `

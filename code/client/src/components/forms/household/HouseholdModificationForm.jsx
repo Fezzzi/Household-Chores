@@ -12,8 +12,7 @@ import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { formatDate } from 'shared/helpers/date'
 import {
-  CONNECTION_KEYS,
-  HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS, PROFILE,
+  CONNECTION_KEYS, HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS, PROFILE,
 } from 'shared/constants/settingsDataKeys'
 
 import HouseholdFormHeader from './HouseholdFormHeader'
@@ -90,30 +89,28 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     && !invitedConnections?.find(user => user === id)
   ), [connections, members, invitations, invitedConnections])
 
-  const memberTableProps = useMemo(() =>
-    useMemberListProps(
-      members.map(member => ({
-        memberId: member[MEMBER_KEYS.ID],
-        memberRole: member[MEMBER_KEYS.ROLE],
-        changedRole: changedRoles?.find(obj => obj.id === member[MEMBER_KEYS.ID])?.role,
-        memberPhoto: member[MEMBER_KEYS.PHOTO],
-        memberDateJoined: member[MEMBER_KEYS.DATE_JOINED],
-        memberName: member[MEMBER_KEYS.NAME],
-      })),
-      currentUser,
-      toId => removedMembers?.includes(toId),
-      (toId, role) => {
-        const isChangedRole = role !== members.find(member => toId === member[MEMBER_KEYS.ID])?.[MEMBER_KEYS.ROLE]
-        if (isChangedRole) {
-          updateArrayValue(HOUSEHOLD_KEYS.CHANGED_ROLES, { id: toId, role })
-        } else {
-          updateArrayValue(HOUSEHOLD_KEYS.CHANGED_ROLES, { id: toId, role }, false)
-        }
-      },
-      toId => updateArrayValue(HOUSEHOLD_KEYS.REMOVED_MEMBERS, toId),
-      toId => updateArrayValue(HOUSEHOLD_KEYS.REMOVED_MEMBERS, toId, false)
-    ),
-  [members, removedMembers, changedRoles, currentUser])
+  const memberTableProps = useMemberListProps(
+    members.map(member => ({
+      memberId: member[MEMBER_KEYS.ID],
+      memberRole: member[MEMBER_KEYS.ROLE],
+      changedRole: changedRoles?.find(obj => obj.id === member[MEMBER_KEYS.ID])?.role,
+      memberPhoto: member[MEMBER_KEYS.PHOTO],
+      memberDateJoined: member[MEMBER_KEYS.DATE_JOINED],
+      memberName: member[MEMBER_KEYS.NAME],
+    })),
+    currentUser,
+    useCallback(toId => removedMembers?.includes(toId), [removedMembers]),
+    useCallback((toId, role) => {
+      const isChangedRole = role !== members.find(member => toId === member[MEMBER_KEYS.ID])?.[MEMBER_KEYS.ROLE]
+      if (isChangedRole) {
+        updateArrayValue(HOUSEHOLD_KEYS.CHANGED_ROLES, { id: toId, role })
+      } else {
+        updateArrayValue(HOUSEHOLD_KEYS.CHANGED_ROLES, { id: toId, role }, false)
+      }
+    }, [members]),
+    toId => updateArrayValue(HOUSEHOLD_KEYS.REMOVED_MEMBERS, toId),
+    toId => updateArrayValue(HOUSEHOLD_KEYS.REMOVED_MEMBERS, toId, false)
+  )
 
   const invitationTableProps = useMemo(() =>
     useInvitationListProps([

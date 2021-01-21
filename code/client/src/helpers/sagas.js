@@ -9,7 +9,9 @@ import { ERROR } from 'shared/constants/localeMessages'
  */
 export function* handleResponse({ data }, onSuccess) {
   if (!data[NOTIFICATION_TYPE.ERRORS] || !data[NOTIFICATION_TYPE.ERRORS].length) {
-    yield call(onSuccess, data)
+    if (onSuccess) {
+      yield call(onSuccess, data)
+    }
   } else {
     yield put(NotificationActions.addNotifications({
       [NOTIFICATION_TYPE.ERRORS]: data[NOTIFICATION_TYPE.ERRORS],

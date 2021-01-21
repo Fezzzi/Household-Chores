@@ -18,6 +18,12 @@ export default {
   [AUTH.SIGN_UP]: 'Sign Up',
   [AUTH.TERMS_AGREEMENT]: 'By signing up, You agree to our ',
 
+  [COMMON.ARE_YOU_SURE]: 'Are you sure?',
+  [COMMON.CANT_UNDO]: 'This action cannot be undone.',
+  [COMMON.CANT_UNDO_SAVING]: 'You won\'t be able to undo this action after saving.',
+  [COMMON.CONFIRM]: 'Confirm',
+  [COMMON.CANCEL]: 'Cancel',
+  [COMMON.DONT_ASK_AGAIN]: 'Don\'t ask again',
   [COMMON.HIDE]: 'Hide',
   [COMMON.ADD_MESSAGE]: 'Append message',
   [COMMON.MESSAGE]: 'Message',

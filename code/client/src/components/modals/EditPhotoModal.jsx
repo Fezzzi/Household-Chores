@@ -158,7 +158,6 @@ const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
             onClick={savePhoto}
             background={COLORS.BLUE_PRIMARY}
             backgroundHover={COLORS.BLUE_SECONDARY}
-            color={COLORS.FONT}
             disabled={size > MAX_IMAGE_SIZE}
           >
             <LocaleText message={FORM.SAVE} />

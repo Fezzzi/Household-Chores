@@ -19,6 +19,12 @@ export const AUTH = {
 }
 
 export const COMMON = {
+  ARE_YOU_SURE: 'common.areYouSure',
+  CANT_UNDO: 'common.cantUndo',
+  CANT_UNDO_SAVING: 'common.cantUndoSaving',
+  CONFIRM: 'common.confirm',
+  CANCEL: 'common.cancel',
+  DONT_ASK_AGAIN: 'common.dontAskAgain',
   OR: 'common.or',
   SHOW: 'common.show',
   HIDE: 'common.hide',

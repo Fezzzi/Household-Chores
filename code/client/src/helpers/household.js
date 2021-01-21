@@ -9,6 +9,8 @@ import { RoleLabel, UserLabel } from 'clientSrc/styles/blocks/households'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import { formatDate } from 'shared/helpers/date'
+import { DIALOG_KEYS } from 'shared/constants/settingsDataKeys'
+import { useOpenConfirmationDialog } from 'clientSrc/helpers/confirmations'
 
 export const useMemberListProps = (
   members,
@@ -18,6 +20,8 @@ export const useMemberListProps = (
   handleDeletion,
   handleCancellation
 ) => {
+  const openConfirmationDialog = useOpenConfirmationDialog()
+
   const rows = members.map(({
     memberId,
     memberName,
@@ -29,6 +33,7 @@ export const useMemberListProps = (
     const moreOptions = []
     const allowCancellation = checkCancellability(memberId) && handleCancellation
     const currentMemberRole = changedRole ?? memberRole
+
     if (currentUser.id !== memberId) {
       const allRoles = Object.values(HOUSEHOLD_ROLE_TYPE)
       const userRoleIndex = allRoles.indexOf(currentUser.role)
@@ -36,6 +41,7 @@ export const useMemberListProps = (
       const availableRoles = memberRoleIndex > userRoleIndex
         ? allRoles.filter(role => userRoleIndex <= allRoles.indexOf(role))
         : []
+
       if (availableRoles.length > 1 && handleRoleChange) {
         moreOptions.push({
           content: HOUSEHOLD.CHANGE_ROLE,
@@ -59,7 +65,7 @@ export const useMemberListProps = (
       if (deletable) {
         moreOptions.push({
           content: HOUSEHOLD.REMOVE_USER,
-          clickHandler: () => handleDeletion(memberId),
+          clickHandler: () => openConfirmationDialog(() => handleDeletion(memberId), DIALOG_KEYS.HOUSEHOLD_USER_DELETING),
         })
       }
     }

@@ -3,14 +3,13 @@ import PropTypes from 'prop-types'
 import { Check } from '@material-ui/icons'
 
 import {
-  InputRow, PaddedInputWrapper, BoolInputBox, BoolInputField,
-  InputLabel, BoolInputLabel,
+  InputRow, PaddedInputWrapper, BoolInputBox, BoolInputField, BoolInputMessage, BoolInputLabel,
 } from 'clientSrc/styles/blocks/form'
 
 import LocaleText from '../LocaleText'
 import { InputHintTooltip } from '../../portals'
 
-const BoolInput = ({ name, label, value, hint, hasDefaultValue, onUpdate }) => {
+const BoolInput = ({ name, label, value, hint, hasDefaultValue, alignLeft, isSmall, onUpdate }) => {
   const [inputActive, setInputActive] = useState(false)
   const [isOn, setIsOn] = useState(null)
 
@@ -20,14 +19,14 @@ const BoolInput = ({ name, label, value, hint, hasDefaultValue, onUpdate }) => {
   }, [name, value, hasDefaultValue, onUpdate])
 
   return (
-    <InputRow>
-      <InputLabel>
+    <InputRow fixedPadding={alignLeft} isSmall={isSmall}>
+      <BoolInputMessage isSmall={isSmall}>
         <LocaleText message={label} />
-      </InputLabel>
-      <PaddedInputWrapper active={inputActive}>
-        <BoolInputBox htmlFor={name}>
+      </BoolInputMessage>
+      <PaddedInputWrapper alignLeft={alignLeft} active={inputActive}>
+        <BoolInputBox htmlFor={name} isSmall={isSmall}>
           {hint && <InputHintTooltip text={hint} />}
-          <BoolInputLabel>
+          <BoolInputLabel isSmall={isSmall}>
             {(isOn !== null ? isOn : value) && <Check />}
           </BoolInputLabel>
           <BoolInputField
@@ -55,6 +54,8 @@ BoolInput.propTypes = {
   value: PropTypes.bool,
   hint: PropTypes.string,
   hasDefaultValue: PropTypes.bool,
+  alignLeft: PropTypes.bool,
+  isSmall: PropTypes.bool,
   onUpdate: PropTypes.func.isRequired,
 }
 

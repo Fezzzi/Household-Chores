@@ -18,6 +18,12 @@ export default {
   [AUTH.SIGN_UP]: 'Zaregistrovat se',
   [AUTH.TERMS_AGREEMENT]: 'Registrací potvrzujete naše ',
 
+  [COMMON.ARE_YOU_SURE]: 'Opravdu provést?',
+  [COMMON.CANT_UNDO]: 'Tuto akci nelze vzít zpět.',
+  [COMMON.CANT_UNDO_SAVING]: 'Po uložení již nepůjde vzít tuto akci zpět.',
+  [COMMON.CONFIRM]: 'Potvrdit',
+  [COMMON.CANCEL]: 'Zrušit',
+  [COMMON.DONT_ASK_AGAIN]: 'Neptat se znovu',
   [COMMON.HIDE]: 'Skrýt',
   [COMMON.ADD_MESSAGE]: 'Přidat zprávu',
   [COMMON.MESSAGE]: 'Zpráva',

@@ -2,7 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 
 import { API } from 'shared/constants'
-import { findProfileData, getActivityForUser } from 'serverSrc/database/models'
+import { findProfileData, getActivityForUser, getDialogSettings } from 'serverSrc/database/models'
 
 dotenv.config()
 
@@ -13,17 +13,26 @@ export default () => {
     switch (action) {
       case API.LOAD_STATE: {
         const userId = req.session && req.cookies.user_sid && req.session.user
-        res.status(200).send({
-          debug: process.env.DEBUG,
-          loggedUser: !!(userId),
-          user: userId && await findProfileData(userId),
-          activityFeed: userId && await getActivityForUser(userId),
-        })
-        return
+        if (userId) {
+          res.status(200).send({
+            debug: process.env.DEBUG,
+            loggedUser: true,
+            user: await findProfileData(userId),
+            activityFeed: await getActivityForUser(userId),
+            dialogSettings: await getDialogSettings(userId),
+          })
+        } else {
+          res.status(200).send({
+            debug: process.env.DEBUG,
+            loggedUser: false,
+          })
+        }
+        break
       }
       default:
         res.status(404).send('Not Found')
     }
+    return true
   })
 
   return router

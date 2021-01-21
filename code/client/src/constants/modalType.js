@@ -1,1 +1,2 @@
 export const PHOTO_EDITOR = 'PHOTO_EDITOR'
+export const CONFIRMATION = 'CONFIRMATION'
