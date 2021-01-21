@@ -12,15 +12,14 @@ export const ModalOverlay = styled.div`
 `
 
 export const ModalBody = styled.div`
-  background-color: ${COLORS.THEME_FRONT};
+  background-color: ${props => props.background ?? COLORS.THEME_FRONT};
   border: 1px solid ${COLORS.BORDER};
   width: ${props => props.width ?? 'max-content'};
   height: ${props => props.height ?? 'max-content'};
   display: flex;
   flex-flow: column;
-  margin: auto;
   position: relative;
-  margin: 75px auto;
+  margin: ${props => props.margin ?? '75px auto'};
   padding: 25px;
 `
 

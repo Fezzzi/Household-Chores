@@ -1,19 +1,28 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
+import { ModalActions, DialogActions } from 'clientSrc/actions'
 import {
   ModalBody, ModalButtonsBlock, ModalOverlay,
 } from 'clientSrc/styles/blocks/modals'
 import { LocaleText, PrimaryButton } from 'clientSrc/components/common'
 import { COLORS } from 'clientSrc/constants'
 import { COMMON } from 'shared/constants/localeMessages'
+import { DIALOG_KEYS } from 'shared/constants/settingsDataKeys'
 
 const TutorialModal = () => {
   const TUTORIAL_PAGES = 3
   const [page, setPage] = useState(1)
 
+  const dispatch = useDispatch()
+  const closeModal = useCallback(() => {
+    dispatch(DialogActions.disableDialog(DIALOG_KEYS.TUTORIAL))
+    dispatch(ModalActions.closeModal())
+  }, [dispatch])
+
   return (
     <ModalOverlay>
-      <ModalBody>
+      <ModalBody width="100%" height="fill-available" margin="0" background="rgba(0, 0, 0, 0.5)">
         TUTORIAL PAGE {page}
 
         <ModalButtonsBlock>
@@ -38,7 +47,7 @@ const TutorialModal = () => {
           )}
           {page === TUTORIAL_PAGES && (
             <PrimaryButton
-              onClick={() => setPage(prevState => prevState + 1)}
+              onClick={closeModal}
               background={COLORS.GREEN_PRIMARY}
               backgroundHover={COLORS.GREEN_PRIMARY}
             >

@@ -4,12 +4,13 @@ import PropTypes from 'prop-types'
 import { Save } from '@material-ui/icons'
 
 import { useFormState, useUpdateHandler } from 'clientSrc/helpers/form'
-import { DialogActions } from 'clientSrc/actions'
+import { DialogActions, ModalActions } from 'clientSrc/actions'
 import { NotificationGroupBox, SectionHeadline } from 'clientSrc/styles/blocks/settings'
 import { TableBox, TableHeaderBox, TableHeaderCell } from 'clientSrc/styles/blocks/table'
 import { INPUT_TYPE } from 'shared/constants'
 import { COMMON, FORM } from 'shared/constants/localeMessages'
 import { DIALOG_KEYS } from 'shared/constants/settingsDataKeys'
+import { MODAL_TYPE } from 'clientSrc/constants'
 
 import { LocaleText, Input, PrimaryButton } from '../../common'
 import { SimpleFloatingElement } from '../../portals'
@@ -29,6 +30,10 @@ const DialogsForm = ({ onSubmit }) => {
     onSubmit(inputs, setFormState)
     dispatch(DialogActions.loadDialogSettings(inputs))
   }, [inputs, setFormState, dispatch])
+
+  const openTutorialDialog = useCallback(() =>
+    dispatch(ModalActions.openModal({ type: MODAL_TYPE.TUTORIAL })),
+  [dispatch])
 
   return (
     <>
@@ -52,7 +57,7 @@ const DialogsForm = ({ onSubmit }) => {
             <LocaleText message={FORM.TUTORIAL_DIALOG} />
           </TableHeaderCell>
         </TableHeaderBox>
-        <PrimaryButton margin="14px 50px" inline>
+        <PrimaryButton onClick={openTutorialDialog} margin="14px 50px" inline>
           <LocaleText message={COMMON.SHOW} />
         </PrimaryButton>
       </TableBox>
