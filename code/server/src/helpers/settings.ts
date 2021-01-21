@@ -6,7 +6,7 @@ import {
   INPUT_TYPE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE,
   SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS, HOUSEHOLD_ROLE_TYPE,
 } from 'shared/constants'
-import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
+import { DIALOG_KEYS, HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
 import { ERROR, INFO } from 'shared/constants/localeMessages'
 import { isInputValid } from 'shared/helpers/validation'
 
@@ -116,6 +116,25 @@ export const validateNotificationData = (
     return false
   }
   return true
+}
+
+export const validateDialogsData = (
+  inputs: Record<string, string | number>,
+  req: any,
+  res: any
+): Record<string, number> | null => {
+  const inputKeys = Object.keys(inputs)
+  if (inputKeys.length === 0) {
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
+    return null
+  }
+
+  const allowedKeys = Object.values(DIALOG_KEYS)
+  if (!inputKeys.every(name => allowedKeys.includes(name))) {
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+    return null
+  }
+  return Object.fromEntries(inputKeys.map(name => [name, inputs[name] ? 0 : 1]))
 }
 
 export const validateEditHouseholdData = async (

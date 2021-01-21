@@ -1,6 +1,6 @@
 import { AUTH, COMMON, ERROR, FORM, HINT, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
 import {
-  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, HOUSEHOLD_TABS,
+  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, PROFILE_TABS, HOUSEHOLD_TABS,
 } from 'shared/constants'
 
 export default {
@@ -72,6 +72,9 @@ export default {
   [FORM.NEW_EMAIL]: 'New email',
   [FORM.NICKNAME]: 'Nickname',
   [FORM.NEW_NICKNAME]: 'New nickname',
+  [FORM.DIALOGS]: 'Dialogs',
+  [FORM.TUTORIAL_DIALOG]: 'Tutorial dialog',
+  [FORM.CONFIRMATION_DIALOGS]: 'Confirmation dialogs',
   [FORM.NOTIFICATIONS]: 'Notifications',
   [FORM.CONNECTIONS]: 'Connections',
   [FORM.HOUSEHOLDS]: 'Households',
@@ -115,6 +118,7 @@ export default {
   [FORM.HOUSEHOLD_LEAVING]: 'Member leaving household',
   [FORM[USER_VISIBILITY_TYPE.FOF]]: 'friends of friends',
   [FORM[USER_VISIBILITY_TYPE.ALL]]: 'all',
+  [FORM.HOUSEHOLD_USER_DELETING_DIALOG]: 'On household member deleting',
 
   [HINT.VISIBILITY]: 'Controls who will be able to find Your account and send connection request.',
 
@@ -140,8 +144,9 @@ export default {
   [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.PROFILE}`]]: 'Profile',
   [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.CONNECTIONS}`]]: 'Connections',
   [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.HOUSEHOLDS}`]]: 'Households',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.GENERAL}`]]: 'General',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.NOTIFICATIONS}`]]: 'Notifications',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.GENERAL}`]]: 'General',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.NOTIFICATIONS}`]]: 'Notifications',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.DIALOGS}`]]: 'Dialogs',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.MY_CONNECTIONS}`]]: 'My connections',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.PENDING}`]]: 'Requests',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.BLOCKED}`]]: 'Blocked',

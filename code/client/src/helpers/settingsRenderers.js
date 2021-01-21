@@ -1,15 +1,16 @@
 import React from 'react'
 
 import {
-  ConnectionRequestsForm, ConnectionSearchForm, HouseholdCreateForm, HouseholdModificationForm,
+  ConnectionRequestsForm, ConnectionSearchForm, HouseholdCreateForm, HouseholdModificationForm, DialogsForm,
   HouseholdInvitationListForm, ProfileForm, NotificationForm, ConnectionsListForm, ConnectionBlocksForm,
 } from 'clientSrc/components/forms'
-import { SETTING_CATEGORIES, SETTING_TABS, HOUSEHOLD_TABS, CONNECTION_STATE_TYPE } from 'shared/constants'
+import { SETTING_CATEGORIES, SETTING_TABS, PROFILE_TABS, HOUSEHOLD_TABS, CONNECTION_STATE_TYPE } from 'shared/constants'
 
 export const settingsRenderers = {
   [SETTING_CATEGORIES.PROFILE]: {
-    [SETTING_TABS.GENERAL]: (data, handleSubmit) => <ProfileForm data={data} onSubmit={handleSubmit} />,
-    [SETTING_TABS.NOTIFICATIONS]: (data, handleSubmit) => <NotificationForm data={data} onSubmit={handleSubmit} />,
+    [PROFILE_TABS.GENERAL]: (data, handleSubmit) => <ProfileForm data={data} onSubmit={handleSubmit} />,
+    [PROFILE_TABS.NOTIFICATIONS]: (data, handleSubmit) => <NotificationForm data={data} onSubmit={handleSubmit} />,
+    [PROFILE_TABS.DIALOGS]: (data, handleSubmit) => <DialogsForm data={data} onSubmit={handleSubmit} />,
   },
   [SETTING_CATEGORIES.CONNECTIONS]: {
     tabModifiers: data => tab => {

@@ -42,7 +42,7 @@ const SearchBar = ({ onSearch }) => {
         disabled={query.length === 0 || isSearching}
         inline
         onClick={handleClick}
-        margin="3px 5px 3px -10px"
+        margin="3px 20px"
       >
         <LocaleText message={submitMessage} />
       </PrimaryButton>

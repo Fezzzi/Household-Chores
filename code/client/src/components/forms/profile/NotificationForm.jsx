@@ -41,30 +41,28 @@ const NotificationForm = ({ data, onSubmit }) => {
   }, [general])
 
   const getNotificationsBlock = (group, groupHeadline) => (
-    <>
-      <TableBox>
-        {groupHeadline && (
-          <TableHeaderBox>
-            <TableHeaderCell>
-              <LocaleText message={groupHeadline} />
-            </TableHeaderCell>
-          </TableHeaderBox>
-        )}
-        <NotificationGroupBox>
-          {group && Object.entries(group).map(([name, value]) => (
-            <Input
-              key={name}
-              type={INPUT_TYPE.BOOL}
-              name={name}
-              label={`form.${name}`}
-              value={Boolean(value)}
-              hasDefaultValue
-              onUpdate={useUpdateHandler(setFormState)}
-            />
-          ))}
-        </NotificationGroupBox>
-      </TableBox>
-    </>
+    <TableBox>
+      {groupHeadline && (
+        <TableHeaderBox>
+          <TableHeaderCell>
+            <LocaleText message={groupHeadline} />
+          </TableHeaderCell>
+        </TableHeaderBox>
+      )}
+      <NotificationGroupBox>
+        {group && Object.entries(group).map(([name, value]) => (
+          <Input
+            key={name}
+            type={INPUT_TYPE.BOOL}
+            name={name}
+            label={`form.${name}`}
+            value={Boolean(value)}
+            hasDefaultValue
+            onUpdate={useUpdateHandler(setFormState)}
+          />
+        ))}
+      </NotificationGroupBox>
+    </TableBox>
   )
 
   return (

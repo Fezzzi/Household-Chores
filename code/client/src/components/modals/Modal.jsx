@@ -6,6 +6,7 @@ import { MODAL_TYPE } from 'clientSrc/constants'
 
 import EditPhotoModal from './EditPhotoModal'
 import ConfirmationModal from './ConfirmationModal'
+import TutorialModal from './TutorialModal'
 
 const Modal = () => {
   const { type, data } = useSelector(({ modal }) => modal, deepEqual)
@@ -15,6 +16,8 @@ const Modal = () => {
       return <EditPhotoModal data={data} />
     case MODAL_TYPE.CONFIRMATION:
       return <ConfirmationModal data={data} />
+    case MODAL_TYPE.TUTORIAL:
+      return <TutorialModal />
     default:
       return ''
   }

@@ -346,7 +346,7 @@ export const SwitchInputValue = styled.span`
 export const FormButtonWrapper = styled.div`
   margin: ${props => props.margin};
   display: ${props => props.inline ? 'inline-block' : 'block'};
-  padding: ${props => props.inline ? '0 25px' : ''};
+
   min-width: 100px;
   align-content: stretch;
 `
