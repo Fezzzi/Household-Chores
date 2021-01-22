@@ -8,8 +8,8 @@ import {
 import { HouseholdActions, SettingsActions } from 'clientSrc/actions'
 
 function* approveInvitationSaga({ payload }) {
-  yield call(generalSaga, invitationApprove, payload, function* (data) {
-    yield put(SettingsActions.settingsDataUpdated(data))
+  yield call(generalSaga, invitationApprove, payload, function* ({ url }) {
+    yield put(push(url))
   })
 }
 

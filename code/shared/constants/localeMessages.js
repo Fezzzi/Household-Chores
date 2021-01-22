@@ -118,6 +118,7 @@ export const FORM = {
   BLOCKED_CONNECTIONS: 'form.blockedConnections',
   HOUSEHOLD_INVITATIONS: 'form.householdInvitations',
   MUTUAL_FRIENDS: 'form.mutualFriends',
+  SET_ALIAS: 'form.setAlias',
 
   EMAIL_NOTIFICATIONS: 'form.email_notifications',
   BROWSER_NOTIFICATIONS: 'form.browser_notifications',
@@ -155,7 +156,6 @@ export const HOUSEHOLD = {
   CANCEL_REMOVE_USER: 'household.cancelRemoveUser',
   INVITATIONS: 'household.invitations',
   INVITE_USERS: 'household.inviteUser',
-  INVITE: 'household.invite',
   SINCE: 'household.since',
   MODULES: 'household.modules',
   ADD_MODULES: 'household.addModule',

@@ -133,3 +133,7 @@ export const ModalPhotoSlider = styled.input`
 export const PhotoSizeValue = styled.span`
   color: ${props => props.isOk ? COLORS.GREEN_PRIMARY : COLORS.RED_PRIMARY}
 `
+
+export const InvitationAcceptModalFields = styled.div`
+  width: 220px;
+`

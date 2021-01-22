@@ -64,11 +64,7 @@ const ConfirmationModal = ({ data: { message, onSubmit, disableableKey } }) => {
           </ModalNote>
         )}
         <ModalButtonsBlock>
-          <PrimaryButton
-            onClick={handleConfirm}
-            background={COLORS.BLUE_PRIMARY}
-            backgroundHover={COLORS.BLUE_SECONDARY}
-          >
+          <PrimaryButton onClick={handleConfirm}>
             <LocaleText message={COMMON.CONFIRM} />
           </PrimaryButton>
           <PrimaryButton

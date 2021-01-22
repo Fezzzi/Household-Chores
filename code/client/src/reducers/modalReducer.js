@@ -2,14 +2,20 @@ import { createReducer } from '@reduxjs/toolkit'
 
 import { ModalActions } from 'clientSrc/actions'
 
-const initialState = {
-  type: null,
-  data: null,
+/**
+ * @type {[{ type: string, data: any }]}
+ */
+const initialState = []
+
+const openModal = (state, { payload }) => {
+  state.push(payload)
+  return state
 }
 
-const openModal = (_, { payload }) => payload
-
-const closeModal = () => initialState
+const closeModal = state => {
+  state.pop()
+  return state
+}
 
 export default createReducer(initialState, {
   [ModalActions.openModal.toString()]: openModal,

@@ -18,6 +18,7 @@ export const FormHeader = styled.div`
 
 export const FormHeaderPhoto = styled.img`
   object-fit: cover;
+  margin: auto;
   width: 150px;
   height: 150px;
   display: flex;
