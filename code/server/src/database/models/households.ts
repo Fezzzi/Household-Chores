@@ -1,6 +1,6 @@
 import { database } from 'serverSrc/database'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
-import { HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS } from 'shared/constants/settingsDataKeys'
+import { HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS } from 'shared/constants/mappingKeys'
 
 import {
   tHouseholdsName, tHouseholdsCols, tHouseInvName, tHouseInvCols,

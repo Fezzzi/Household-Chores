@@ -8,7 +8,7 @@ import {
 } from 'serverSrc/database/models'
 import { SETTING_CATEGORIES, PROFILE_TABS, HOUSEHOLD_TABS, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
+import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/mappingKeys'
 
 const getTabData = async (category: string, tab: string, req: any) => {
   switch (category) {

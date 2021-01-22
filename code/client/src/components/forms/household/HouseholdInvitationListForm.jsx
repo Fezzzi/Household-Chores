@@ -10,7 +10,7 @@ import { TableBigPhoto, TableRowIcon } from 'clientSrc/styles/blocks/table'
 import { getTimeString } from 'clientSrc/helpers/connections'
 import { FORM } from 'shared/constants/localeMessages'
 import { COLORS } from 'clientSrc/constants'
-import { HOUSEHOLD_KEYS, INVITATION_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
+import { HOUSEHOLD_KEYS, INVITATION_KEYS, PROFILE } from 'shared/constants/mappingKeys'
 
 import { LocaleText, PrimaryButton, Table } from '../../common'
 import { InfoTooltip } from '../../portals'

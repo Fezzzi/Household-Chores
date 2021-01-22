@@ -8,7 +8,7 @@ import {
 import { TableBox, TableHeaderBox, TableHeaderCell, TableSingleRowBox, TableSorterIcon } from 'clientSrc/styles/blocks/table'
 import { useTableLogic } from 'clientSrc/helpers/table'
 import { COMMON } from 'shared/constants/localeMessages'
-import { CONNECTION_KEYS } from 'shared/constants/settingsDataKeys'
+import { CONNECTION_KEYS } from 'shared/constants/mappingKeys'
 
 import { MiniTextInput } from '../../common'
 

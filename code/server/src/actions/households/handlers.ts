@@ -2,7 +2,7 @@ import { HOUSEHOLD_DIR, uploadFiles } from 'serverSrc/helpers/files.'
 import { validateField } from 'serverSrc/helpers/settings'
 import { addHouseholdInvitations, createHousehold, findApprovedConnections } from 'serverSrc/database/models'
 import { NOTIFICATION_TYPE, INPUT_TYPE, API, SETTING_CATEGORIES } from 'shared/constants'
-import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys'
+import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 import { ERROR } from 'shared/constants/localeMessages'
 
 const validateCreateData = async (

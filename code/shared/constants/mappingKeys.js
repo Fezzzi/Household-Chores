@@ -69,5 +69,5 @@ export const CONNECTION_KEYS = {
 
 export const DIALOG_KEYS = {
   TUTORIAL: 'tutorial',
-  HOUSEHOLD_USER_DELETING: 'household-user-deleting',
+  HOUSEHOLD_MEMBER_DELETING: 'household-member-deleting',
 }

@@ -9,7 +9,7 @@ import { useInvitationListProps } from 'clientSrc/helpers/household'
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { HouseholdActions } from 'clientSrc/actions'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
-import { CONNECTION_KEYS, HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
+import { CONNECTION_KEYS, HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/mappingKeys'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 
 import HouseholdFormHeader from './HouseholdFormHeader'

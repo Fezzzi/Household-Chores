@@ -7,7 +7,7 @@ import { NotificationGroupBox, SectionHeadline } from 'clientSrc/styles/blocks/s
 import { TableBox, TableHeaderBox, TableHeaderCell } from 'clientSrc/styles/blocks/table'
 import { INPUT_TYPE } from 'shared/constants'
 import { FORM } from 'shared/constants/localeMessages'
-import { NOTIFICATIONS } from 'shared/constants/settingsDataKeys'
+import { NOTIFICATIONS } from 'shared/constants/mappingKeys'
 
 import { LocaleText, Input } from '../../common'
 import { SimpleFloatingElement } from '../../portals'

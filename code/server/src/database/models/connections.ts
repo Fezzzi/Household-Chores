@@ -1,5 +1,5 @@
 import { CONNECTION_STATE_TYPE } from 'shared/constants'
-import { CONNECTION_KEYS } from 'shared/constants/settingsDataKeys'
+import { CONNECTION_KEYS } from 'shared/constants/mappingKeys'
 
 import { database } from '..'
 import { tConnectionsName, tConnectionsCols, tUsersName, tUsersCols } from './tables'

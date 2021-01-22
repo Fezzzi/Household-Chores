@@ -1,9 +1,9 @@
 import { tDialogsCols } from 'serverSrc/database/models/tables'
-import { DIALOG_KEYS } from 'shared/constants/settingsDataKeys'
+import { DIALOG_KEYS } from 'shared/constants/mappingKeys'
 
 const dialogKeyMapping = {
   [DIALOG_KEYS.TUTORIAL]: tDialogsCols.tutorial,
-  [DIALOG_KEYS.HOUSEHOLD_USER_DELETING]: tDialogsCols.household_user_deleting,
+  [DIALOG_KEYS.HOUSEHOLD_MEMBER_DELETING]: tDialogsCols.household_user_deleting,
 }
 const dialogDbMapping = Object.fromEntries(Object.entries(dialogKeyMapping).map(([name, value]) => [value, name]))
 

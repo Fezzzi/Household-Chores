@@ -6,7 +6,7 @@ import {
 } from 'serverSrc/database/models'
 import { API, NOTIFICATION_TYPE, HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { INVITATION_KEYS, HOUSEHOLD_KEYS, HOUSEHOLD_GROUP_KEYS } from 'shared/constants/settingsDataKeys'
+import { INVITATION_KEYS, HOUSEHOLD_KEYS, HOUSEHOLD_GROUP_KEYS } from 'shared/constants/mappingKeys'
 
 import { handleCreateHousehold } from './handlers'
 

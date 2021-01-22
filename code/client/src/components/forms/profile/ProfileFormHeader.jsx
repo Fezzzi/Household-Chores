@@ -10,7 +10,7 @@ import {
 } from 'clientSrc/styles/blocks/settings'
 import { INPUT_TYPE } from 'shared/constants'
 import { FORM } from 'shared/constants/localeMessages'
-import { PROFILE } from 'shared/constants/settingsDataKeys'
+import { PROFILE } from 'shared/constants/mappingKeys'
 
 import {
   LocaleText, Input, LocaleSwitch, ThemeSwitch, EditableField, EditablePhotoField, EditableTextField,

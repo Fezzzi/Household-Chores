@@ -6,7 +6,7 @@ import {
   INPUT_TYPE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE,
   SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS, HOUSEHOLD_ROLE_TYPE,
 } from 'shared/constants'
-import { DIALOG_KEYS, HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
+import { DIALOG_KEYS, HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/mappingKeys'
 import { ERROR, INFO } from 'shared/constants/localeMessages'
 import { isInputValid } from 'shared/helpers/validation'
 

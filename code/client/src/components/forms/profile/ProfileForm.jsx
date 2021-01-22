@@ -4,12 +4,13 @@ import { Save } from '@material-ui/icons'
 import PropTypes from 'prop-types'
 
 import { useFormState, useUpdateHandler } from 'clientSrc/helpers/form'
+import { useOpenConfirmationDialog } from 'clientSrc/helpers/confirmations'
 import { FormWrapper, BottomFormButton, FormBody } from 'clientSrc/styles/blocks/settings'
 import { INPUT_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
 import { COLORS, SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { SettingsActions } from 'clientSrc/actions'
-import { FORM, HINT } from 'shared/constants/localeMessages'
-import { PROFILE } from 'shared/constants/settingsDataKeys'
+import { COMMON, FORM, HINT } from 'shared/constants/localeMessages'
+import { PROFILE } from 'shared/constants/mappingKeys'
 
 import { SimpleFloatingElement } from '../../portals'
 import ProfileFormHeader from './ProfileFormHeader'
@@ -54,6 +55,8 @@ const ProfileForm = ({ data, onSubmit }) => {
     dispatch(SettingsActions.deleteAccount())
   }, [setFormState, dispatch])
 
+  const openConfirmationDialog = useOpenConfirmationDialog()
+
   return (
     <FormWrapper>
       {Object.keys(inputs).length > 0 && (
@@ -91,7 +94,7 @@ const ProfileForm = ({ data, onSubmit }) => {
       <BottomFormButton>
         <PrimaryButton
           disabled={isFormSending}
-          onClick={handleAccountDeletion}
+          onClick={() => openConfirmationDialog(handleAccountDeletion, null, COMMON.CANT_UNDO)}
           background={COLORS.RED_PRIMARY}
           backgroundHover={COLORS.RED_SECONDARY}
         >

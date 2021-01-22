@@ -9,7 +9,7 @@ import { RoleLabel, UserLabel } from 'clientSrc/styles/blocks/households'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import { formatDate } from 'shared/helpers/date'
-import { DIALOG_KEYS } from 'shared/constants/settingsDataKeys'
+import { DIALOG_KEYS } from 'shared/constants/mappingKeys'
 import { useOpenConfirmationDialog } from 'clientSrc/helpers/confirmations'
 
 export const useMemberListProps = (
@@ -65,7 +65,7 @@ export const useMemberListProps = (
       if (deletable) {
         moreOptions.push({
           content: HOUSEHOLD.REMOVE_USER,
-          clickHandler: () => openConfirmationDialog(() => handleDeletion(memberId), DIALOG_KEYS.HOUSEHOLD_USER_DELETING),
+          clickHandler: () => openConfirmationDialog(() => handleDeletion(memberId), DIALOG_KEYS.HOUSEHOLD_MEMBER_DELETING),
         })
       }
     }

@@ -13,7 +13,7 @@ import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { formatDate } from 'shared/helpers/date'
 import {
   CONNECTION_KEYS, HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS, PROFILE,
-} from 'shared/constants/settingsDataKeys'
+} from 'shared/constants/mappingKeys'
 
 import HouseholdFormHeader from './HouseholdFormHeader'
 import HouseholdInvitationForm from './HouseholdInvitationForm'

@@ -8,7 +8,7 @@ import {
 import { LocaleText, PrimaryButton } from 'clientSrc/components/common'
 import { COLORS } from 'clientSrc/constants'
 import { COMMON } from 'shared/constants/localeMessages'
-import { DIALOG_KEYS } from 'shared/constants/settingsDataKeys'
+import { DIALOG_KEYS } from 'shared/constants/mappingKeys'
 
 const TutorialModal = () => {
   const TUTORIAL_PAGES = 3

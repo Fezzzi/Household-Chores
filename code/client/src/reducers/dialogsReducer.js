@@ -1,11 +1,11 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import { DialogActions } from 'clientSrc/actions'
-import { DIALOG_KEYS } from 'shared/constants/settingsDataKeys'
+import { DIALOG_KEYS } from 'shared/constants/mappingKeys'
 
 const initialState = {
   [DIALOG_KEYS.TUTORIAL]: false,
-  [DIALOG_KEYS.HOUSEHOLD_USER_DELETING]: false,
+  [DIALOG_KEYS.HOUSEHOLD_MEMBER_DELETING]: false,
 }
 
 const loadDialogSettings = (state, { payload: settings }) => ({
