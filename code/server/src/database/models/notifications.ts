@@ -1,5 +1,5 @@
 import { database } from 'serverSrc/database'
-import { NOTIFICATIONS } from 'shared/constants/settingsDataKeys'
+import { NOTIFICATIONS } from 'shared/constants/mappingKeys'
 
 import { tNotifySettingsName, tNotifySettingsCols } from './tables'
 

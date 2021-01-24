@@ -1,29 +1,24 @@
 import {
-  getTabList, validateNotificationData, validateProfileData, validateEditHouseholdData,
+  getTabList, validateNotificationData, validateProfileData, validateEditHouseholdData, validateDialogsData,
 } from 'serverSrc/helpers/settings'
 import { HOUSEHOLD_DIR, PROFILE_DIR, uploadFiles } from 'serverSrc/helpers/files.'
 import {
-  findProfileData,
-  updateUserData,
-  findApprovedConnections,
-  findConnections,
-  findUserHouseholds,
-  findUserInvitations,
-  findNotificationSettings,
-  updateNotificationSettings,
-  editHousehold,
+  findProfileData, updateUserData, findApprovedConnections, findConnections, findUserHouseholds,
+  findUserInvitations, findNotificationSettings, updateNotificationSettings, editHousehold, updateDialogSettings,
 } from 'serverSrc/database/models'
-import { SETTING_CATEGORIES, SETTING_TABS, HOUSEHOLD_TABS, NOTIFICATION_TYPE } from 'shared/constants'
+import { SETTING_CATEGORIES, PROFILE_TABS, HOUSEHOLD_TABS, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
+import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/mappingKeys'
 
 const getTabData = async (category: string, tab: string, req: any) => {
   switch (category) {
     case SETTING_CATEGORIES.PROFILE:
-      if (tab === SETTING_TABS.NOTIFICATIONS) {
+      if (tab === PROFILE_TABS.NOTIFICATIONS) {
         return findNotificationSettings(req.session.user)
+      } else if (tab === PROFILE_TABS.GENERAL) {
+        return findProfileData(req.session.user)
       }
-      return findProfileData(req.session.user)
+      return {}
     case SETTING_CATEGORIES.HOUSEHOLDS:
       return {
         invitations: await findUserInvitations(req.session.user),
@@ -52,31 +47,53 @@ export const handleSettingsDataFetch = async (category: string, tab: string, req
   })
 }
 
+const handleUpdate = (res: any, updated: boolean): boolean => {
+  if (!updated) {
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+    return true
+  }
+  return false
+}
+
 export const handleSettingsDataUpdate = async (
   category: string, tab: string, inputs: Record<string, string | number>, req: any, res: any
 ): Promise<boolean> => {
   switch (category) {
     case SETTING_CATEGORIES.PROFILE:
-      if (tab === SETTING_TABS.GENERAL) {
-        const valid = await validateProfileData(inputs, req, res)
-        if (!valid) {
+      switch (tab) {
+        case PROFILE_TABS.GENERAL: {
+          const valid = await validateProfileData(inputs, req, res)
+          if (!valid) {
+            return true
+          }
+          if (!inputs[PROFILE.PHOTO]) {
+            return handleUpdate(res, await updateUserData(inputs, req.session.user))
+          }
+          const [photo] = uploadFiles([inputs[PROFILE.PHOTO] as any], PROFILE_DIR, req.session.fsKey)
+          if (photo === null) {
+            res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
+            return true
+          }
+          return handleUpdate(res, await updateUserData({ ...inputs, [PROFILE.PHOTO]: photo }, req.session.user))
+        }
+        case PROFILE_TABS.NOTIFICATIONS: {
+          const valid = validateNotificationData(inputs, req, res)
+          if (!valid) {
+            return true
+          }
+          return handleUpdate(res, await updateNotificationSettings(inputs, req.session.user))
+        }
+        case PROFILE_TABS.DIALOGS: {
+          const validData = validateDialogsData(inputs, req, res)
+          if (!validData) {
+            return true
+          }
+          const updated = handleUpdate(res, await updateDialogSettings(req.session.user, validData))
+          if (!updated) {
+            res.status(200).send({})
+          }
           return true
         }
-        if (!inputs[PROFILE.PHOTO]) {
-          return updateUserData(inputs, req.session.user)
-        }
-        const [photo] = uploadFiles([inputs[PROFILE.PHOTO] as any], PROFILE_DIR, req.session.fsKey)
-        if (photo === null) {
-          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
-          return true
-        }
-        return updateUserData({ ...inputs, [PROFILE.PHOTO]: photo }, req.session.user)
-      } else if (SETTING_TABS.NOTIFICATIONS) {
-        const valid = validateNotificationData(inputs, req, res)
-        if (!valid) {
-          return true
-        }
-        return updateNotificationSettings(inputs, req.session.user)
       }
       break
     case SETTING_CATEGORIES.HOUSEHOLDS:
@@ -100,7 +117,7 @@ export const handleSettingsDataUpdate = async (
           return true
         }
 
-        return !(await editHousehold(
+        return handleUpdate(res, !!await editHousehold(
           inputs[HOUSEHOLD_KEYS.ID] as number,
           {
             ...inputs,

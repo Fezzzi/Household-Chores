@@ -10,10 +10,11 @@ import { FormBody, FormWrapper, SectionHeadline } from 'clientSrc/styles/blocks/
 import { TableBigPhoto } from 'clientSrc/styles/blocks/table'
 import { getTimeString, getButtonForUser } from 'clientSrc/helpers/connections'
 import { FORM } from 'shared/constants/localeMessages'
-import { CONNECTION_KEYS } from 'shared/constants/settingsDataKeys'
+import { CONNECTION_KEYS } from 'shared/constants/mappingKeys'
+import { PORTAL_TYPE } from 'clientSrc/constants'
 
 import { LocaleText, Table } from '../../common'
-import { InfoTooltip } from '../../portals'
+import { MessageTooltip } from '../../portals'
 
 const ConnectionRequestsForm = ({ data }) => {
   const dispatch = useDispatch()
@@ -53,11 +54,13 @@ const ConnectionRequestsForm = ({ data }) => {
               userMutualConnections: <>({userMutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
               userMessage: userMessage && (
                 <AppendMessageAnchor>
-                  <InfoTooltip
+                  <MessageTooltip
                     icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
                     text={userMessage}
-                    customHeight={24}
                     customOffsetY={-5}
+                    customOffsetX={-10}
+                    scrollRoot="settingsWrapper"
+                    type={PORTAL_TYPE.SETTINGS_TOOLTIPS}
                   />
                 </AppendMessageAnchor>
               ),

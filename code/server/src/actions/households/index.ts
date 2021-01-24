@@ -1,14 +1,14 @@
 import express from 'express'
 
 import {
-  approveInvitation, deleteHousehold, deleteInvitation, findHouseholdAdmins, findUserHouseholds,
+  deleteHousehold, deleteInvitation, findHouseholdAdmins, findUserHouseholds,
   findUserInvitations, getUserRole, leaveHousehold,
 } from 'serverSrc/database/models'
 import { API, NOTIFICATION_TYPE, HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { INVITATION_KEYS, HOUSEHOLD_KEYS, HOUSEHOLD_GROUP_KEYS } from 'shared/constants/settingsDataKeys'
+import { INVITATION_KEYS, HOUSEHOLD_KEYS, HOUSEHOLD_GROUP_KEYS } from 'shared/constants/mappingKeys'
 
-import { handleCreateHousehold } from './handlers'
+import { handleApproveHouseholdInvitation, handleCreateHousehold } from './handlers'
 
 export default () => {
   const router = express.Router()
@@ -52,16 +52,7 @@ export default () => {
           [HOUSEHOLD_KEYS.USER_NAME]: name,
           [HOUSEHOLD_KEYS.USER_PHOTO]: photo,
         } = body
-        const success = await approveInvitation(userId, fromId, householdId, name, photo)
-        if (success) {
-          res.status(200).send({
-            invitations: await findUserInvitations(userId),
-            households: await findUserHouseholds(userId),
-          })
-        } else {
-          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
-        }
-        return true
+        return handleApproveHouseholdInvitation(fromId, householdId, name, photo, userId, req, res)
       }
       case API.INVITATION_IGNORE: {
         const { [INVITATION_KEYS.FROM_ID]: fromId, [INVITATION_KEYS.HOUSEHOLD_ID]: householdId } = body

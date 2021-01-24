@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { CalendarToday, ChevronRight, Message, SortByAlpha } from '@material-ui/icons'
 
-import { HouseholdActions } from 'clientSrc/actions'
+import { HouseholdActions, ModalActions } from 'clientSrc/actions'
 import { AppendMessageAnchor, AppendMessageIcon } from 'clientSrc/styles/blocks/users'
 import { FormBody, FormWrapper, SectionHeadline } from 'clientSrc/styles/blocks/settings'
 import { TableBigPhoto, TableRowIcon } from 'clientSrc/styles/blocks/table'
 import { getTimeString } from 'clientSrc/helpers/connections'
 import { FORM } from 'shared/constants/localeMessages'
-import { COLORS } from 'clientSrc/constants'
-import { HOUSEHOLD_KEYS, INVITATION_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
+import { COLORS, MODAL_TYPE } from 'clientSrc/constants'
+import { HOUSEHOLD_KEYS, INVITATION_KEYS, PROFILE } from 'shared/constants/mappingKeys'
 
 import { LocaleText, PrimaryButton, Table } from '../../common'
 import { InfoTooltip } from '../../portals'
@@ -23,12 +23,18 @@ const HouseholdInvitationListForm = ({ invitations }) => {
 
   const dispatch = useDispatch()
   const approveHandler = useCallback((householdId, fromId) =>
-    // todo: Add photo and name modification modal dialog
-    dispatch(HouseholdActions.approveInvitation({
-      [INVITATION_KEYS.HOUSEHOLD_ID]: householdId,
-      [INVITATION_KEYS.FROM_ID]: fromId,
-      [HOUSEHOLD_KEYS.USER_NAME]: name,
-      [HOUSEHOLD_KEYS.USER_PHOTO]: photo,
+    dispatch(ModalActions.openModal({
+      type: MODAL_TYPE.INVITATION_ACCEPT,
+      data: {
+        userName: name,
+        userPhoto: photo,
+        onSubmit: (nameAlis, photoAlias) => dispatch(HouseholdActions.approveInvitation({
+          [INVITATION_KEYS.HOUSEHOLD_ID]: householdId,
+          [INVITATION_KEYS.FROM_ID]: fromId,
+          [HOUSEHOLD_KEYS.USER_NAME]: nameAlis ?? name,
+          [HOUSEHOLD_KEYS.USER_PHOTO]: photoAlias ?? photo,
+        })),
+      },
     })),
   [name, photo, dispatch])
 

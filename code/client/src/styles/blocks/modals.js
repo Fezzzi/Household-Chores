@@ -12,15 +12,15 @@ export const ModalOverlay = styled.div`
 `
 
 export const ModalBody = styled.div`
-  background-color: ${COLORS.THEME_FRONT};
+  background-color: ${props => props.background ?? COLORS.THEME_FRONT};
   border: 1px solid ${COLORS.BORDER};
   width: ${props => props.width ?? 'max-content'};
   height: ${props => props.height ?? 'max-content'};
+  max-height: ${props => props.height ?? 'calc(100% - 150px)'};
   display: flex;
   flex-flow: column;
-  margin: auto;
   position: relative;
-  margin: 50px auto;
+  margin: ${props => props.margin ?? '75px auto auto'};
   padding: 25px;
 `
 
@@ -45,18 +45,29 @@ export const ModalCloseButton = styled.div`
 
 export const ModalButtonsBlock = styled.div`
   width: 100%;
-  padding-top: 15px;
   display: flex;
   flex-flow: row;
   align-items: center;
   justify-content: center;
 `
 
-export const ModalNote = styled.p`
+export const ModalHeadline = styled.h2`
+  text-align: center;
+  margin-bottom: 20px;
+`
+
+export const ModalMessage = styled.h3`
+  text-align: center;
+  margin: 0 0 25px;
+`
+
+export const ModalNote = styled.div`
   text-align: center;
   font-size: 0.9em;
-  margin: 0;
+  margin: 0 auto;
+  opacity: 0.6;
   user-select: none;
+  width: fit-content;
 `
 
 export const ModalPhotoControls = styled.div`
@@ -122,4 +133,8 @@ export const ModalPhotoSlider = styled.input`
 
 export const PhotoSizeValue = styled.span`
   color: ${props => props.isOk ? COLORS.GREEN_PRIMARY : COLORS.RED_PRIMARY}
+`
+
+export const InvitationAcceptModalFields = styled.div`
+  width: 220px;
 `

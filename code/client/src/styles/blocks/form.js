@@ -18,6 +18,7 @@ export const FormHeader = styled.div`
 
 export const FormHeaderPhoto = styled.img`
   object-fit: cover;
+  margin: auto;
   width: 150px;
   height: 150px;
   display: flex;
@@ -52,7 +53,7 @@ export const FormHeaderRightPanel = styled.div`
 export const InputRow = styled.div`
   margin: 0 ${props => props.fixedPadding ? '42px' : 'auto'} 6px;
   position: relative;
-  min-height: 38px;
+  min-height: ${props => props.isSmall ? 22 : 38}px;
 `
 
 export const InputWrapper = styled.div`
@@ -116,6 +117,63 @@ export const TextInputField = styled.input`
   }
 `
 
+export const TextAreaRow = styled.div`
+  display: flex;
+  margin: 0 auto 6px;
+  position: relative;
+  min-height: 38px;
+`
+
+export const TextAreaBox = styled.label`
+  height: fit-content;
+  padding: 0;
+  position: relative;
+  margin: 0;
+  min-width: 0;
+  font-weight: 400;
+  flex: 1 0 0;
+  display: flex;
+`
+
+export const TextAreaValue = styled.span`
+  color: ${COLORS.GREY_PRIMARY};
+  font-size: 12px;
+  height: 36px;
+  left: 8px;
+  line-height: 36px;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  transform-origin: left;
+  right: 0;
+  user-select: none;
+  transition: transform ease-out .1s, -webkit-transform ease-out .1s;
+  
+  ${props => props.shrunken && { transform: 'scale(.83333) translateY(-11px)' }}
+`
+
+export const TextAreaField = styled.textarea`
+  background: ${COLORS.THEME_BACK};
+  color: ${COLORS.FONT};
+  padding: ${props => props.shrunken && !props.miniInput ? '16px 8px 2px' : '11px 8px 7px'};
+  margin: 0;
+  border: 0;
+  width: 100%;
+  min-width: 150px;
+  max-height: -webkit-fill-available;
+  
+  &:active, &:focus {
+    outline: 0;
+  }
+`
+
+export const TextAreaErrorWrapper = styled.div`
+  position: absolute;
+  top: -12px;
+  right: -11px;
+  z-index: 10;
+`
+
 export const InputSiderWrapper = styled.div`
   align-items: center;
   height: 100%;
@@ -164,12 +222,13 @@ export const PaddedInputWrapper = styled.div`
   border-radius: 1px;  
   box-sizing: border-box;
   display: inline-block;
-  float: right;
+  float: ${props => props.alignLeft ? 'left' : 'right'};
+  margin: ${props => props.alignLeft ? '0 15px 0 0' : '0 0 0 15px'};
 `
 
 export const BoolInputBox = styled.label`
-  height: 36px;
-  width: 36px;
+  height: ${props => props.isSmall ? 20 : 36}px;
+  width: ${props => props.isSmall ? 20 : 36}px;
   padding: 0;
   position: relative;
   margin: 0;
@@ -185,17 +244,23 @@ export const BoolInputBox = styled.label`
   }
 `
 
+export const BoolInputMessage = styled.span`
+  font-weight: 500;
+  display: inline-block;
+  line-height: ${props => props.isSmall ? 21 : 34}px;
+  font-size: ${props => props.isSmall ? 1 : 1.2}em;
+`
+
 export const BoolInputLabel = styled.span`
   position: absolute;
-  width: 100%;
+  padding: ${props => props.isSmall ? '0 2px' : '0 4px'};
+  width: fill-available;
   height: 100%;
   user-select: none;
   
   & svg {
     height: 100%;
-    width: 26px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
     display: block;
   }
 `
@@ -339,7 +404,7 @@ export const SwitchInputValue = styled.span`
 export const FormButtonWrapper = styled.div`
   margin: ${props => props.margin};
   display: ${props => props.inline ? 'inline-block' : 'block'};
-  padding: ${props => props.inline ? '0 25px' : ''};
+
   min-width: 100px;
   align-content: stretch;
 `

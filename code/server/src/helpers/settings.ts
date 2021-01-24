@@ -4,9 +4,9 @@ import {
 import { tHouseholdsCols, tNotifySettingsCols } from 'serverSrc/database/models/tables'
 import {
   INPUT_TYPE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE,
-  SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS, HOUSEHOLD_ROLE_TYPE,
+  SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS, HOUSEHOLD_ROLE_TYPE, INVITATION_MESSAGE_LENGTH,
 } from 'shared/constants'
-import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/settingsDataKeys'
+import { DIALOG_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, PROFILE } from 'shared/constants/mappingKeys'
 import { ERROR, INFO } from 'shared/constants/localeMessages'
 import { isInputValid } from 'shared/helpers/validation'
 
@@ -118,6 +118,25 @@ export const validateNotificationData = (
   return true
 }
 
+export const validateDialogsData = (
+  inputs: Record<string, string | number>,
+  req: any,
+  res: any
+): Record<string, number> | null => {
+  const inputKeys = Object.keys(inputs)
+  if (inputKeys.length === 0) {
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
+    return null
+  }
+
+  const allowedKeys = Object.values(DIALOG_KEYS)
+  if (!inputKeys.every(name => allowedKeys.includes(name))) {
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+    return null
+  }
+  return Object.fromEntries(inputKeys.map(name => [name, inputs[name] ? 0 : 1]))
+}
+
 export const validateEditHouseholdData = async (
   inputs: Record<string, any>,
   userId: number,
@@ -174,11 +193,17 @@ export const validateEditHouseholdData = async (
   }
 
   if (newInvitations?.length > 0) {
+    const invitations = newInvitations as Array<Record<string, string | number>>
     const connections = await findApprovedConnections(userId)
     const connectionIds = connections.map(({ id }) => id)
-    const valid = newInvitations.every((id: number) => connectionIds.indexOf(id) !== -1)
+    const valid = invitations.every(({ id }) => connectionIds.indexOf(id) !== -1)
     if (!valid) {
       res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+      return false
+    }
+    const validMessages = invitations.every(({ [INVITATION_KEYS.MESSAGE]: message }) => !message
+      || validateField(res, message, INPUT_TYPE.TEXT_AREA, { max: INVITATION_MESSAGE_LENGTH }))
+    if (!validMessages) {
       return false
     }
   }

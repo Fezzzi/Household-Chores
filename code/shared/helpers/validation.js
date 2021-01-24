@@ -39,6 +39,16 @@ export const isInputValid = (type, value, constraints) => {
       return isEmailValid(value)
     case INPUT_TYPE.PHOTO:
       return isImageValid(value, constraints)
+    case INPUT_TYPE.TEXT_AREA:
+      if (constraints?.max == null) {
+        throw new Error('Missing validation constraint for max length')
+      }
+      return {
+        valid: value.length >= (constraints.min ?? 0) && value.length <= constraints.max,
+        message: (constraints.min && value.length < constraints.min && ERROR.VALUE_TOO_SHORT)
+          || (value.length > constraints.max && ERROR.VALUE_TOO_LONG)
+          || '',
+      }
     case INPUT_TYPE.SWITCH: {
       return {
         valid: constraints.indexOf(value) !== -1,

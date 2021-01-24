@@ -5,10 +5,11 @@ import deepEqual from 'fast-deep-equal'
 
 import { ContentColumn, SettingsWrapper } from 'clientSrc/styles/blocks/settings'
 import { settingsRenderers } from 'clientSrc/helpers/settingsRenderers'
-import { CATEGORY_ICONS, TAB_ICONS } from 'clientSrc/constants'
+import { CATEGORY_ICONS, PORTAL_TYPE, TAB_ICONS } from 'clientSrc/constants'
 import { useSubmitHandler } from 'clientSrc/helpers/form'
 import { SettingsActions } from 'clientSrc/actions'
 import { SETTING_TAB_ROWS, SETTING_CATEGORIES, SETTING_COLUMNS } from 'shared/constants'
+import { PortalAnchor } from 'clientSrc/styles/blocks'
 
 import SettingsColumn from './SettingsColumn'
 
@@ -104,7 +105,8 @@ const Settings = memo(({ history, location }) => {
         changeSelection={changeTab}
         modifiers={settingsRenderers[category]?.tabModifiers && settingsRenderers[category].tabModifiers(data)}
       />
-      <ContentColumn>
+      <ContentColumn id="settingsWrapper">
+        <PortalAnchor id={PORTAL_TYPE.SETTINGS_TOOLTIPS} />
         {category && tabKey && settingsRenderers[category][tabKey](data, submitHandler, tab, category)}
       </ContentColumn>
     </SettingsWrapper>

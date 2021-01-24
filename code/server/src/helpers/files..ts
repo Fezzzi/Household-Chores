@@ -39,3 +39,8 @@ export const uploadFiles = (
   })
   return uploadedFiles
 }
+
+export const isLocalImage = (image: string, userFsKey: string) => image.startsWith
+  && image.startsWith(`/${UPLOAD_DIR}/${userFsKey}/`)
+  && image.length < 140
+

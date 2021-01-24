@@ -3,19 +3,19 @@ import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import { Message } from '@material-ui/icons'
 
-import { SettingsActions } from 'clientSrc/actions'
-import { COLORS } from 'clientSrc/constants'
+import { SettingsActions, ModalActions } from 'clientSrc/actions'
+import { COLORS, MODAL_TYPE, PORTAL_TYPE } from 'clientSrc/constants'
 import {
-  AppendMessageAnchor, AppendMessageIcon, UserButtonsBox, UserList, UserMutualFriends,
+  SearchFormMessageAnchor, AppendMessageIcon, UserButtonsBox, UserList, UserMutualFriends,
   UserName, UserNode, UserPhoto, UserPhotoBox, WrapperBox,
 } from 'clientSrc/styles/blocks/users'
 import { FormBody, FormWrapper, SectionHeadline } from 'clientSrc/styles/blocks/settings'
 import { TableBox, TableHeaderBox } from 'clientSrc/styles/blocks/table'
 import { FORM } from 'shared/constants/localeMessages'
-import { CONNECTION_STATE_TYPE } from 'shared/constants'
+import { CONNECTION_STATE_TYPE, INVITATION_MESSAGE_LENGTH } from 'shared/constants'
 
 import { LocaleText, PrimaryButton } from '../../common'
-import { InfoTooltip } from '../../portals'
+import { MessageTooltip } from '../../portals'
 import SearchBar from '../SearchBar'
 
 const ConnectionSearchForm = ({ data }) => {
@@ -28,10 +28,13 @@ const ConnectionSearchForm = ({ data }) => {
     dispatch(SettingsActions.connectionRequest({ targetId, message })),
   [dispatch])
 
-  const handleClick = userId => () => {
-    /* todo: Implement connection messages and pass it here */
-    connectHandler(userId)
-  }
+  const handleClick = userId => () => dispatch(ModalActions.openModal({
+    type: MODAL_TYPE.APPEND_MESSAGE,
+    data: {
+      maxLength: INVITATION_MESSAGE_LENGTH,
+      onSubmit: message => connectHandler(userId, message),
+    },
+  }))
 
   const emptyResultMessage = useMemo(() => data?.length === 0
     ? FORM.NO_CONNECTIONS_FOUND
@@ -65,12 +68,17 @@ const ConnectionSearchForm = ({ data }) => {
                   <UserPhotoBox>
                     <UserPhoto src={userPhoto} />
                     {userMessage && (
-                      <AppendMessageAnchor>
-                        <InfoTooltip
+                      <SearchFormMessageAnchor>
+                        <MessageTooltip
                           icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
                           text={userMessage}
+                          customOffsetY={3}
+                          customOffsetX={-10}
+                          centered
+                          scrollRoot="settingsWrapper"
+                          type={PORTAL_TYPE.SETTINGS_TOOLTIPS}
                         />
-                      </AppendMessageAnchor>
+                      </SearchFormMessageAnchor>
                     )}
                   </UserPhotoBox>
                   <UserName>{userName}</UserName>

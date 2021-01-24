@@ -7,7 +7,7 @@ import { NotificationGroupBox, SectionHeadline } from 'clientSrc/styles/blocks/s
 import { TableBox, TableHeaderBox, TableHeaderCell } from 'clientSrc/styles/blocks/table'
 import { INPUT_TYPE } from 'shared/constants'
 import { FORM } from 'shared/constants/localeMessages'
-import { NOTIFICATIONS } from 'shared/constants/settingsDataKeys'
+import { NOTIFICATIONS } from 'shared/constants/mappingKeys'
 
 import { LocaleText, Input } from '../../common'
 import { SimpleFloatingElement } from '../../portals'
@@ -41,30 +41,28 @@ const NotificationForm = ({ data, onSubmit }) => {
   }, [general])
 
   const getNotificationsBlock = (group, groupHeadline) => (
-    <>
-      <TableBox>
-        {groupHeadline && (
-          <TableHeaderBox>
-            <TableHeaderCell>
-              <LocaleText message={groupHeadline} />
-            </TableHeaderCell>
-          </TableHeaderBox>
-        )}
-        <NotificationGroupBox>
-          {group && Object.entries(group).map(([name, value]) => (
-            <Input
-              key={name}
-              type={INPUT_TYPE.BOOL}
-              name={name}
-              label={`form.${name}`}
-              value={Boolean(value)}
-              hasDefaultValue
-              onUpdate={useUpdateHandler(setFormState)}
-            />
-          ))}
-        </NotificationGroupBox>
-      </TableBox>
-    </>
+    <TableBox>
+      {groupHeadline && (
+        <TableHeaderBox>
+          <TableHeaderCell>
+            <LocaleText message={groupHeadline} />
+          </TableHeaderCell>
+        </TableHeaderBox>
+      )}
+      <NotificationGroupBox>
+        {group && Object.entries(group).map(([name, value]) => (
+          <Input
+            key={name}
+            type={INPUT_TYPE.BOOL}
+            name={name}
+            label={`form.${name}`}
+            value={Boolean(value)}
+            hasDefaultValue
+            onUpdate={useUpdateHandler(setFormState)}
+          />
+        ))}
+      </NotificationGroupBox>
+    </TableBox>
   )
 
   return (

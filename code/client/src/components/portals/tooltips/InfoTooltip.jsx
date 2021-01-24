@@ -14,7 +14,13 @@ const InfoTooltip = ({ icon, text, customHeight, customOffsetY }) => {
         {icon}
       </span>
       {hovered && (
-        <Tooltip withArrow withHover customHeight={customHeight} customOffsetY={customOffsetY}>
+        <Tooltip
+          customHeight={`${customHeight}px`}
+          customLineHeight={`${customHeight - 2}px`}
+          customOffsetY={customOffsetY}
+          withArrow
+          withHover
+        >
           <LocaleText message={text} />
         </Tooltip>
       )}

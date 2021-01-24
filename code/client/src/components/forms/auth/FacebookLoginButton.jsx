@@ -25,7 +25,6 @@ const FacebookLoginButton = ({ onError }) => {
             onClick={onClick}
             background="#3B4998"
             backgroundHover="#303B7C"
-            color="#FAFAFA"
             disabled={isLoading || isWorking}
             margin="0 40px 14px"
           >

@@ -66,3 +66,8 @@ export const CONNECTION_KEYS = {
   MUTUAL_CONNECTIONS: 'mutual-connections',
   DATE_CREATED: 'date-created',
 }
+
+export const DIALOG_KEYS = {
+  TUTORIAL: 'tutorial',
+  HOUSEHOLD_MEMBER_DELETING: 'household-member-deleting',
+}

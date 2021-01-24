@@ -1,7 +1,7 @@
 import { database } from 'serverSrc/database'
 import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords'
 import { CONNECTION_STATE_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
-import { PROFILE } from 'shared/constants/settingsDataKeys'
+import { PROFILE } from 'shared/constants/mappingKeys'
 
 import {
   tUsersName, tUsersCols, tConnectionsName, tConnectionsCols, tNotifySettingsName, tNotifySettingsCols,

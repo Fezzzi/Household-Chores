@@ -7,6 +7,7 @@ import themeReducer from './themeReducer'
 import localeReducer from './localeReducer'
 import settingsReducer from './settingsReducer'
 import modalReducer from './modalReducer'
+import dialogsReducer from './dialogsReducer'
 
 const initialState = {
   debug: true,
@@ -43,4 +44,5 @@ export default combineReducers({
   locale: localeReducer,
   settings: settingsReducer,
   modal: modalReducer,
+  dialogs: dialogsReducer,
 })

@@ -29,6 +29,11 @@ export const database = {
       Logger(LOGS.DB_LOG, 'Beginning transaction...')
       Connection.get().beginTransaction()
       const result = await func()
+      if (!result) {
+        Logger(LOGS.DB_LOG, '...transaction failed, rolling back!')
+        Connection.get().rollback()
+        return null
+      }
       Connection.get().commit()
       Logger(LOGS.DB_LOG, '...transaction finished.')
       return result

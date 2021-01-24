@@ -5,6 +5,7 @@ import HOUSEHOLD_MEMBERS_TABLE from './household_members'
 import HOUSEHOLDS_TABLE from './households'
 import NOTIFICATION_SETTINGS_TABLE from './notification_settings'
 import USERS_TABLE from './users'
+import DIALOGS_TABLE from './dialogs'
 
 const { name: tActivityName, columns: tActivityCols } = ACTIVITY_TABLE
 const { name: tConnectionsName, columns: tConnectionsCols } = CONNECTIONS_TABLE
@@ -13,9 +14,10 @@ const { name: tHouseMemName, columns: tHouseMemCols } = HOUSEHOLD_MEMBERS_TABLE
 const { name: tHouseholdsName, columns: tHouseholdsCols } = HOUSEHOLDS_TABLE
 const { name: tNotifySettingsName, columns: tNotifySettingsCols } = NOTIFICATION_SETTINGS_TABLE
 const { name: tUsersName, columns: tUsersCols } = USERS_TABLE
+const { name: tDialogsName, columns: tDialogsCols } = DIALOGS_TABLE
 
 export {
   tActivityName, tActivityCols, tConnectionsName, tConnectionsCols, tHouseInvName, tHouseInvCols,
   tHouseMemName, tHouseMemCols, tHouseholdsName, tHouseholdsCols, tNotifySettingsName, tNotifySettingsCols,
-  tUsersName, tUsersCols,
+  tUsersName, tUsersCols, tDialogsName, tDialogsCols,
 }

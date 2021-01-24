@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { INPUT_TYPE } from 'shared/constants'
 
-import { TextInput, PhotoInput, BoolInput, SwitchInput } from './inputs'
+import { TextInput, PhotoInput, BoolInput, SwitchInput, TextAreaInput } from './inputs'
 
 const Input = ({ type, ...props }) => {
   switch (type) {
@@ -13,6 +13,8 @@ const Input = ({ type, ...props }) => {
       return <BoolInput {...props} />
     case INPUT_TYPE.SWITCH:
       return <SwitchInput {...props} />
+    case INPUT_TYPE.TEXT_AREA:
+      return <TextAreaInput {...props} />
     default:
       return <TextInput type={type} {...props} />
   }

@@ -1,6 +1,6 @@
 import { AUTH, COMMON, ERROR, FORM, HINT, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
 import {
-  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, HOUSEHOLD_TABS,
+  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, PROFILE_TABS, HOUSEHOLD_TABS,
 } from 'shared/constants'
 
 export default {
@@ -18,6 +18,15 @@ export default {
   [AUTH.SIGN_UP]: 'Zaregistrovat se',
   [AUTH.TERMS_AGREEMENT]: 'Registrací potvrzujete naše ',
 
+  [COMMON.ARE_YOU_SURE]: 'Opravdu provést?',
+  [COMMON.CANT_UNDO]: 'Tuto akci nelze vzít zpět.',
+  [COMMON.CANT_UNDO_SAVING]: 'Po uložení již nepůjde vzít tuto akci zpět.',
+  [COMMON.CONFIRM]: 'Potvrdit',
+  [COMMON.CANCEL]: 'Zrušit',
+  [COMMON.CONTINUE]: 'Pokračovat',
+  [COMMON.FINISH]: 'Dokončit',
+  [COMMON.BACK]: 'Zpět',
+  [COMMON.DONT_ASK_AGAIN]: 'Neptat se znovu',
   [COMMON.HIDE]: 'Skrýt',
   [COMMON.ADD_MESSAGE]: 'Přidat zprávu',
   [COMMON.MESSAGE]: 'Zpráva',
@@ -65,6 +74,9 @@ export default {
   [FORM.LANGUAGE]: 'Jazyk',
   [FORM.NEW_EMAIL]: 'Nový email',
   [FORM.NICKNAME]: 'Jméno',
+  [FORM.DIALOGS]: 'Dialogy',
+  [FORM.TUTORIAL_DIALOG]: 'Návodový dialog',
+  [FORM.CONFIRMATION_DIALOGS]: 'Potvrzovací dialogy',
   [FORM.NOTIFICATIONS]: 'Notifikace',
   [FORM.CONNECTIONS]: 'Spojení',
   [FORM.HOUSEHOLDS]: 'Domácnosti',
@@ -75,6 +87,7 @@ export default {
   [FORM.NEW_PASSWORD]: 'Nové heslo',
   [FORM.USER_VISIBILITY]: 'Viditelnost',
   [FORM.CHANGE_PASSWORD]: 'Změnit heslo',
+  [FORM.SET_ALIAS]: 'Nastavit přezdívku v domácnosti',
   [FORM.NO_HOUSEHOLD_REQUESTS]: 'Nemáte žádné pozvánky do domácností.',
   [FORM.NO_BLOCKED_CONNECTIONS]: 'Nemáte blokované žádné uživatele.',
   [FORM.NO_CONNECTION_REQUESTS]: 'Nemáte žádné žádosti o spojení.',
@@ -109,6 +122,7 @@ export default {
   [FORM.HOUSEHOLD_LEAVING]: 'Odchod člena z rodiny',
   [FORM[USER_VISIBILITY_TYPE.FOF]]: 'přátelé přátel',
   [FORM[USER_VISIBILITY_TYPE.ALL]]: 'všichni',
+  [FORM.HOUSEHOLD_USER_DELETING_DIALOG]: 'Při mazání člena domácnosti',
 
   [HINT.VISIBILITY]: 'Nastavuje kdo bude schopen Váš účet vyhledat a poslat žádost o spojení.',
 
@@ -126,7 +140,6 @@ export default {
   [HOUSEHOLD.CANCEL_REMOVE_USER]: 'Zrušit smazání',
   [HOUSEHOLD.INVITATIONS]: 'pozvánky',
   [HOUSEHOLD.INVITE_USERS]: 'pozvat členy',
-  [HOUSEHOLD.INVITE]: 'pozvat',
   [HOUSEHOLD.SINCE]: 'od',
   [HOUSEHOLD.MODULES]: 'moduly',
   [HOUSEHOLD.ADD_MODULES]: 'přidat moduly',
@@ -134,8 +147,9 @@ export default {
   [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.PROFILE}`]]: 'Profil',
   [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.CONNECTIONS}`]]: 'Spojení',
   [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.HOUSEHOLDS}`]]: 'Domácnosti',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.GENERAL}`]]: 'Obecné',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.NOTIFICATIONS}`]]: 'Notifikace',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.GENERAL}`]]: 'Obecné',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.NOTIFICATIONS}`]]: 'Notifikace',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.DIALOGS}`]]: 'Dialogy',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.MY_CONNECTIONS}`]]: 'Moje spojení',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.PENDING}`]]: 'Žádosti',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.BLOCKED}`]]: 'Blokování',

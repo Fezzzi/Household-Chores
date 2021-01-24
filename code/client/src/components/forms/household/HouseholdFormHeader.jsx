@@ -3,14 +3,15 @@ import PropTypes from 'prop-types'
 import { DeleteForever, MeetingRoom, Add } from '@material-ui/icons'
 
 import { COLORS } from 'clientSrc/constants'
+import { useOpenConfirmationDialog } from 'clientSrc/helpers/confirmations'
+import { getLabelColors } from 'clientSrc/helpers/household'
 import {
   ButtonIconSpan, CriticalButtonsBlock, CurrentUserBlock,
   HouseholdSubtitle, RoleLabel, UserLabel, UserName, UserPhoto,
 } from 'clientSrc/styles/blocks/households'
 import { FormHeader, FormButtonContentWrapper, FormHeaderPhoto, FormHeaderTitle } from 'clientSrc/styles/blocks/form'
-import { getLabelColors } from 'clientSrc/helpers/household'
-import { HOUSEHOLD } from 'shared/constants/localeMessages'
-import { HOUSEHOLD_KEYS } from 'shared/constants/settingsDataKeys'
+import { COMMON, HOUSEHOLD } from 'shared/constants/localeMessages'
+import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 
 import { LocaleText, PrimaryButton, EditableTextField, EditablePhotoField, EditableLabelField } from '../../common'
@@ -28,6 +29,8 @@ const HouseholdFormHeader = ({
     const currentRoleIndex = allRoles.indexOf(currentUser.role)
     return allRoles.filter(role => allRoles.indexOf(role) >= currentRoleIndex)
   }, [currentUser])
+
+  const openConfirmationDialog = useOpenConfirmationDialog()
 
   const criticalButton = (handleClick, color, message, icon) => (
     <PrimaryButton
@@ -115,9 +118,24 @@ const HouseholdFormHeader = ({
       )}
 
       <CriticalButtonsBlock>
-        {onLeaveHousehold && criticalButton(onLeaveHousehold, COLORS.RED_PRIMARY, HOUSEHOLD.LEAVE, <MeetingRoom />)}
-        {onDeleteHousehold && criticalButton(onDeleteHousehold, COLORS.RED_SECONDARY, HOUSEHOLD.DELETE, <DeleteForever />)}
-        {onCreateHousehold && criticalButton(onCreateHousehold, COLORS.GREEN_SECONDARY, HOUSEHOLD.CREATE, <Add />)}
+        {onLeaveHousehold && criticalButton(
+          () => openConfirmationDialog(onLeaveHousehold, null, COMMON.CANT_UNDO),
+          COLORS.RED_PRIMARY,
+          HOUSEHOLD.LEAVE,
+          <MeetingRoom />
+        )}
+        {onDeleteHousehold && criticalButton(
+          () => openConfirmationDialog(onDeleteHousehold, null, COMMON.CANT_UNDO),
+          COLORS.RED_SECONDARY,
+          HOUSEHOLD.DELETE,
+          <DeleteForever />
+        )}
+        {onCreateHousehold && criticalButton(
+          onCreateHousehold,
+          COLORS.GREEN_SECONDARY,
+          HOUSEHOLD.CREATE,
+          <Add />
+        )}
       </CriticalButtonsBlock>
     </FormHeader>
   )

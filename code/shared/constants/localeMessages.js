@@ -1,6 +1,7 @@
 import {
-  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_TABS, HOUSEHOLD_TABS, SETTING_CATEGORIES,
+  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_TABS, PROFILE_TABS, HOUSEHOLD_TABS, SETTING_CATEGORIES,
 } from 'shared/constants'
+import { DIALOG_KEYS } from 'shared/constants/mappingKeys'
 
 export const AUTH = {
   BACK_TO_LOGIN: 'auth.backToLogin',
@@ -19,6 +20,15 @@ export const AUTH = {
 }
 
 export const COMMON = {
+  ARE_YOU_SURE: 'common.areYouSure',
+  CANT_UNDO: 'common.cantUndo',
+  CANT_UNDO_SAVING: 'common.cantUndoSaving',
+  CONFIRM: 'common.confirm',
+  CONTINUE: 'common.continue',
+  FINISH: 'common.finish',
+  BACK: 'common.back',
+  CANCEL: 'common.cancel',
+  DONT_ASK_AGAIN: 'common.dontAskAgain',
   OR: 'common.or',
   SHOW: 'common.show',
   HIDE: 'common.hide',
@@ -66,6 +76,7 @@ export const INFO = {
 
 export const FORM = {
   DELETE_ACCOUNT: 'form.deleteAccount',
+  DISABLED_DIALOGS: 'form.disabledDialogs',
   DROP_PHOTO_HERE: 'form.dropPhotoHere',
   CLICK_TO_UPLOAD: 'form.clickToUpload',
   CONNECTIONS: 'form.connections',
@@ -76,6 +87,9 @@ export const FORM = {
   NEW_NICKNAME: 'form.newNickname',
   USER_VISIBILITY: 'form.userVisibility',
   NOTIFICATIONS: 'form.notifications',
+  CONFIRMATION_DIALOGS: 'form.confirmationDialogs',
+  DIALOGS: 'form.dialogs',
+  TUTORIAL_DIALOG: 'form.tutorialDialogs',
   HOUSEHOLDS: 'form.households',
   PASSWORD: 'form.password',
   THEME: 'form.theme',
@@ -104,6 +118,7 @@ export const FORM = {
   BLOCKED_CONNECTIONS: 'form.blockedConnections',
   HOUSEHOLD_INVITATIONS: 'form.householdInvitations',
   MUTUAL_FRIENDS: 'form.mutualFriends',
+  SET_ALIAS: 'form.setAlias',
 
   EMAIL_NOTIFICATIONS: 'form.email_notifications',
   BROWSER_NOTIFICATIONS: 'form.browser_notifications',
@@ -118,6 +133,8 @@ export const FORM = {
 
   [USER_VISIBILITY_TYPE.FOF]: 'form.userVisibilityFOF',
   [USER_VISIBILITY_TYPE.ALL]: 'form.userVisibilityALL',
+
+  HOUSEHOLD_USER_DELETING_DIALOG: `form.${DIALOG_KEYS.HOUSEHOLD_MEMBER_DELETING}`,
 }
 
 export const HINT = {
@@ -139,7 +156,6 @@ export const HOUSEHOLD = {
   CANCEL_REMOVE_USER: 'household.cancelRemoveUser',
   INVITATIONS: 'household.invitations',
   INVITE_USERS: 'household.inviteUser',
-  INVITE: 'household.invite',
   SINCE: 'household.since',
   MODULES: 'household.modules',
   ADD_MODULES: 'household.addModule',
@@ -150,8 +166,10 @@ export const SETTINGS = {
   [`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.CONNECTIONS}`]: 'settings.categoryConnections',
   [`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.HOUSEHOLDS}`]: 'settings.categoryHouseholds',
 
-  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.GENERAL}`]: 'settings.tabGeneral',
-  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.NOTIFICATIONS}`]: 'settings.tabNotifications',
+  [`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.GENERAL}`]: 'settings.tabGeneral',
+  [`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.NOTIFICATIONS}`]: 'settings.tabNotifications',
+  [`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.DIALOGS}`]: 'settings.tabDialogs',
+
   [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.MY_CONNECTIONS}`]: 'settings.tabMyConnections',
   [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.PENDING}`]: 'settings.tabPending',
   [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.BLOCKED}`]: 'settings.tabBlocked',

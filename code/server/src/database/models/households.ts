@@ -1,6 +1,6 @@
 import { database } from 'serverSrc/database'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
-import { HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS } from 'shared/constants/settingsDataKeys'
+import { HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS } from 'shared/constants/mappingKeys'
 
 import {
   tHouseholdsName, tHouseholdsCols, tHouseInvName, tHouseInvCols,
@@ -96,7 +96,7 @@ export const addHouseholdInvitations = async (
   database.query(`
     INSERT INTO ${tHouseInvName}
     VALUES (${invitations.map(() => `${householdId}, ${currentId}, ?, ?, NOW()`).join('),(')})
-  `, invitations.flatMap(user => [user.id, user.invitationMessage || '']))
+  `, invitations.flatMap(user => [user.id, user[INVITATION_KEYS.MESSAGE] || '']))
 
 export const createHousehold = async (
   data: Record<string, string | number>,
@@ -143,12 +143,11 @@ export const editHousehold = async (
           DELETE FROM ${tHouseInvName}
           WHERE ${tHouseInvCols.id_to} IN (?) AND ${tHouseInvCols.id_household}=?
         `, [removedInvitations, householdId]))
-      // todo: These added invitations do not support invitation messages -> will have to be rewritten to smth. like changedRoles
       && (!newInvitations?.length
         || await database.query(`
           INSERT INTO ${tHouseInvName}
           VALUES (${newInvitations.map(() => `${householdId}, ${currentId}, ?, ?, NOW()`).join('),(')})
-        `, newInvitations.flatMap((id: number) => [id, ''])))
+        `, newInvitations.flatMap((user: Record<string, number | string>) => [user.id, user[INVITATION_KEYS.MESSAGE] || ''])))
       && (!removedMembers?.length
         || await database.query(`
           DELETE FROM ${tHouseMemName}

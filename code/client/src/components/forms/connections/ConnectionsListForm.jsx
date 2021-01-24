@@ -9,7 +9,7 @@ import { FormBody, FormWrapper, SectionHeadline } from 'clientSrc/styles/blocks/
 import { TableBigPhoto } from 'clientSrc/styles/blocks/table'
 import { getButtonForUser, getTimeString } from 'clientSrc/helpers/connections'
 import { FORM } from 'shared/constants/localeMessages'
-import { CONNECTION_KEYS } from 'shared/constants/settingsDataKeys'
+import { CONNECTION_KEYS } from 'shared/constants/mappingKeys'
 
 import { LocaleText, Table } from '../../common'
 

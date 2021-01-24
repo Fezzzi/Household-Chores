@@ -1,6 +1,6 @@
 import { AUTH, COMMON, ERROR, FORM, HINT, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
 import {
-  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, HOUSEHOLD_TABS,
+  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, PROFILE_TABS, HOUSEHOLD_TABS,
 } from 'shared/constants'
 
 export default {
@@ -18,6 +18,15 @@ export default {
   [AUTH.SIGN_UP]: 'Sign Up',
   [AUTH.TERMS_AGREEMENT]: 'By signing up, You agree to our ',
 
+  [COMMON.ARE_YOU_SURE]: 'Are you sure?',
+  [COMMON.CANT_UNDO]: 'This action cannot be undone.',
+  [COMMON.CANT_UNDO_SAVING]: 'You won\'t be able to undo this action after saving.',
+  [COMMON.CONFIRM]: 'Confirm',
+  [COMMON.CANCEL]: 'Cancel',
+  [COMMON.CONTINUE]: 'Continue',
+  [COMMON.FINISH]: 'Finish',
+  [COMMON.BACK]: 'Back',
+  [COMMON.DONT_ASK_AGAIN]: 'Don\'t ask again',
   [COMMON.HIDE]: 'Hide',
   [COMMON.ADD_MESSAGE]: 'Append message',
   [COMMON.MESSAGE]: 'Message',
@@ -66,6 +75,9 @@ export default {
   [FORM.NEW_EMAIL]: 'New email',
   [FORM.NICKNAME]: 'Nickname',
   [FORM.NEW_NICKNAME]: 'New nickname',
+  [FORM.DIALOGS]: 'Dialogs',
+  [FORM.TUTORIAL_DIALOG]: 'Tutorial dialog',
+  [FORM.CONFIRMATION_DIALOGS]: 'Confirmation dialogs',
   [FORM.NOTIFICATIONS]: 'Notifications',
   [FORM.CONNECTIONS]: 'Connections',
   [FORM.HOUSEHOLDS]: 'Households',
@@ -75,6 +87,7 @@ export default {
   [FORM.NEW_PASSWORD]: 'New password',
   [FORM.USER_VISIBILITY]: 'Visibility',
   [FORM.CHANGE_PASSWORD]: 'Change password',
+  [FORM.SET_ALIAS]: 'Set household alias',
   [FORM.NO_HOUSEHOLD_REQUESTS]: 'You have no household invitations.',
   [FORM.NO_BLOCKED_CONNECTIONS]: 'You have no blocked users.',
   [FORM.NO_CONNECTION_REQUESTS]: 'You have no connection requests.',
@@ -109,6 +122,7 @@ export default {
   [FORM.HOUSEHOLD_LEAVING]: 'Member leaving household',
   [FORM[USER_VISIBILITY_TYPE.FOF]]: 'friends of friends',
   [FORM[USER_VISIBILITY_TYPE.ALL]]: 'all',
+  [FORM.HOUSEHOLD_USER_DELETING_DIALOG]: 'On household member deleting',
 
   [HINT.VISIBILITY]: 'Controls who will be able to find Your account and send connection request.',
 
@@ -126,7 +140,6 @@ export default {
   [HOUSEHOLD.CANCEL_REMOVE_USER]: 'Cancel removal',
   [HOUSEHOLD.INVITATIONS]: 'invitations',
   [HOUSEHOLD.INVITE_USERS]: 'invite users',
-  [HOUSEHOLD.INVITE]: 'invite',
   [HOUSEHOLD.SINCE]: 'since',
   [HOUSEHOLD.MODULES]: 'modules',
   [HOUSEHOLD.ADD_MODULES]: 'add modules',
@@ -134,8 +147,9 @@ export default {
   [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.PROFILE}`]]: 'Profile',
   [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.CONNECTIONS}`]]: 'Connections',
   [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.HOUSEHOLDS}`]]: 'Households',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.GENERAL}`]]: 'General',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.NOTIFICATIONS}`]]: 'Notifications',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.GENERAL}`]]: 'General',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.NOTIFICATIONS}`]]: 'Notifications',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.DIALOGS}`]]: 'Dialogs',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.MY_CONNECTIONS}`]]: 'My connections',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.PENDING}`]]: 'Requests',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.BLOCKED}`]]: 'Blocked',
