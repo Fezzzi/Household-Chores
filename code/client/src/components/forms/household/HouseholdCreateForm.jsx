@@ -9,7 +9,9 @@ import { useInvitationListProps } from 'clientSrc/helpers/household'
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { HouseholdActions } from 'clientSrc/actions'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
-import { CONNECTION_KEYS, HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/mappingKeys'
+import {
+  CONNECTION_KEYS, HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, PROFILE,
+} from 'shared/constants/mappingKeys'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 
 import HouseholdFormHeader from './HouseholdFormHeader'
@@ -45,6 +47,7 @@ const HouseholdCreateForm = ({ connections }) => {
       fromPhoto: currentUser.photo,
       fromNickname: currentUser.name,
       fromId: currentUser.id,
+      message: user[INVITATION_KEYS.MESSAGE],
       dateCreated: '(PENDING)',
     })),
     toId => setInvitations(prevState => prevState.filter(user => user.id !== toId))
@@ -147,9 +150,13 @@ const HouseholdCreateForm = ({ connections }) => {
       </SectionHeadline>
       <HouseholdInvitationForm
         connections={connections.filter(({ [CONNECTION_KEYS.ID]: id }) => !invitations.find(user => user.id === id))}
-        onInvite={id => setInvitations(prevState =>
-          [...prevState, connections.find(user => user[CONNECTION_KEYS.ID] === id)]
-        )}
+        onInvite={(id, message) => setInvitations(prevState => [
+          ...prevState,
+          {
+            ...connections.find(user => user[CONNECTION_KEYS.ID] === id),
+            [INVITATION_KEYS.MESSAGE]: message,
+          },
+        ])}
       />
 
       <SectionHeadline>

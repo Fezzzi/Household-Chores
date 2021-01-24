@@ -3,8 +3,8 @@ import { validateField } from 'serverSrc/helpers/settings'
 import {
   addHouseholdInvitations, approveInvitation, createHousehold, findApprovedConnections,
 } from 'serverSrc/database/models'
-import { NOTIFICATION_TYPE, INPUT_TYPE, API, SETTING_CATEGORIES } from 'shared/constants'
-import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
+import { NOTIFICATION_TYPE, INPUT_TYPE, API, SETTING_CATEGORIES, INVITATION_MESSAGE_LENGTH } from 'shared/constants'
+import { HOUSEHOLD_KEYS, INVITATION_KEYS } from 'shared/constants/mappingKeys'
 import { ERROR } from 'shared/constants/localeMessages'
 
 const validateCreateData = async (
@@ -31,9 +31,14 @@ const validateCreateData = async (
   if (invitations.length > 0) {
     const connections = await findApprovedConnections(userId)
     const connectionIds = connections.map(({ id }) => id)
-    const valid = invitations.every(({ id }) => connectionIds.indexOf(id) !== -1)
-    if (!valid) {
+    const validRequest = invitations.every(({ id }) => connectionIds.indexOf(id) !== -1)
+    if (!validRequest) {
       res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+      return false
+    }
+    const validMessages = invitations.every(({ [INVITATION_KEYS.MESSAGE]: message }) => !message
+      || validateField(res, message, INPUT_TYPE.TEXT_AREA, { max: INVITATION_MESSAGE_LENGTH }))
+    if (!validMessages) {
       return false
     }
   }

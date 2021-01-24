@@ -16,10 +16,11 @@ export const ModalBody = styled.div`
   border: 1px solid ${COLORS.BORDER};
   width: ${props => props.width ?? 'max-content'};
   height: ${props => props.height ?? 'max-content'};
+  max-height: ${props => props.height ?? 'calc(100% - 150px)'};
   display: flex;
   flex-flow: column;
   position: relative;
-  margin: ${props => props.margin ?? '75px auto'};
+  margin: ${props => props.margin ?? '75px auto auto'};
   padding: 25px;
 `
 

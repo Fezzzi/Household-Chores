@@ -8,6 +8,7 @@ import EditPhotoModal from './EditPhotoModal'
 import ConfirmationModal from './ConfirmationModal'
 import TutorialModal from './TutorialModal'
 import InvitationAcceptModal from './InvitationAcceptModal'
+import AppendMessageModal from './AppendMessageModal'
 
 const Modal = () => {
   const modals = useSelector(({ modal }) => modal, deepEqual)
@@ -22,6 +23,8 @@ const Modal = () => {
         return <TutorialModal />
       case MODAL_TYPE.INVITATION_ACCEPT:
         return <InvitationAcceptModal data={data} />
+      case MODAL_TYPE.APPEND_MESSAGE:
+        return <AppendMessageModal data={data} />
       default:
         return ''
     }

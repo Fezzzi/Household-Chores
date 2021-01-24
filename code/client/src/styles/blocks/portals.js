@@ -25,6 +25,7 @@ export const OptionsTooltipIcon = styled.span`
 
 export const TooltipAnchor = styled.div`
   position: absolute;
+  z-index: 10;
   top: ${props => props.position?.y ? props.position.y + 2 : 180}px;
   left: ${props => props.position?.x ?? 1400}px;
 `
@@ -33,21 +34,23 @@ export const Tooltip = styled.div`
   top: ${props => props.customOffsetY ?? -3}px;
   right: ${props => props.withHover ? 150 : 125}%;
   width: max-content;
-  height: ${props => props.customHeight ? `${props.customHeight}px` : 'inherit'};
-  line-height: ${props => props.customHeight ? `${props.customHeight - 2}px` : 'inherit'};
+  height: ${props => props.customHeight ? props.customHeight : 'inherit'};
+  line-height: ${props => props.customLineHeight ? props.customLineHeight : 'inherit'};
   background-color: ${COLORS.THEME_FRONT};
   border: 1px solid ${COLORS.BORDER};
   position: absolute;
   padding: ${props => props.hasRows ? 0 : '4px 6px'};
-  z-index: 10;
   user-select: none;
   font-weight: 400;
+  word-break: break-all;
+
+  ${props => props.maxWidth && `max-width: ${props.maxWidth};`}
   
   ${props => props.withArrow && `
     ::after {
       content: "";
       position: absolute;
-      top: 50%;
+      top: ${props.arrowTop ? '14px' : '54%'};
       left: 100%;
       margin-top: -5px;
       border: 5px solid;

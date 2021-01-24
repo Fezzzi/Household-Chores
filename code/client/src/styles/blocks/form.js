@@ -117,6 +117,63 @@ export const TextInputField = styled.input`
   }
 `
 
+export const TextAreaRow = styled.div`
+  display: flex;
+  margin: 0 auto 6px;
+  position: relative;
+  min-height: 38px;
+`
+
+export const TextAreaBox = styled.label`
+  height: fit-content;
+  padding: 0;
+  position: relative;
+  margin: 0;
+  min-width: 0;
+  font-weight: 400;
+  flex: 1 0 0;
+  display: flex;
+`
+
+export const TextAreaValue = styled.span`
+  color: ${COLORS.GREY_PRIMARY};
+  font-size: 12px;
+  height: 36px;
+  left: 8px;
+  line-height: 36px;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  transform-origin: left;
+  right: 0;
+  user-select: none;
+  transition: transform ease-out .1s, -webkit-transform ease-out .1s;
+  
+  ${props => props.shrunken && { transform: 'scale(.83333) translateY(-11px)' }}
+`
+
+export const TextAreaField = styled.textarea`
+  background: ${COLORS.THEME_BACK};
+  color: ${COLORS.FONT};
+  padding: ${props => props.shrunken && !props.miniInput ? '16px 8px 2px' : '11px 8px 7px'};
+  margin: 0;
+  border: 0;
+  width: 100%;
+  min-width: 150px;
+  max-height: -webkit-fill-available;
+  
+  &:active, &:focus {
+    outline: 0;
+  }
+`
+
+export const TextAreaErrorWrapper = styled.div`
+  position: absolute;
+  top: -12px;
+  right: -11px;
+  z-index: 10;
+`
+
 export const InputSiderWrapper = styled.div`
   align-items: center;
   height: 100%;

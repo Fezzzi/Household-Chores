@@ -1,16 +1,17 @@
 import React from 'react'
-import { CalendarToday, ChevronRight, Delete, Cancel, Grade, MoreVert, SortByAlpha } from '@material-ui/icons'
+import { CalendarToday, ChevronRight, Delete, Cancel, Grade, MoreVert, SortByAlpha, Message } from '@material-ui/icons'
 
-import { COLORS } from 'clientSrc/constants'
-import { OptionsTooltip } from 'clientSrc/components/portals'
-import LocaleText from 'clientSrc/components/common/LocaleText'
+import { COLORS, PORTAL_TYPE } from 'clientSrc/constants'
 import { TablePhoto, TableRowIcon } from 'clientSrc/styles/blocks/table'
 import { RoleLabel, UserLabel } from 'clientSrc/styles/blocks/households'
+import { AppendMessageIcon } from 'clientSrc/styles/blocks/users'
+import { useOpenConfirmationDialog } from 'clientSrc/helpers/confirmations'
+import { formatDate } from 'shared/helpers/date'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
-import { formatDate } from 'shared/helpers/date'
 import { DIALOG_KEYS } from 'shared/constants/mappingKeys'
-import { useOpenConfirmationDialog } from 'clientSrc/helpers/confirmations'
+import { MessageTooltip, OptionsTooltip } from 'clientSrc/components/portals'
+import LocaleText from 'clientSrc/components/common/LocaleText'
 
 export const useMemberListProps = (
   members,
@@ -113,6 +114,7 @@ export const useInvitationListProps = (invitations, handleDeletion, handleCancel
     toPhoto,
     fromId,
     toId,
+    message,
     disableDeletion,
     allowCancellation,
     ...invitation
@@ -121,6 +123,16 @@ export const useInvitationListProps = (invitations, handleDeletion, handleCancel
     fromPhoto: <TablePhoto src={fromPhoto} />,
     delimiter: <TableRowIcon><ChevronRight /></TableRowIcon>,
     toPhoto: <TablePhoto src={toPhoto} />,
+    message: message && (
+      <MessageTooltip
+        icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
+        text={message}
+        customOffsetY={-5}
+        customOffsetX={-10}
+        scrollRoot="settingsWrapper"
+        type={PORTAL_TYPE.SETTINGS_TOOLTIPS}
+      />
+    ),
     delete: disableDeletion || !handleDeletion
       ? undefined
       : (
@@ -151,6 +163,7 @@ export const useInvitationListProps = (invitations, handleDeletion, handleCancel
     { name: 'delimiter' },
     { name: 'toPhoto' },
     { name: 'toNickname', bold: true, growing: true },
+    { name: 'message' },
     { name: 'dateCreated', fading: true },
     { name: 'delete' },
     { name: 'cancel' },

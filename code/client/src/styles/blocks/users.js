@@ -69,6 +69,12 @@ export const AppendMessageAnchor = styled.div`
   margin: 7px 0;
 `
 
+export const SearchFormMessageAnchor = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+`
+
 export const AppendMessageIcon = styled.div`
   opacity: 0.6;
   height: 20px;

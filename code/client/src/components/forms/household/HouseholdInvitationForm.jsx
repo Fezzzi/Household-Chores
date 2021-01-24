@@ -1,13 +1,17 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Search, SortByAlpha, Add } from '@material-ui/icons'
 
+import { ModalActions } from 'clientSrc/actions'
+import { MODAL_TYPE } from 'clientSrc/constants'
 import {
   InvitationFormButton, InvitationFormNode, InvitationFormNodeName, InvitationFormNodePhoto, InvitationNodesWrapper,
 } from 'clientSrc/styles/blocks/households'
 import { TableBox, TableHeaderBox, TableHeaderCell, TableSingleRowBox, TableSorterIcon } from 'clientSrc/styles/blocks/table'
 import { useTableLogic } from 'clientSrc/helpers/table'
 import { COMMON } from 'shared/constants/localeMessages'
+import { INVITATION_MESSAGE_LENGTH } from 'shared/constants'
 import { CONNECTION_KEYS } from 'shared/constants/mappingKeys'
 
 import { MiniTextInput } from '../../common'
@@ -43,6 +47,18 @@ const HouseholdInvitationForm = ({ connections, onInvite }) => {
     }
   }, [nodesRef.current, processedRows])
 
+  const dispatch = useDispatch()
+  const handleInvitationClick = id => dispatch(ModalActions.openModal({
+    type: MODAL_TYPE.APPEND_MESSAGE,
+    data: {
+      maxLength: INVITATION_MESSAGE_LENGTH,
+      onSubmit: message => {
+        onInvite(id, message)
+        setHoveredNode(null)
+      },
+    },
+  }))
+
   return (
     <TableBox>
       <TableHeaderBox>
@@ -70,10 +86,7 @@ const HouseholdInvitationForm = ({ connections, onInvite }) => {
               key={`connection-${id}`}
               onMouseEnter={() => setHoveredNode(index)}
               onMouseLeave={() => setHoveredNode(null)}
-              onClick={() => {
-                onInvite(id)
-                setHoveredNode(null)
-              }}
+              onClick={() => handleInvitationClick(id)}
             >
               {hoveredNode === index && (<InvitationFormButton><Add /></InvitationFormButton>)}
               <InvitationFormNodePhoto src={photo} />

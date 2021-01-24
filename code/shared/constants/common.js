@@ -1,1 +1,2 @@
 export const MAX_IMAGE_SIZE = 2000000
+export const INVITATION_MESSAGE_LENGTH = 255

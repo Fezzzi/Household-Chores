@@ -86,7 +86,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
   const invitableConnections = useMemo(() => connections.filter(({ [CONNECTION_KEYS.ID]: id }) =>
     !members.find(member => member[MEMBER_KEYS.ID] === id)
     && !invitations.find(invitation => invitation[INVITATION_KEYS.TO_ID] === id)
-    && !invitedConnections?.find(user => user === id)
+    && !invitedConnections?.find(user => user.id === id)
   ), [connections, members, invitations, invitedConnections])
 
   const memberTableProps = useMemberListProps(
@@ -115,7 +115,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
   const invitationTableProps = useMemo(() =>
     useInvitationListProps([
       ...(invitedConnections
-        ? invitedConnections.map(id => {
+        ? invitedConnections.map(({ id, message }) => {
           const connectedUser = connections.find(user => user[CONNECTION_KEYS.ID] === id)
           return {
             fromPhoto: currentUser.photo,
@@ -124,6 +124,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
             toPhoto: connectedUser[CONNECTION_KEYS.PHOTO],
             toNickname: connectedUser[CONNECTION_KEYS.NICKNAME],
             toId: id,
+            message,
             dateCreated: '(PENDING)',
           }
         })
@@ -140,6 +141,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
           toPhoto: invitation[INVITATION_KEYS.TO_PHOTO],
           toNickname: invitation[INVITATION_KEYS.TO_NICKNAME],
           toId: invitation[INVITATION_KEYS.TO_ID],
+          message: invitation[INVITATION_KEYS.MESSAGE],
           dateCreated: formatDate(invitation[INVITATION_KEYS.DATE_CREATED]),
           disableDeletion,
           allowCancellation,
@@ -151,7 +153,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
       if (isExistingInvitation) {
         updateArrayValue(HOUSEHOLD_KEYS.REMOVED_INVITATIONS, toId)
       } else {
-        updateArrayValue(HOUSEHOLD_KEYS.INVITED_CONNECTIONS, toId, false)
+        updateArrayValue(HOUSEHOLD_KEYS.INVITED_CONNECTIONS, { id: toId }, false)
       }
     },
     toId => updateArrayValue(HOUSEHOLD_KEYS.REMOVED_INVITATIONS, toId, false)
@@ -221,7 +223,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
           </SectionHeadline>
           <HouseholdInvitationForm
             connections={invitableConnections}
-            onInvite={id => updateArrayValue(HOUSEHOLD_KEYS.INVITED_CONNECTIONS, id)}
+            onInvite={(id, message) => updateArrayValue(HOUSEHOLD_KEYS.INVITED_CONNECTIONS, { id, message })}
           />
         </>
       )}
