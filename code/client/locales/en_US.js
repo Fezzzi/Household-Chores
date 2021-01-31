@@ -1,7 +1,11 @@
-import { AUTH, COMMON, ERROR, FORM, HINT, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
+/* eslint-disable max-len */
 import {
-  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, PROFILE_TABS, HOUSEHOLD_TABS,
+  AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, SETTINGS, SUCCESS,
+} from 'shared/constants/localeMessages'
+import {
+  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS,
 } from 'shared/constants'
+import { LINKS } from 'clientSrc/constants'
 
 export default {
   [AUTH.BACK_TO_LOGIN]: 'Back to Login',
@@ -126,6 +130,8 @@ export default {
 
   [HINT.VISIBILITY]: 'Controls who will be able to find Your account and send connection request.',
 
+  [HOME.NO_HOUSEHOLD]: `Seems like you are not a member of any household yet. Start @[${LINKS.NEW_HOUSEHOLD}]by creating@ one or @[${LINKS.FIND_CONNECTION}]by making connections@ to get invited.`,
+
   [HOUSEHOLD.LEAVE]: 'Leave household',
   [HOUSEHOLD.LEAVING]: 'Leaving',
   [HOUSEHOLD.DELETE]: 'Delete household',
@@ -150,10 +156,10 @@ export default {
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.GENERAL}`]]: 'General',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.NOTIFICATIONS}`]]: 'Notifications',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.DIALOGS}`]]: 'Dialogs',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.MY_CONNECTIONS}`]]: 'My connections',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.PENDING}`]]: 'Requests',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.BLOCKED}`]]: 'Blocked',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.FIND_CONNECTION}`]]: 'Find connection',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${CONNECTION_TABS.MY_CONNECTIONS}`]]: 'My connections',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${CONNECTION_TABS.PENDING}`]]: 'Requests',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${CONNECTION_TABS.BLOCKED}`]]: 'Blocked',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${CONNECTION_TABS.FIND_CONNECTION}`]]: 'Find connection',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.NEW_HOUSEHOLD}`]]: 'Create household',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.INVITATIONS}`]]: 'Invitations',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS._HOUSEHOLD}`]]: 'Household',

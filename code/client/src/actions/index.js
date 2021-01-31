@@ -7,8 +7,9 @@ import * as SettingsActions from './settingsActions'
 import * as HouseholdActions from './householdActions'
 import * as ThemeActions from './themeActions'
 import * as DialogActions from './dialogActions'
+import * as HomeActions from './homeActions'
 
 export {
   AuthActions, LocaleActions, ModalActions, NotificationActions, RootActions, SettingsActions, ThemeActions,
-  HouseholdActions, DialogActions,
+  HouseholdActions, DialogActions, HomeActions,
 }

@@ -6,6 +6,7 @@ import LogoTop from '~/static/logo-top.svgr'
 import { AuthContent, InputsBlock, LogoBlock, LogoTopBlock } from 'clientSrc/styles/blocks/auth'
 import { AUTH_TABS } from 'clientSrc/constants'
 import { AUTH } from 'shared/constants/localeMessages'
+import { API } from 'shared/constants'
 
 import LogInForm from './LogInForm'
 import SignUpForm from './SignUpForm'
@@ -27,18 +28,20 @@ const AuthForm = ({ history, location }) => {
     }
   }, [location])
 
-  const renderTab = () => {
-    switch (currentTab) {
-      case AUTH_TABS.SIGNUP_TAB: return <SignUpForm />
-      case AUTH_TABS.RESET_TAB: return <ResetPassForm switchTab={switchTab} />
-      default: return <LogInForm switchTab={switchTab} />
-    }
-  }
-
   const switchTab = newTab => history.push({
     pathname: newTab,
     hash: location.hash,
   })
+
+  const showTaC = () => history.push(`/${API.RESOURCES_PREFIX}/${API.RESOURCE_TAC}`)
+
+  const renderTab = () => {
+    switch (currentTab) {
+      case AUTH_TABS.SIGNUP_TAB: return <SignUpForm showTaC={showTaC} />
+      case AUTH_TABS.RESET_TAB: return <ResetPassForm switchTab={switchTab} />
+      default: return <LogInForm switchTab={switchTab} />
+    }
+  }
 
   const getTabBottom = () => {
     switch (currentTab) {
@@ -61,22 +64,20 @@ const AuthForm = ({ history, location }) => {
   }
 
   return (
-    <>
-      <AuthContent>
-        <LogoBlock>
-          <LogoTopBlock>
-            <LogoTop />
-          </LogoTopBlock>
-          HouseHold
-        </LogoBlock>
-        <InputsBlock extraPadding>
-          {renderTab()}
-        </InputsBlock>
-        <InputsBlock>
-          <BottomBlock {...(getTabBottom())} />
-        </InputsBlock>
-      </AuthContent>
-    </>
+    <AuthContent>
+      <LogoBlock>
+        <LogoTopBlock>
+          <LogoTop />
+        </LogoTopBlock>
+        HouseHold
+      </LogoBlock>
+      <InputsBlock extraPadding>
+        {renderTab()}
+      </InputsBlock>
+      <InputsBlock>
+        <BottomBlock {...(getTabBottom())} />
+      </InputsBlock>
+    </AuthContent>
   )
 }
 
