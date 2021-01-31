@@ -2,7 +2,7 @@ import express from 'express'
 
 import {
   deleteHousehold, deleteInvitation, findHouseholdAdmins, findUserHouseholds,
-  findUserInvitations, getUserRole, leaveHousehold,
+  findUserInvitations, getUserRole, leaveHousehold, getUserHouseholdsData,
 } from 'serverSrc/database/models'
 import { API, NOTIFICATION_TYPE, HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
@@ -12,6 +12,27 @@ import { handleApproveHouseholdInvitation, handleCreateHousehold } from './handl
 
 export default () => {
   const router = express.Router()
+  router.get('/:action', async (req, res) => {
+    const { params: { action } } = req
+    const userId = req.session!.user
+    switch (action) {
+      case API.HOUSEHOLDS_LOAD: {
+        // eslint-disable-next-line no-undef
+        const households = await getUserHouseholdsData(userId)
+        if (!households) {
+          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR] })
+          return true
+        }
+
+        res.status(200).send(households)
+        return true
+      }
+      default:
+        res.status(404).send('Not Found')
+    }
+    return true
+  })
+
   router.post('/:action', async (req, res) => {
     const { params: { action }, body } = req
     const userId = req.session!.user

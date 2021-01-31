@@ -1,7 +1,11 @@
-import { AUTH, COMMON, ERROR, FORM, HINT, HOUSEHOLD, INFO, SETTINGS, SUCCESS } from 'shared/constants/localeMessages'
+/* eslint-disable max-len */
 import {
-  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, SETTING_TABS, PROFILE_TABS, HOUSEHOLD_TABS,
+  AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, SETTINGS, SUCCESS,
+} from 'shared/constants/localeMessages'
+import {
+  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS,
 } from 'shared/constants'
+import { LINKS } from 'clientSrc/constants'
 
 export default {
   [AUTH.BACK_TO_LOGIN]: 'Zpět na přihlášení',
@@ -126,6 +130,8 @@ export default {
 
   [HINT.VISIBILITY]: 'Nastavuje kdo bude schopen Váš účet vyhledat a poslat žádost o spojení.',
 
+  [HOME.NO_HOUSEHOLD]: `Vypadá to že zatím nejste členem žádné domácnosti. Začněte jejím @[${LINKS.NEW_HOUSEHOLD}]vytvořením@ nebo si @[${LINKS.FIND_CONNECTION}]najděte spojení@ a získejte pozvánku.`,
+
   [HOUSEHOLD.LEAVE]: 'Opustit domácnost',
   [HOUSEHOLD.LEAVING]: 'Opouštím',
   [HOUSEHOLD.DELETE]: 'Smazat domácnost',
@@ -150,10 +156,10 @@ export default {
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.GENERAL}`]]: 'Obecné',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.NOTIFICATIONS}`]]: 'Notifikace',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.DIALOGS}`]]: 'Dialogy',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.MY_CONNECTIONS}`]]: 'Moje spojení',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.PENDING}`]]: 'Žádosti',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.BLOCKED}`]]: 'Blokování',
-  [SETTINGS[`${SETTING_COLUMNS.TAB}_${SETTING_TABS.FIND_CONNECTION}`]]: 'Hledat spojení',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${CONNECTION_TABS.MY_CONNECTIONS}`]]: 'Moje spojení',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${CONNECTION_TABS.PENDING}`]]: 'Žádosti',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${CONNECTION_TABS.BLOCKED}`]]: 'Blokování',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${CONNECTION_TABS.FIND_CONNECTION}`]]: 'Hledat spojení',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.NEW_HOUSEHOLD}`]]: 'Vytvořit domácnost',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.INVITATIONS}`]]: 'Pozvánky',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS._HOUSEHOLD}`]]: 'Domácnost',

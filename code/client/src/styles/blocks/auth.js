@@ -111,8 +111,12 @@ export const MessageBlock = styled.p`
   text-align: center;
 `
 
-export const MessageBlockLink = styled.a`
+export const MessageBlockLink = styled.span`
   color: ${COLORS.GREY_PRIMARY};
   font-weight: 600;
   text-decoration: none;
+  
+  :hover {
+    cursor: pointer;
+  }
 `

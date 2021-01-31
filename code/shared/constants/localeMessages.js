@@ -1,5 +1,5 @@
 import {
-  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_TABS, PROFILE_TABS, HOUSEHOLD_TABS, SETTING_CATEGORIES,
+  USER_VISIBILITY_TYPE, SETTING_COLUMNS, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, SETTING_CATEGORIES,
 } from 'shared/constants'
 import { DIALOG_KEYS } from 'shared/constants/mappingKeys'
 
@@ -141,6 +141,10 @@ export const HINT = {
   VISIBILITY: 'hint.visibility',
 }
 
+export const HOME = {
+  NO_HOUSEHOLD: 'home.noHousehold',
+}
+
 export const HOUSEHOLD = {
   LEAVE: 'household.leave',
   LEAVING: 'household.leaving',
@@ -170,10 +174,10 @@ export const SETTINGS = {
   [`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.NOTIFICATIONS}`]: 'settings.tabNotifications',
   [`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.DIALOGS}`]: 'settings.tabDialogs',
 
-  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.MY_CONNECTIONS}`]: 'settings.tabMyConnections',
-  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.PENDING}`]: 'settings.tabPending',
-  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.BLOCKED}`]: 'settings.tabBlocked',
-  [`${SETTING_COLUMNS.TAB}_${SETTING_TABS.FIND_CONNECTION}`]: 'settings.tabFindConnection',
+  [`${SETTING_COLUMNS.TAB}_${CONNECTION_TABS.MY_CONNECTIONS}`]: 'settings.tabMyConnections',
+  [`${SETTING_COLUMNS.TAB}_${CONNECTION_TABS.PENDING}`]: 'settings.tabPending',
+  [`${SETTING_COLUMNS.TAB}_${CONNECTION_TABS.BLOCKED}`]: 'settings.tabBlocked',
+  [`${SETTING_COLUMNS.TAB}_${CONNECTION_TABS.FIND_CONNECTION}`]: 'settings.tabFindConnection',
 
   [`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.NEW_HOUSEHOLD}`]: 'settings.newHousehold',
   [`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.INVITATIONS}`]: 'settings.invitations',

@@ -4,7 +4,7 @@ import {
   ConnectionRequestsForm, ConnectionSearchForm, HouseholdCreateForm, HouseholdModificationForm, DialogsForm,
   HouseholdInvitationListForm, ProfileForm, NotificationForm, ConnectionsListForm, ConnectionBlocksForm,
 } from 'clientSrc/components/forms'
-import { SETTING_CATEGORIES, SETTING_TABS, PROFILE_TABS, HOUSEHOLD_TABS, CONNECTION_STATE_TYPE } from 'shared/constants'
+import { SETTING_CATEGORIES, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, CONNECTION_STATE_TYPE } from 'shared/constants'
 
 export const settingsRenderers = {
   [SETTING_CATEGORIES.PROFILE]: {
@@ -15,16 +15,16 @@ export const settingsRenderers = {
   [SETTING_CATEGORIES.CONNECTIONS]: {
     tabModifiers: data => tab => {
       switch (tab) {
-        case SETTING_TABS.MY_CONNECTIONS: return ` (${data[CONNECTION_STATE_TYPE.APPROVED]?.length || 0})`
-        case SETTING_TABS.PENDING: return ` (${data[CONNECTION_STATE_TYPE.WAITING]?.length || 0})`
-        case SETTING_TABS.BLOCKED: return ` (${data[CONNECTION_STATE_TYPE.BLOCKED]?.length || 0})`
+        case CONNECTION_TABS.MY_CONNECTIONS: return ` (${data[CONNECTION_STATE_TYPE.APPROVED]?.length || 0})`
+        case CONNECTION_TABS.PENDING: return ` (${data[CONNECTION_STATE_TYPE.WAITING]?.length || 0})`
+        case CONNECTION_TABS.BLOCKED: return ` (${data[CONNECTION_STATE_TYPE.BLOCKED]?.length || 0})`
         default: return ''
       }
     },
-    [SETTING_TABS.MY_CONNECTIONS]: data => <ConnectionsListForm data={data[CONNECTION_STATE_TYPE.APPROVED]} />,
-    [SETTING_TABS.FIND_CONNECTION]: data => <ConnectionSearchForm data={data[CONNECTION_STATE_TYPE.FOUND]} />,
-    [SETTING_TABS.PENDING]: data => <ConnectionRequestsForm data={data[CONNECTION_STATE_TYPE.WAITING]} />,
-    [SETTING_TABS.BLOCKED]: data => <ConnectionBlocksForm data={data[CONNECTION_STATE_TYPE.BLOCKED]} />,
+    [CONNECTION_TABS.MY_CONNECTIONS]: data => <ConnectionsListForm data={data[CONNECTION_STATE_TYPE.APPROVED]} />,
+    [CONNECTION_TABS.FIND_CONNECTION]: data => <ConnectionSearchForm data={data[CONNECTION_STATE_TYPE.FOUND]} />,
+    [CONNECTION_TABS.PENDING]: data => <ConnectionRequestsForm data={data[CONNECTION_STATE_TYPE.WAITING]} />,
+    [CONNECTION_TABS.BLOCKED]: data => <ConnectionBlocksForm data={data[CONNECTION_STATE_TYPE.BLOCKED]} />,
   },
   [SETTING_CATEGORIES.HOUSEHOLDS]: {
     tabModifiers: data => tab => tab === HOUSEHOLD_TABS.INVITATIONS && ` (${data.invitations?.length || 0})`,

@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
+import PropTypes from 'prop-types'
 
-import { INPUT_TYPE, NOTIFICATION_TYPE, API } from 'shared/constants'
+import { INPUT_TYPE, NOTIFICATION_TYPE } from 'shared/constants'
 import { AUTH, COMMON, FORM } from 'shared/constants/localeMessages'
 import { AuthActions, NotificationActions } from 'clientSrc/actions'
 import { MessageBlock, MessageBlockLink } from 'clientSrc/styles/blocks/auth'
@@ -19,7 +20,7 @@ const inputConfig = [
   { name: 'password', message: FORM.PASSWORD, type: INPUT_TYPE.PASSWORD },
 ]
 
-const SignUpForm = () => {
+const SignUpForm = ({ showTaC }) => {
   const dispatch = useDispatch()
   const addNotification = useCallback((type, message) =>
     dispatch(NotificationActions.addNotifications({ [type]: [message] })),
@@ -62,12 +63,16 @@ const SignUpForm = () => {
       </PrimaryButton>
       <MessageBlock>
         <LocaleText message={AUTH.TERMS_AGREEMENT} />
-        <MessageBlockLink target="_self" href={`/${API.RESOURCES_PREFIX}/${API.RESOURCE_TAC}`}>
+        <MessageBlockLink onClick={showTaC}>
           <LocaleText message={COMMON.TERMS_AND_CONDITIONS} />
         </MessageBlockLink>.
       </MessageBlock>
     </form>
   )
+}
+
+SignUpForm.propTypes = {
+  showTaC: PropTypes.func.isRequired,
 }
 
 export default SignUpForm

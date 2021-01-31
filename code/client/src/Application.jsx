@@ -13,7 +13,7 @@ import Notifications from './components/notifications'
 import Router, { history } from './components/Router'
 import PageTheme from './components/PageTheme'
 import Footer from './components/Footer'
-import Modal from './components/modals/Modal'
+import Modal from './components/Modal'
 
 export default () => {
   const sagaMiddleware = createSagaMiddleware()

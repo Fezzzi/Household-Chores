@@ -4,11 +4,9 @@ import deepEqual from 'fast-deep-equal'
 
 import { MODAL_TYPE } from 'clientSrc/constants'
 
-import EditPhotoModal from './EditPhotoModal'
-import ConfirmationModal from './ConfirmationModal'
-import TutorialModal from './TutorialModal'
-import InvitationAcceptModal from './InvitationAcceptModal'
-import AppendMessageModal from './AppendMessageModal'
+import {
+  EditPhotoModal, ConfirmationModal, TutorialModal, InvitationAcceptModal, AppendMessageModal,
+} from './modals'
 
 const Modal = () => {
   const modals = useSelector(({ modal }) => modal, deepEqual)

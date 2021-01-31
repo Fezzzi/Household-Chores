@@ -5,7 +5,7 @@ import { FormHeaderLeftPanel, FormHeaderRightPanel } from 'clientSrc/styles/bloc
 
 export const SettingsWrapper = styled.div`
   width: 100%;
-  height: calc(100% - 30px);
+  height: calc(100vh - 70px);
   overflow: hidden;
   display: flex;
   padding: 15px 0 15px 20px;
@@ -14,7 +14,7 @@ export const SettingsWrapper = styled.div`
 export const ColumnWrapper = styled.div`
   min-width: ${props => props.width};
   max-width: ${props => props.width};
-  height: calc(100% - 30px);;
+  height: calc(100% - 20px);
   display: table-col;
   margin-right: 10px;
   color: ${COLORS.FONT};
@@ -65,10 +65,10 @@ export const SettingRow = styled.div`
 export const ContentColumn = styled.div`
   position: relative;
   width: 100%;
-  min-height: calc(100% - 58px);
-  max-height: calc(100% - 58px);
+  min-height: calc(100% - 28px);
+  max-height: calc(100% - 28px);
   background-color: ${COLORS.THEME_FRONT};
-  padding: 14px;
+  padding: 14px 14px 0;
   margin: 14px 20px 14px 0;
   border: 1px solid ${COLORS.BORDER};
   overflow-y: auto;

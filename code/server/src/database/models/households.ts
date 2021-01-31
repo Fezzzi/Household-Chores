@@ -30,6 +30,45 @@ export const findUserInvitations = async (currentUser: number): Promise<Array<ob
   }))
 }
 
+export const getUserHouseholdsData = async (currentUser: number): Promise<Array<object>> => {
+  const households = await database.query(`
+    SELECT households.${tHouseholdsCols.id}, households.${tHouseholdsCols.name} AS h_name,
+      households.${tHouseholdsCols.photo} AS h_photo, CONCAT('household-', households.${tHouseholdsCols.id}) AS "key",
+      households.${tHouseholdsCols.date_created}, members.${tHouseMemCols.role},
+      members.${tHouseMemCols.id_user}, members.${tHouseMemCols.name}, members.${tHouseMemCols.photo}
+    FROM ${tHouseholdsName} AS households
+    INNER JOIN ${tHouseMemName} AS mems
+      ON households.${tHouseholdsCols.id}=mems.${tHouseMemCols.id_household} AND mems.${tHouseMemCols.id_user}=${currentUser}
+    LEFT JOIN ${tHouseMemName} AS members ON households.${tHouseholdsCols.id}=members.${tHouseInvCols.id_household}
+  `)
+
+  return Object.values(households.reduce((acc: any, household: any) => {
+    const householdId = household[tHouseholdsCols.id]
+    if (acc[householdId] === undefined) {
+      acc[householdId] = {
+        [HOUSEHOLD_KEYS.ID]: household[tHouseholdsCols.id],
+        [HOUSEHOLD_KEYS.NAME]: household.h_name,
+        [HOUSEHOLD_KEYS.PHOTO]: household.h_photo,
+        [HOUSEHOLD_KEYS.KEY]: household.key,
+        [HOUSEHOLD_KEYS.DATE_CREATED]: household[tHouseholdsCols.date_created],
+        [HOUSEHOLD_GROUP_KEYS.MEMBERS]: [],
+      }
+    }
+    if (household[tHouseMemCols.id_user]
+      && !acc[householdId][HOUSEHOLD_GROUP_KEYS.MEMBERS].find((member: any) =>
+        member[MEMBER_KEYS.ID] === household[tHouseMemCols.id_user])
+    ) {
+      acc[householdId][HOUSEHOLD_GROUP_KEYS.MEMBERS].push({
+        [MEMBER_KEYS.ID]: household[tHouseMemCols.id_user],
+        [MEMBER_KEYS.ROLE]: household[tHouseMemCols.role],
+        [MEMBER_KEYS.NAME]: household[tHouseMemCols.name],
+        [MEMBER_KEYS.PHOTO]: household[tHouseMemCols.photo],
+      })
+    }
+    return acc
+  }, {}))
+}
+
 export const findUserHouseholds = async (currentUser: number): Promise<Array<object>> => {
   const households = await database.query(`
     SELECT households.${tHouseholdsCols.id}, households.${tHouseholdsCols.name} AS h_name,
@@ -46,6 +85,7 @@ export const findUserHouseholds = async (currentUser: number): Promise<Array<obj
     LEFT JOIN ${tUsersName} AS users ON users.${tUsersCols.id}=invitations.${tHouseInvCols.id_to}
     LEFT JOIN ${tHouseMemName} AS members ON households.${tHouseholdsCols.id}=members.${tHouseInvCols.id_household}
   `)
+
   return Object.values(households.reduce((acc: any, household: any) => {
     const householdId = household[tHouseholdsCols.id]
     if (acc[householdId] === undefined) {
