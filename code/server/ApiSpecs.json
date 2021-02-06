@@ -1,0 +1,450 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Household API",
+    "description": "Household App API documentation",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:{port}",
+      "description": "Local server",
+      "variables": {
+        "port": {
+          "default": "8080"
+        }
+      }
+    },
+    {
+      "url": "https://household-chores-beta.azurewebsites.net",
+      "description": "Beta server"
+    },
+    {
+      "url": "https://household-chores.azurewebsites.net",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/load/state": {
+      "get": {
+        "summary": "Returns data identifying current user and environment",
+        "operationId": "loadState",
+        "tags": ["Load"],
+        "responses": {
+          "200": {
+            "description": "Data about current user and environment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/State"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/resources/{resource}": {
+      "get": {
+        "summary": "Returns information for given resource",
+        "operationId": "resources",
+        "tags": ["Resources"],
+        "parameters": [
+          {
+            "name": "resource",
+            "in": "path",
+            "description": "Identifies resource to display",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Locale to display resource page in",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en_US",
+              "enum": [
+                "cs_CZ",
+                "en_US"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data about current user and environment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/auth/sign-up": {
+      "post": {
+        "summary": "Signs up the user",
+        "operationId": "authSignup",
+        "tags": ["Auth"],
+        "requestBody": {
+          "description": "Sign up form input values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "inputs": {
+                    "$ref": "#/components/schemas/SignUpForm"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Notification about successful result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notifications"
+                }
+              }
+            },
+            "headers": {
+              "Set-Header": {
+                "schema": {
+                  "type": "string",
+                  "example": "user_sid=s%3Ab7pTnC4Scuw_Vpiu_0fKhij0hZ9oOitu.4z9glr85D...; Path=/; Expires=Sun, 06 Feb 2022 16:16:03 GMT; HttpOnly"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/log-in": {
+      "post": {
+        "summary": "Logs in the user",
+        "operationId": "authLogin",
+        "tags": ["Auth"],
+        "requestBody": {
+          "description": "Log in form input values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "inputs": {
+                    "$ref": "#/components/schemas/LogInForm"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Notification about successful result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notifications"
+                }
+              }
+            },
+            "headers": {
+              "Set-Header": {
+                "schema": {
+                  "type": "string",
+                  "example": "user_sid=s%3Ab7pTnC4Scuw_Vpiu_0fKhij0hZ9oOitu.4z9glr85D...; Path=/; Expires=Sun, 06 Feb 2022 16:16:03 GMT; HttpOnly"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/reset": {
+      "post": {
+        "summary": "Resets user's password",
+        "operationId": "authReset",
+        "tags": ["Auth"],
+        "requestBody": {
+          "description": "Reset pass form input values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "inputs": {
+                    "$ref": "#/components/schemas/ResetPassForm"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Notification about successful result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notifications"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/delete": {
+      "post": {
+        "summary": "Deletes user's account",
+        "operationId": "authDelete",
+        "tags": ["Auth"],
+        "responses": {
+          "200": {
+            "description": "Notification about successful result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notifications"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/settings": {
+
+    },
+    "/connections": {
+
+    },
+    "/households": {
+
+    },
+    "/dialogs": {
+
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "user_sid"
+      }
+    },
+    "schemas": {
+      "State": {
+        "required": [
+          "debug",
+          "loggedUser"
+        ],
+        "properties": {
+          "debug": {
+            "type": "boolean"
+          },
+          "loggedUser": {
+            "type": "boolean"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "activityFeed": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Activity"
+            }
+          },
+          "dialogSettings": {
+            "$ref": "#/components/schemas/DialogSettings"
+          }
+        }
+      },
+      "User": {
+        "required": [
+          "nickname",
+          "email",
+          "photo",
+          "visibility"
+        ],
+        "properties": {
+          "nickname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "photo": {
+            "type": "string",
+            "format": "link"
+          },
+          "visibility": {
+            "type": "string",
+            "default": "FRIENDS_OF_FRIENDS",
+            "enum": [
+              "ALL",
+              "FRIENDS_OF_FRIENDS"
+            ]
+          }
+        }
+      },
+      "Activity": {
+        "required": [
+          "id",
+          "message",
+          "link",
+          "dateCreated"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "uuid"
+          },
+          "message": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string",
+            "format": "link"
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DialogSettings": {
+        "required": [
+          "tutorial",
+          "householdMemberDeleting"
+        ],
+        "properties": {
+          "tutorial": {
+            "type": "boolean"
+          },
+          "householdMemberDeleting": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Resource": {
+        "required": [
+          "headline",
+          "body"
+        ],
+        "properties": {
+          "headline": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string",
+            "format": "html"
+          },
+          "banner": {
+            "type": "string",
+            "format": "base64"
+          },
+          "icon": {
+            "type": "string",
+            "format": "base64"
+          }
+        }
+      },
+      "SignUpForm": {
+        "required": [
+          "email",
+          "nickname",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "format": "pass"
+          }
+        }
+      },
+      "LogInForm": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "pass"
+          }
+        }
+      },
+      "ResetPassForm": {
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      "Notifications": {
+        "properties": {
+          "successes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
