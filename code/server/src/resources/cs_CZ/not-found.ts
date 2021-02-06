@@ -1,4 +1,5 @@
-import errorIcon from '~/static/resources/icons/error-icon.svg';
+// @ts-ignore
+import errorIcon from '~/static/resources/icons/error-icon.svg'
 
 export default {
   headline: 'Nenalezeno',
@@ -7,4 +8,4 @@ export default {
   body: `
     <div>Pozadovana stranka nebyla nalezena. Prosim zkontroujte adresu.</div>
   `,
-};
+}
