@@ -1,8 +1,8 @@
 import express from 'express'
 
 import {
-  deleteHousehold, deleteInvitation, findHouseholdAdmins, findUserHouseholds,
-  findUserInvitations, getUserRole, leaveHousehold, getUserHouseholdsData,
+  deleteHousehold, deleteInvitation, findHouseholdAdmins,
+  getUserRole, leaveHousehold, getUserHouseholdsData,
 } from 'serverSrc/database/models'
 import { API, NOTIFICATION_TYPE, HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
@@ -78,14 +78,7 @@ export default () => {
       case API.INVITATION_IGNORE: {
         const { [INVITATION_KEYS.FROM_ID]: fromId, [INVITATION_KEYS.HOUSEHOLD_ID]: householdId } = body
         const success = await deleteInvitation(userId, fromId, householdId)
-        if (success) {
-          res.status(200).send({
-            invitations: await findUserInvitations(userId),
-            households: await findUserHouseholds(userId),
-          })
-          return true
-        }
-        res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+        res.status(200).send(success ?? { [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
         return true
       }
       default:

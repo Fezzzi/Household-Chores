@@ -167,4 +167,5 @@ export default {
   [SUCCESS.RESET_LINK]: 'A reset link has been sent to your email address.',
   [SUCCESS.SETTINGS_UPDATED]: 'Settings have been successfully updated.',
   [SUCCESS.ACCOUNT_CREATED]: 'Your account has been successfully created.',
+  [SUCCESS.CONNECTION_REQUEST_SENT]: 'Connection request sent successfully.',
 }

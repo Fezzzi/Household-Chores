@@ -92,7 +92,7 @@ export const approveConnection = async (currentId: number, targetId: number): Pr
     WHERE ${tConnectionsCols.id_from}=? AND ${tConnectionsCols.id_to}=${currentId}
   `, [targetId])
 
-export const createConnection = async (
+export const createConnectionRequest = async (
   currentId: number,
   targetId: number,
   message: string | null | undefined

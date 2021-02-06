@@ -1,11 +1,11 @@
 import express from 'express'
 
 import {
-  queryUsers, approveConnection, createConnection, blockConnection,
+  queryUsers, approveConnection, createConnectionRequest, blockConnection,
   removeConnection, findBlockedConnections, findConnections,
 } from 'serverSrc/database/models'
 import { API, CONNECTION_STATE_TYPE, NOTIFICATION_TYPE } from 'shared/constants'
-import { ERROR } from 'shared/constants/localeMessages'
+import { ERROR, SUCCESS } from 'shared/constants/localeMessages'
 
 const findUsers = async (req: any, res: any, { query }: { query: string }) => {
   const foundUsers = await queryUsers(query, req.session.user)
@@ -23,7 +23,7 @@ const performConnectionAction = async (
   if (success) {
     const data = await findConnections(req.session.user)
     if (data) {
-      res.status(200).send({ ...data })
+      res.status(200).send(data)
       return true
     }
   }
@@ -39,9 +39,9 @@ const handleConnectionRequest = async (
   const currentUser = req.session.user
   const isRequestValid = !(await findBlockedConnections(targetId)).find(blockedUser => blockedUser === currentUser)
   if (isRequestValid) {
-    const success = await createConnection(currentUser, targetId, message ?? null)
+    const success = await createConnectionRequest(currentUser, targetId, message ?? null)
     if (success) {
-      res.status(200).send({ targetId })
+      res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.CONNECTION_REQUEST_SENT] })
     } else {
       res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] })
     }
