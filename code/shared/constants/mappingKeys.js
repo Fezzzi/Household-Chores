@@ -71,3 +71,10 @@ export const DIALOG_KEYS = {
   TUTORIAL: 'tutorial',
   HOUSEHOLD_MEMBER_DELETING: 'household-member-deleting',
 }
+
+export const ACTIVITY_KEYS = {
+  ID: 'id',
+  MESSAGE: 'message',
+  LINK: 'link',
+  DATE_CREATED: 'date-created',
+}
