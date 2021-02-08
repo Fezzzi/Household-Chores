@@ -24,8 +24,22 @@
 6. run `npm run dev`
 
 ## How to start working
- 1. start the `MySQL` service
- 2. run `git fetch` and `git fetch origin develop:develop` from project root
- 3. on new branch:
-  a. create new branch with `git checkout -b <name-of-new-branch>`
-  3.2.
+1. start the `MySQL` service
+2. run `git fetch` and `git fetch origin development:development` from project root
+3. **(on new branch)**:
+    1. create new branch with `git checkout -b <name-of-new-branch>`
+4. **(on existing branch)**:
+    1. if you didn't commit your local changes, stash them with `git stash "<stash-name>"` (see local changes with `git status`)
+    2. run `git pull` to sync with remote
+    3. rebase branch on `origin/development`
+    4. pop previously stashed local changes if needed with `git stash pop`
+5. run `npm install` and `npm run migrate up`
+6. always commit changes with `git commit -a -m "<commit-message>"` and
+push them with `git push` at the end of coding session (if you expect
+someone else working on the branch as well)
+
+---
+
+| Previous Page | Next Page |
+|:-------------:|:-----:|
+| <sup>[Home](./readme.md)</sup> | <sup>[Migrations](./migrations.md)</sup> |

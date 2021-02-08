@@ -18,3 +18,9 @@ Migrating is controlled with two scripts:
  `down` property are executed when migrating **down** and should therefore perform reverse
  operation.
  4. The second argument of `migrateWithQueries` is function performing the queries and returning `Promise<boolean>`.
+
+---
+
+| Previous Page | Next Page |
+|:-------------:|:-----:|
+| <sup>[Application Setup](./setup.md)</sup>  | <sup>[API](./api.md)</sup> |
