@@ -1,8 +1,8 @@
-import { tUsersName, tUsersCols } from 'serverSrc/database/models/tables'
 import { migrateWithQueries } from 'serverSrc/helpers/migrations'
+import { tUsersName, tUsersCols } from 'serverSrc/database/models/tables'
 
 module.exports = {
-  up: async (conn, cb) => migrateWithQueries(cb,
+  up: async (conn, cb) => await migrateWithQueries(cb, async () =>
     await conn.query(`
       CREATE TABLE ${tUsersName} (
         ${tUsersCols.id} INT AUTO_INCREMENT PRIMARY KEY,
@@ -24,5 +24,5 @@ module.exports = {
       ) VALUES ('test@test.cz', 'test', '$2y$12$917uKopA7bPqkCDlHCyavO5fAch/CFYre7aANyqxnUqZZrNnQQQOy', 1, NOW())
     `)
   ),
-  down: async (conn, cb) => migrateWithQueries(cb, await conn.query(`DROP TABLE ${tUsersName}`)),
+  down: async (conn, cb) => await migrateWithQueries(cb, async () => await conn.query(`DROP TABLE ${tUsersName}`)),
 }

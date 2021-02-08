@@ -4,7 +4,7 @@ import {
 import { migrateWithQueries } from 'serverSrc/helpers/migrations'
 
 module.exports = {
-  up: async (conn, cb) => migrateWithQueries(cb,
+  up: async (conn, cb) => await migrateWithQueries(cb, async () =>
     await conn.query(`
       CREATE TABLE ${tActivityName} (
         ${tActivityCols.id} INT AUTO_INCREMENT PRIMARY KEY,
@@ -36,7 +36,7 @@ module.exports = {
       INSERT INTO ${tNotifySettingsName} (${tNotifySettingsCols.id_user}) SELECT ${tUsersCols.id} FROM ${tUsersName}
     `)
   ),
-  down: async (conn, cb) => migrateWithQueries(cb,
+  down: async (conn, cb) => await migrateWithQueries(cb, async () =>
     await conn.query(`DROP TABLE ${tActivityName}`)
     && await conn.query(`DROP TABLE ${tNotifySettingsName}`)
   ),

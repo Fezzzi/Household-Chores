@@ -26,6 +26,7 @@
   ],
   "paths": {
     "/load/state": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "get": {
         "summary": "Returns data identifying current user and environment",
         "operationId": "loadState",
@@ -46,6 +47,7 @@
     },
 
     "/resources/{resource}": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "get": {
         "summary": "Returns information for given resource",
         "operationId": "resources",
@@ -91,6 +93,7 @@
     },
 
     "/auth/sign-up": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "post": {
         "summary": "Signs up the user",
         "operationId": "authSignup",
@@ -135,6 +138,7 @@
       }
     },
     "/auth/log-in": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "post": {
         "summary": "Logs in the user",
         "operationId": "authLogin",
@@ -179,6 +183,7 @@
       }
     },
     "/auth/reset": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "post": {
         "summary": "Resets user's password",
         "operationId": "authReset",
@@ -215,6 +220,7 @@
       }
     },
     "/auth/delete": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "post": {
         "summary": "Deletes user's account",
         "operationId": "authDelete",
@@ -236,6 +242,7 @@
     },
 
     "/connections/find": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "post": {
         "summary": "Searches for users with names/emails matching query provided",
         "operationId": "connectionsFind",
@@ -282,6 +289,7 @@
       }
     },
     "/connections/request": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "post": {
         "summary": "Sends connection request to the user",
         "operationId": "connectionsRequest",
@@ -323,6 +331,7 @@
       }
     },
     "/connections/{action}": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "post": {
         "summary": "Performs given connection action",
         "operationId": "connectionsAction",
@@ -367,6 +376,7 @@
     },
 
     "/households/load": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "get": {
         "summary": "Loads information about user's households",
         "operationId": "householdsLoad",
@@ -390,6 +400,7 @@
       }
     },
     "/households/create": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "post": {
         "summary": "Creates new household",
         "operationId": "householdsCreate",
@@ -441,6 +452,7 @@
       }
     },
     "/households/{action}": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "post": {
         "summary": "Deletes/Leaves given household",
         "operationId": "householdsAction",
@@ -492,6 +504,7 @@
       }
     },
     "/households/approve": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "post": {
         "summary": "Approves household invitation",
         "operationId": "householdsApprove",
@@ -555,6 +568,7 @@
       }
     },
     "/households/ignore": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "post": {
         "summary": "Ignores household invitation",
         "operationId": "householdsIgnore",
@@ -599,6 +613,7 @@
     },
 
     "/settings": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "get": {
         "summary": "Fetches data for a settings page",
         "operationId": "settingsLoad",
@@ -658,7 +673,12 @@
                     "$ref": "#/components/schemas/SettingsTabs"
                   },
                   "inputs": {
-                    "type": "string"
+                    "anyOf": [
+                      { "$ref": "#/components/schemas/ProfileEditForm" },
+                      { "$ref": "#/components/schemas/NotificationsEditForm" },
+                      { "$ref": "#/components/schemas/DialogsEditForm" },
+                      { "$ref": "#/components/schemas/HouseholdEditForm" }
+                    ]
                   }
                 }
               }
@@ -680,6 +700,7 @@
       }
     },
     "/dialogs/disable": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
       "post": {
         "summary": "Disables appearing of specified dialog",
         "operationId": "dialogDisable",
@@ -734,6 +755,17 @@
               "$ref": "#/components/schemas/Connections"
             }
           }
+        }
+      }
+    },
+    "parameters": {
+      "xhrHeader": {
+        "in": "header",
+        "name": "X-Requested-With",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "default": "XMLHttpRequest"
         }
       }
     },
@@ -792,6 +824,14 @@
             ]
           }
         }
+      },
+      "UserRole": {
+        "type": "string",
+        "enum": [
+          "ADMIN",
+          "MANAGER",
+          "MEMBER"
+        ]
       },
       "Activity": {
         "required": [
@@ -918,6 +958,114 @@
           "userPhoto": {
             "type": "string",
             "format": "link"
+          }
+        }
+      },
+      "ProfileEditForm": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "photo": {
+            "type": "string",
+            "format": "link"
+          },
+          "oldPassword": {
+            "type": "string",
+            "format": "password"
+          },
+          "newPassword": {
+            "type": "string",
+            "format": "password"
+          },
+          "connectionVisibility": {
+            "type": "string",
+            "enum": ["ALL", "FRIENDS_OF_FRIENDS"]
+          }
+        }
+      },
+      "NotificationsEditForm": {
+        "type": "object",
+        "properties": {
+          "[dbColumnName]": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DialogsEditForm": {
+        "type": "object",
+        "properties": {
+          "tutorial": {
+            "type": "boolean"
+          },
+          "householdMemberDeleting": {
+            "type": "boolean"
+          }
+        }
+      },
+      "HouseholdEditForm": {
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "uuid"
+          },
+          "userRole": {
+            "$ref": "#/components/schemas/UserRole"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "userPhoto": {
+            "type": "string",
+            "format": "link"
+          },
+          "name": {
+            "type": "string"
+          },
+          "photo": {
+            "type": "string",
+            "format": "link"
+          },
+          "invitedConnections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NewInvitation"
+            }
+          },
+          "changedRoles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "role"],
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "format": "uuid"
+                },
+                "role": {
+                  "$ref": "#/components/schemas/UserRole"
+                }
+              }
+            }
+          },
+          "removedMembers": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "uuid"
+            }
+          },
+          "removedInvitations": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "uuid"
+            }
           }
         }
       },
@@ -1093,12 +1241,7 @@
             "format": "uuid"
           },
           "role": {
-            "type": "string",
-            "enum": [
-              "ADMIN",
-              "MANAGER",
-              "MEMBER"
-            ]
+            "$ref": "#/components/schemas/UserRole"
           },
           "name": {
             "type": "string"

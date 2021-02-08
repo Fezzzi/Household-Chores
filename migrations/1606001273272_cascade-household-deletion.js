@@ -4,7 +4,7 @@ import {
 import { migrateWithQueries } from 'serverSrc/helpers/migrations'
 
 module.exports = {
-  up: async (conn, cb) => migrateWithQueries(cb,
+  up: async (conn, cb) => await migrateWithQueries(cb, async () =>
     await conn.query(`
       ALTER TABLE ${tHouseMemName}
       ADD CONSTRAINT FK_HouseholdId
@@ -16,7 +16,7 @@ module.exports = {
       ADD FOREIGN KEY (${tHouseInvCols.id_household} REFERENCES ${tHouseholdsName}(${tHouseholdsCols.id_household}))
     `)
   ),
-  down: async (conn, cb) => migrateWithQueries(cb,
+  down: async (conn, cb) => await migrateWithQueries(cb, async () =>
     await conn.query(`
       ALTER TABLE ${tHouseMemName}
       DROP FOREIGN KEY FK_HouseholdId
