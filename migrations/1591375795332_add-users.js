@@ -17,12 +17,6 @@ module.exports = {
         ${tUsersCols.date_last_active} DATETIME
       )
     `)
-    && await conn.query(`
-      INSERT INTO ${tUsersName} (
-        ${tUsersCols.email}, ${tUsersCols.nickname}, ${tUsersCols.password},
-        ${tUsersCols.confirmed}, ${tUsersCols.date_registered}
-      ) VALUES ('test@test.cz', 'test', '$2y$12$917uKopA7bPqkCDlHCyavO5fAch/CFYre7aANyqxnUqZZrNnQQQOy', 1, NOW())
-    `)
   ),
   down: async (conn, cb) => await migrateWithQueries(cb, async () => await conn.query(`DROP TABLE ${tUsersName}`)),
 }

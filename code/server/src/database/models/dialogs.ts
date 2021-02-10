@@ -26,5 +26,7 @@ export const getDialogSettings = async (userId: number): Promise<Record<string, 
     LIMIT 1
   `)
 
+  console.log('MAPPING DIALOGS DATA', settings[0])
+  console.log('MAPPING DIALOGS DATA', mapData(settings[0], mapToDialogKey))
   return mapData(settings[0], mapToDialogKey)
 }

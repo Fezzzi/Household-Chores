@@ -28,7 +28,7 @@ const Home = ({ history }) => {
 
   return (
     <HomeWrapper>
-      {currentHouseholdIndex !== -1
+      {currentHouseholdIndex && currentHouseholdIndex !== -1
         ? (
           <>
             <HouseholdSwitch

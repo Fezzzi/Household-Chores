@@ -4,7 +4,14 @@ import { CONNECTION_STATE_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
 import { PROFILE } from 'shared/constants/mappingKeys'
 
 import {
-  tUsersName, tUsersCols, tConnectionsName, tConnectionsCols, tNotifySettingsName, tNotifySettingsCols,
+  tUsersName,
+  tUsersCols,
+  tConnectionsName,
+  tConnectionsCols,
+  tNotifySettingsName,
+  tNotifySettingsCols,
+  tDialogsName,
+  tDialogsCols,
 } from './tables'
 
 export const isCorrectPassword = async (password: string, userId: number): Promise<boolean> => {
@@ -131,11 +138,11 @@ export const SignUpUser = async (
   database.withTransaction(async (): Promise<{ insertId: number; fsKey: string }> => {
     const pass = await encryptPass(password ?? generatePass())
     const result = await database.query(`
-    INSERT INTO ${tUsersName} (
-      ${tUsersCols.email}, ${tUsersCols.nickname}, ${tUsersCols.password}, ${tUsersCols.photo},
-      ${tUsersCols.google_id}, ${tUsersCols.facebook_id}, ${tUsersCols.date_registered}, ${tUsersCols.date_last_active}
-    ) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
-  `, [email, nickname, pass, photo, googleId, facebookId], false)
+      INSERT INTO ${tUsersName} (
+        ${tUsersCols.email}, ${tUsersCols.nickname}, ${tUsersCols.password}, ${tUsersCols.photo},
+        ${tUsersCols.google_id}, ${tUsersCols.facebook_id}, ${tUsersCols.date_registered}, ${tUsersCols.date_last_active}
+      ) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
+    `, [email, nickname, pass, photo, googleId, facebookId], false)
 
     if (result.insertId) {
       const fsKey = generateFsKey(result.insertId)
@@ -146,6 +153,9 @@ export const SignUpUser = async (
       `)
       await database.query(`
         INSERT INTO ${tNotifySettingsName} (${tNotifySettingsCols.id_user}) VALUES (${result.insertId})
+      `)
+      await database.query(`
+        INSERT INTO ${tDialogsName} (${tDialogsCols.id_user}) VALUES (${result.insertId})
       `)
       return {
         insertId: result.insertId,
