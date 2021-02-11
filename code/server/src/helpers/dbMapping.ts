@@ -1,14 +1,8 @@
-import { tDialogsCols, tActivityCols } from 'serverSrc/database/models/tables'
-import { ACTIVITY_KEYS, DIALOG_KEYS } from 'shared/constants/mappingKeys'
+import { tActivityCols } from 'serverSrc/database/models/tables'
+import { ACTIVITY_KEYS } from 'shared/constants/mappingKeys'
 
 const reverseMapping = (mapping: object) =>
   Object.fromEntries(Object.entries(mapping).map(([name, value]) => [value, name]))
-
-const dialogKeyMapping = {
-  [DIALOG_KEYS.TUTORIAL]: tDialogsCols.tutorial,
-  [DIALOG_KEYS.HOUSEHOLD_MEMBER_DELETING]: tDialogsCols.household_user_deleting,
-}
-const dialogDbMapping = reverseMapping(dialogKeyMapping)
 
 const activityKeyMapping = {
   [ACTIVITY_KEYS.ID]: tActivityCols.id,
@@ -18,8 +12,6 @@ const activityKeyMapping = {
 }
 const activityDbMapping = reverseMapping(activityKeyMapping)
 
-export const mapToDialogKey = (key: string): string => dialogDbMapping[key]
-export const mapFromDialogKey = (key: string): string => dialogKeyMapping[key]
 export const mapToActivityKey = (key: string): string => activityDbMapping[key]
 export const mapFromActivityKey = (key: string): string => activityKeyMapping[key]
 

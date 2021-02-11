@@ -9,7 +9,6 @@ import { useOpenConfirmationDialog } from 'clientSrc/helpers/confirmations'
 import { formatDate } from 'shared/helpers/date'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
-import { DIALOG_KEYS } from 'shared/constants/mappingKeys'
 import { MessageTooltip, OptionsTooltip } from 'clientSrc/components/portals'
 import LocaleText from 'clientSrc/components/common/LocaleText'
 
@@ -66,7 +65,7 @@ export const useMemberListProps = (
       if (deletable) {
         moreOptions.push({
           content: HOUSEHOLD.REMOVE_USER,
-          clickHandler: () => openConfirmationDialog(() => handleDeletion(memberId), DIALOG_KEYS.HOUSEHOLD_MEMBER_DELETING),
+          clickHandler: () => openConfirmationDialog(() => handleDeletion(memberId), 'householdMemberDeleting'),
         })
       }
     }

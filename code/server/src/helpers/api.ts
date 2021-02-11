@@ -2,7 +2,7 @@
  * Helper function that maps db query output fields to match the specified API from openAPI docs.
  * Converts from snake_case to camelCase and flips fields to '<entity>Id' template.
  */
-export const apify = async (queryResult: Promise<Array<any>>): Promise<Array<any>> => {
+export const apify = async <T>(queryResult: Promise<Array<Record<string, T>>>): Promise<Array<Record<string, T>>> => {
   const queriedData = await queryResult
 
   return queriedData.map(data => Object.fromEntries(
@@ -10,7 +10,11 @@ export const apify = async (queryResult: Promise<Array<any>>): Promise<Array<any
   ))
 }
 
-const mapKey = (key: string): string => {
+/**
+ * Converts single key from snake_case to camelCase and flips fields to '<entity>Id' template.
+ * @param key
+ */
+export const mapKey = (key: string): string => {
   const keyParts = key.split('_')
   if (keyParts[0] === 'id') {
     keyParts.push(keyParts.splice(0, 1)[0])
@@ -21,13 +25,17 @@ const mapKey = (key: string): string => {
 
 /**
  * Helper function that de-maps fields matching the specified API from openAPI docs to db field names.
- * Converts from camelCase snake_case camelCase and flips fields from '<entity>Id' template to 'id_<entity>'.
+ * Converts from camelCase to snake_case and flips fields from '<entity>Id' template to 'id_<entity>'.
  */
-export const deApify = (data: Record<string, any>): Record<string, any> => Object.fromEntries(
+export const deApify = <T>(data: Record<string, T>): Record<string, T> => Object.fromEntries(
   Object.entries(data).map(([key, value]) => [deMapKey(key), value])
 )
 
-const deMapKey = (key: string): string => {
+/**
+ * Converts single key from camelCase to snake_case and flips fields from '<entity>Id' template to 'id_<entity>'.
+ * @param key
+ */
+export const deMapKey = (key: string): string => {
   const keyParts = key.split(/(?=[A-Z])/)
   if (keyParts[keyParts.length - 1] === 'Id') {
     keyParts.unshift(keyParts.pop()!)

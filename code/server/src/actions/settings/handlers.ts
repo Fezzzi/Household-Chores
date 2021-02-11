@@ -85,6 +85,7 @@ export const handleSettingsDataUpdate = async (
         }
         case PROFILE_TABS.DIALOGS: {
           const validData = validateDialogsData(inputs, req, res)
+          console.log('VALIDATED DIALOG DATA', validData)
           if (!validData) {
             return true
           }

@@ -1,14 +1,15 @@
 import {
   findApprovedConnections, findUser, getHouseholdMembers, getUserRole, isCorrectPassword,
 } from 'serverSrc/database/models'
-import { tHouseholdsCols, tNotifySettingsCols } from 'serverSrc/database/models/tables'
+import { tDialogsCols, tHouseholdsCols, tNotifySettingsCols } from 'serverSrc/database/models/tables'
 import {
   INPUT_TYPE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE,
   SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS, HOUSEHOLD_ROLE_TYPE, INVITATION_MESSAGE_LENGTH,
 } from 'shared/constants'
-import { DIALOG_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, PROFILE } from 'shared/constants/mappingKeys'
+import { HOUSEHOLD_KEYS, INVITATION_KEYS, PROFILE } from 'shared/constants/mappingKeys'
 import { ERROR, INFO } from 'shared/constants/localeMessages'
 import { isInputValid } from 'shared/helpers/validation'
+import { deApify } from 'serverSrc/helpers/api'
 
 export const getTabList = (
   data: any,
@@ -123,18 +124,19 @@ export const validateDialogsData = (
   req: any,
   res: any
 ): Record<string, number> | null => {
-  const inputKeys = Object.keys(inputs)
-  if (inputKeys.length === 0) {
+  const inputEntries = Object.entries(deApify(inputs))
+  if (inputEntries.length === 0) {
     res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
     return null
   }
 
-  const allowedKeys = Object.values(DIALOG_KEYS)
-  if (!inputKeys.every(name => allowedKeys.includes(name))) {
+
+  const allowedKeys = Object.values(tDialogsCols).filter(name => name !== 'id_user')
+  if (!inputEntries.every(([name]) => allowedKeys.includes(name))) {
     res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return null
   }
-  return Object.fromEntries(inputKeys.map(name => [name, inputs[name] ? 0 : 1]))
+  return Object.fromEntries(inputEntries.map(([name, value]) => [name, value ? 0 : 1]))
 }
 
 export const validateEditHouseholdData = async (

@@ -1,7 +1,6 @@
 import {
   USER_VISIBILITY_TYPE, SETTING_COLUMNS, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, SETTING_CATEGORIES,
 } from 'shared/constants'
-import { DIALOG_KEYS } from 'shared/constants/mappingKeys'
 
 export const AUTH = {
   BACK_TO_LOGIN: 'auth.backToLogin',
@@ -134,7 +133,7 @@ export const FORM = {
   [USER_VISIBILITY_TYPE.FOF]: 'form.userVisibilityFOF',
   [USER_VISIBILITY_TYPE.ALL]: 'form.userVisibilityALL',
 
-  HOUSEHOLD_USER_DELETING_DIALOG: `form.${DIALOG_KEYS.HOUSEHOLD_MEMBER_DELETING}`,
+  HOUSEHOLD_USER_DELETING_DIALOG: `form.householdMemberDeleting`,
 }
 
 export const HINT = {
