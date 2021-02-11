@@ -99,28 +99,10 @@ export const validateProfileData = async (
   return true
 }
 
-export const validateNotificationData = (
+export const tryRemapBoolData = (
   inputs: Record<string, string | number>,
-  req: any,
-  res: any
-): boolean => {
-  const inputKeys = Object.keys(inputs)
-  if (inputKeys.length === 0) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
-    return false
-  }
-
-  if (!inputKeys.every(input => tNotifySettingsCols[input as keyof typeof tNotifySettingsCols] !== undefined)
-    && inputs[tNotifySettingsCols.id_user] === undefined
-  ) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
-    return false
-  }
-  return true
-}
-
-export const validateDialogsData = (
-  inputs: Record<string, string | number>,
+  allowedKeys: string[],
+  valueMapper: (val: string | number) => number,
   req: any,
   res: any
 ): Record<string, number> | null => {
@@ -130,13 +112,11 @@ export const validateDialogsData = (
     return null
   }
 
-
-  const allowedKeys = Object.values(tDialogsCols).filter(name => name !== 'id_user')
   if (!inputEntries.every(([name]) => allowedKeys.includes(name))) {
     res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return null
   }
-  return Object.fromEntries(inputEntries.map(([name, value]) => [name, value ? 0 : 1]))
+  return Object.fromEntries(inputEntries.map(([name, value]) => [name, valueMapper(value)]))
 }
 
 export const validateEditHouseholdData = async (

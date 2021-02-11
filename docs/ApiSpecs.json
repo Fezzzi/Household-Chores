@@ -989,12 +989,11 @@
         }
       },
       "NotificationsEditForm": {
-        "type": "object",
-        "properties": {
-          "[dbColumnName]": {
-            "type": "boolean"
-          }
-        }
+        "anyOf": [
+          { "$ref": "#/components/schemas/GeneralNotifications" },
+          { "$ref": "#/components/schemas/ConnectionNotifications" },
+          { "$ref": "#/components/schemas/HouseholdNotifications" }
+        ]
       },
       "DialogsEditForm": {
         "type": "object",
@@ -1430,32 +1429,39 @@
           }
         }
       },
+      "GeneralNotifications": {
+        "properties": {
+          "emailNotifications": { "type": "boolean" },
+          "browserNotifications": { "type": "boolean" },
+          "mobileNotifications": { "type": "boolean" }
+        }
+      },
+      "ConnectionNotifications": {
+        "properties": {
+          "connectionApproval": { "type": "boolean" },
+          "connectionRequest": { "type": "boolean" }
+        }
+      },
+      "HouseholdNotifications": {
+        "properties": {
+          "householdDeleting": { "type": "boolean" },
+          "householdExpelling": { "type": "boolean" },
+          "householdInvitation": { "type": "boolean" },
+          "householdJoining": { "type": "boolean" },
+          "householdLeaving": { "type": "boolean" }
+        }
+      },
       "NotificationData": {
         "required": ["general", "connections", "households"],
         "properties": {
           "general": {
-            "type": "object",
-            "properties": {
-              "[dbColumnName]": {
-                "type": "boolean"
-              }
-            }
+            "$ref": "#/components/schemas/GeneralNotifications"
           },
           "connections": {
-            "type": "object",
-            "properties": {
-              "[dbColumnName]": {
-                "type": "boolean"
-              }
-            }
+            "$ref": "#/components/schemas/ConnectionNotifications"
           },
           "households": {
-            "type": "object",
-            "properties": {
-              "[dbColumnName]": {
-                "type": "boolean"
-              }
-            }
+            "$ref": "#/components/schemas/HouseholdNotifications"
           }
         }
       },

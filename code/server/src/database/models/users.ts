@@ -4,14 +4,8 @@ import { CONNECTION_STATE_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
 import { PROFILE } from 'shared/constants/mappingKeys'
 
 import {
-  tUsersName,
-  tUsersCols,
-  tConnectionsName,
-  tConnectionsCols,
-  tNotifySettingsName,
-  tNotifySettingsCols,
-  tDialogsName,
-  tDialogsCols,
+  tUsersName, tUsersCols, tConnectionsName, tConnectionsCols,
+  tNotifySettingsName, tNotifySettingsCols, tDialogsName, tDialogsCols,
 } from './tables'
 
 export const isCorrectPassword = async (password: string, userId: number): Promise<boolean> => {

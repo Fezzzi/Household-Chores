@@ -2,13 +2,13 @@ import { database } from '..'
 import { tDialogsName, tDialogsCols } from './tables'
 import { apify } from 'serverSrc/helpers/api'
 
-export const disableDialog = async (userId: number, dialog: string): Promise<Array<number>> =>
+export const disableDialog = async (dialog: string, userId: number): Promise<Array<number>> =>
   database.query(`
     UPDATE ${tDialogsName} SET ${dialog}=1
     WHERE ${tDialogsCols.id_user}=${userId}
   `)
 
-export const updateDialogSettings = async (userId: number, data: Record<string, number>): Promise<boolean> =>
+export const updateDialogSettings = async (data: Record<string, number>, userId: number): Promise<boolean> =>
   database.query(`
     UPDATE ${tDialogsName}
     SET ${Object.entries(data).map(([name, value]) => `${name}=${value}`).join(', ')}

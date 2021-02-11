@@ -1,6 +1,5 @@
 import {
-  getTabList, validateNotificationData, validateProfileData, validateEditHouseholdData, validateDialogsData,
-} from 'serverSrc/helpers/settings'
+  getTabList, validateProfileData, validateEditHouseholdData, tryRemapBoolData } from 'serverSrc/helpers/settings'
 import { HOUSEHOLD_DIR, PROFILE_DIR, uploadFiles } from 'serverSrc/helpers/files.'
 import {
   findProfileData, updateUserData, findApprovedConnections, findConnections, findUserHouseholds,
@@ -9,6 +8,7 @@ import {
 import { SETTING_CATEGORIES, PROFILE_TABS, HOUSEHOLD_TABS, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/mappingKeys'
+import { tDialogsCols, tNotifySettingsCols } from 'serverSrc/database/models/tables'
 
 const getTabData = async (category: string, tab: string, req: any) => {
   switch (category) {
@@ -77,19 +77,22 @@ export const handleSettingsDataUpdate = async (
           return handleUpdate(res, await updateUserData({ ...inputs, [PROFILE.PHOTO]: photo }, req.session.user))
         }
         case PROFILE_TABS.NOTIFICATIONS: {
-          const valid = validateNotificationData(inputs, req, res)
-          if (!valid) {
-            return true
-          }
-          return handleUpdate(res, await updateNotificationSettings(inputs, req.session.user))
-        }
-        case PROFILE_TABS.DIALOGS: {
-          const validData = validateDialogsData(inputs, req, res)
-          console.log('VALIDATED DIALOG DATA', validData)
+          const allowedKeys = Object.values(tNotifySettingsCols).filter(name => name !== tNotifySettingsCols.id_user)
+          const valueMapper = (val: string | number) => val ? 1 : 0
+          const validData = tryRemapBoolData(inputs, allowedKeys, valueMapper, req, res)
           if (!validData) {
             return true
           }
-          const updated = handleUpdate(res, await updateDialogSettings(req.session.user, validData))
+          return handleUpdate(res, await updateNotificationSettings(validData, req.session.user))
+        }
+        case PROFILE_TABS.DIALOGS: {
+          const allowedKeys = Object.values(tDialogsCols).filter(name => name !== tDialogsCols.id_user)
+          const valueMapper = (val: string | number) => val ? 0 : 1
+          const validData = tryRemapBoolData(inputs, allowedKeys, valueMapper, req, res)
+          if (!validData) {
+            return true
+          }
+          const updated = handleUpdate(res, await updateDialogSettings(validData, req.session.user))
           if (!updated) {
             res.status(200).send({})
           }

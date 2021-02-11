@@ -67,7 +67,6 @@ const DialogsForm = ({ onSubmit }) => {
           </TableHeaderCell>
         </TableHeaderBox>
         <NotificationGroupBox>
-          {console.log(dialogSettings)}
           {dialogSettings && Object.entries(dialogSettings).map(([name, value]) => name !== 'tutorial' && (
             <Input
               key={name}

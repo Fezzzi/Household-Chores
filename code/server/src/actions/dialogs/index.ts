@@ -3,7 +3,7 @@ import express from 'express'
 import { disableDialog } from 'serverSrc/database/models'
 import { API, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { deMapKey } from 'serverSrc/helpers/api'
+import { deApifyKey } from 'serverSrc/helpers/api'
 import { tDialogsCols } from 'serverSrc/database/models/tables'
 
 export default () => {
@@ -13,15 +13,13 @@ export default () => {
     const userId = req.session!.user
     switch (action) {
       case API.DIALOGS_DISABLE: {
-        const key = deMapKey(body.key)
-        console.log(key)
-        const valid = Object.values(tDialogsCols).filter(name => name !== 'id_user').includes(key)
+        const key = deApifyKey(body.key)
+        const valid = Object.values(tDialogsCols).filter(name => name !== tDialogsCols.id_user).includes(key)
         if (!valid) {
           res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
         }
 
-        console.log('UPDATING KEY', key)
-        const success = await disableDialog(userId, key)
+        const success = await disableDialog(key, userId)
         res.status(200).send(success ? {} : { [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
         return true
       }
