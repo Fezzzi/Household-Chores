@@ -1,23 +1,23 @@
-import { isInputValid } from 'shared/helpers/validation'
+import { isExternalImage } from 'serverSrc/helpers/files'
+
 import { INPUT_TYPE } from 'shared/constants'
 import { findUser } from 'serverSrc/database/models'
+import { isInputValid } from 'shared/helpers/validation'
 
-export const validateResetData = async ({ email: { valid, value } }: any): Promise<boolean|number> =>
-  valid && isInputValid(INPUT_TYPE.EMAIL, value).valid
-  && await findUser(value) !== null
+export const validateResetData = async ({ email }: any): Promise<boolean> =>
+  isInputValid(INPUT_TYPE.EMAIL, email).valid
+  && await findUser(email) !== null
 
-export const validateLoginData = async ({ email, password }: any): Promise<boolean|number> =>
-  email.valid && password.valid
-  && isInputValid(INPUT_TYPE.EMAIL, email.value).valid
-  && isInputValid(INPUT_TYPE.PASSWORD, password.value).valid
-  && await findUser(email.value) !== null
+export const validateLoginData = async ({ email, password }: any): Promise<boolean> =>
+  isInputValid(INPUT_TYPE.EMAIL, email).valid
+  && isInputValid(INPUT_TYPE.PASSWORD, password).valid
+  && await findUser(email) !== null
 
-export const validateSignupData = async ({ email, nickname, password, googleToken, facebook }: any): Promise<boolean> =>
-  email.valid && nickname.valid
-  && isInputValid(INPUT_TYPE.EMAIL, email.value).valid
-  && isInputValid(INPUT_TYPE.TEXT, nickname.value).valid
-  && (
-    (password && password.valid && isInputValid(INPUT_TYPE.PASSWORD, password.value).valid)
+export const validateSignupData = async ({ email, nickname, password, photo, googleToken, facebook }: any): Promise<boolean> =>
+  isInputValid(INPUT_TYPE.EMAIL, email).valid
+  && isInputValid(INPUT_TYPE.TEXT, nickname).valid
+  && (!photo || isExternalImage(photo))
+  && ((password && isInputValid(INPUT_TYPE.PASSWORD, password).valid)
     || googleToken
-    || (facebook.userID && facebook.signedRequest)
+    || (facebook.userId && facebook.signedRequest)
   )

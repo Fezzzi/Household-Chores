@@ -133,7 +133,7 @@ export const FORM = {
   [USER_VISIBILITY_TYPE.FOF]: 'form.userVisibilityFOF',
   [USER_VISIBILITY_TYPE.ALL]: 'form.userVisibilityALL',
 
-  HOUSEHOLD_USER_DELETING_DIALOG: `form.householdMemberDeleting`,
+  HOUSEHOLD_USER_DELETING_DIALOG: 'form.householdMemberDeleting',
 }
 
 export const HINT = {

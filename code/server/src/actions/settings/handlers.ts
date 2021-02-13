@@ -1,6 +1,7 @@
+import { HOUSEHOLD_DIR, PROFILE_DIR, uploadFiles } from 'serverSrc/helpers/files'
+
 import {
   getTabList, validateProfileData, validateEditHouseholdData, tryRemapBoolData } from 'serverSrc/helpers/settings'
-import { HOUSEHOLD_DIR, PROFILE_DIR, uploadFiles } from 'serverSrc/helpers/files.'
 import {
   findProfileData, updateUserData, findApprovedConnections, findConnections, findUserHouseholds,
   findUserInvitations, findNotificationSettings, updateNotificationSettings, editHousehold, updateDialogSettings,

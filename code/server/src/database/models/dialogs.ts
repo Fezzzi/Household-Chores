@@ -1,6 +1,7 @@
+import { apify } from 'serverSrc/helpers/api'
+
 import { database } from '..'
 import { tDialogsName, tDialogsCols } from './tables'
-import { apify } from 'serverSrc/helpers/api'
 
 export const disableDialog = async (dialog: string, userId: number): Promise<Array<number>> =>
   database.query(`
@@ -18,8 +19,8 @@ export const updateDialogSettings = async (data: Record<string, number>, userId:
 export const getDialogSettings = async (userId: number): Promise<Record<string, boolean>> => {
   const settings = await apify<boolean>(database.query(`
     SELECT ${Object.values(tDialogsCols).filter(key => key !== tDialogsCols.id_user).join(', ')}
-    FROM ${ tDialogsName }
-    WHERE ${ tDialogsCols.id_user }=${ userId }
+    FROM ${tDialogsName}
+    WHERE ${tDialogsCols.id_user}=${userId}
     LIMIT 1
   `))
 

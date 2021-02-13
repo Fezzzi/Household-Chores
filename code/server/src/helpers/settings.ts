@@ -1,7 +1,7 @@
 import {
   findApprovedConnections, findUser, getHouseholdMembers, getUserRole, isCorrectPassword,
 } from 'serverSrc/database/models'
-import { tDialogsCols, tHouseholdsCols, tNotifySettingsCols } from 'serverSrc/database/models/tables'
+import { tHouseholdsCols } from 'serverSrc/database/models/tables'
 import {
   INPUT_TYPE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE,
   SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS, HOUSEHOLD_ROLE_TYPE, INVITATION_MESSAGE_LENGTH,

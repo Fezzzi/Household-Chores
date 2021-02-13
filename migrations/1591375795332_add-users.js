@@ -6,8 +6,8 @@ module.exports = {
     await conn.query(`
       CREATE TABLE ${tUsersName} (
         ${tUsersCols.id} INT AUTO_INCREMENT PRIMARY KEY,
-        ${tUsersCols.google_id} VARCHAR(255) UNIQUE KEY DEFAULT NULL,
-        ${tUsersCols.facebook_id} VARCHAR(255) UNIQUE KEY DEFAULT NULL,
+        ${tUsersCols.id_google} VARCHAR(255) UNIQUE KEY DEFAULT NULL,
+        ${tUsersCols.id_facebook} VARCHAR(255) UNIQUE KEY DEFAULT NULL,
         ${tUsersCols.email} VARCHAR(255) NOT NULL,
         ${tUsersCols.nickname} VARCHAR(255) NOT NULL,
         ${tUsersCols.password} CHAR(60) NOT NULL,

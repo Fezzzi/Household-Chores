@@ -2,8 +2,8 @@ export default {
   name: 'users',
   columns: {
     id: 'id',
-    google_id: 'google_id',
-    facebook_id: 'facebook_id',
+    id_google: 'id_google',
+    id_facebook: 'id_facebook',
     email: 'email',
     nickname: 'nickname',
     password: 'password',

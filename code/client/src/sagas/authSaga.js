@@ -38,7 +38,7 @@ function* logInFacebookSaga(action) {
       email,
       photo: `https://graph.facebook.com/${id}/picture`,
       facebook: {
-        userID,
+        userId: userID,
         signedRequest,
       },
     } })

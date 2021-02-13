@@ -898,8 +898,7 @@
       "SignUpForm": {
         "required": [
           "email",
-          "nickname",
-          "password"
+          "nickname"
         ],
         "properties": {
           "email": {
@@ -912,6 +911,24 @@
           "password": {
             "type": "string",
             "format": "pass"
+          },
+          "photo": {
+            "type": "string",
+            "format": "link"
+          },
+          "googleToken": {
+            "type": "string"
+          },
+          "facebook": {
+            "type": "object",
+            "properties": {
+              "userId": {
+                "type": "string"
+              },
+              "signedRequest": {
+                "type": "string"
+              }
+            }
           }
         }
       },

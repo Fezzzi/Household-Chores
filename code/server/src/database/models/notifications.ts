@@ -1,8 +1,8 @@
 import { database } from 'serverSrc/database'
 import { NOTIFICATIONS } from 'shared/constants/mappingKeys'
+import { apifyKey } from 'serverSrc/helpers/api'
 
 import { tNotifySettingsName, tNotifySettingsCols } from './tables'
-import { apifyKey } from 'serverSrc/helpers/api'
 
 const groupMappings = {
   [NOTIFICATIONS.GENERAL]: [
@@ -20,7 +20,7 @@ const groupMappings = {
     tNotifySettingsCols.household_invitation,
     tNotifySettingsCols.household_joining,
     tNotifySettingsCols.household_leaving,
-  ]
+  ],
 }
 const groups = Object.keys(groupMappings)
 

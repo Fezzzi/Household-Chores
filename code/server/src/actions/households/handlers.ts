@@ -1,4 +1,5 @@
-import { HOUSEHOLD_DIR, isLocalImage, uploadFiles } from 'serverSrc/helpers/files.'
+import { HOUSEHOLD_DIR, isLocalImage, uploadFiles } from 'serverSrc/helpers/files'
+
 import { validateField } from 'serverSrc/helpers/settings'
 import {
   addHouseholdInvitations, approveInvitation, createHousehold, findApprovedConnections,

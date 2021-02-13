@@ -5,80 +5,114 @@ import { ERROR, SUCCESS } from 'shared/constants/localeMessages'
 import { MAILS } from 'serverSrc/constants'
 import { sendEmails } from 'serverSrc/helpers/mailer'
 import { logInUser, SignUpUser, findUser } from 'serverSrc/database/models'
-import { handleAction, setSession } from 'serverSrc/helpers/auth'
+import { setSession } from 'serverSrc/helpers/auth'
 
 import { validateLoginData, validateResetData, validateSignupData } from './validation'
 import { getProvidersUserId, handleProvidersLogIn, logInWithIds } from './providers'
 
-const resetPass = async ({ email }: any) => {
+const resetPass = async ({ email }: any, req: any, res: any) => {
   const emailSent = await sendEmails(MAILS.RESET_PASSWORD, {
     resetLink: 'resetLink',
   }, [email])
 
-  return {
-    [NOTIFICATION_TYPE.ERRORS]: emailSent ? [] : [ERROR.RESET_PASS_ERROR],
-    [NOTIFICATION_TYPE.SUCCESSES]: emailSent ? [SUCCESS.RESET_LINK] : [],
+  if (emailSent) {
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.RESET_PASS_ERROR] })
+  } else {
+    res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.RESET_LINK] })
   }
+  return true
 }
 
-const logIn = async ({ email, password }: any, req: any, res: any) => {
-  const result = await logInUser(email, password)
+const logIn = async ({ email, password }: any, req: any, res: any): Promise<boolean> => {
+  const result = await logInUser(email, password, res)
   if (result === null) {
-    return {
-      [NOTIFICATION_TYPE.ERRORS]: [ERROR.INCORRECT_PASS],
-    }
+    return true
   }
 
   setSession(req, res, result.userId, result.fsKey)
-  return {}
+  res.status(204).send()
+  return true
 }
 
-const signUp = async (inputs: any, req: any, res: any) => {
+const signUp = async (inputs: any, req: any, res: any): Promise<boolean> => {
   const { email, nickname, password, photo, googleToken, facebook } = inputs
   const { googleId, facebookId } = await getProvidersUserId(googleToken, facebook)
-  const result = await handleProvidersLogIn(req, res, googleId, facebookId, googleToken, facebook)
-  if (result !== false) {
-    return result
+  const loggedIn = await handleProvidersLogIn(req, res, googleId, facebookId, googleToken, facebook)
+  if (loggedIn) {
+    return true
   }
 
   const user = await findUser(email)
   if (user !== null) {
     if (googleId || facebookId) {
       if (await logInWithIds(req, res, user.userId, googleId, facebookId, user.fsKey)) {
-        return {}
+        res.status(204).send()
       } else {
-        return {
-          [NOTIFICATION_TYPE.ERRORS]: [ERROR.SMTH_BROKE_LOGIN],
-        }
+        res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.SMTH_BROKE_LOGIN] })
       }
+      return true
     }
     return logIn(inputs, req, res)
   }
 
   const signUpResult = await SignUpUser(
-    email, nickname,
-    (password && password.value) || null,
-    photo || null,
-    googleId, facebookId,
+    email,
+    nickname,
+    password ?? null,
+    photo ?? null,
+    googleId,
+    facebookId,
   )
   if (!signUpResult?.insertId) {
-    return { [NOTIFICATION_TYPE.ERRORS]: [ERROR.SIGN_UP_ERROR] }
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.SIGN_UP_ERROR] })
+    return true
   }
   setSession(req, res, signUpResult.insertId, signUpResult.fsKey)
-  return { [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.ACCOUNT_CREATED] }
+  res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.ACCOUNT_CREATED] })
+  return true
 }
 
 export default () => {
   const router = express.Router()
-  router.post('/:action', (req, res) => {
+  router.post('/:action', async (req, res) => {
     const { params: { action }, body: { inputs } } = req
     switch (action) {
-      case API.AUTH_LOG_IN:
-        return handleAction(inputs, validateLoginData, logIn, req, res)
-      case API.AUTH_SIGN_UP:
-        return handleAction(inputs, validateSignupData, signUp, req, res)
-      case API.AUTH_RESET:
-        return handleAction(inputs, validateResetData, resetPass, req, res)
+      case API.AUTH_LOG_IN: {
+        const valid = validateLoginData(inputs)
+        if (!valid) {
+          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+          return true
+        }
+        const handled = await logIn(inputs, req, res)
+        if (handled) {
+          return true
+        }
+        break
+      }
+      case API.AUTH_SIGN_UP: {
+        const valid = validateSignupData(inputs)
+        if (!valid) {
+          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+          return true
+        }
+        const handled = await signUp(inputs, req, res)
+        if (handled) {
+          return true
+        }
+        break
+      }
+      case API.AUTH_RESET: {
+        const valid = validateResetData(inputs)
+        if (!valid) {
+          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+          return true
+        }
+        const handled = await resetPass(inputs, req, res)
+        if (handled) {
+          return true
+        }
+        break
+      }
       case API.AUTH_DELETE:
         // todo: Finish within navbar issue when logging off is implemented
         return false
@@ -86,6 +120,9 @@ export default () => {
         res.status(404).send('Not Found')
         return false
     }
+
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+    return false
   })
 
   return router

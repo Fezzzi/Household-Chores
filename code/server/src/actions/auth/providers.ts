@@ -5,82 +5,99 @@ import dotenv from 'dotenv'
 
 import { NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { findFacebookUser, findGoogleUser, assignUserProvider, updateLoginTime } from 'serverSrc/database/models'
+import {
+  findFacebookUser, findGoogleUser, updateLoginTime, assignGoogleProvider, assignFacebookProvider,
+} from 'serverSrc/database/models'
 import { setSession } from 'serverSrc/helpers/auth'
 
 dotenv.config()
 
 const CLIENT_ID = process.env.GCID ?? ''
 const client = new OAuth2Client(CLIENT_ID)
-const getGoogleUserId = async (googleToken: string): Promise<number|string> => client.verifyIdToken({
-  idToken: googleToken,
-  audience: CLIENT_ID,
-}).then((ticket => {
+const getGoogleUserId = async (googleToken: string): Promise<string | null> => {
+  const ticket = await client.verifyIdToken({
+    idToken: googleToken,
+    audience: CLIENT_ID,
+  })
+
   const payload = ticket.getPayload()
-  return (payload && payload.aud === CLIENT_ID && payload.sub) || -1
-})).catch(() => -1)
+  if (!payload || payload.aud !== CLIENT_ID || !payload.sub) {
+    return null
+  }
+
+  return payload.sub
+}
+
+interface FacebookObject {
+  userId: string;
+  signedRequest: string;
+}
 
 const APP_SECRET = process.env.FB_APP_SECRET ?? ''
-const getFacebookUserId = ({ userID, signedRequest }: any): number|string => {
+const getFacebookUserId = ({ userId, signedRequest }: FacebookObject): string | null => {
   const [encodedSignature, encodedPayload] = signedRequest.split('.')
   const signature = base64url.decode(encodedSignature)
   const hmac = crypto.createHmac('sha256', APP_SECRET)
   const expectedSignature = hmac.update(encodedPayload).digest()
 
   if (signature !== expectedSignature.toString()) {
-    return -1
+    return null
   }
 
-  return userID
+  return userId
 }
 
-export const getProvidersUserId = async (googleToken: string, facebook: any): Promise<any> => ({
-  googleId: (googleToken && await getGoogleUserId(googleToken)) || null,
-  facebookId: (facebook && facebook.signedRequest && getFacebookUserId(facebook)) || null,
+interface ProviderIds {
+  googleId: string | null;
+  facebookId: string | null;
+}
+
+export const getProvidersUserId = async (googleToken: string, facebook: FacebookObject): Promise<ProviderIds> => ({
+  googleId: (googleToken && await getGoogleUserId(googleToken)) ?? null,
+  facebookId: (facebook && facebook.signedRequest && getFacebookUserId(facebook)) ?? null,
 })
 
 const logInWithProvider = async (
   req: any,
   res: any,
-  condition: boolean,
   getID: () => Promise<{ userId: number; fsKey: string } | null>,
 ): Promise<boolean> => {
-  if (condition) {
-    const result = await getID()
-    if (result !== null) {
-      updateLoginTime(result.userId)
-      setSession(req, res, result.userId, result.fsKey)
-      return true
-    }
+  const result = await getID()
+  if (result === null) {
+    return false
   }
-  return false
+
+  updateLoginTime(result.userId)
+  setSession(req, res, result.userId, result.fsKey)
+  return true
 }
 
 export const handleProvidersLogIn = async (
-  req: any, res: any,
-  googleId: string|-1,
-  facebookId: string|-1,
-  googleToken: string,
-  facebook: any,
-): Promise<object|false> => {
-  if (googleId === -1) {
-    return {
-      [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_GOOGLE_DATA],
-    }
+  req: any,
+  res: any,
+  googleId: string | null,
+  facebookId: string | null,
+  googleToken: string | null,
+  facebook: FacebookObject | null,
+): Promise<boolean> => {
+  if (googleId === null) {
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_GOOGLE_DATA] })
+    return true
   }
 
-  if (facebookId === -1) {
-    return {
-      [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_FACEBOOK_DATA],
-    }
+  if (facebookId === null) {
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_FACEBOOK_DATA] })
+    return true
   }
 
-  if (
-    await logInWithProvider(req, res, !!googleToken, () => findGoogleUser(googleId))
-    || await logInWithProvider(req, res, facebook && facebook.signedRequest, () => findFacebookUser(facebookId))
-  ) {
-    return {}
+  const loggedIn = (googleToken !== null && await logInWithProvider(req, res, () => findGoogleUser(googleId)))
+    || (facebook && facebook.signedRequest && await logInWithProvider(req, res, () => findFacebookUser(facebookId)))
+
+  if (loggedIn) {
+    res.status(204).send()
+    return true
   }
+
   return false
 }
 
@@ -88,11 +105,18 @@ export const logInWithIds = async (
   req: any,
   res: any,
   userId: number,
-  googleId: string,
-  facebookId: string,
+  googleId: string | null,
+  facebookId: string | null,
   fsKey: string,
 ): Promise<boolean> => {
-  const success = await assignUserProvider(userId, googleId, facebookId)
+  let success = false
+
+  if (googleId !== null) {
+    success = await assignGoogleProvider(userId, googleId)
+  } else if (facebookId !== null) {
+    success = await assignFacebookProvider(userId, facebookId)
+  }
+
   if (!success) {
     return false
   }

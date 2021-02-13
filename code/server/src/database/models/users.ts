@@ -1,7 +1,8 @@
 import { database } from 'serverSrc/database'
 import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords'
-import { CONNECTION_STATE_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
+import { CONNECTION_STATE_TYPE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
 import { PROFILE } from 'shared/constants/mappingKeys'
+import { ERROR } from 'shared/constants/localeMessages'
 
 import {
   tUsersName, tUsersCols, tConnectionsName, tConnectionsCols,
@@ -49,7 +50,7 @@ export const findGoogleUser = async (googleId: string): Promise<{ userId: number
   const result = await database.query(`
     SELECT ${tUsersCols.id}, ${tUsersCols.fs_key}
     FROM ${tUsersName}
-    WHERE ${tUsersCols.google_id}=?
+    WHERE ${tUsersCols.id_google}=?
   `, [googleId])
 
   return result && result.length
@@ -61,7 +62,7 @@ export const findFacebookUser = async (facebookId: string): Promise<{ userId: nu
   const result = await database.query(`
     SELECT ${tUsersCols.id}, ${tUsersCols.fs_key}
     FROM ${tUsersName}
-    WHERE ${tUsersCols.facebook_id}=?
+    WHERE ${tUsersCols.id_facebook}=?
   `, [facebookId])
 
   return result && result.length
@@ -71,7 +72,8 @@ export const findFacebookUser = async (facebookId: string): Promise<{ userId: nu
 
 export const logInUser = async (
   email: string,
-  password: string
+  password: string,
+  res: any
 ): Promise<{ userId: number; fsKey: string } | null> => {
   const result = await database.query(`
     SELECT ${tUsersCols.password}, ${tUsersCols.id}, ${tUsersCols.fs_key}
@@ -79,8 +81,15 @@ export const logInUser = async (
     WHERE ${tUsersCols.email}=?
   `, [email])
 
-  const validPass = result && result.length && await checkPass(password, result[0][tUsersCols.password])
+  const userExists = result && result.length > 0
+  if (!userExists) {
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.NO_ACCOUNT] })
+    return null
+  }
+
+  const validPass = await checkPass(password, result[0][tUsersCols.password])
   if (!validPass) {
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INCORRECT_PASS] })
     return null
   }
 
@@ -124,17 +133,17 @@ export const updateUserData = async (
 export const SignUpUser = async (
   email: string,
   nickname: string,
-  password: string|null,
-  photo: string|null,
-  googleId: string,
-  facebookId: string,
+  password: string | null,
+  photo: string | null,
+  googleId: string | null,
+  facebookId: string | null,
 ): Promise<{ insertId: number; fsKey: string } | null> =>
   database.withTransaction(async (): Promise<{ insertId: number; fsKey: string }> => {
     const pass = await encryptPass(password ?? generatePass())
     const result = await database.query(`
       INSERT INTO ${tUsersName} (
         ${tUsersCols.email}, ${tUsersCols.nickname}, ${tUsersCols.password}, ${tUsersCols.photo},
-        ${tUsersCols.google_id}, ${tUsersCols.facebook_id}, ${tUsersCols.date_registered}, ${tUsersCols.date_last_active}
+        ${tUsersCols.id_google}, ${tUsersCols.id_facebook}, ${tUsersCols.date_registered}, ${tUsersCols.date_last_active}
       ) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
     `, [email, nickname, pass, photo, googleId, facebookId], false)
 
@@ -159,22 +168,19 @@ export const SignUpUser = async (
     return result
   })
 
-export const assignUserProvider = async (userId: number, googleId: string, facebookId: string): Promise<boolean> => {
-  if (googleId !== null) {
-    return !!database.query(`
-      UPDATE ${tUsersName}
-      SET ${tUsersCols.google_id}=?
-      WHERE ${tUsersCols.id}=?
-    `, [googleId, userId])
-  } else if (facebookId !== null) {
-    return !!database.query(`
-      UPDATE ${tUsersName}
-      SET ${tUsersCols.facebook_id}=?
-      WHERE ${tUsersCols.id}=?
-    `, [facebookId, userId])
-  }
-  return false
-}
+export const assignGoogleProvider = async (userId: number, googleId: string): Promise<boolean> =>
+  database.query(`
+    UPDATE ${tUsersName}
+    SET ${tUsersCols.id_google}=?
+    WHERE ${tUsersCols.id}=?
+  `, [googleId, userId])
+
+export const assignFacebookProvider = async (userId: number, facebookId: string): Promise<boolean> =>
+  database.query(`
+    UPDATE ${tUsersName}
+    SET ${tUsersCols.id_facebook}=?
+    WHERE ${tUsersCols.id}=?
+  `, [facebookId, userId])
 
 // todo: Sort secondary by size of matching query
 export const queryUsers = async (query: string, userId: number): Promise<Array<object>> =>
