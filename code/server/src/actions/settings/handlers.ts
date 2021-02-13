@@ -1,5 +1,4 @@
 import { HOUSEHOLD_DIR, PROFILE_DIR, uploadFiles } from 'serverSrc/helpers/files'
-
 import {
   getTabList, validateProfileData, validateEditHouseholdData, tryRemapBoolData } from 'serverSrc/helpers/settings'
 import {

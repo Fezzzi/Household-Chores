@@ -36,14 +36,26 @@ const logIn = async ({ email, password }: any, req: any, res: any): Promise<bool
 
 const signUp = async (inputs: any, req: any, res: any): Promise<boolean> => {
   const { email, nickname, password, photo, googleToken, facebook } = inputs
-  const { googleId, facebookId } = await getProvidersUserId(googleToken, facebook)
-  const loggedIn = await handleProvidersLogIn(req, res, googleId, facebookId, googleToken, facebook)
-  if (loggedIn) {
-    return true
+
+  let googleId = null
+  let facebookId = null
+  if (googleToken || facebook) {
+    // We validate googleToken or facebook data and try resolve appropriate user ids for these providers
+    const providerIds = await getProvidersUserId(googleToken, facebook)
+    googleId = providerIds.googleId
+    facebookId = providerIds.facebookId
+
+    // We attempt to log in the user with retrieved ids or return error in case of invalid validation
+    const loggedIn = await handleProvidersLogIn(req, res, googleId, facebookId, googleToken, facebook)
+    if (loggedIn) {
+      return true
+    }
   }
 
+  // In case the user could not be logged in with google or facebook provider, we proceed to email/password
   const user = await findUser(email)
   if (user !== null) {
+    // In case user with such email exists but does not yet have assigned any provider id, we assign them and perform log in
     if (googleId || facebookId) {
       if (await logInWithIds(req, res, user.userId, googleId, facebookId, user.fsKey)) {
         res.status(204).send()
@@ -52,9 +64,11 @@ const signUp = async (inputs: any, req: any, res: any): Promise<boolean> => {
       }
       return true
     }
+    // In case there are no providers' data available but the user exists, we continue as with standrd log in attempt
     return logIn(inputs, req, res)
   }
 
+  // In case the user is truly signing up, create new account and possibly assign available provider ids
   const signUpResult = await SignUpUser(
     email,
     nickname,

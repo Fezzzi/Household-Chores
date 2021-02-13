@@ -1,5 +1,4 @@
 import { isExternalImage } from 'serverSrc/helpers/files'
-
 import { INPUT_TYPE } from 'shared/constants'
 import { findUser } from 'serverSrc/database/models'
 import { isInputValid } from 'shared/helpers/validation'

@@ -8,6 +8,7 @@ import { linkify } from 'clientSrc/helpers/textLinks'
 import { HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 import { HOME } from 'shared/constants/localeMessages'
 
+// eslint-disable-next-line import/no-useless-path-segments
 import { HouseholdSwitch, HouseholdMemberList, HouseholdBody } from './home/'
 import { LocaleText } from './common'
 
@@ -20,15 +21,18 @@ const Home = ({ history }) => {
   const { selectedHousehold, households } = useSelector(({ home }) => home)
   const currentHouseholdIndex = useMemo(() => {
     if (selectedHousehold == null) {
-      return households[0]?.[HOUSEHOLD_KEYS.ID]
+      return households[0]?.[HOUSEHOLD_KEYS.ID] ?? null
     }
 
-    return households.findIndex(household => household[HOUSEHOLD_KEYS.ID] === Number(selectedHousehold))
+    const householdIndex = households.findIndex(household => household[HOUSEHOLD_KEYS.ID] === Number(selectedHousehold))
+    return householdIndex >= 0
+      ? householdIndex
+      : null
   }, [selectedHousehold, households])
 
   return (
     <HomeWrapper>
-      {currentHouseholdIndex && currentHouseholdIndex !== -1
+      {currentHouseholdIndex !== null
         ? (
           <>
             <HouseholdSwitch
