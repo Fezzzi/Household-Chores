@@ -90,28 +90,40 @@ export default () => {
   const router = express.Router()
   router.post('/:action', async (req, res) => {
     const { params: { action }, body: { inputs } } = req
+
+    if (action === API.AUTH_SIGN_UP) {
+      const valid = validateSignupData(inputs)
+      if (!valid) {
+        res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+        return
+      }
+
+      const handled = await signUp(inputs, req, res)
+      if (handled) {
+        return
+      }
+    } else {
+      res.status(404).send('Not Found')
+      return
+    }
+
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+  })
+
+  router.put('/:action', async (req, res) => {
+    const { params: { action }, body: { inputs } } = req
+
     switch (action) {
       case API.AUTH_LOG_IN: {
         const valid = validateLoginData(inputs)
         if (!valid) {
           res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
-          return true
+          return
         }
+
         const handled = await logIn(inputs, req, res)
         if (handled) {
-          return true
-        }
-        break
-      }
-      case API.AUTH_SIGN_UP: {
-        const valid = validateSignupData(inputs)
-        if (!valid) {
-          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
-          return true
-        }
-        const handled = await signUp(inputs, req, res)
-        if (handled) {
-          return true
+          return
         }
         break
       }
@@ -119,24 +131,34 @@ export default () => {
         const valid = validateResetData(inputs)
         if (!valid) {
           res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
-          return true
+          return
         }
+
         const handled = await resetPass(inputs, req, res)
         if (handled) {
-          return true
+          return
         }
         break
       }
-      case API.AUTH_DELETE:
-        // todo: Finish within navbar issue when logging off is implemented
-        return false
       default:
         res.status(404).send('Not Found')
-        return false
+        return
     }
 
     res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
-    return false
+  })
+
+  router.delete('/:action', async (req, res) => {
+    const { params: { action } } = req
+
+    if (action === API.AUTH_DELETE) {
+      // todo: Finish within navbar issue when logging off is implemented
+    } else {
+      res.status(404).send('Not Found')
+      return
+    }
+
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
   })
 
   return router

@@ -38,6 +38,7 @@ export const handleSettingsDataFetch = async (category: string, tab: string, req
     res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] })
     return
   }
+
   const { tabs, messages: tabMessages, types: tabTypes } = getTabList(data, category)
   res.status(200).send({
     tabs,

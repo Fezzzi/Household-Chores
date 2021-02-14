@@ -139,7 +139,7 @@
     },
     "/auth/log-in": {
       "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
-      "post": {
+      "put": {
         "summary": "Logs in the user",
         "operationId": "authLogin",
         "tags": ["Auth"],
@@ -184,7 +184,7 @@
     },
     "/auth/reset": {
       "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
-      "post": {
+      "put": {
         "summary": "Resets user's password",
         "operationId": "authReset",
         "tags": ["Auth"],
@@ -221,7 +221,7 @@
     },
     "/auth/delete": {
       "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
-      "post": {
+      "delete": {
         "summary": "Deletes user's account",
         "operationId": "authDelete",
         "tags": ["Auth"],
@@ -652,7 +652,7 @@
           }
         }
       },
-      "post": {
+      "put": {
         "summary": "Updated data for a settings page",
         "operationId": "settingsUpdate",
         "tags": ["Settings"],
@@ -701,7 +701,7 @@
     },
     "/dialogs/disable": {
       "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
-      "post": {
+      "put": {
         "summary": "Disables appearing of specified dialog",
         "operationId": "dialogDisable",
         "tags": ["Settings"],
