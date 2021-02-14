@@ -15,12 +15,12 @@ import { LocaleText, Table } from '../../common'
 const ConnectionsListForm = ({ data }) => {
   const dispatch = useDispatch()
 
-  const removeHandler = useCallback(targetId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionRemove, targetId })),
+  const removeHandler = useCallback(userId =>
+    dispatch(SettingsActions.connectionAction({ effect: connectionRemove, userId })),
   [dispatch])
 
-  const blockHandler = useCallback(targetId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionBlock, targetId })),
+  const blockHandler = useCallback(userId =>
+    dispatch(SettingsActions.connectionAction({ effect: connectionBlock, userId })),
   [dispatch])
 
   return (
@@ -35,7 +35,7 @@ const ConnectionsListForm = ({ data }) => {
         ? (
           <Table
             rows={data.map(({
-              id,
+              userId,
               photo,
               dateCreated,
               ...user
@@ -43,8 +43,8 @@ const ConnectionsListForm = ({ data }) => {
               ...user,
               photo: <TableBigPhoto src={photo} />,
               dateCreated: getTimeString(dateCreated),
-              removeBtn: getButtonForUser(FORM.REMOVE, id, removeHandler),
-              blockBtn: getButtonForUser(FORM.BLOCK, id, blockHandler),
+              removeBtn: getButtonForUser(FORM.REMOVE, userId, removeHandler),
+              blockBtn: getButtonForUser(FORM.BLOCK, userId, blockHandler),
             }))}
             keys={[
               { name: 'photo' },

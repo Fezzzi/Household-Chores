@@ -10,7 +10,7 @@ import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { HouseholdActions } from 'clientSrc/actions'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import {
-  HOUSEHOLD_KEYS, INVITATION_KEYS,
+  HOUSEHOLD_KEYS,
 } from 'shared/constants/mappingKeys'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 
@@ -38,17 +38,17 @@ const HouseholdCreateForm = ({ connections }) => {
   }), [userState])
 
   const invitationTableProps = useMemo(() => useInvitationListProps(
-    invitations.map(user => ({
-      toPhoto: user.photo,
-      toNickname: user.nickname,
-      toId: user.id,
+    invitations.map(({ toId, toPhoto, toNickname, message }) => ({
+      toId,
+      toPhoto,
+      toNickname,
       fromPhoto: currentUser.photo,
       fromNickname: currentUser.nickname,
       fromId: currentUser.id,
-      message: user[INVITATION_KEYS.MESSAGE],
+      message,
       dateCreated: '(PENDING)',
     })),
-    toId => setInvitations(prevState => prevState.filter(user => user.id !== toId))
+    toId => setInvitations(prevState => prevState.filter(invitation => invitation.toId !== toId))
   ), [connections, invitations])
 
   const loadImageUrlWithCallback = (image, type, callback) => {
@@ -147,14 +147,20 @@ const HouseholdCreateForm = ({ connections }) => {
         <LocaleText message={HOUSEHOLD.INVITE_USERS} />
       </SectionHeadline>
       <HouseholdInvitationForm
-        connections={connections.filter(({ id }) => !invitations.find(user => user.id === id))}
-        onInvite={(id, message) => setInvitations(prevState => [
-          ...prevState,
-          {
-            ...connections.find(user => user.id === id),
-            [INVITATION_KEYS.MESSAGE]: message,
-          },
-        ])}
+        connections={connections.filter(({ userId }) => !invitations.find(invitation => invitation.toId === userId))}
+        onInvite={(id, message) => {
+          const connection = connections.find(connection => connection.userId === id)
+
+          setInvitations(prevState => [
+            ...prevState,
+            {
+              toId: connection.userId,
+              toPhoto: connection.photo,
+              toNickname: connection.nickname,
+              message,
+            },
+          ])
+        }}
       />
 
       <SectionHeadline>
@@ -175,7 +181,7 @@ HouseholdCreateForm.defaultProps = {
 
 HouseholdCreateForm.propTypes = {
   connections: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    userId: PropTypes.number.isRequired,
     nickname: PropTypes.string.isRequired,
     photo: PropTypes.string,
   })),

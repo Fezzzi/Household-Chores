@@ -6,7 +6,7 @@ import {
   INPUT_TYPE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE,
   SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS, HOUSEHOLD_ROLE_TYPE, INVITATION_MESSAGE_LENGTH,
 } from 'shared/constants'
-import { HOUSEHOLD_KEYS, INVITATION_KEYS } from 'shared/constants/mappingKeys'
+import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 import { ERROR, INFO } from 'shared/constants/localeMessages'
 import { isInputValid } from 'shared/helpers/validation'
 import { deApify } from 'serverSrc/helpers/api'
@@ -127,8 +127,8 @@ export const validateEditHouseholdData = async (
 ): Promise<boolean> => {
   const {
     [HOUSEHOLD_KEYS.USER_ROLE]: userRole,
-    [HOUSEHOLD_KEYS.INVITED_CONNECTIONS]: newInvitations,
-    [HOUSEHOLD_KEYS.CHANGED_ROLES]: changedRoles,
+    newInvitations,
+    changedRoles,
     [HOUSEHOLD_KEYS.REMOVED_MEMBERS]: removedMembers,
     [HOUSEHOLD_KEYS.REMOVED_INVITATIONS]: removedInvitations,
   } = inputs
@@ -177,13 +177,13 @@ export const validateEditHouseholdData = async (
   if (newInvitations?.length > 0) {
     const invitations = newInvitations as Array<Record<string, string | number>>
     const connections = await findApprovedConnections(userId)
-    const connectionIds = connections.map(({ id }) => id)
-    const valid = invitations.every(({ id }) => connectionIds.indexOf(id) !== -1)
+    const connectionIds = connections.map(({ userId }) => userId)
+    const valid = invitations.every(({ userId }) => connectionIds.indexOf(userId) !== -1)
     if (!valid) {
       res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
       return false
     }
-    const validMessages = invitations.every(({ [INVITATION_KEYS.MESSAGE]: message }) => !message
+    const validMessages = invitations.every(({ message }) => !message
       || validateField(res, message, INPUT_TYPE.TEXT_AREA, { max: INVITATION_MESSAGE_LENGTH }))
     if (!validMessages) {
       return false

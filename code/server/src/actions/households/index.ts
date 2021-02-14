@@ -6,7 +6,7 @@ import {
 } from 'serverSrc/database/models'
 import { API, NOTIFICATION_TYPE, HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { INVITATION_KEYS, HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
+import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 
 import { handleApproveHouseholdInvitation, handleCreateHousehold } from './handlers'
 
@@ -65,15 +65,15 @@ export default () => {
       }
       case API.INVITATION_APPROVE: {
         const {
-          [INVITATION_KEYS.FROM_ID]: fromId,
-          [INVITATION_KEYS.HOUSEHOLD_ID]: householdId,
+          fromId,
+          householdId,
           [HOUSEHOLD_KEYS.USER_NAME]: name,
           [HOUSEHOLD_KEYS.USER_PHOTO]: photo,
         } = body
         return handleApproveHouseholdInvitation(fromId, householdId, name, photo, userId, req, res)
       }
       case API.INVITATION_IGNORE: {
-        const { [INVITATION_KEYS.FROM_ID]: fromId, [INVITATION_KEYS.HOUSEHOLD_ID]: householdId } = body
+        const { fromId, householdId } = body
         const success = await deleteInvitation(userId, fromId, householdId)
         res.status(200).send(success ?? { [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
         return true

@@ -1,34 +1,24 @@
 import { database } from 'serverSrc/database'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
-import { HOUSEHOLD_KEYS, INVITATION_KEYS } from 'shared/constants/mappingKeys'
+import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
+import { apify } from 'serverSrc/helpers/api'
 
 import {
   tHouseholdsName, tHouseholdsCols, tHouseInvName, tHouseInvCols,
   tHouseMemName, tHouseMemCols, tUsersName, tUsersCols,
 } from './tables'
 
-export const findUserInvitations = async (currentUser: number): Promise<Array<object>> => {
-  const result = await database.query(`
-    SELECT i.${tHouseInvCols.id_household}, h.${tHouseholdsCols.name}, h.${tHouseholdsCols.photo},
-      i.${tHouseInvCols.id_from}, u.${tUsersCols.nickname}, u.${tUsersCols.photo} AS u_photo,
+export const findUserInvitations = async (currentUser: number): Promise<Array<object>> =>
+  apify(database.query(`
+    SELECT i.${tHouseInvCols.id_household}, h.${tHouseholdsCols.name} as household_name,
+      h.${tHouseholdsCols.photo} as household_photo,
+      i.${tHouseInvCols.id_from}, u.${tUsersCols.nickname} as from_nickname, u.${tUsersCols.photo} AS from_photo,
       i.${tHouseInvCols.message}, i.${tHouseInvCols.date_created}
     FROM ${tHouseInvName} AS i
     INNER JOIN ${tHouseholdsName} AS h ON ${tHouseInvCols.id_household} = h.${tHouseholdsCols.id}
     LEFT JOIN ${tUsersName} AS u ON ${tHouseInvCols.id_from} = u.${tUsersCols.id}
     WHERE ${tHouseInvCols.id_to}=${currentUser}
-  `)
-
-  return result.map((invitation: any) => ({
-    [INVITATION_KEYS.HOUSEHOLD_ID]: invitation[tHouseInvCols.id_household],
-    [INVITATION_KEYS.HOUSEHOLD_NAME]: invitation[tHouseholdsCols.name],
-    [INVITATION_KEYS.HOUSEHOLD_PHOTO]: invitation[tHouseholdsCols.photo],
-    [INVITATION_KEYS.FROM_ID]: invitation[tHouseInvCols.id_from],
-    [INVITATION_KEYS.FROM_NICKNAME]: invitation[tUsersCols.nickname],
-    [INVITATION_KEYS.FROM_PHOTO]: invitation.u_photo,
-    [INVITATION_KEYS.MESSAGE]: invitation[tHouseInvCols.message],
-    [INVITATION_KEYS.DATE_CREATED]: invitation[tHouseInvCols.date_created],
-  }))
-}
+  `))
 
 export const getUserHouseholdsData = async (currentUser: number): Promise<Array<object>> => {
   const households = await database.query(`
@@ -100,15 +90,15 @@ export const findUserHouseholds = async (currentUser: number): Promise<Array<obj
     }
     if (household[tHouseInvCols.id_to] && household[tHouseInvCols.id_from]
       && !acc[householdId].invitations.find((invitation: any) =>
-        invitation[INVITATION_KEYS.TO_ID] === household[tHouseInvCols.id_to])
+        invitation.toId === household[tHouseInvCols.id_to])
     ) {
       acc[householdId].invitations.push({
-        [INVITATION_KEYS.FROM_ID]: household[tHouseInvCols.id_from],
-        [INVITATION_KEYS.TO_ID]: household[tHouseInvCols.id_to],
-        [INVITATION_KEYS.TO_NICKNAME]: household[tUsersCols.nickname],
-        [INVITATION_KEYS.TO_PHOTO]: household.u_photo,
-        [INVITATION_KEYS.MESSAGE]: household[tHouseInvCols.message],
-        [INVITATION_KEYS.DATE_CREATED]: household[tHouseInvCols.date_created],
+        fromId: household[tHouseInvCols.id_from],
+        toId: household[tHouseInvCols.id_to],
+        toNickname: household[tUsersCols.nickname],
+        toPhoto: household.u_photo,
+        message: household[tHouseInvCols.message],
+        dateCreated: household[tHouseInvCols.date_created],
       })
     }
     if (household[tHouseMemCols.id_user] && !acc[householdId].members.find((member: any) =>
@@ -134,7 +124,7 @@ export const addHouseholdInvitations = async (
   database.query(`
     INSERT INTO ${tHouseInvName}
     VALUES (${invitations.map(() => `${householdId}, ${currentId}, ?, ?, NOW()`).join('),(')})
-  `, invitations.flatMap(user => [user.id, user[INVITATION_KEYS.MESSAGE] || '']))
+  `, invitations.flatMap(user => [user.userId, user.message || '']))
 
 export const createHousehold = async (
   data: Record<string, string | number>,
@@ -169,8 +159,8 @@ export const editHousehold = async (
       [HOUSEHOLD_KEYS.USER_NAME]: userName,
       [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
       [HOUSEHOLD_KEYS.USER_ROLE]: userRole,
-      [HOUSEHOLD_KEYS.INVITED_CONNECTIONS]: newInvitations,
-      [HOUSEHOLD_KEYS.CHANGED_ROLES]: changedRoles,
+      newInvitations,
+      changedRoles,
       [HOUSEHOLD_KEYS.REMOVED_MEMBERS]: removedMembers,
       [HOUSEHOLD_KEYS.REMOVED_INVITATIONS]: removedInvitations,
     } = data
@@ -185,7 +175,7 @@ export const editHousehold = async (
         || await database.query(`
           INSERT INTO ${tHouseInvName}
           VALUES (${newInvitations.map(() => `${householdId}, ${currentId}, ?, ?, NOW()`).join('),(')})
-        `, newInvitations.flatMap((user: Record<string, number | string>) => [user.id, user[INVITATION_KEYS.MESSAGE] || ''])))
+        `, newInvitations.flatMap((user: Record<string, number | string>) => [user.userId, user.message || ''])))
       && (!removedMembers?.length
         || await database.query(`
           DELETE FROM ${tHouseMemName}

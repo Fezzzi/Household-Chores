@@ -178,8 +178,8 @@ export const assignFacebookProvider = async (userId: number, facebookId: string)
 
 // todo: Sort secondary by size of matching query
 export const queryUsers = async (query: string, userId: number): Promise<Array<object>> =>
-  database.query(`
-    SELECT users.${tUsersCols.id}, users.${tUsersCols.nickname}, users.${tUsersCols.photo},
+  apify(database.query(`
+    SELECT users.${tUsersCols.id} as id_user, users.${tUsersCols.nickname}, users.${tUsersCols.photo},
       connections.${tConnectionsCols.state}, connections.${tConnectionsCols.message},
       users.${tUsersCols.visibility} AS visibility,
       (SELECT COUNT(*) FROM (
@@ -216,4 +216,4 @@ export const queryUsers = async (query: string, userId: number): Promise<Array<o
       )
     HAVING visibility='${USER_VISIBILITY_TYPE.ALL}' OR (visibility='${USER_VISIBILITY_TYPE.FOF}' AND mutualConnections > 0)
     ORDER BY mutualConnections DESC
-  `, [`%${query}%`, `%${query}%`])
+  `, [`%${query}%`, `%${query}%`]))

@@ -24,13 +24,13 @@ const settingsDataUpdated = (state, { payload }) => ({
   },
 })
 
-const connectionRequested = (state, { payload: { targetId } }) => ({
+const connectionRequested = (state, { payload: { userId } }) => ({
   ...state,
   data: {
     ...state.data,
     [CONNECTION_STATE_TYPE.FOUND]: state.data[CONNECTION_STATE_TYPE.FOUND].map(connection => ({
       ...connection,
-      state: connection.id === targetId
+      state: connection.userId === userId
         ? CONNECTION_STATE_TYPE.WAITING
         : connection.state,
     })),

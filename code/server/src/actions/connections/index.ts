@@ -16,10 +16,10 @@ const findUsers = async (req: any, res: any, { query }: { query: string }) => {
 const performConnectionAction = async (
   req: any,
   res: any,
-  { targetId }: { targetId: number },
+  { userId }: { userId: number },
   action: (currentUser: number, targetUser: number) => Promise<boolean>
 ) => {
-  const success = await action(req.session.user, targetId)
+  const success = await action(req.session.user, userId)
   if (success) {
     const data = await findConnections(req.session.user)
     if (data) {
@@ -34,12 +34,12 @@ const performConnectionAction = async (
 const handleConnectionRequest = async (
   req: any,
   res: any,
-  { targetId, message }: { targetId: number; message: string | null },
+  { userId, message }: { userId: number; message: string | null },
 ) => {
   const currentUser = req.session.user
-  const isRequestValid = !(await findBlockedConnections(targetId)).find(blockedUser => blockedUser === currentUser)
+  const isRequestValid = !(await findBlockedConnections(userId)).find(blockedUser => blockedUser === currentUser)
   if (isRequestValid) {
-    const success = await createConnectionRequest(currentUser, targetId, message ?? null)
+    const success = await createConnectionRequest(currentUser, userId, message ?? null)
     if (success) {
       res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.CONNECTION_REQUEST_SENT] })
     } else {

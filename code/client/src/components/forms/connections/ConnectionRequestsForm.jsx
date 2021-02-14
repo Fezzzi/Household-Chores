@@ -18,16 +18,16 @@ import { MessageTooltip } from '../../portals'
 const ConnectionRequestsForm = ({ data }) => {
   const dispatch = useDispatch()
 
-  const blockHandler = useCallback(targetId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionBlock, targetId })),
+  const blockHandler = useCallback(userId =>
+    dispatch(SettingsActions.connectionAction({ effect: connectionBlock, userId })),
   [dispatch])
 
-  const approveHandler = useCallback(targetId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionApprove, targetId })),
+  const approveHandler = useCallback(userId =>
+    dispatch(SettingsActions.connectionAction({ effect: connectionApprove, userId })),
   [dispatch])
 
-  const ignoreHandler = useCallback(targetId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionIgnore, targetId })),
+  const ignoreHandler = useCallback(userId =>
+    dispatch(SettingsActions.connectionAction({ effect: connectionIgnore, userId })),
   [dispatch])
 
   return (
@@ -42,7 +42,7 @@ const ConnectionRequestsForm = ({ data }) => {
         ? (
           <Table
             rows={data.map(({
-              id,
+              userId,
               photo,
               message,
               mutualConnections,
@@ -63,9 +63,9 @@ const ConnectionRequestsForm = ({ data }) => {
                 </AppendMessageAnchor>
               ),
               dateCreated: getTimeString(dateCreated),
-              approveBtn: getButtonForUser(FORM.APPROVE, id, approveHandler),
-              ignoreBtn: getButtonForUser(FORM.IGNORE, id, ignoreHandler),
-              blockBtn: getButtonForUser(FORM.BLOCK, id, blockHandler),
+              approveBtn: getButtonForUser(FORM.APPROVE, userId, approveHandler),
+              ignoreBtn: getButtonForUser(FORM.IGNORE, userId, ignoreHandler),
+              blockBtn: getButtonForUser(FORM.BLOCK, userId, blockHandler),
             }))}
             keys={[
               { name: 'photo' },

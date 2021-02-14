@@ -47,12 +47,12 @@ const HouseholdInvitationForm = ({ connections, onInvite }) => {
   }, [nodesRef.current, processedRows])
 
   const dispatch = useDispatch()
-  const handleInvitationClick = id => dispatch(ModalActions.openModal({
+  const handleInvitationClick = userId => dispatch(ModalActions.openModal({
     type: MODAL_TYPE.APPEND_MESSAGE,
     data: {
       maxLength: INVITATION_MESSAGE_LENGTH,
       onSubmit: message => {
-        onInvite(id, message)
+        onInvite(userId, message)
         setHoveredNode(null)
       },
     },
@@ -76,12 +76,12 @@ const HouseholdInvitationForm = ({ connections, onInvite }) => {
       </TableHeaderBox>
       <TableSingleRowBox height={connections.length ? '130px' : '0px'}>
         <InvitationNodesWrapper>
-          {processedRows.map(({ id, nickname, photo }, index) => (
+          {processedRows.map(({ userId, nickname, photo }, index) => (
             <InvitationFormNode
-              key={`connection-${id}`}
+              key={`connection-${userId}`}
               onMouseEnter={() => setHoveredNode(index)}
               onMouseLeave={() => setHoveredNode(null)}
-              onClick={() => handleInvitationClick(id)}
+              onClick={() => handleInvitationClick(userId)}
             >
               {hoveredNode === index && (<InvitationFormButton><Add /></InvitationFormButton>)}
               <InvitationFormNodePhoto src={photo} />
@@ -96,7 +96,7 @@ const HouseholdInvitationForm = ({ connections, onInvite }) => {
 
 HouseholdInvitationForm.propTypes = {
   connections: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    userId: PropTypes.number.isRequired,
     nickname: PropTypes.string.isRequired,
     photo: PropTypes.string,
   })).isRequired,

@@ -10,36 +10,33 @@ import { TableBigPhoto, TableRowIcon } from 'clientSrc/styles/blocks/table'
 import { getTimeString } from 'clientSrc/helpers/connections'
 import { FORM } from 'shared/constants/localeMessages'
 import { COLORS, MODAL_TYPE } from 'clientSrc/constants'
-import { HOUSEHOLD_KEYS, INVITATION_KEYS } from 'shared/constants/mappingKeys'
+import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 
 import { LocaleText, PrimaryButton, Table } from '../../common'
 import { InfoTooltip } from '../../portals'
 
 const HouseholdInvitationListForm = ({ invitations }) => {
-  const { photo, name } = useSelector(({ app: { user } }) => user)
+  const { photo, nickname } = useSelector(({ app: { user } }) => user)
 
   const dispatch = useDispatch()
   const approveHandler = useCallback((householdId, fromId) =>
     dispatch(ModalActions.openModal({
       type: MODAL_TYPE.INVITATION_ACCEPT,
       data: {
-        userName: name,
+        userName: nickname,
         userPhoto: photo,
         onSubmit: (nameAlis, photoAlias) => dispatch(HouseholdActions.approveInvitation({
-          [INVITATION_KEYS.HOUSEHOLD_ID]: householdId,
-          [INVITATION_KEYS.FROM_ID]: fromId,
-          [HOUSEHOLD_KEYS.USER_NAME]: nameAlis ?? name,
+          householdId,
+          fromId,
+          [HOUSEHOLD_KEYS.USER_NAME]: nameAlis ?? nickname,
           [HOUSEHOLD_KEYS.USER_PHOTO]: photoAlias ?? photo,
         })),
       },
     })),
-  [name, photo, dispatch])
+  [nickname, photo, dispatch])
 
   const ignoreHandler = useCallback((householdId, fromId) =>
-    dispatch(HouseholdActions.ignoreInvitation({
-      [INVITATION_KEYS.HOUSEHOLD_ID]: householdId,
-      [INVITATION_KEYS.FROM_ID]: fromId,
-    })),
+    dispatch(HouseholdActions.ignoreInvitation({ householdId, fromId })),
   [dispatch])
 
   return (
@@ -54,28 +51,29 @@ const HouseholdInvitationListForm = ({ invitations }) => {
         ? (
           <Table
             rows={invitations.map(({
-              [INVITATION_KEYS.FROM_ID]: fromId,
-              [INVITATION_KEYS.HOUSEHOLD_ID]: householdId,
-              [INVITATION_KEYS.FROM_PHOTO]: fromPhoto,
-              [INVITATION_KEYS.HOUSEHOLD_PHOTO]: householdPhoto,
-              [INVITATION_KEYS.MESSAGE]: invitationMessage,
+              fromId,
+              householdId,
+              fromPhoto,
+              householdPhoto,
+              message,
+              dateCreated,
               ...invitation
             }) => ({
               ...invitation,
               fromPhoto: <TableBigPhoto src={fromPhoto} />,
               householdPhoto: <TableBigPhoto src={householdPhoto} />,
               delimiter: <TableRowIcon><ChevronRight /></TableRowIcon>,
-              invitationMessage: invitationMessage && (
+              message: message && (
                 <AppendMessageAnchor>
                   <InfoTooltip
                     icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
-                    text={invitationMessage}
+                    text={message}
                     customHeight={24}
                     customOffsetY={-5}
                   />
                 </AppendMessageAnchor>
               ),
-              date: getTimeString(invitation[INVITATION_KEYS.DATE_CREATED]),
+              dateCreated: getTimeString(dateCreated),
               approveBtn: (
                 <PrimaryButton
                   onClick={() => approveHandler(householdId, fromId)}
@@ -100,21 +98,21 @@ const HouseholdInvitationListForm = ({ invitations }) => {
             }))}
             keys={[
               { name: 'fromPhoto' },
-              { name: INVITATION_KEYS.FROM_NICKNAME, bold: true },
+              { name: 'fromNickname', bold: true },
               { name: 'delimiter' },
               { name: 'householdPhoto' },
-              { name: INVITATION_KEYS.HOUSEHOLD_NAME, bold: true, growing: true },
-              { name: 'invitationMessage' },
-              { name: 'date', fading: true },
+              { name: 'householdName', bold: true, growing: true },
+              { name: 'message' },
+              { name: 'dateCreated', fading: true },
               { name: 'approveBtn' },
               { name: 'ignoreBtn' },
             ]}
             sortConfig={[
-              { key: INVITATION_KEYS.HOUSEHOLD_NAME, icon: <SortByAlpha /> },
-              { key: INVITATION_KEYS.DATE_CREATED, icon: <CalendarToday /> },
+              { key: 'householdName', icon: <SortByAlpha /> },
+              { key: 'dateCreated', icon: <CalendarToday /> },
             ]}
             defaultSorter={-2}
-            filterKey={INVITATION_KEYS.FROM_NICKNAME}
+            filterKey="fromNickname"
             bigCells
             freeHeight
           />

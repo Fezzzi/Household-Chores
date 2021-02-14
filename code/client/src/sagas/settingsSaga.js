@@ -28,8 +28,8 @@ function* editSettingsSaga({ payload }) {
   }
 }
 
-function* connectionActionSaga({ payload: { effect, targetId } }) {
-  yield call(generalSaga, effect, targetId, function* (data) {
+function* connectionActionSaga({ payload: { effect, userId } }) {
+  yield call(generalSaga, effect, userId, function* (data) {
     yield put(SettingsActions.settingsDataUpdated(data))
   })
 }

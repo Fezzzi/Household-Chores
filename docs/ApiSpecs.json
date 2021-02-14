@@ -302,9 +302,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["targetId"],
+                "required": ["userId"],
                 "properties": {
-                  "targetId": {
+                  "userId": {
                     "type": "number",
                     "format": "uuid"
                   },
@@ -356,9 +356,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["targetId"],
+                "required": ["userId"],
                 "properties": {
-                  "targetId": {
+                  "userId": {
                     "type": "number",
                     "format": "uuid"
                   }
@@ -1047,7 +1047,7 @@
             "type": "string",
             "format": "link"
           },
-          "invitedConnections": {
+          "newInvitations": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/NewInvitation"
@@ -1142,14 +1142,14 @@
       },
       "Connection": {
         "required": [
-          "id",
+          "userId",
           "nickname",
           "photo",
           "mutualConnections",
           "dateCreated"
         ],
         "properties": {
-          "id": {
+          "userId": {
             "type": "number",
             "format": "uuid"
           },
@@ -1273,9 +1273,9 @@
         }
       },
       "NewInvitation": {
-        "required": ["id"],
+        "required": ["userId"],
         "properties": {
-          "id": {
+          "userId": {
             "type": "string",
             "format": "uuid"
           },

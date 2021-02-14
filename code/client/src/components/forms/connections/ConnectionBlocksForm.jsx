@@ -17,8 +17,8 @@ import { LocaleText, Table } from '../../common'
 const ConnectionBlocksForm = ({ data }) => {
   const dispatch = useDispatch()
 
-  const unblockHandler = useCallback(targetId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionUnblock, targetId })),
+  const unblockHandler = useCallback(userId =>
+    dispatch(SettingsActions.connectionAction({ effect: connectionUnblock, userId })),
   [dispatch])
 
   return (
@@ -32,7 +32,7 @@ const ConnectionBlocksForm = ({ data }) => {
       {data?.length
         ? <Table
           rows={data.map(({
-            id,
+            userId,
             photo,
             message,
             mutualConnections,
@@ -51,7 +51,7 @@ const ConnectionBlocksForm = ({ data }) => {
               </AppendMessageAnchor>
             ),
             dateCreated: getTimeString(dateCreated),
-            unblockBtn: getButtonForUser(FORM.UNBLOCK, id, unblockHandler),
+            unblockBtn: getButtonForUser(FORM.UNBLOCK, userId, unblockHandler),
           }))}
           keys={[
             { name: 'photo' },

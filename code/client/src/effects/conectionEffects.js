@@ -7,17 +7,17 @@ export const findUsers = query =>
 export const connectionRequest = data =>
   clientApi.post(`${API.CONNECTIONS_PREFIX}/${API.CONNECTION_REQUEST}`, data)
 
-export const connectionApprove = targetId =>
-  clientApi.post(`${API.CONNECTIONS_PREFIX}/${API.CONNECTION_APPROVE}`, { targetId })
+export const connectionApprove = userId =>
+  clientApi.post(`${API.CONNECTIONS_PREFIX}/${API.CONNECTION_APPROVE}`, { userId })
 
-export const connectionBlock = targetId =>
-  clientApi.post(`${API.CONNECTIONS_PREFIX}/${API.CONNECTION_BLOCK}`, { targetId })
+export const connectionBlock = userId =>
+  clientApi.post(`${API.CONNECTIONS_PREFIX}/${API.CONNECTION_BLOCK}`, { userId })
 
-export const connectionIgnore = targetId =>
-  clientApi.post(`${API.CONNECTIONS_PREFIX}/${API.CONNECTION_IGNORE}`, { targetId })
+export const connectionIgnore = userId =>
+  clientApi.post(`${API.CONNECTIONS_PREFIX}/${API.CONNECTION_IGNORE}`, { userId })
 
-export const connectionRemove = targetId =>
-  clientApi.post(`${API.CONNECTIONS_PREFIX}/${API.CONNECTION_REMOVE}`, { targetId })
+export const connectionRemove = userId =>
+  clientApi.post(`${API.CONNECTIONS_PREFIX}/${API.CONNECTION_REMOVE}`, { userId })
 
-export const connectionUnblock = targetId =>
-  clientApi.post(`${API.CONNECTIONS_PREFIX}/${API.CONNECTION_UNBLOCK}`, { targetId })
+export const connectionUnblock = userId =>
+  clientApi.post(`${API.CONNECTIONS_PREFIX}/${API.CONNECTION_UNBLOCK}`, { userId })
