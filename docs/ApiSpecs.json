@@ -243,7 +243,7 @@
 
     "/connections/find": {
       "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
-      "post": {
+      "get": {
         "summary": "Searches for users with names/emails matching query provided",
         "operationId": "connectionsFind",
         "tags": ["Connections"],
@@ -332,7 +332,7 @@
     },
     "/connections/{action}": {
       "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
-      "post": {
+      "put": {
         "summary": "Performs given connection action",
         "operationId": "connectionsAction",
         "tags": ["Connections"],
@@ -345,7 +345,48 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["approve", "ignore", "remove", "block", "unblock"]
+              "enum": ["approve", "block"]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Information about the target user of the action",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["userId"],
+                "properties": {
+                  "userId": {
+                    "type": "number",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/foundConnections"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Performs given connection action",
+        "operationId": "connectionsAction",
+        "tags": ["Connections"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [
+          {
+            "name": "action",
+            "in": "path",
+            "description": "Identifies the action to be performed",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["ignore", "remove", "unblock"]
             }
           }
         ],
@@ -453,7 +494,7 @@
     },
     "/households/{action}": {
       "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
-      "post": {
+      "delete": {
         "summary": "Deletes/Leaves given household",
         "operationId": "householdsAction",
         "tags": ["Households"],
@@ -505,7 +546,7 @@
     },
     "/households/approve": {
       "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
-      "post": {
+      "put": {
         "summary": "Approves household invitation",
         "operationId": "householdsApprove",
         "tags": ["Households"],
@@ -569,7 +610,7 @@
     },
     "/households/ignore": {
       "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
-      "post": {
+      "delete": {
         "summary": "Ignores household invitation",
         "operationId": "householdsIgnore",
         "tags": ["Households"],

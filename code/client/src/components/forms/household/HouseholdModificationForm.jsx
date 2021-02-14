@@ -162,13 +162,13 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
   const dispatch = useDispatch()
   const handleLeaveHousehold = useCallback(() => {
     setSendingField({ [HOUSEHOLD.LEAVE]: HOUSEHOLD.LEAVING })
-    dispatch(HouseholdActions.leaveHousehold({ householdId }))
+    dispatch(HouseholdActions.leaveHousehold(householdId))
     setTimer(setTimeout(() => setSendingField && setSendingField(null), SUBMIT_TIMEOUT))
   }, [householdId, dispatch])
 
   const handleDeleteHousehold = useCallback(() => {
     setSendingField({ [HOUSEHOLD.DELETE]: HOUSEHOLD.DELETING })
-    dispatch(HouseholdActions.deleteHousehold({ householdId }))
+    dispatch(HouseholdActions.deleteHousehold(householdId))
     setTimer(setTimeout(() => setSendingField && setSendingField(null), SUBMIT_TIMEOUT))
   }, [householdId, dispatch])
 

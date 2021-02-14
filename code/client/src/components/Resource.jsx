@@ -18,7 +18,7 @@ const Resource = ({ match: { params: { resourceId } }, history }) => {
   const fetchData = (resourceId, locale) =>
     loadResource({
       resourceId,
-      localeData: { locale },
+      locale,
     })
       .then(({ data }) => setData(data))
       .catch(() => setData({
