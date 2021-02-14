@@ -1,13 +1,3 @@
-export const PROFILE = {
-  ID: 'id',
-  OLD_PASSWORD: 'old-password',
-  NEW_PASSWORD: 'new-password',
-  PHOTO: 'photo',
-  NAME: 'name',
-  EMAIL: 'email',
-  CONNECTION_VISIBILITY: 'connection-visibility',
-}
-
 export const HOUSEHOLD_GROUP_KEYS = {
   INVITATIONS: 'invitations',
   MEMBERS: 'members',
@@ -58,12 +48,5 @@ export const CONNECTION_KEYS = {
   PHOTO: 'photo',
   MESSAGE: 'message',
   MUTUAL_CONNECTIONS: 'mutual-connections',
-  DATE_CREATED: 'date-created',
-}
-
-export const ACTIVITY_KEYS = {
-  ID: 'id',
-  MESSAGE: 'message',
-  LINK: 'link',
   DATE_CREATED: 'date-created',
 }

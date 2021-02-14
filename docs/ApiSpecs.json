@@ -773,13 +773,13 @@
       "State": {
         "required": [
           "debug",
-          "loggedUser"
+          "isUserLogged"
         ],
         "properties": {
           "debug": {
             "type": "boolean"
           },
-          "loggedUser": {
+          "isUserLogged": {
             "type": "boolean"
           },
           "user": {
@@ -999,7 +999,7 @@
             "type": "string",
             "format": "password"
           },
-          "connectionVisibility": {
+          "visibility": {
             "type": "string",
             "enum": ["ALL", "FRIENDS_OF_FRIENDS"]
           }
@@ -1423,13 +1423,13 @@
         }
       },
       "ProfileData": {
-        "required": ["id", "name", "email", "photo", "connectionVisibility"],
+        "required": ["id", "nickname", "email", "photo", "visibility"],
         "properties": {
           "id": {
             "type": "number",
             "format": "uuid"
           },
-          "name": {
+          "nickname": {
             "type": "string"
           },
           "email": {
@@ -1440,7 +1440,7 @@
             "type": "string",
             "format": "link"
           },
-          "connectionVisibility": {
+          "visibility": {
             "type": "string",
             "enum": ["ALL", "FRIENDS_OF_FRIENDS"]
           }

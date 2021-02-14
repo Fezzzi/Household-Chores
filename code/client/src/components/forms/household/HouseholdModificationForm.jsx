@@ -12,7 +12,7 @@ import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { formatDate } from 'shared/helpers/date'
 import {
-  CONNECTION_KEYS, HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS, PROFILE,
+  CONNECTION_KEYS, HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS,
 } from 'shared/constants/mappingKeys'
 
 import HouseholdFormHeader from './HouseholdFormHeader'
@@ -74,11 +74,12 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
 
   const userState = useSelector(({ app }) => app.user)
   const currentUser = useMemo(() => {
-    const member = members.find(member => member[MEMBER_KEYS.ID] === userState[PROFILE.ID])
+    const { id, photo, nickname } = userState
+    const member = members.find(member => member[MEMBER_KEYS.ID] === id)
     return {
-      id: userState[PROFILE.ID],
-      photo: member[MEMBER_KEYS.PHOTO] ?? userState[PROFILE.PHOTO],
-      name: member[MEMBER_KEYS.NAME] ?? userState[PROFILE.NAME],
+      id,
+      photo: member[MEMBER_KEYS.PHOTO] ?? photo,
+      nickname: member[MEMBER_KEYS.NAME] ?? nickname,
       role: member[MEMBER_KEYS.ROLE],
     }
   }, [members, userState])
@@ -119,7 +120,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
           const connectedUser = connections.find(user => user[CONNECTION_KEYS.ID] === id)
           return {
             fromPhoto: currentUser.photo,
-            fromNickname: currentUser.name,
+            fromNickname: currentUser.nickname,
             fromId: currentUser.id,
             toPhoto: connectedUser[CONNECTION_KEYS.PHOTO],
             toNickname: connectedUser[CONNECTION_KEYS.NICKNAME],

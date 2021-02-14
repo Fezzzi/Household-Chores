@@ -16,7 +16,7 @@ export default () => {
         if (userId) {
           res.status(200).send({
             debug: process.env.DEBUG,
-            loggedUser: true,
+            isUserLogged: true,
             user: await findProfileData(userId),
             activityFeed: await getActivityForUser(userId),
             dialogSettings: await getDialogSettings(userId),
@@ -24,7 +24,7 @@ export default () => {
         } else {
           res.status(200).send({
             debug: process.env.DEBUG,
-            loggedUser: false,
+            isUserLogged: false,
           })
         }
         break

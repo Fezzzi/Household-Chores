@@ -6,7 +6,7 @@ import {
   INPUT_TYPE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE,
   SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS, HOUSEHOLD_ROLE_TYPE, INVITATION_MESSAGE_LENGTH,
 } from 'shared/constants'
-import { HOUSEHOLD_KEYS, INVITATION_KEYS, PROFILE } from 'shared/constants/mappingKeys'
+import { HOUSEHOLD_KEYS, INVITATION_KEYS } from 'shared/constants/mappingKeys'
 import { ERROR, INFO } from 'shared/constants/localeMessages'
 import { isInputValid } from 'shared/helpers/validation'
 import { deApify } from 'serverSrc/helpers/api'
@@ -59,23 +59,25 @@ export const validateProfileData = async (
   req: any,
   res: any
 ): Promise<boolean> => {
-  const update = inputs[PROFILE.NAME] !== undefined
-    || inputs[PROFILE.EMAIL] !== undefined
-    || (inputs[PROFILE.OLD_PASSWORD] !== undefined && inputs[PROFILE.NEW_PASSWORD] !== undefined)
-    || inputs[PROFILE.PHOTO] !== undefined
-    || inputs[PROFILE.CONNECTION_VISIBILITY] !== undefined
+  const { nickname, email, oldPassword, newPassword, photo, visibility } = inputs
+
+  const update = nickname !== undefined
+    || email !== undefined
+    || (oldPassword !== undefined && newPassword !== undefined)
+    || photo !== undefined
+    || visibility !== undefined
 
   if (!update) {
     res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
     return false
   }
 
-  const valid = validateField(res, inputs[PROFILE.NAME], INPUT_TYPE.TEXT)
-    && validateField(res, inputs[PROFILE.PHOTO], INPUT_TYPE.PHOTO)
-    && validateField(res, inputs[PROFILE.EMAIL], INPUT_TYPE.EMAIL)
-    && validateField(res, inputs[PROFILE.OLD_PASSWORD], INPUT_TYPE.PASSWORD)
-    && validateField(res, inputs[PROFILE.NEW_PASSWORD], INPUT_TYPE.PASSWORD)
-    && validateField(res, inputs[PROFILE.CONNECTION_VISIBILITY], INPUT_TYPE.SWITCH, [
+  const valid = validateField(res, nickname, INPUT_TYPE.TEXT)
+    && validateField(res, photo, INPUT_TYPE.PHOTO)
+    && validateField(res, email, INPUT_TYPE.EMAIL)
+    && validateField(res, oldPassword, INPUT_TYPE.PASSWORD)
+    && validateField(res, newPassword, INPUT_TYPE.PASSWORD)
+    && validateField(res, visibility, INPUT_TYPE.SWITCH, [
       USER_VISIBILITY_TYPE.ALL, USER_VISIBILITY_TYPE.FOF,
     ])
 
@@ -84,14 +86,12 @@ export const validateProfileData = async (
     return false
   }
 
-  if (inputs[PROFILE.EMAIL] !== undefined && await findUser(inputs[PROFILE.EMAIL] as string) !== null) {
+  if (email !== undefined && await findUser(email as string) !== null) {
     res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.EMAIL_USED] })
     return false
   }
 
-  if (inputs[PROFILE.OLD_PASSWORD]
-    && !await isCorrectPassword(inputs[PROFILE.OLD_PASSWORD] as string, req.session.user)
-  ) {
+  if (oldPassword && !await isCorrectPassword(oldPassword as string, req.session.user)) {
     res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INCORRECT_PASS] })
     return false
   }

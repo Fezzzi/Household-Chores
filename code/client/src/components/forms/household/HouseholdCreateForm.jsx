@@ -10,7 +10,7 @@ import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { HouseholdActions } from 'clientSrc/actions'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import {
-  CONNECTION_KEYS, HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, PROFILE,
+  CONNECTION_KEYS, HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS,
 } from 'shared/constants/mappingKeys'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 
@@ -33,9 +33,7 @@ const HouseholdCreateForm = ({ connections }) => {
 
   const userState = useSelector(({ app }) => app.user)
   const currentUser = useMemo(() => ({
-    id: userState[PROFILE.ID],
-    photo: userState[PROFILE.PHOTO],
-    name: userState[PROFILE.NAME],
+    ...userState,
     role: HOUSEHOLD_ROLE_TYPE.ADMIN,
   }), [userState])
 
@@ -45,7 +43,7 @@ const HouseholdCreateForm = ({ connections }) => {
       toNickname: user.nickname,
       toId: user.id,
       fromPhoto: currentUser.photo,
-      fromNickname: currentUser.name,
+      fromNickname: currentUser.nickname,
       fromId: currentUser.id,
       message: user[INVITATION_KEYS.MESSAGE],
       dateCreated: '(PENDING)',
@@ -80,7 +78,7 @@ const HouseholdCreateForm = ({ connections }) => {
     }))
 
     const inputsData = {
-      [HOUSEHOLD_KEYS.USER_NAME]: currentUser.name,
+      [HOUSEHOLD_KEYS.USER_NAME]: currentUser.nickname,
       [HOUSEHOLD_KEYS.NAME]: 'New Household',
       ...inputs,
     }

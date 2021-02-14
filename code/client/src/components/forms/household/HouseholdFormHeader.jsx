@@ -65,11 +65,11 @@ const HouseholdFormHeader = ({
           <EditableTextField
             name={HOUSEHOLD_KEYS.USER_NAME}
             edited={!!inputs[HOUSEHOLD_KEYS.USER_NAME]}
-            placeholder={currentUser.name}
+            placeholder={currentUser.nickname}
             error={errors[HOUSEHOLD_KEYS.USER_NAME]}
             setFormState={setFormState}
           >
-            {currentUser.name}
+            {currentUser.nickname}
           </EditableTextField>
         </UserName>
 
@@ -146,7 +146,7 @@ HouseholdFormHeader.propTypes = {
   photo: PropTypes.string.isRequired,
   currentUser: PropTypes.shape({
     photo: PropTypes.string,
-    name: PropTypes.string,
+    nickname: PropTypes.string,
     role: PropTypes.string,
   }).isRequired,
   editableRole: PropTypes.bool,

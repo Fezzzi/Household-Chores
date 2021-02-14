@@ -10,16 +10,13 @@ import { TableBigPhoto, TableRowIcon } from 'clientSrc/styles/blocks/table'
 import { getTimeString } from 'clientSrc/helpers/connections'
 import { FORM } from 'shared/constants/localeMessages'
 import { COLORS, MODAL_TYPE } from 'clientSrc/constants'
-import { HOUSEHOLD_KEYS, INVITATION_KEYS, PROFILE } from 'shared/constants/mappingKeys'
+import { HOUSEHOLD_KEYS, INVITATION_KEYS } from 'shared/constants/mappingKeys'
 
 import { LocaleText, PrimaryButton, Table } from '../../common'
 import { InfoTooltip } from '../../portals'
 
 const HouseholdInvitationListForm = ({ invitations }) => {
-  const {
-    [PROFILE.PHOTO]: photo,
-    [PROFILE.NAME]: name,
-  } = useSelector(({ app: { user } }) => user)
+  const { photo, name } = useSelector(({ app: { user } }) => user)
 
   const dispatch = useDispatch()
   const approveHandler = useCallback((householdId, fromId) =>

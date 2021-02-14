@@ -7,7 +7,7 @@ import {
 } from 'serverSrc/database/models'
 import { SETTING_CATEGORIES, PROFILE_TABS, HOUSEHOLD_TABS, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/mappingKeys'
+import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 import { tDialogsCols, tNotifySettingsCols } from 'serverSrc/database/models/tables'
 
 const getTabData = async (category: string, tab: string, req: any) => {
@@ -66,15 +66,15 @@ export const handleSettingsDataUpdate = async (
           if (!valid) {
             return true
           }
-          if (!inputs[PROFILE.PHOTO]) {
+          if (!inputs.photo) {
             return handleUpdate(res, await updateUserData(inputs, req.session.user))
           }
-          const [photo] = uploadFiles([inputs[PROFILE.PHOTO] as any], PROFILE_DIR, req.session.fsKey)
+          const [photo] = uploadFiles([inputs.photo as any], PROFILE_DIR, req.session.fsKey)
           if (photo === null) {
             res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
             return true
           }
-          return handleUpdate(res, await updateUserData({ ...inputs, [PROFILE.PHOTO]: photo }, req.session.user))
+          return handleUpdate(res, await updateUserData({ ...inputs, photo }, req.session.user))
         }
         case PROFILE_TABS.NOTIFICATIONS: {
           const allowedKeys = Object.values(tNotifySettingsCols).filter(name => name !== tNotifySettingsCols.id_user)

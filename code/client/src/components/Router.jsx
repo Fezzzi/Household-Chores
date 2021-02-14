@@ -13,7 +13,7 @@ import Settings from './settings/Settings'
 export const history = createBrowserHistory()
 
 const Router = () => {
-  const { loggedUser, loaded } = useSelector(({ app: { loggedUser, loaded } }) => ({ loggedUser, loaded }))
+  const { isUserLogged, loaded } = useSelector(({ app: { isUserLogged, loaded } }) => ({ isUserLogged, loaded }))
 
   return (
     <BrowserRouter history={history}>
@@ -29,7 +29,7 @@ const Router = () => {
             </>
           )}
         />
-        {loaded && (!loggedUser
+        {loaded && (!isUserLogged
           ? (
             <Switch>
               <Route path="/*" component={AuthForm} />

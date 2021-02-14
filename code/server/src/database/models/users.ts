@@ -1,8 +1,8 @@
 import { database } from 'serverSrc/database'
 import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords'
 import { CONNECTION_STATE_TYPE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
-import { PROFILE } from 'shared/constants/mappingKeys'
 import { ERROR } from 'shared/constants/localeMessages'
+import { apify } from 'serverSrc/helpers/api'
 
 import {
   tUsersName, tUsersCols, tConnectionsName, tConnectionsCols,
@@ -16,22 +16,16 @@ export const isCorrectPassword = async (password: string, userId: number): Promi
     WHERE ${tUsersCols.id}=?
   `, [userId])
 
-  return result && result.length && checkPass(password, result[0][tUsersCols.password])
+  return result?.[0]?.[tUsersCols.password] && checkPass(password, result[0][tUsersCols.password])
 }
 export const findProfileData = async (userId: number): Promise<Record<string, string | number>> => {
-  const result = await database.query(`
-    SELECT ${tUsersCols.nickname}, ${tUsersCols.email}, ${tUsersCols.photo}, ${tUsersCols.visibility}
+  const result = await apify<string | number>(database.query(`
+    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.email}, ${tUsersCols.photo}, ${tUsersCols.visibility}
     FROM ${tUsersName}
     WHERE ${tUsersCols.id}=${userId}
-  `)
+  `))
 
-  return result[0] && {
-    [PROFILE.ID]: userId,
-    [PROFILE.NAME]: result[0][tUsersCols.nickname],
-    [PROFILE.EMAIL]: result[0][tUsersCols.email],
-    [PROFILE.PHOTO]: result[0][tUsersCols.photo],
-    [PROFILE.CONNECTION_VISIBILITY]: result[0][tUsersCols.visibility],
-  }
+  return result[0]
 }
 
 export const findUser = async (email: string): Promise<{ userId: number; fsKey: string } | null> => {
@@ -112,20 +106,20 @@ export const updateUserData = async (
   data: Record<string, string | number>,
   userId: number
 ): Promise<boolean> => {
-  const newPass = data[PROFILE.NEW_PASSWORD] && await encryptPass(data[PROFILE.NEW_PASSWORD] as string)
+  const newPass = data.newPassword && await encryptPass(data.newPassword as string)
   /* eslint-disable indent */
   return database.query(`
     UPDATE ${tUsersName} SET ${
       [
-        data[PROFILE.NAME] && `${tUsersCols.nickname}=?`,
-        data[PROFILE.EMAIL] && `${tUsersCols.email}=?`,
-        data[PROFILE.PHOTO] && `${tUsersCols.photo}=?`,
-        data[PROFILE.NEW_PASSWORD] && `${tUsersCols.password}=?`,
-        data[PROFILE.CONNECTION_VISIBILITY] && `${tUsersCols.visibility}=?`,
+        data.nickname && `${tUsersCols.nickname}=?`,
+        data.email && `${tUsersCols.email}=?`,
+        data.photo && `${tUsersCols.photo}=?`,
+        data.newPassword && `${tUsersCols.password}=?`,
+        data.visibility && `${tUsersCols.visibility}=?`,
       ].filter(Boolean).join(',')
     } WHERE ${tUsersCols.id}=${userId}
   `, [
-    data[PROFILE.NAME], data[PROFILE.EMAIL], data[PROFILE.PHOTO], newPass, data[PROFILE.CONNECTION_VISIBILITY],
+    data.nickname, data.email, data.photo, newPass, data.visibility,
   ].filter(Boolean))
   /* eslint-enable indent */
 }

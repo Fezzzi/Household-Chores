@@ -13,21 +13,21 @@ import homeReducer from './homeReducer'
 const initialState = {
   debug: true,
   loaded: false,
-  loggedUser: false,
+  isUserLogged: false,
   user: {},
   activityFeed: [],
 }
 
 const logInUser = state => ({
   ...state,
-  loggedUser: true,
+  isUserLogged: true,
 })
 
-const stateLoaded = (state, { payload: { debug, loggedUser, user, activityFeed } }) => ({
+const stateLoaded = (state, { payload: { debug, isUserLogged, user, activityFeed } }) => ({
   ...state,
   debug,
   loaded: true,
-  loggedUser,
+  isUserLogged,
   user,
   activityFeed,
 })
