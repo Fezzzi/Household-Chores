@@ -26,11 +26,3 @@ export const INVITATION_KEYS = {
   MESSAGE: 'message',
   DATE_CREATED: 'date-created',
 }
-
-export const MEMBER_KEYS = {
-  ID: 'member-id',
-  NAME: 'member-name',
-  PHOTO: 'member-photo',
-  ROLE: 'member-role',
-  DATE_JOINED: 'date-joined',
-}

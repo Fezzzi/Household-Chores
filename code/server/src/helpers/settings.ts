@@ -192,9 +192,9 @@ export const validateEditHouseholdData = async (
 
   if (userRole || changedRoles?.length > 0 || removedMembers?.length > 0) {
     const admins = (await getHouseholdMembers(householdId))
-      ?.filter(({ id, role }) => !removedMembers?.includes(id)
+      ?.filter(({ userId, role }) => !removedMembers?.includes(userId)
         && role === HOUSEHOLD_ROLE_TYPE.ADMIN
-        && !changedRoles?.find((changedRole: any) => id === changedRole.id && changedRole.role !== HOUSEHOLD_ROLE_TYPE.ADMIN))
+        && !changedRoles?.find((changedRole: any) => userId === changedRole.userId && changedRole.role !== HOUSEHOLD_ROLE_TYPE.ADMIN))
 
     if (!admins || admins.length === 0) {
       res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ADMIN_REQUIRED] })

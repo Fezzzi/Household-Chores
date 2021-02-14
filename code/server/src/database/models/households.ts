@@ -1,6 +1,6 @@
 import { database } from 'serverSrc/database'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
-import { HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS } from 'shared/constants/mappingKeys'
+import { HOUSEHOLD_KEYS, INVITATION_KEYS } from 'shared/constants/mappingKeys'
 
 import {
   tHouseholdsName, tHouseholdsCols, tHouseInvName, tHouseInvCols,
@@ -35,7 +35,7 @@ export const getUserHouseholdsData = async (currentUser: number): Promise<Array<
     SELECT households.${tHouseholdsCols.id}, households.${tHouseholdsCols.name} AS h_name,
       households.${tHouseholdsCols.photo} AS h_photo, CONCAT('household-', households.${tHouseholdsCols.id}) AS "key",
       households.${tHouseholdsCols.date_created}, members.${tHouseMemCols.role},
-      members.${tHouseMemCols.id_user}, members.${tHouseMemCols.name}, members.${tHouseMemCols.photo}
+      members.${tHouseMemCols.id_user}, members.${tHouseMemCols.nickname}, members.${tHouseMemCols.photo}
     FROM ${tHouseholdsName} AS households
     INNER JOIN ${tHouseMemName} AS mems
       ON households.${tHouseholdsCols.id}=mems.${tHouseMemCols.id_household} AND mems.${tHouseMemCols.id_user}=${currentUser}
@@ -54,15 +54,14 @@ export const getUserHouseholdsData = async (currentUser: number): Promise<Array<
         members: [],
       }
     }
-    if (household[tHouseMemCols.id_user]
-      && !acc[householdId].members.find((member: any) =>
-        member[MEMBER_KEYS.ID] === household[tHouseMemCols.id_user])
+    if (household[tHouseMemCols.id_user] && !acc[householdId].members.find((member: any) =>
+      member.userId === household[tHouseMemCols.id_user])
     ) {
       acc[householdId].members.push({
-        [MEMBER_KEYS.ID]: household[tHouseMemCols.id_user],
-        [MEMBER_KEYS.ROLE]: household[tHouseMemCols.role],
-        [MEMBER_KEYS.NAME]: household[tHouseMemCols.name],
-        [MEMBER_KEYS.PHOTO]: household[tHouseMemCols.photo],
+        userId: household[tHouseMemCols.id_user],
+        role: household[tHouseMemCols.role],
+        nickname: household[tHouseMemCols.nickname],
+        photo: household[tHouseMemCols.photo],
       })
     }
     return acc
@@ -77,7 +76,7 @@ export const findUserHouseholds = async (currentUser: number): Promise<Array<obj
       invitations.${tHouseInvCols.id_from}, invitations.${tHouseInvCols.id_to}, invitations.${tHouseInvCols.message},
       invitations.${tHouseInvCols.date_created}, users.${tUsersCols.nickname}, users.${tUsersCols.photo} AS u_photo,
       members.${tHouseMemCols.role}, members.${tHouseMemCols.id_user}, members.${tHouseMemCols.date_joined},
-      members.${tHouseMemCols.name}, members.${tHouseMemCols.photo}
+      members.${tHouseMemCols.nickname}, members.${tHouseMemCols.photo}
     FROM ${tHouseholdsName} AS households
     INNER JOIN ${tHouseMemName} AS mems
       ON households.${tHouseholdsCols.id}=mems.${tHouseMemCols.id_household} AND mems.${tHouseMemCols.id_user}=${currentUser}
@@ -112,16 +111,15 @@ export const findUserHouseholds = async (currentUser: number): Promise<Array<obj
         [INVITATION_KEYS.DATE_CREATED]: household[tHouseInvCols.date_created],
       })
     }
-    if (household[tHouseMemCols.id_user]
-      && !acc[householdId].members.find((member: any) =>
-        member[MEMBER_KEYS.ID] === household[tHouseMemCols.id_user])
+    if (household[tHouseMemCols.id_user] && !acc[householdId].members.find((member: any) =>
+      member.userId === household[tHouseMemCols.id_user])
     ) {
       acc[householdId].members.push({
-        [MEMBER_KEYS.ID]: household[tHouseMemCols.id_user],
-        [MEMBER_KEYS.ROLE]: household[tHouseMemCols.role],
-        [MEMBER_KEYS.NAME]: household[tHouseMemCols.name],
-        [MEMBER_KEYS.PHOTO]: household[tHouseMemCols.photo],
-        [MEMBER_KEYS.DATE_JOINED]: household[tHouseMemCols.date_joined],
+        userId: household[tHouseMemCols.id_user],
+        role: household[tHouseMemCols.role],
+        nickname: household[tHouseMemCols.nickname],
+        photo: household[tHouseMemCols.photo],
+        dateJoined: household[tHouseMemCols.date_joined],
       })
     }
     return acc
@@ -201,12 +199,12 @@ export const editHousehold = async (
           VALUES (${changedRoles.map(() => '?, ?, ?, ?, NOW()').join('),(')})
           ON DUPLICATE KEY UPDATE
             ${tHouseMemCols.role}=VALUES(${tHouseMemCols.role})
-        `, changedRoles.flatMap(({ id, role }: { id: number; role: string }) => [householdId, id, currentId, role])))
+        `, changedRoles.flatMap(({ userId, role }: { userId: number; role: string }) => [householdId, userId, currentId, role])))
       && (!userName && !userPhoto && !userRole
         || await database.query(`
           UPDATE ${tHouseMemName} SET ${
             [
-              userName && `${tHouseMemCols.name}=?`,
+              userName && `${tHouseMemCols.nickname}=?`,
               userPhoto && `${tHouseMemCols.photo}=?`,
               userRole && `${tHouseMemCols.role}=?`,
             ].filter(Boolean).join(',')
@@ -262,7 +260,7 @@ export const approveInvitation = async (
   currentId: number,
   fromId: number,
   householdId: number,
-  name: string,
+  nickname: string,
   photo: string,
 ): Promise<boolean | null> =>
   database.withTransaction(async (): Promise<boolean> => {
@@ -270,9 +268,9 @@ export const approveInvitation = async (
     return deleted && database.query(`
       INSERT INTO ${tHouseMemName} (
         ${tHouseMemCols.id_household}, ${tHouseMemCols.id_user}, ${tHouseMemCols.id_from}, ${tHouseMemCols.role},
-        ${tHouseMemCols.name}, ${tHouseMemCols.photo}, ${tHouseMemCols.date_joined}
+        ${tHouseMemCols.nickname}, ${tHouseMemCols.photo}, ${tHouseMemCols.date_joined}
       ) VALUES (?, ${currentId}, ?, '${HOUSEHOLD_ROLE_TYPE.MEMBER}', ?, ?, NOW())
-    `, [householdId, fromId, name, photo])
+    `, [householdId, fromId, nickname, photo])
   })
 
 export const getUserRole = async (
@@ -290,10 +288,11 @@ export const getUserRole = async (
 
 export const getHouseholdMembers = async (
   householdId: number
-): Promise<Array<{ id: number; role: string }> | null> => {
+): Promise<Array<{ userId: number; role: string }> | null> => {
   const members = await database.query(`
     SELECT * FROM ${tHouseMemName}
     WHERE ${tHouseMemCols.id_household}=?
   `, [householdId])
-  return members?.map((member: any) => ({ id: member[tHouseMemCols.id_user], role: member[tHouseMemCols.role] }))
+
+  return members?.map((member: any) => ({ userId: member[tHouseMemCols.id_user], role: member[tHouseMemCols.role] }))
 }

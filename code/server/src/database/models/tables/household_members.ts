@@ -5,7 +5,7 @@ export default {
     id_user: 'id_user',
     id_from: 'id_from',
     role: 'role',
-    name: 'name',
+    nickname: 'nickname',
     photo: 'photo',
     date_joined: 'date_joined',
   },

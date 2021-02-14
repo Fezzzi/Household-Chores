@@ -12,7 +12,7 @@ import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { formatDate } from 'shared/helpers/date'
 import {
-  HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS,
+  HOUSEHOLD_KEYS, INVITATION_KEYS,
 } from 'shared/constants/mappingKeys'
 
 import HouseholdFormHeader from './HouseholdFormHeader'
@@ -75,38 +75,38 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
   const userState = useSelector(({ app }) => app.user)
   const currentUser = useMemo(() => {
     const { id, photo, nickname } = userState
-    const member = members.find(member => member[MEMBER_KEYS.ID] === id)
+    const member = members.find(member => member.userId === id)
     return {
       id,
-      photo: member[MEMBER_KEYS.PHOTO] ?? photo,
-      nickname: member[MEMBER_KEYS.NAME] ?? nickname,
-      role: member[MEMBER_KEYS.ROLE],
+      photo: member.photo ?? photo,
+      nickname: member.nickname ?? nickname,
+      role: member.role,
     }
   }, [members, userState])
 
   const invitableConnections = useMemo(() => connections.filter(({ id }) =>
-    !members.find(member => member[MEMBER_KEYS.ID] === id)
+    !members.find(member => member.userId === id)
     && !invitations.find(invitation => invitation[INVITATION_KEYS.TO_ID] === id)
     && !invitedConnections?.find(user => user.id === id)
   ), [connections, members, invitations, invitedConnections])
 
   const memberTableProps = useMemberListProps(
-    members.map(member => ({
-      memberId: member[MEMBER_KEYS.ID],
-      memberRole: member[MEMBER_KEYS.ROLE],
-      changedRole: changedRoles?.find(obj => obj.id === member[MEMBER_KEYS.ID])?.role,
-      memberPhoto: member[MEMBER_KEYS.PHOTO],
-      memberDateJoined: member[MEMBER_KEYS.DATE_JOINED],
-      memberName: member[MEMBER_KEYS.NAME],
+    members.map(({ userId, role, photo, dateJoined, nickname }) => ({
+      memberId: userId,
+      memberRole: role,
+      changedRole: changedRoles?.find(obj => obj.userId === userId)?.role,
+      memberPhoto: photo,
+      memberDateJoined: dateJoined,
+      memberName: nickname,
     })),
     currentUser,
     useCallback(toId => removedMembers?.includes(toId), [removedMembers]),
     useCallback((toId, role) => {
-      const isChangedRole = role !== members.find(member => toId === member[MEMBER_KEYS.ID])?.[MEMBER_KEYS.ROLE]
+      const isChangedRole = role !== members.find(member => toId === member.userId)?.role
       if (isChangedRole) {
-        updateArrayValue(HOUSEHOLD_KEYS.CHANGED_ROLES, { id: toId, role })
+        updateArrayValue(HOUSEHOLD_KEYS.CHANGED_ROLES, { userId: toId, role })
       } else {
-        updateArrayValue(HOUSEHOLD_KEYS.CHANGED_ROLES, { id: toId, role }, false)
+        updateArrayValue(HOUSEHOLD_KEYS.CHANGED_ROLES, { userId: toId, role }, false)
       }
     }, [members]),
     toId => updateArrayValue(HOUSEHOLD_KEYS.REMOVED_MEMBERS, toId),
@@ -132,12 +132,12 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
         : []
       ),
       ...invitations.map(invitation => {
-        const invitor = members.find(member => member[MEMBER_KEYS.ID] === invitation[INVITATION_KEYS.FROM_ID])
+        const invitor = members.find(member => member.userId === invitation[INVITATION_KEYS.FROM_ID])
         const allowCancellation = removedInvitations?.includes(invitation[INVITATION_KEYS.TO_ID])
         const disableDeletion = allowCancellation || currentUser.role === HOUSEHOLD_ROLE_TYPE.MEMBER
         return invitor && {
-          fromPhoto: invitor[MEMBER_KEYS.PHOTO],
-          fromNickname: invitor[MEMBER_KEYS.NAME],
+          fromPhoto: invitor.photo,
+          fromNickname: invitor.nickname,
           fromId: invitation[INVITATION_KEYS.FROM_ID],
           toPhoto: invitation[INVITATION_KEYS.TO_PHOTO],
           toNickname: invitation[INVITATION_KEYS.TO_NICKNAME],
@@ -176,13 +176,13 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
 
   const canDeleteHousehold = useMemo(() => {
     const admins = members
-      .filter(member => member[MEMBER_KEYS.ROLE] === HOUSEHOLD_ROLE_TYPE.ADMIN)
-      .map(admin => admin[MEMBER_KEYS.ID])
+      .filter(member => member.role === HOUSEHOLD_ROLE_TYPE.ADMIN)
+      .map(member => member.userId)
     return admins.length > 1 || admins.indexOf(currentUser.id) === -1
   }, [members, currentUser])
 
   const memberAdmins = useMemo(() =>
-    members.filter(member => member[MEMBER_KEYS.ROLE] === HOUSEHOLD_ROLE_TYPE.ADMIN),
+    members.filter(member => member.role === HOUSEHOLD_ROLE_TYPE.ADMIN),
   [members])
 
   return (

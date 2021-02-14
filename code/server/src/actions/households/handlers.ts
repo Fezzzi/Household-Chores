@@ -86,18 +86,18 @@ export const handleCreateHousehold = async (
 export const handleApproveHouseholdInvitation = async (
   fromId: number,
   householdId: number,
-  name: string,
+  nickname: string,
   photo: any,
   userId: number,
   req: any,
   res: any,
 ): Promise<boolean> => {
-  if (!fromId || !householdId || !name || !photo) {
+  if (!fromId || !householdId || !nickname || !photo) {
     res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return false
   }
 
-  if (!(validateField(res, name, INPUT_TYPE.TEXT)
+  if (!(validateField(res, nickname, INPUT_TYPE.TEXT)
     && (isLocalImage(photo, req.session!.fsKey)
     || validateField(res, photo, INPUT_TYPE.PHOTO)))
   ) {
@@ -112,7 +112,7 @@ export const handleApproveHouseholdInvitation = async (
     return true
   }
 
-  const success = await approveInvitation(userId, fromId, householdId, name, userPhoto)
+  const success = await approveInvitation(userId, fromId, householdId, nickname, userPhoto)
   if (success) {
     res.status(200).send({
       url: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`,

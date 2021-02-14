@@ -1057,9 +1057,9 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["id", "role"],
+              "required": ["userId", "role"],
               "properties": {
-                "id": {
+                "userId": {
                   "type": "number",
                   "format": "uuid"
                 },
@@ -1246,25 +1246,29 @@
       },
       "Member": {
         "required": [
-          "id",
+          "userId",
           "role",
-          "name",
+          "nickname",
           "photo"
         ],
         "properties": {
-          "id": {
+          "userId": {
             "type": "number",
             "format": "uuid"
           },
           "role": {
             "$ref": "#/components/schemas/UserRole"
           },
-          "name": {
+          "nickname": {
             "type": "string"
           },
           "photo": {
             "type": "string",
             "format": "link"
+          },
+          "dateJoined": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
