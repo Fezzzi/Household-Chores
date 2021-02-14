@@ -1,20 +1,19 @@
 import { database } from 'serverSrc/database'
-import { NOTIFICATIONS } from 'shared/constants/mappingKeys'
 import { apifyKey } from 'serverSrc/helpers/api'
 
 import { tNotifySettingsName, tNotifySettingsCols } from './tables'
 
-const groupMappings = {
-  [NOTIFICATIONS.GENERAL]: [
+const groupMappings: Record<string, string[]> = {
+  general: [
     tNotifySettingsCols.email_notifications,
     tNotifySettingsCols.browser_notifications,
     tNotifySettingsCols.mobile_notifications,
   ],
-  [NOTIFICATIONS.CONNECTIONS]: [
+  connections: [
     tNotifySettingsCols.connection_approval,
     tNotifySettingsCols.connection_request,
   ],
-  [NOTIFICATIONS.HOUSEHOLDS]: [
+  households: [
     tNotifySettingsCols.household_deleting,
     tNotifySettingsCols.household_expelling,
     tNotifySettingsCols.household_invitation,

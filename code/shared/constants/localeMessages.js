@@ -75,7 +75,6 @@ export const INFO = {
 
 export const FORM = {
   DELETE_ACCOUNT: 'form.deleteAccount',
-  DISABLED_DIALOGS: 'form.disabledDialogs',
   DROP_PHOTO_HERE: 'form.dropPhotoHere',
   CLICK_TO_UPLOAD: 'form.clickToUpload',
   CONNECTIONS: 'form.connections',

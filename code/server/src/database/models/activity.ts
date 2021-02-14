@@ -1,17 +1,14 @@
 import { database } from 'serverSrc/database'
-import { mapData, mapToActivityKey } from 'serverSrc/helpers/dbMapping'
+import { apify } from 'serverSrc/helpers/api'
 
 import { tActivityName, tActivityCols } from './tables'
 
-export const getActivityForUser = async (userId: number): Promise<Array<object> | null> => {
-  const results = await database.query(`
+export const getActivityForUser = async (userId: number): Promise<Array<object> | null> =>
+  apify(database.query(`
     SELECT ${tActivityCols.id}, ${tActivityCols.message}, ${tActivityCols.link}, ${tActivityCols.date_created}
     FROM ${tActivityName}
     WHERE ${tActivityCols.id_user}=${userId} AND ${tActivityCols.seen}=0
-  `)
-
-  return results?.map((result: any) => mapData(result, mapToActivityKey))
-}
+  `))
 
 export const markActivityForUser = async (activityIds: number[]) =>
   database.query(`

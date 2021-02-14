@@ -8,12 +8,6 @@ export const PROFILE = {
   CONNECTION_VISIBILITY: 'connection-visibility',
 }
 
-export const NOTIFICATIONS = {
-  CONNECTIONS: 'connections',
-  HOUSEHOLDS: 'households',
-  GENERAL: 'general',
-}
-
 export const HOUSEHOLD_GROUP_KEYS = {
   INVITATIONS: 'invitations',
   MEMBERS: 'members',

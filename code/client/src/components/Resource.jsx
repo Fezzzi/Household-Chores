@@ -36,6 +36,7 @@ const Resource = ({ match: { params: { resourceId } }, history }) => {
       <TopButton onClick={() => history.goBack()}>
         <ArrowBack />
       </TopButton>
+      {/* todo: add locale selection to top right / to bottom right corner of the banner */}
       <BannerWrapper banner={banner} />
       <BodyWrapper>
         <IconBlock icon={icon} />

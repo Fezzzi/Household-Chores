@@ -7,7 +7,6 @@ import { NotificationGroupBox, SectionHeadline } from 'clientSrc/styles/blocks/s
 import { TableBox, TableHeaderBox, TableHeaderCell } from 'clientSrc/styles/blocks/table'
 import { INPUT_TYPE } from 'shared/constants'
 import { FORM } from 'shared/constants/localeMessages'
-import { NOTIFICATIONS } from 'shared/constants/mappingKeys'
 
 import { LocaleText, Input } from '../../common'
 import { SimpleFloatingElement } from '../../portals'
@@ -21,11 +20,7 @@ const NotificationForm = ({ data, onSubmit }) => {
     setFormState,
   } = useFormState([data])
 
-  const {
-    [NOTIFICATIONS.GENERAL]: general,
-    [NOTIFICATIONS.CONNECTIONS]: connections,
-    [NOTIFICATIONS.HOUSEHOLDS]: households,
-  } = data
+  const { general, connections, households } = data
 
   const filteredGeneral = useMemo(() => {
     const filtered = { ...general }
@@ -90,9 +85,9 @@ const NotificationForm = ({ data, onSubmit }) => {
 
 NotificationForm.propTypes = {
   data: PropTypes.shape({
-    [NOTIFICATIONS.GENERAL]: PropTypes.object,
-    [NOTIFICATIONS.CONNECTIONS]: PropTypes.object,
-    [NOTIFICATIONS.HOUSEHOLDS]: PropTypes.object,
+    general: PropTypes.object,
+    connections: PropTypes.object,
+    households: PropTypes.object,
   }).isRequired,
   onSubmit: PropTypes.func.isRequired,
 }
