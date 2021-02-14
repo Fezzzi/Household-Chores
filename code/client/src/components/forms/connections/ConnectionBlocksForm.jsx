@@ -11,7 +11,6 @@ import { TableBigPhoto } from 'clientSrc/styles/blocks/table'
 import { InfoTooltip } from 'clientSrc/components/portals'
 import { getButtonForUser, getTimeString } from 'clientSrc/helpers/connections'
 import { FORM } from 'shared/constants/localeMessages'
-import { CONNECTION_KEYS } from 'shared/constants/mappingKeys'
 
 import { LocaleText, Table } from '../../common'
 
@@ -33,43 +32,42 @@ const ConnectionBlocksForm = ({ data }) => {
       {data?.length
         ? <Table
           rows={data.map(({
-            [CONNECTION_KEYS.ID]: userId,
-            [CONNECTION_KEYS.PHOTO]: userPhoto,
-            [CONNECTION_KEYS.MESSAGE]: userMessage,
-            [CONNECTION_KEYS.MUTUAL_CONNECTIONS]: userMutualConnections,
-            ...user
+            id,
+            photo,
+            message,
+            mutualConnections,
+            dateCreated,
           }) => ({
-            ...user,
-            userPhoto: <TableBigPhoto src={userPhoto} />,
-            userMutualConnections: <>({userMutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
-            userMessage: userMessage && (
+            photo: <TableBigPhoto src={photo} />,
+            mutualConnections: <>({mutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
+            message: message && (
               <AppendMessageAnchor>
                 <InfoTooltip
                   icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
-                  text={userMessage}
+                  text={message}
                   customHeight={24}
                   customOffsetY={-5}
                 />
               </AppendMessageAnchor>
             ),
-            date: getTimeString(user[CONNECTION_KEYS.DATE_CREATED]),
-            unblockBtn: getButtonForUser(FORM.UNBLOCK, userId, unblockHandler),
+            dateCreated: getTimeString(dateCreated),
+            unblockBtn: getButtonForUser(FORM.UNBLOCK, id, unblockHandler),
           }))}
           keys={[
-            { name: 'userPhoto' },
-            { name: CONNECTION_KEYS.NICKNAME, bold: true },
-            { name: 'userMutualConnections', fading: true, growing: true },
-            { name: 'userMessage' },
-            { name: 'date', fading: true },
+            { name: 'photo' },
+            { name: 'nickname', bold: true },
+            { name: 'mutualConnections', fading: true, growing: true },
+            { name: 'message' },
+            { name: 'dateCreated', fading: true },
             { name: 'unblockBtn' },
           ]}
           sortConfig={[
-            { key: CONNECTION_KEYS.NICKNAME, icon: <SortByAlpha /> },
-            { key: CONNECTION_KEYS.DATE_CREATED, icon: <CalendarToday /> },
-            { key: CONNECTION_KEYS.MUTUAL_CONNECTIONS, icon: <Group /> },
+            { key: 'nickname', icon: <SortByAlpha /> },
+            { key: 'dateCreated', icon: <CalendarToday /> },
+            { key: 'mutualConnections', icon: <Group /> },
           ]}
           defaultSorter={-2}
-          filterKey={CONNECTION_KEYS.NICKNAME}
+          filterKey="nickname"
           bigCells
           freeHeight
         />

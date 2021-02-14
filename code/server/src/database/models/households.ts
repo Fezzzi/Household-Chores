@@ -1,6 +1,6 @@
 import { database } from 'serverSrc/database'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
-import { HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS } from 'shared/constants/mappingKeys'
+import { HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS } from 'shared/constants/mappingKeys'
 
 import {
   tHouseholdsName, tHouseholdsCols, tHouseInvName, tHouseInvCols,
@@ -51,14 +51,14 @@ export const getUserHouseholdsData = async (currentUser: number): Promise<Array<
         [HOUSEHOLD_KEYS.PHOTO]: household.h_photo,
         [HOUSEHOLD_KEYS.KEY]: household.key,
         [HOUSEHOLD_KEYS.DATE_CREATED]: household[tHouseholdsCols.date_created],
-        [HOUSEHOLD_GROUP_KEYS.MEMBERS]: [],
+        members: [],
       }
     }
     if (household[tHouseMemCols.id_user]
-      && !acc[householdId][HOUSEHOLD_GROUP_KEYS.MEMBERS].find((member: any) =>
+      && !acc[householdId].members.find((member: any) =>
         member[MEMBER_KEYS.ID] === household[tHouseMemCols.id_user])
     ) {
-      acc[householdId][HOUSEHOLD_GROUP_KEYS.MEMBERS].push({
+      acc[householdId].members.push({
         [MEMBER_KEYS.ID]: household[tHouseMemCols.id_user],
         [MEMBER_KEYS.ROLE]: household[tHouseMemCols.role],
         [MEMBER_KEYS.NAME]: household[tHouseMemCols.name],
@@ -95,15 +95,15 @@ export const findUserHouseholds = async (currentUser: number): Promise<Array<obj
         [HOUSEHOLD_KEYS.PHOTO]: household.h_photo,
         [HOUSEHOLD_KEYS.KEY]: household.key,
         [HOUSEHOLD_KEYS.DATE_CREATED]: household.h_created,
-        [HOUSEHOLD_GROUP_KEYS.MEMBERS]: [],
-        [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: [],
+        members: [],
+        invitations: [],
       }
     }
     if (household[tHouseInvCols.id_to] && household[tHouseInvCols.id_from]
-      && !acc[householdId][HOUSEHOLD_GROUP_KEYS.INVITATIONS].find((invitation: any) =>
+      && !acc[householdId].invitations.find((invitation: any) =>
         invitation[INVITATION_KEYS.TO_ID] === household[tHouseInvCols.id_to])
     ) {
-      acc[householdId][HOUSEHOLD_GROUP_KEYS.INVITATIONS].push({
+      acc[householdId].invitations.push({
         [INVITATION_KEYS.FROM_ID]: household[tHouseInvCols.id_from],
         [INVITATION_KEYS.TO_ID]: household[tHouseInvCols.id_to],
         [INVITATION_KEYS.TO_NICKNAME]: household[tUsersCols.nickname],
@@ -113,10 +113,10 @@ export const findUserHouseholds = async (currentUser: number): Promise<Array<obj
       })
     }
     if (household[tHouseMemCols.id_user]
-      && !acc[householdId][HOUSEHOLD_GROUP_KEYS.MEMBERS].find((member: any) =>
+      && !acc[householdId].members.find((member: any) =>
         member[MEMBER_KEYS.ID] === household[tHouseMemCols.id_user])
     ) {
-      acc[householdId][HOUSEHOLD_GROUP_KEYS.MEMBERS].push({
+      acc[householdId].members.push({
         [MEMBER_KEYS.ID]: household[tHouseMemCols.id_user],
         [MEMBER_KEYS.ROLE]: household[tHouseMemCols.role],
         [MEMBER_KEYS.NAME]: household[tHouseMemCols.name],

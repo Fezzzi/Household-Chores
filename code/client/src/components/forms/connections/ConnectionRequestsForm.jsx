@@ -10,7 +10,6 @@ import { FormBody, FormWrapper, SectionHeadline } from 'clientSrc/styles/blocks/
 import { TableBigPhoto } from 'clientSrc/styles/blocks/table'
 import { getTimeString, getButtonForUser } from 'clientSrc/helpers/connections'
 import { FORM } from 'shared/constants/localeMessages'
-import { CONNECTION_KEYS } from 'shared/constants/mappingKeys'
 import { PORTAL_TYPE } from 'clientSrc/constants'
 
 import { LocaleText, Table } from '../../common'
@@ -43,20 +42,19 @@ const ConnectionRequestsForm = ({ data }) => {
         ? (
           <Table
             rows={data.map(({
-              [CONNECTION_KEYS.ID]: userId,
-              [CONNECTION_KEYS.PHOTO]: userPhoto,
-              [CONNECTION_KEYS.MESSAGE]: userMessage,
-              [CONNECTION_KEYS.MUTUAL_CONNECTIONS]: userMutualConnections,
-              ...user
+              id,
+              photo,
+              message,
+              mutualConnections,
+              dateCreated,
             }) => ({
-              ...user,
-              userPhoto: <TableBigPhoto src={userPhoto} />,
-              userMutualConnections: <>({userMutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
-              userMessage: userMessage && (
+              photo: <TableBigPhoto src={photo} />,
+              mutualConnections: <>({mutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
+              message: message && (
                 <AppendMessageAnchor>
                   <MessageTooltip
                     icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
-                    text={userMessage}
+                    text={message}
                     customOffsetY={-5}
                     customOffsetX={-10}
                     scrollRoot="settingsWrapper"
@@ -64,28 +62,28 @@ const ConnectionRequestsForm = ({ data }) => {
                   />
                 </AppendMessageAnchor>
               ),
-              date: getTimeString(user[CONNECTION_KEYS.DATE_CREATED]),
-              approveBtn: getButtonForUser(FORM.APPROVE, userId, approveHandler),
-              ignoreBtn: getButtonForUser(FORM.IGNORE, userId, ignoreHandler),
-              blockBtn: getButtonForUser(FORM.BLOCK, userId, blockHandler),
+              dateCreated: getTimeString(dateCreated),
+              approveBtn: getButtonForUser(FORM.APPROVE, id, approveHandler),
+              ignoreBtn: getButtonForUser(FORM.IGNORE, id, ignoreHandler),
+              blockBtn: getButtonForUser(FORM.BLOCK, id, blockHandler),
             }))}
             keys={[
-              { name: 'userPhoto' },
-              { name: CONNECTION_KEYS.NICKNAME, bold: true },
-              { name: 'userMutualConnections', fading: true, growing: true },
-              { name: 'userMessage' },
-              { name: 'date', fading: true },
+              { name: 'photo' },
+              { name: 'nickname', bold: true },
+              { name: 'mutualConnections', fading: true, growing: true },
+              { name: 'message' },
+              { name: 'dateCreated', fading: true },
               { name: 'approveBtn' },
               { name: 'ignoreBtn' },
               { name: 'blockBtn' },
             ]}
             sortConfig={[
-              { key: CONNECTION_KEYS.NICKNAME, icon: <SortByAlpha /> },
-              { key: CONNECTION_KEYS.DATE_CREATED, icon: <CalendarToday /> },
-              { key: CONNECTION_KEYS.MUTUAL_CONNECTIONS, icon: <Group /> },
+              { key: 'nickname', icon: <SortByAlpha /> },
+              { key: 'dateCreated', icon: <CalendarToday /> },
+              { key: 'mutualConnections', icon: <Group /> },
             ]}
             defaultSorter={-2}
-            filterKey={CONNECTION_KEYS.NICKNAME}
+            filterKey="nickname"
             bigCells
             freeHeight
           />

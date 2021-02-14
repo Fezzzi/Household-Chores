@@ -1,10 +1,3 @@
-export const HOUSEHOLD_GROUP_KEYS = {
-  INVITATIONS: 'invitations',
-  MEMBERS: 'members',
-  HOUSEHOLDS: 'households',
-  CONNECTIONS: 'connections',
-}
-
 export const HOUSEHOLD_KEYS = {
   USER_NAME: 'user-name',
   USER_PHOTO: 'user-photo',
@@ -40,13 +33,4 @@ export const MEMBER_KEYS = {
   PHOTO: 'member-photo',
   ROLE: 'member-role',
   DATE_JOINED: 'date-joined',
-}
-
-export const CONNECTION_KEYS = {
-  ID: 'id',
-  NICKNAME: 'nickname',
-  PHOTO: 'photo',
-  MESSAGE: 'message',
-  MUTUAL_CONNECTIONS: 'mutual-connections',
-  DATE_CREATED: 'date-created',
 }

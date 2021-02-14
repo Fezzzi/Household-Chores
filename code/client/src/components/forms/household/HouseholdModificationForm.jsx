@@ -12,7 +12,7 @@ import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { formatDate } from 'shared/helpers/date'
 import {
-  CONNECTION_KEYS, HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS,
+  HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS,
 } from 'shared/constants/mappingKeys'
 
 import HouseholdFormHeader from './HouseholdFormHeader'
@@ -25,8 +25,8 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     [HOUSEHOLD_KEYS.ID]: householdId,
     [HOUSEHOLD_KEYS.PHOTO]: photo,
     [HOUSEHOLD_KEYS.NAME]: name,
-    [HOUSEHOLD_GROUP_KEYS.MEMBERS]: members,
-    [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations,
+    members,
+    invitations,
   } = household
 
   // This state holds information about sending state of leave/delete buttons in household header
@@ -84,7 +84,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     }
   }, [members, userState])
 
-  const invitableConnections = useMemo(() => connections.filter(({ [CONNECTION_KEYS.ID]: id }) =>
+  const invitableConnections = useMemo(() => connections.filter(({ id }) =>
     !members.find(member => member[MEMBER_KEYS.ID] === id)
     && !invitations.find(invitation => invitation[INVITATION_KEYS.TO_ID] === id)
     && !invitedConnections?.find(user => user.id === id)
@@ -117,13 +117,13 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     useInvitationListProps([
       ...(invitedConnections
         ? invitedConnections.map(({ id, message }) => {
-          const connectedUser = connections.find(user => user[CONNECTION_KEYS.ID] === id)
+          const connectedUser = connections.find(user => user.id === id)
           return {
             fromPhoto: currentUser.photo,
             fromNickname: currentUser.nickname,
             fromId: currentUser.id,
-            toPhoto: connectedUser[CONNECTION_KEYS.PHOTO],
-            toNickname: connectedUser[CONNECTION_KEYS.NICKNAME],
+            toPhoto: connectedUser.photo,
+            toNickname: connectedUser.nickname,
             toId: id,
             message,
             dateCreated: '(PENDING)',
@@ -249,8 +249,8 @@ HouseholdModificationForm.defaultProps = {
   household: {
     [HOUSEHOLD_KEYS.PHOTO]: '',
     [HOUSEHOLD_KEYS.NAME]: '',
-    [HOUSEHOLD_GROUP_KEYS.MEMBERS]: [],
-    [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: [],
+    members: [],
+    invitations: [],
   },
   connections: [],
 }
@@ -260,13 +260,13 @@ HouseholdModificationForm.propTypes = {
     [HOUSEHOLD_KEYS.ID]: PropTypes.number,
     [HOUSEHOLD_KEYS.PHOTO]: PropTypes.string,
     [HOUSEHOLD_KEYS.NAME]: PropTypes.string,
-    [HOUSEHOLD_GROUP_KEYS.MEMBERS]: PropTypes.array,
-    [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: PropTypes.array,
+    members: PropTypes.array,
+    invitations: PropTypes.array,
   }),
   connections: PropTypes.arrayOf(PropTypes.shape({
-    [CONNECTION_KEYS.ID]: PropTypes.number.isRequired,
-    [CONNECTION_KEYS.NICKNAME]: PropTypes.string.isRequired,
-    [CONNECTION_KEYS.PHOTO]: PropTypes.string,
+    id: PropTypes.number.isRequired,
+    nickname: PropTypes.string.isRequired,
+    photo: PropTypes.string,
   })),
   onSubmit: PropTypes.func.isRequired,
 }

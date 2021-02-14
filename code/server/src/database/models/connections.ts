@@ -1,5 +1,4 @@
 import { CONNECTION_STATE_TYPE } from 'shared/constants'
-import { CONNECTION_KEYS } from 'shared/constants/mappingKeys'
 
 import { database } from '..'
 import { tConnectionsName, tConnectionsCols, tUsersName, tUsersCols } from './tables'
@@ -75,12 +74,12 @@ export const findConnections = async (userId: number): Promise<ConnectionsType |
     return connections.length
       ? connections.reduce((acc: any, connection: any) =>
         acc[connection[tConnectionsCols.state]].push({
-          [CONNECTION_KEYS.ID]: connection[tUsersCols.id],
-          [CONNECTION_KEYS.NICKNAME]: connection[tUsersCols.nickname],
-          [CONNECTION_KEYS.PHOTO]: connection[tUsersCols.photo],
-          [CONNECTION_KEYS.MESSAGE]: connection[tConnectionsCols.message],
-          [CONNECTION_KEYS.MUTUAL_CONNECTIONS]: connection.mutualConnections ?? 0,
-          [CONNECTION_KEYS.DATE_CREATED]: connection[tConnectionsCols.date_created],
+          id: connection[tUsersCols.id],
+          nickname: connection[tUsersCols.nickname],
+          photo: connection[tUsersCols.photo],
+          message: connection[tConnectionsCols.message],
+          mutualConnections: connection.mutualConnections ?? 0,
+          dateCreated: connection[tConnectionsCols.date_created],
         }) && acc, groupedConnections
       ) : groupedConnections
   })

@@ -10,7 +10,7 @@ import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { HouseholdActions } from 'clientSrc/actions'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import {
-  CONNECTION_KEYS, HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS,
+  HOUSEHOLD_KEYS, INVITATION_KEYS,
 } from 'shared/constants/mappingKeys'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 
@@ -94,7 +94,7 @@ const HouseholdCreateForm = ({ connections }) => {
                 [HOUSEHOLD_KEYS.PHOTO]: householdPhoto,
                 [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
               },
-              [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations,
+              invitations,
             }))
           })
         } else {
@@ -103,7 +103,7 @@ const HouseholdCreateForm = ({ connections }) => {
               ...inputsData,
               [HOUSEHOLD_KEYS.PHOTO]: householdPhoto,
             },
-            [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations,
+            invitations,
           }))
         }
       })
@@ -114,11 +114,11 @@ const HouseholdCreateForm = ({ connections }) => {
             ...inputsData,
             [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
           },
-          [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations,
+          invitations,
         }))
       })
     } else {
-      dispatch(HouseholdActions.createHousehold({ inputs: inputsData, [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations }))
+      dispatch(HouseholdActions.createHousehold({ inputs: inputsData, invitations }))
     }
 
     setTimer(setTimeout(
@@ -147,11 +147,11 @@ const HouseholdCreateForm = ({ connections }) => {
         <LocaleText message={HOUSEHOLD.INVITE_USERS} />
       </SectionHeadline>
       <HouseholdInvitationForm
-        connections={connections.filter(({ [CONNECTION_KEYS.ID]: id }) => !invitations.find(user => user.id === id))}
+        connections={connections.filter(({ id }) => !invitations.find(user => user.id === id))}
         onInvite={(id, message) => setInvitations(prevState => [
           ...prevState,
           {
-            ...connections.find(user => user[CONNECTION_KEYS.ID] === id),
+            ...connections.find(user => user.id === id),
             [INVITATION_KEYS.MESSAGE]: message,
           },
         ])}
@@ -175,9 +175,9 @@ HouseholdCreateForm.defaultProps = {
 
 HouseholdCreateForm.propTypes = {
   connections: PropTypes.arrayOf(PropTypes.shape({
-    [CONNECTION_KEYS.ID]: PropTypes.number.isRequired,
-    [CONNECTION_KEYS.NICKNAME]: PropTypes.string.isRequired,
-    [CONNECTION_KEYS.PHOTO]: PropTypes.string,
+    id: PropTypes.number.isRequired,
+    nickname: PropTypes.string.isRequired,
+    photo: PropTypes.string,
   })),
 }
 
