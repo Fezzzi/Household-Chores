@@ -9,9 +9,6 @@ import { useInvitationListProps } from 'clientSrc/helpers/household'
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { HouseholdActions } from 'clientSrc/actions'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
-import {
-  HOUSEHOLD_KEYS,
-} from 'shared/constants/mappingKeys'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 
 import HouseholdFormHeader from './HouseholdFormHeader'
@@ -78,21 +75,21 @@ const HouseholdCreateForm = ({ connections }) => {
     }))
 
     const inputsData = {
-      [HOUSEHOLD_KEYS.USER_NAME]: currentUser.nickname,
-      [HOUSEHOLD_KEYS.NAME]: 'New Household',
+      userNickname: currentUser.nickname,
+      name: 'New Household',
       ...inputs,
     }
 
     // TODO: Add default photo to user after registering
-    if (!inputs[HOUSEHOLD_KEYS.PHOTO]) {
+    if (!inputs.photo) {
       loadImageUrlWithCallback(newHouseholdIcon, 'image/svg+xml', householdPhoto => {
-        if (!inputs[HOUSEHOLD_KEYS.USER_PHOTO]) {
+        if (!inputs.userPhoto) {
           loadImageUrlWithCallback(currentUser.photo, `image/${currentUser.photo.split('.').splice(-1)[0]}`, userPhoto => {
             dispatch(HouseholdActions.createHousehold({
               inputs: {
                 ...inputsData,
-                [HOUSEHOLD_KEYS.PHOTO]: householdPhoto,
-                [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
+                photo: householdPhoto,
+                userPhoto,
               },
               invitations,
             }))
@@ -101,18 +98,18 @@ const HouseholdCreateForm = ({ connections }) => {
           dispatch(HouseholdActions.createHousehold({
             inputs: {
               ...inputsData,
-              [HOUSEHOLD_KEYS.PHOTO]: householdPhoto,
+              photo: householdPhoto,
             },
             invitations,
           }))
         }
       })
-    } else if (!inputs[HOUSEHOLD_KEYS.USER_PHOTO]) {
+    } else if (!inputs.userPhoto) {
       loadImageUrlWithCallback(currentUser.photo, `image/${currentUser.photo.split('.').splice(-1)[0]}`, userPhoto => {
         dispatch(HouseholdActions.createHousehold({
           inputs: {
             ...inputsData,
-            [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
+            userPhoto,
           },
           invitations,
         }))

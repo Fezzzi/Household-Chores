@@ -6,7 +6,6 @@ import {
 } from 'serverSrc/database/models'
 import { API, NOTIFICATION_TYPE, HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 
 import { handleApproveHouseholdInvitation, handleCreateHousehold } from './handlers'
 
@@ -67,10 +66,10 @@ export default () => {
         const {
           fromId,
           householdId,
-          [HOUSEHOLD_KEYS.USER_NAME]: name,
-          [HOUSEHOLD_KEYS.USER_PHOTO]: photo,
+          userNickname,
+          userPhoto,
         } = body
-        return handleApproveHouseholdInvitation(fromId, householdId, name, photo, userId, req, res)
+        return handleApproveHouseholdInvitation(fromId, householdId, userNickname, userPhoto, userId, req, res)
       }
       case API.INVITATION_IGNORE: {
         const { fromId, householdId } = body

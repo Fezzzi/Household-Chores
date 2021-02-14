@@ -527,7 +527,7 @@
                     "type": "number",
                     "format": "uuid"
                   },
-                  "userName": {
+                  "userNickname": {
                     "type": "string"
                   },
                   "userPhoto": {
@@ -960,7 +960,7 @@
         }
       },
       "CreateHouseholdForm": {
-        "required": ["name", "photo", "userName", "userPhoto"],
+        "required": ["name", "photo", "userNickname", "userPhoto"],
         "properties": {
           "name": {
             "type": "string"
@@ -969,7 +969,7 @@
             "type": "string",
             "format": "link"
           },
-          "userName": {
+          "userNickname": {
             "type": "string"
           },
           "userPhoto": {
@@ -1033,7 +1033,7 @@
           "userRole": {
             "$ref": "#/components/schemas/UserRole"
           },
-          "userName": {
+          "userNickname": {
             "type": "string"
           },
           "userPhoto": {

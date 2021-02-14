@@ -6,7 +6,6 @@ import {
   INPUT_TYPE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE,
   SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS, HOUSEHOLD_ROLE_TYPE, INVITATION_MESSAGE_LENGTH,
 } from 'shared/constants'
-import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 import { ERROR, INFO } from 'shared/constants/localeMessages'
 import { isInputValid } from 'shared/helpers/validation'
 import { deApify } from 'serverSrc/helpers/api'
@@ -126,17 +125,22 @@ export const validateEditHouseholdData = async (
   res: any
 ): Promise<boolean> => {
   const {
-    [HOUSEHOLD_KEYS.USER_ROLE]: userRole,
+    householdId,
+    name,
+    photo,
+    userNickname,
+    userPhoto,
+    userRole,
     newInvitations,
     changedRoles,
-    [HOUSEHOLD_KEYS.REMOVED_MEMBERS]: removedMembers,
-    [HOUSEHOLD_KEYS.REMOVED_INVITATIONS]: removedInvitations,
+    removedMembers,
+    removedInvitations,
   } = inputs
 
-  const update = inputs[HOUSEHOLD_KEYS.NAME] !== undefined
-    || inputs[HOUSEHOLD_KEYS.PHOTO] !== undefined
-    || inputs[HOUSEHOLD_KEYS.USER_NAME] !== undefined
-    || inputs[HOUSEHOLD_KEYS.USER_PHOTO] !== undefined
+  const update = name !== undefined
+    || photo !== undefined
+    || userNickname !== undefined
+    || userPhoto !== undefined
     || userRole !== undefined
     || changedRoles !== undefined
     || newInvitations !== undefined
@@ -149,22 +153,21 @@ export const validateEditHouseholdData = async (
   }
 
   const allRoles = Object.keys(HOUSEHOLD_ROLE_TYPE)
-  const householdId = inputs[HOUSEHOLD_KEYS.ID]
   // Querying user's role in given household also checks whether is user a member
   const currentUserRole = await getUserRole(userId, householdId)
   if (!(householdId !== undefined && currentUserRole !== null
-    && validateField(res, inputs[HOUSEHOLD_KEYS.NAME], INPUT_TYPE.TEXT)
-    && validateField(res, inputs[HOUSEHOLD_KEYS.PHOTO], INPUT_TYPE.PHOTO)
-    && validateField(res, inputs[HOUSEHOLD_KEYS.USER_NAME], INPUT_TYPE.TEXT)
-    && validateField(res, inputs[HOUSEHOLD_KEYS.USER_PHOTO], INPUT_TYPE.PHOTO)
+    && validateField(res, name, INPUT_TYPE.TEXT)
+    && validateField(res, photo, INPUT_TYPE.PHOTO)
+    && validateField(res, userNickname, INPUT_TYPE.TEXT)
+    && validateField(res, userPhoto, INPUT_TYPE.PHOTO)
     && validateField(res, userRole, INPUT_TYPE.SWITCH, allRoles)
   )) {
     return false
   }
 
   const currentUserRoleIndex = currentUserRole && allRoles.indexOf(currentUserRole)
-  if ((inputs[HOUSEHOLD_KEYS.PHOTO] && currentUserRole !== HOUSEHOLD_ROLE_TYPE.ADMIN)
-    || (inputs[HOUSEHOLD_KEYS.NAME] && currentUserRole !== HOUSEHOLD_ROLE_TYPE.ADMIN)
+  if ((photo && currentUserRole !== HOUSEHOLD_ROLE_TYPE.ADMIN)
+    || (name && currentUserRole !== HOUSEHOLD_ROLE_TYPE.ADMIN)
     || (removedMembers && currentUserRole !== HOUSEHOLD_ROLE_TYPE.ADMIN)
     || (removedInvitations && currentUserRole === HOUSEHOLD_ROLE_TYPE.MEMBER)
     || (newInvitations && currentUserRole === HOUSEHOLD_ROLE_TYPE.MEMBER)

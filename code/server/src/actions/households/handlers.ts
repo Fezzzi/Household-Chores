@@ -4,7 +4,6 @@ import {
   addHouseholdInvitations, approveInvitation, createHousehold, findApprovedConnections,
 } from 'serverSrc/database/models'
 import { NOTIFICATION_TYPE, INPUT_TYPE, API, SETTING_CATEGORIES, INVITATION_MESSAGE_LENGTH } from 'shared/constants'
-import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 import { ERROR } from 'shared/constants/localeMessages'
 
 const validateCreateData = async (
@@ -13,17 +12,17 @@ const validateCreateData = async (
   userId: number,
   res: any
 ): Promise<boolean> => {
-  if (!inputs[HOUSEHOLD_KEYS.NAME] || !inputs[HOUSEHOLD_KEYS.USER_NAME]
-    || !inputs[HOUSEHOLD_KEYS.PHOTO] || !inputs[HOUSEHOLD_KEYS.USER_PHOTO]
-  ) {
+  const { name, photo, userNickname, userPhoto } = inputs
+
+  if (!name || !userNickname || !photo || !userPhoto) {
     res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return false
   }
 
-  if (!(validateField(res, inputs[HOUSEHOLD_KEYS.NAME], INPUT_TYPE.TEXT)
-    && validateField(res, inputs[HOUSEHOLD_KEYS.USER_NAME], INPUT_TYPE.TEXT)
-    && validateField(res, inputs[HOUSEHOLD_KEYS.PHOTO], INPUT_TYPE.PHOTO)
-    && validateField(res, inputs[HOUSEHOLD_KEYS.USER_PHOTO], INPUT_TYPE.PHOTO)
+  if (!(validateField(res, name, INPUT_TYPE.TEXT)
+    && validateField(res, userNickname, INPUT_TYPE.TEXT)
+    && validateField(res, photo, INPUT_TYPE.PHOTO)
+    && validateField(res, userPhoto, INPUT_TYPE.PHOTO)
   )) {
     return false
   }
@@ -57,8 +56,8 @@ export const handleCreateHousehold = async (
     return true
   }
   const [photo, userPhoto] = uploadFiles([
-    inputs[HOUSEHOLD_KEYS.PHOTO] as any,
-    inputs[HOUSEHOLD_KEYS.USER_PHOTO] as any,
+    inputs.photo as any,
+    inputs.userPhoto as any,
   ], HOUSEHOLD_DIR, req.session!.fsKey)
 
   if (photo === null || userPhoto === null) {
@@ -68,8 +67,8 @@ export const handleCreateHousehold = async (
 
   const householdId = await createHousehold({
     ...inputs,
-    [HOUSEHOLD_KEYS.PHOTO]: photo,
-    [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
+    photo,
+    userPhoto,
   }, userId)
 
   if (householdId === null) {

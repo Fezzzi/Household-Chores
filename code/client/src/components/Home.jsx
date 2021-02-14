@@ -5,7 +5,6 @@ import { PropTypes } from 'prop-types'
 import { HomeActions } from 'clientSrc/actions'
 import { EmptyContentMessage, HomeWrapper } from 'clientSrc/styles/blocks/home'
 import { linkify } from 'clientSrc/helpers/textLinks'
-import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 import { HOME } from 'shared/constants/localeMessages'
 
 // eslint-disable-next-line import/no-useless-path-segments
@@ -21,10 +20,10 @@ const Home = ({ history }) => {
   const { selectedHousehold, households } = useSelector(({ home }) => home)
   const currentHouseholdIndex = useMemo(() => {
     if (selectedHousehold == null) {
-      return households[0]?.[HOUSEHOLD_KEYS.ID] ?? null
+      return households[0]?.householdId ?? null
     }
 
-    const householdIndex = households.findIndex(household => household[HOUSEHOLD_KEYS.ID] === Number(selectedHousehold))
+    const householdIndex = households.findIndex(household => household.householdId === Number(selectedHousehold))
     return householdIndex >= 0
       ? householdIndex
       : null

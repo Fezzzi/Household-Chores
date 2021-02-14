@@ -1,6 +1,5 @@
 import { database } from 'serverSrc/database'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
-import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 import { apify } from 'serverSrc/helpers/api'
 
 import {
@@ -36,11 +35,11 @@ export const getUserHouseholdsData = async (currentUser: number): Promise<Array<
     const householdId = household[tHouseholdsCols.id]
     if (acc[householdId] === undefined) {
       acc[householdId] = {
-        [HOUSEHOLD_KEYS.ID]: household[tHouseholdsCols.id],
-        [HOUSEHOLD_KEYS.NAME]: household.h_name,
-        [HOUSEHOLD_KEYS.PHOTO]: household.h_photo,
-        [HOUSEHOLD_KEYS.KEY]: household.key,
-        [HOUSEHOLD_KEYS.DATE_CREATED]: household[tHouseholdsCols.date_created],
+        householdId: household[tHouseholdsCols.id],
+        name: household.h_name,
+        photo: household.h_photo,
+        key: household.key,
+        dateCreated: household[tHouseholdsCols.date_created],
         members: [],
       }
     }
@@ -79,11 +78,11 @@ export const findUserHouseholds = async (currentUser: number): Promise<Array<obj
     const householdId = household[tHouseholdsCols.id]
     if (acc[householdId] === undefined) {
       acc[householdId] = {
-        [HOUSEHOLD_KEYS.ID]: household[tHouseholdsCols.id],
-        [HOUSEHOLD_KEYS.NAME]: household.h_name,
-        [HOUSEHOLD_KEYS.PHOTO]: household.h_photo,
-        [HOUSEHOLD_KEYS.KEY]: household.key,
-        [HOUSEHOLD_KEYS.DATE_CREATED]: household.h_created,
+        householdId: household[tHouseholdsCols.id],
+        name: household.h_name,
+        photo: household.h_photo,
+        key: household.key,
+        dateCreated: household.h_created,
         members: [],
         invitations: [],
       }
@@ -135,7 +134,7 @@ export const createHousehold = async (
       INSERT INTO ${tHouseholdsName} (
         ${tHouseholdsCols.name}, ${tHouseholdsCols.photo}, ${tHouseholdsCols.date_created}
       ) VALUES (?, ?, NOW())
-    `, [data[HOUSEHOLD_KEYS.NAME], data[HOUSEHOLD_KEYS.PHOTO]])
+    `, [data.name, data.photo])
 
     if (!result?.insertId) {
       return null
@@ -143,7 +142,7 @@ export const createHousehold = async (
     const success = await database.query(`
       INSERT INTO ${tHouseMemName}
       VALUES (${result.insertId}, ${currentId}, ${currentId}, '${HOUSEHOLD_ROLE_TYPE.ADMIN}', ?, ?, NOW())
-    `, [data[HOUSEHOLD_KEYS.USER_NAME], data[HOUSEHOLD_KEYS.USER_PHOTO]])
+    `, [data.userNickname, data.userPhoto])
     return success && result.insertId
   })
 
@@ -154,15 +153,15 @@ export const editHousehold = async (
 ): Promise<boolean | null> =>
   database.withTransaction(async (): Promise<boolean> => {
     const {
-      [HOUSEHOLD_KEYS.PHOTO]: photo,
-      [HOUSEHOLD_KEYS.NAME]: name,
-      [HOUSEHOLD_KEYS.USER_NAME]: userName,
-      [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
-      [HOUSEHOLD_KEYS.USER_ROLE]: userRole,
+      photo,
+      name,
+      userNickname,
+      userPhoto,
+      userRole,
       newInvitations,
       changedRoles,
-      [HOUSEHOLD_KEYS.REMOVED_MEMBERS]: removedMembers,
-      [HOUSEHOLD_KEYS.REMOVED_INVITATIONS]: removedInvitations,
+      removedMembers,
+      removedInvitations,
     } = data
 
     /* eslint-disable indent */
@@ -190,16 +189,16 @@ export const editHousehold = async (
           ON DUPLICATE KEY UPDATE
             ${tHouseMemCols.role}=VALUES(${tHouseMemCols.role})
         `, changedRoles.flatMap(({ userId, role }: { userId: number; role: string }) => [householdId, userId, currentId, role])))
-      && (!userName && !userPhoto && !userRole
+      && (!userNickname && !userPhoto && !userRole
         || await database.query(`
           UPDATE ${tHouseMemName} SET ${
             [
-              userName && `${tHouseMemCols.nickname}=?`,
+              userNickname && `${tHouseMemCols.nickname}=?`,
               userPhoto && `${tHouseMemCols.photo}=?`,
               userRole && `${tHouseMemCols.role}=?`,
             ].filter(Boolean).join(',')
           } WHERE ${tHouseMemCols.id_user}=${currentId} AND ${tHouseMemCols.id_household}=?
-        `, [userName, userPhoto, userRole, householdId].filter(Boolean)))
+        `, [userNickname, userPhoto, userRole, householdId].filter(Boolean)))
       && (!name && !photo
         || database.query(`
           UPDATE ${tHouseholdsName} SET ${

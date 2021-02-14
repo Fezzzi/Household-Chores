@@ -11,9 +11,6 @@ import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { formatDate } from 'shared/helpers/date'
-import {
-  HOUSEHOLD_KEYS,
-} from 'shared/constants/mappingKeys'
 
 import HouseholdFormHeader from './HouseholdFormHeader'
 import HouseholdInvitationForm from './HouseholdInvitationForm'
@@ -22,9 +19,9 @@ import { SimpleFloatingElement } from '../../portals'
 
 const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
   const {
-    [HOUSEHOLD_KEYS.ID]: householdId,
-    [HOUSEHOLD_KEYS.PHOTO]: photo,
-    [HOUSEHOLD_KEYS.NAME]: name,
+    householdId,
+    photo,
+    name,
     members,
     invitations,
   } = household
@@ -49,13 +46,13 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
   } = useFormState([household, connections])
 
   const handleSubmit = useCallback(() =>
-    onSubmit({ ...inputs, [HOUSEHOLD_KEYS.ID]: householdId }, setFormState),
+    onSubmit({ ...inputs, householdId }, setFormState),
   [inputs, setFormState])
 
   const {
     newInvitations,
-    [HOUSEHOLD_KEYS.REMOVED_INVITATIONS]: removedInvitations,
-    [HOUSEHOLD_KEYS.REMOVED_MEMBERS]: removedMembers,
+    removedInvitations,
+    removedMembers,
     changedRoles,
   } = inputs
   const updateInput = useMemo(() => useUpdateHandler(setFormState), [setFormState])
@@ -109,8 +106,8 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
         updateArrayValue('changedRoles', { userId, role }, false)
       }
     }, [members]),
-    userId => updateArrayValue(HOUSEHOLD_KEYS.REMOVED_MEMBERS, userId),
-    userId => updateArrayValue(HOUSEHOLD_KEYS.REMOVED_MEMBERS, userId, false)
+    userId => updateArrayValue('removedMembers', userId),
+    userId => updateArrayValue('removedMembers', userId, false)
   )
 
   const invitationTableProps = useMemo(() =>
@@ -153,12 +150,12 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     userId => {
       const isExistingInvitation = invitations.find(invitation => invitation.toId === userId)
       if (isExistingInvitation) {
-        updateArrayValue(HOUSEHOLD_KEYS.REMOVED_INVITATIONS, userId)
+        updateArrayValue('removedInvitations', userId)
       } else {
         updateArrayValue('newInvitations', { userId }, false)
       }
     },
-    toId => updateArrayValue(HOUSEHOLD_KEYS.REMOVED_INVITATIONS, toId, false)
+    userId => updateArrayValue('removedInvitations', userId, false)
     ),
   [newInvitations, removedInvitations, invitations, members, currentUser])
 
@@ -248,8 +245,8 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
 
 HouseholdModificationForm.defaultProps = {
   household: {
-    [HOUSEHOLD_KEYS.PHOTO]: '',
-    [HOUSEHOLD_KEYS.NAME]: '',
+    photo: '',
+    name: '',
     members: [],
     invitations: [],
   },
@@ -258,9 +255,9 @@ HouseholdModificationForm.defaultProps = {
 
 HouseholdModificationForm.propTypes = {
   household: PropTypes.shape({
-    [HOUSEHOLD_KEYS.ID]: PropTypes.number,
-    [HOUSEHOLD_KEYS.PHOTO]: PropTypes.string,
-    [HOUSEHOLD_KEYS.NAME]: PropTypes.string,
+    householdId: PropTypes.number,
+    photo: PropTypes.string,
+    name: PropTypes.string,
     members: PropTypes.array,
     invitations: PropTypes.array,
   }),

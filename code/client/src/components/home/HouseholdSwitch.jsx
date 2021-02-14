@@ -8,7 +8,6 @@ import { FormHeader, FormHeaderPhoto, FormHeaderTitle } from 'clientSrc/styles/b
 import {
   ArrowHouseholdPreview, HouseholdSwitchPhotoBox, HouseholdSwitchSettingsLink, ToggleLeftArrow, ToggleRightArrow,
 } from 'clientSrc/styles/blocks/home'
-import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 import { API, SETTING_CATEGORIES } from 'shared/constants'
 
 const HouseholdSwitch = ({ history, householdData, nextData, prevData }) => {
@@ -17,40 +16,37 @@ const HouseholdSwitch = ({ history, householdData, nextData, prevData }) => {
     dispatch(HomeActions.changeSelectedHousehold(householdId)), [dispatch]
   )
 
-  const showArrows = householdData[HOUSEHOLD_KEYS.ID] !== nextData[HOUSEHOLD_KEYS.ID]
+  const showArrows = householdData.householdId !== nextData.householdId
 
-  const {
-    [HOUSEHOLD_KEYS.NAME]: householdName,
-    [HOUSEHOLD_KEYS.PHOTO]: householdPhoto,
-  } = householdData
+  const { name, photo } = householdData
 
   return (
     <FormHeader>
       {showArrows && (
-        <ToggleLeftArrow onClick={() => handleHouseholdSelection(prevData[HOUSEHOLD_KEYS.ID])}>
+        <ToggleLeftArrow onClick={() => handleHouseholdSelection(prevData.householdId)}>
 
           <svg viewBox="0 0 5 10">
             <path d="M5 0l-5 5 5 5V7z" />
           </svg>
-          <ArrowHouseholdPreview src={prevData[HOUSEHOLD_KEYS.PHOTO]} alt="prev household" />
+          <ArrowHouseholdPreview src={prevData.photo} alt="prev household" />
         </ToggleLeftArrow>
       )}
 
       <HouseholdSwitchPhotoBox>
         <HouseholdSwitchSettingsLink onClick={() => history.push(
-          `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=${householdData[HOUSEHOLD_KEYS.KEY]}`)}
+          `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=${householdData.key}`)}
         >
           <Settings />
         </HouseholdSwitchSettingsLink>
-        <FormHeaderPhoto src={householdPhoto} />
+        <FormHeaderPhoto src={photo} />
       </HouseholdSwitchPhotoBox>
       <FormHeaderTitle>
-        {householdName}
+        {name}
       </FormHeaderTitle>
 
       {showArrows && (
-        <ToggleRightArrow onClick={() => handleHouseholdSelection(nextData[HOUSEHOLD_KEYS.ID])}>
-          <ArrowHouseholdPreview src={nextData[HOUSEHOLD_KEYS.PHOTO]} alt="next household" />
+        <ToggleRightArrow onClick={() => handleHouseholdSelection(nextData.householdId)}>
+          <ArrowHouseholdPreview src={nextData.photo} alt="next household" />
           <svg viewBox="5 0 5 10">
             <path d="M5 10l5 -5 -5 -5v10z" />
           </svg>

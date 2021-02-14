@@ -1,13 +1,13 @@
 import { HOUSEHOLD_DIR, PROFILE_DIR, uploadFiles } from 'serverSrc/helpers/files'
 import {
-  getTabList, validateProfileData, validateEditHouseholdData, tryRemapBoolData } from 'serverSrc/helpers/settings'
+  getTabList, validateProfileData, validateEditHouseholdData, tryRemapBoolData,
+} from 'serverSrc/helpers/settings'
 import {
   findProfileData, updateUserData, findApprovedConnections, findConnections, findUserHouseholds,
   findUserInvitations, findNotificationSettings, updateNotificationSettings, editHousehold, updateDialogSettings,
 } from 'serverSrc/database/models'
 import { SETTING_CATEGORIES, PROFILE_TABS, HOUSEHOLD_TABS, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 import { tDialogsCols, tNotifySettingsCols } from 'serverSrc/database/models/tables'
 
 const getTabData = async (category: string, tab: string, req: any) => {
@@ -108,12 +108,12 @@ export const handleSettingsDataUpdate = async (
           return true
         }
 
-        const photo = inputs[HOUSEHOLD_KEYS.PHOTO]
-          ? uploadFiles([inputs[HOUSEHOLD_KEYS.PHOTO] as any], HOUSEHOLD_DIR, req.session!.fsKey)
+        const photo = inputs.photo
+          ? uploadFiles([inputs.photo as any], HOUSEHOLD_DIR, req.session!.fsKey)
           : undefined
 
-        const userPhoto = inputs[HOUSEHOLD_KEYS.USER_PHOTO]
-          ? uploadFiles([inputs[HOUSEHOLD_KEYS.USER_PHOTO] as any], HOUSEHOLD_DIR, req.session!.fsKey)
+        const userPhoto = inputs.userPhoto
+          ? uploadFiles([inputs.userPhoto as any], HOUSEHOLD_DIR, req.session!.fsKey)
           : undefined
 
         if (photo === null || userPhoto === null) {
@@ -122,11 +122,11 @@ export const handleSettingsDataUpdate = async (
         }
 
         return handleUpdate(res, !!await editHousehold(
-          inputs[HOUSEHOLD_KEYS.ID] as number,
+          inputs.householdId as number,
           {
             ...inputs,
-            [HOUSEHOLD_KEYS.PHOTO]: photo,
-            [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
+            photo,
+            userPhoto,
           },
           userId
         ))
