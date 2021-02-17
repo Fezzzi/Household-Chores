@@ -27,9 +27,7 @@ export default () => {
     if (req.xhr) {
       next()
     } else {
-      res
-        .status(200)
-        .sendFile(path.resolve('./dist/index.html'))
+      res.status(200).sendFile(path.resolve('./dist/index.html'))
     }
   })
 

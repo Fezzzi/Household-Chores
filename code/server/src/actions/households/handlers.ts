@@ -76,9 +76,14 @@ export const handleCreateHousehold = async (
     return true
   }
   const success = invitations.length === 0 || await addHouseholdInvitations(householdId, invitations, userId)
-  res.status(200).send(success
-    ? { url: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}` }
-    : { [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+  if (success) {
+    res.status(200).send({
+      url: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`,
+    })
+  } else {
+    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+  }
+
   return true
 }
 

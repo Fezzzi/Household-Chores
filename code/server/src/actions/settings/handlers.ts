@@ -95,7 +95,7 @@ export const handleSettingsDataUpdate = async (
           }
           const updated = handleUpdate(res, await updateDialogSettings(validData, req.session.user))
           if (!updated) {
-            res.status(200).send({})
+            res.status(204).send()
           }
           return true
         }

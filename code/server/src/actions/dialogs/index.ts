@@ -21,7 +21,12 @@ export default () => {
       }
 
       const success = await disableDialog(key, userId)
-      res.status(200).send(success ? {} : { [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+      if (success) {
+        res.status(204).send()
+      } else {
+        res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+      }
+
       return
     }
 
