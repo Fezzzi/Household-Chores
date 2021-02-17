@@ -41,8 +41,8 @@ function* searchConnectionActionSaga({ payload }) {
 }
 
 function* connectionRequestSaga({ payload }) {
-  yield call(generalSaga, connectionRequest, payload, function* (data) {
-    yield put(SettingsActions.connectionRequestSuccess(data))
+  yield call(generalSaga, connectionRequest, payload, function* () {
+    yield put(SettingsActions.connectionRequestSuccess(payload))
   })
 }
 
