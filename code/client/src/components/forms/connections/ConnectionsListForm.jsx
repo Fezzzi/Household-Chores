@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { CalendarToday, SortByAlpha } from '@material-ui/icons'
 
-import { SettingsActions } from 'clientSrc/actions'
+import { ConnectionActions } from 'clientSrc/actions'
 import { connectionBlock, connectionRemove } from 'clientSrc/effects/conectionEffects'
 import { FormBody, FormWrapper, SectionHeadline } from 'clientSrc/styles/blocks/settings'
 import { TableBigPhoto } from 'clientSrc/styles/blocks/table'
@@ -16,11 +16,11 @@ const ConnectionsListForm = ({ data }) => {
   const dispatch = useDispatch()
 
   const removeHandler = useCallback(userId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionRemove, userId })),
+    dispatch(ConnectionActions.connectionAction({ effect: connectionRemove, userId })),
   [dispatch])
 
   const blockHandler = useCallback(userId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionBlock, userId })),
+    dispatch(ConnectionActions.connectionAction({ effect: connectionBlock, userId })),
   [dispatch])
 
   return (

@@ -46,7 +46,7 @@ export const validateField = (
   if (field !== undefined) {
     const validity = isInputValid(type, field, constraints)
     if (!validity.valid) {
-      res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [validity.message || ERROR.INVALID_DATA] })
+      res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [validity.message || ERROR.INVALID_DATA] })
       return false
     }
   }
@@ -67,7 +67,7 @@ export const validateProfileData = async (
     || visibility !== undefined
 
   if (!update) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
     return false
   }
 
@@ -81,17 +81,17 @@ export const validateProfileData = async (
     ])
 
   if (!valid) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return false
   }
 
   if (email !== undefined && await findUser(email as string) !== null) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.EMAIL_USED] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.EMAIL_USED] })
     return false
   }
 
   if (oldPassword && !await isCorrectPassword(oldPassword as string, req.session.user)) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INCORRECT_PASS] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INCORRECT_PASS] })
     return false
   }
 
@@ -107,12 +107,12 @@ export const tryRemapBoolData = (
 ): Record<string, number> | null => {
   const inputEntries = Object.entries(deApify(inputs))
   if (inputEntries.length === 0) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
     return null
   }
 
   if (!inputEntries.every(([name]) => allowedKeys.includes(name))) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return null
   }
   return Object.fromEntries(inputEntries.map(([name, value]) => [name, valueMapper(value)]))
@@ -148,7 +148,7 @@ export const validateEditHouseholdData = async (
     || removedMembers !== undefined
 
   if (!update) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
     return false
   }
 
@@ -173,7 +173,7 @@ export const validateEditHouseholdData = async (
     || (newInvitations && currentUserRole === HOUSEHOLD_ROLE_TYPE.MEMBER)
     || (changedRoles && changedRoles.find(({ role }: { role: string }) => allRoles.indexOf(role) < currentUserRoleIndex))
   ) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.BAD_PERMISSIONS] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.BAD_PERMISSIONS] })
     return false
   }
 
@@ -183,7 +183,7 @@ export const validateEditHouseholdData = async (
     const connectionIds = connections.map(({ userId }) => userId)
     const valid = invitations.every(({ userId }) => connectionIds.indexOf(userId) !== -1)
     if (!valid) {
-      res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+      res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
       return false
     }
     const validMessages = invitations.every(({ message }) => !message
@@ -200,7 +200,7 @@ export const validateEditHouseholdData = async (
         && !changedRoles?.find((changedRole: any) => userId === changedRole.userId && changedRole.role !== HOUSEHOLD_ROLE_TYPE.ADMIN))
 
     if (!admins || admins.length === 0) {
-      res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ADMIN_REQUIRED] })
+      res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ADMIN_REQUIRED] })
       return false
     }
   }

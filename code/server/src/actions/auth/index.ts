@@ -16,7 +16,7 @@ const resetPass = async ({ email }: any, req: any, res: any) => {
   }, [email])
 
   if (emailSent) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.RESET_PASS_ERROR] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.RESET_PASS_ERROR] })
   } else {
     res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.RESET_LINK] })
   }
@@ -60,7 +60,7 @@ const signUp = async (inputs: any, req: any, res: any): Promise<boolean> => {
       if (await logInWithIds(req, res, user.userId, googleId, facebookId, user.fsKey)) {
         res.status(204).send()
       } else {
-        res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.SMTH_BROKE_LOGIN] })
+        res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.SMTH_BROKE_LOGIN] })
       }
       return true
     }
@@ -78,7 +78,7 @@ const signUp = async (inputs: any, req: any, res: any): Promise<boolean> => {
     facebookId,
   )
   if (!signUpResult?.insertId) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.SIGN_UP_ERROR] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.SIGN_UP_ERROR] })
     return true
   }
   setSession(req, res, signUpResult.insertId, signUpResult.fsKey)
@@ -94,20 +94,18 @@ export default () => {
     if (action === API.AUTH_SIGN_UP) {
       const valid = validateSignupData(inputs)
       if (!valid) {
-        res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+        res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
         return
       }
 
       const handled = await signUp(inputs, req, res)
-      if (handled) {
-        return
+      if (!handled) {
+        res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
       }
-    } else {
-      res.status(404).send('Not Found')
       return
     }
 
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+    res.status(404).send('Not Found')
   })
 
   router.put('/:action', async (req, res) => {
@@ -117,7 +115,7 @@ export default () => {
       case API.AUTH_LOG_IN: {
         const valid = validateLoginData(inputs)
         if (!valid) {
-          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+          res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
           return
         }
 
@@ -130,7 +128,7 @@ export default () => {
       case API.AUTH_RESET: {
         const valid = validateResetData(inputs)
         if (!valid) {
-          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+          res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
           return
         }
 
@@ -145,7 +143,7 @@ export default () => {
         return
     }
 
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
   })
 
   router.delete('/:action', async (req, res) => {
@@ -153,12 +151,12 @@ export default () => {
 
     if (action === API.AUTH_DELETE) {
       // todo: Finish within navbar issue when logging off is implemented
-    } else {
-      res.status(404).send('Not Found')
+
+      res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
       return
     }
 
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+    res.status(404).send('Not Found')
   })
 
   return router

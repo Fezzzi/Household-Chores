@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import { Message } from '@material-ui/icons'
 
-import { SettingsActions, ModalActions } from 'clientSrc/actions'
+import { ConnectionActions, ModalActions } from 'clientSrc/actions'
 import { COLORS, MODAL_TYPE, PORTAL_TYPE } from 'clientSrc/constants'
 import {
   SearchFormMessageAnchor, AppendMessageIcon, UserButtonsBox, UserList, UserMutualFriends,
@@ -21,11 +21,11 @@ import SearchBar from '../SearchBar'
 const ConnectionSearchForm = ({ data }) => {
   const dispatch = useDispatch()
   const searchQuery = useCallback(query =>
-    dispatch(SettingsActions.searchConnectionAction(query)),
+    dispatch(ConnectionActions.searchConnectionAction(query)),
   [dispatch])
 
   const connectHandler = useCallback((userId, message) =>
-    dispatch(SettingsActions.connectionRequest({ userId, message })),
+    dispatch(ConnectionActions.connectionRequest({ userId, message })),
   [dispatch])
 
   const handleClick = userId => () => dispatch(ModalActions.openModal({

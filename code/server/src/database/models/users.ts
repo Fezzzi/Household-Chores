@@ -77,13 +77,13 @@ export const logInUser = async (
 
   const userExists = result && result.length > 0
   if (!userExists) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.NO_ACCOUNT] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.NO_ACCOUNT] })
     return null
   }
 
   const validPass = await checkPass(password, result[0][tUsersCols.password])
   if (!validPass) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INCORRECT_PASS] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INCORRECT_PASS] })
     return null
   }
 

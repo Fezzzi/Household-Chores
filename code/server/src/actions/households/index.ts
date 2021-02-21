@@ -18,7 +18,7 @@ export default () => {
       case API.HOUSEHOLDS_LOAD: {
         const households = await getUserHouseholdsData(userId)
         if (!households) {
-          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR] })
+          res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR] })
           return true
         }
 
@@ -69,13 +69,13 @@ export default () => {
       case API.HOUSEHOLD_DELETE: {
         const role = await getUserRole(userId, Number(householdId))
         if (role !== HOUSEHOLD_ROLE_TYPE.ADMIN) {
-          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.BAD_PERMISSIONS] })
+          res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.BAD_PERMISSIONS] })
         } else {
           const success = await deleteHousehold(Number(householdId))
           if (success) {
             res.status(204).send()
           } else {
-            res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+            res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
           }
         }
         return
@@ -83,14 +83,14 @@ export default () => {
       case API.HOUSEHOLD_LEAVE: {
         const admins = await findHouseholdAdmins(Number(householdId))
         if (!admins || (admins.length === 1 && admins.indexOf(userId) !== -1)) {
-          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ADMIN_REQUIRED] })
+          res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ADMIN_REQUIRED] })
           return
         }
         const success = await leaveHousehold(userId, Number(householdId))
         if (success) {
           res.status(204).send()
         } else {
-          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+          res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
         }
         return
       }
@@ -99,7 +99,7 @@ export default () => {
         if (success) {
           res.status(204).send()
         } else {
-          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+          res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
         }
         return
       }

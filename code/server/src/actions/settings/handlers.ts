@@ -35,7 +35,7 @@ const getTabData = async (category: string, tab: string, req: any) => {
 export const handleSettingsDataFetch = async (category: string, tab: string, req: any, res: any): Promise<void> => {
   const data = await getTabData(category, tab, req)
   if (!data) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] })
     return
   }
 
@@ -50,7 +50,7 @@ export const handleSettingsDataFetch = async (category: string, tab: string, req
 
 const handleUpdate = (res: any, updated: boolean): boolean => {
   if (!updated) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
     return true
   }
   return false
@@ -72,7 +72,7 @@ export const handleSettingsDataUpdate = async (
           }
           const [photo] = uploadFiles([inputs.photo as any], PROFILE_DIR, req.session.fsKey)
           if (photo === null) {
-            res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
+            res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
             return true
           }
           return handleUpdate(res, await updateUserData({ ...inputs, photo }, req.session.user))
@@ -118,7 +118,7 @@ export const handleSettingsDataUpdate = async (
           : undefined
 
         if (photo === null || userPhoto === null) {
-          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
+          res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
           return true
         }
 
@@ -134,6 +134,6 @@ export const handleSettingsDataUpdate = async (
       }
       break
   }
-  res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
+  res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
   return true
 }

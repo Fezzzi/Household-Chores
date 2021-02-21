@@ -4,6 +4,7 @@ import { authSaga } from 'clientSrc/sagas/authSaga'
 import { themeSaga } from 'clientSrc/sagas/themeSaga'
 import { localeSaga } from 'clientSrc/sagas/localeSaga'
 import { settingsSaga } from 'clientSrc/sagas/settingsSaga'
+import { connectionSaga } from 'clientSrc/sagas/connectionSaga'
 import { householdSaga } from 'clientSrc/sagas/householdSaga'
 import { dialogsSaga } from 'clientSrc/sagas/dialogsSaga'
 import { homeSaga } from 'clientSrc/sagas/homeSaga'
@@ -17,6 +18,7 @@ export default function* rootSaga() {
     fork(localeSaga),
     fork(authSaga),
     fork(settingsSaga),
+    fork(connectionSaga),
     fork(householdSaga),
     fork(dialogsSaga),
     fork(homeSaga),

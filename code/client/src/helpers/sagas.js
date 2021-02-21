@@ -20,20 +20,6 @@ export function* handleResponse({ data }, onSuccess) {
 }
 
 /**
- * Should be used around every saga that performs API calls.
- * Wraps API calls with try/catch block and dispatches Notification action with CONNECTION_ERROR on API call exception.
- */
-export function* sagaWrapper(data, callback) {
-  try {
-    yield call(callback, data)
-  } catch (error) {
-    yield put(NotificationActions.addNotifications({
-      [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR],
-    }))
-  }
-}
-
-/**
  * Universal saga that performs API call with provided effect and payload.
  * API call exceptions and response exceptions are dispatched through Notification actions.
  * Calls callback function on response data of successful API call.
@@ -43,8 +29,10 @@ export function* generalSaga(effect, payload, callback) {
     const response = yield call(effect, payload)
     yield call(handleResponse, response, callback)
   } catch (error) {
-    yield put(NotificationActions.addNotifications({
-      [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR],
-    }))
+    if (error.response.data) {
+      yield put(NotificationActions.addNotifications(error.response.data))
+    } else {
+      yield put(NotificationActions.addNotifications({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR] }))
+    }
   }
 }

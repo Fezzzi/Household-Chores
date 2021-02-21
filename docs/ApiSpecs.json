@@ -79,7 +79,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Data about current user and environment.",
+            "description": "Data of requested resource page.",
             "content": {
               "application/json": {
                 "schema": {
@@ -117,19 +117,32 @@
         },
         "responses": {
           "200": {
-            "description": "Notification about successful result",
+            "description": "Notification about successful sign-up action",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Notifications"
+                  "$ref": "#/components/schemas/Successes"
                 }
               }
-            },
+            }
+          },
+          "204": {
+            "description": "In case of successful log-in action",
             "headers": {
               "Set-Header": {
                 "schema": {
                   "type": "string",
                   "example": "user_sid=s%3Ab7pTnC4Scuw_Vpiu_0fKhij0hZ9oOitu.4z9glr85D...; Path=/; Expires=Sun, 06 Feb 2022 16:16:03 GMT; HttpOnly"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
                 }
               }
             }
@@ -161,20 +174,23 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Notification about successful result",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Notifications"
-                }
-              }
-            },
+          "204": {
+            "description": "In case of successful action",
             "headers": {
               "Set-Header": {
                 "schema": {
                   "type": "string",
                   "example": "user_sid=s%3Ab7pTnC4Scuw_Vpiu_0fKhij0hZ9oOitu.4z9glr85D...; Path=/; Expires=Sun, 06 Feb 2022 16:16:03 GMT; HttpOnly"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
                 }
               }
             }
@@ -211,7 +227,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Notifications"
+                  "$ref": "#/components/schemas/Successes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
                 }
               }
             }
@@ -232,7 +258,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Notifications"
+                  "$ref": "#/components/schemas/Successes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
                 }
               }
             }
@@ -267,7 +303,7 @@
         },
         "responses": {
           "200": {
-            "description": "Notification about successful result",
+            "description": "Found users matching given query",
             "content": {
               "application/json": {
                 "schema": {
@@ -322,7 +358,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Notifications"
+                  "$ref": "#/components/schemas/Successes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
                 }
               }
             }
@@ -370,6 +416,16 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/foundConnections"
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
           }
         }
       },
@@ -411,6 +467,16 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/foundConnections"
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
           }
         }
       }
@@ -433,6 +499,16 @@
                   "items": {
                     "$ref": "#/components/schemas/Household"
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
                 }
               }
             }
@@ -488,6 +564,16 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
           }
         }
       }
@@ -530,13 +616,13 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "",
+          "204": { "description": "In case of successful action" },
+          "400": {
+            "description": "Notification about error",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean",
-                  "default": "true"
+                  "$ref": "#/components/schemas/Errors"
                 }
               }
             }
@@ -604,6 +690,16 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
           }
         }
       }
@@ -638,13 +734,13 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "",
+          "204": { "description": "In case of successful action" },
+          "400": {
+            "description": "Notification about error",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean",
-                  "default": "true"
+                  "$ref": "#/components/schemas/Errors"
                 }
               }
             }
@@ -681,12 +777,23 @@
           }
         ],
         "responses": {
+          "204": { "description": "in case invalid category parameter was supplied" },
           "200": {
             "description": "Settings page data",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SettingsData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about fetching error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
                 }
               }
             }
@@ -727,12 +834,23 @@
           }
         },
         "responses": {
+          "204": { "description": "In case of successful edit action." },
           "200": {
             "description": "Settings page data",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SettingsData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
                 }
               }
             }
@@ -765,12 +883,13 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Notification about successful result",
+          "204": { "description":  "In case of successful action" },
+          "400": {
+            "description": "Notification about error",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Notifications"
+                  "$ref": "#/components/schemas/Errors"
                 }
               }
             }
@@ -1126,27 +1245,21 @@
           }
         }
       },
-      "Notifications": {
+      "Errors": {
+        "required": [ "errors" ],
         "properties": {
-          "successes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
           "errors": {
             "type": "array",
             "items": {
               "type": "string"
             }
-          },
-          "warnings": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "messages": {
+          }
+        }
+      },
+      "Successes": {
+        "required": [ "successes" ],
+        "properties": {
+          "successes": {
             "type": "array",
             "items": {
               "type": "string"

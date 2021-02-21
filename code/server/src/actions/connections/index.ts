@@ -7,12 +7,6 @@ import {
 import { API, CONNECTION_STATE_TYPE, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR, SUCCESS } from 'shared/constants/localeMessages'
 
-const findUsers = async (req: any, res: any, query: string) => {
-  const foundUsers = await queryUsers(query, req.session.user)
-  res.status(200).send({ [CONNECTION_STATE_TYPE.FOUND]: foundUsers })
-  return true
-}
-
 const performConnectionAction = async (
   req: any,
   res: any,
@@ -27,7 +21,7 @@ const performConnectionAction = async (
       return true
     }
   }
-  res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+  res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
   return true
 }
 
@@ -43,10 +37,10 @@ const handleConnectionRequest = async (
     if (success) {
       res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.CONNECTION_REQUEST_SENT] })
     } else {
-      res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] })
+      res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] })
     }
   } else {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
   }
   return true
 }
@@ -91,15 +85,16 @@ export default () => {
     }
   })
 
-  router.get('/:action', (req, res) => {
+  router.get('/:action', async (req, res) => {
     const { params: { action }, query: { query } } = req
 
     if (action === API.CONNECTION_FIND) {
-      return findUsers(req, res, query as string)
+      const foundUsers = await queryUsers(query as string, req.session!.user)
+      res.status(200).send({ [CONNECTION_STATE_TYPE.FOUND]: foundUsers })
+      return
     }
 
     res.status(404).send('Not Found')
-    return false
   })
 
   return router

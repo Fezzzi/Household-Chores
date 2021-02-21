@@ -15,7 +15,7 @@ const validateCreateData = async (
   const { name, photo, userNickname, userPhoto } = inputs
 
   if (!name || !userNickname || !photo || !userPhoto) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return false
   }
 
@@ -32,7 +32,7 @@ const validateCreateData = async (
     const connectionIds = connections.map(({ userId }) => userId)
     const validRequest = invitations.every(({ userId }) => connectionIds.indexOf(userId) !== -1)
     if (!validRequest) {
-      res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+      res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
       return false
     }
     const validMessages = invitations.every(({ message }) => !message
@@ -61,7 +61,7 @@ export const handleCreateHousehold = async (
   ], HOUSEHOLD_DIR, req.session!.fsKey)
 
   if (photo === null || userPhoto === null) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
     return true
   }
 
@@ -72,7 +72,7 @@ export const handleCreateHousehold = async (
   }, userId)
 
   if (householdId === null) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
     return true
   }
   const success = invitations.length === 0 || await addHouseholdInvitations(householdId, invitations, userId)
@@ -81,7 +81,7 @@ export const handleCreateHousehold = async (
       url: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`,
     })
   } else {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
   }
 
   return true
@@ -97,7 +97,7 @@ export const handleApproveHouseholdInvitation = async (
   res: any,
 ): Promise<boolean> => {
   if (!fromId || !householdId || !nickname || !photo) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return false
   }
 
@@ -112,7 +112,7 @@ export const handleApproveHouseholdInvitation = async (
     ? photo
     : uploadFiles([photo as any], HOUSEHOLD_DIR, req.session!.fsKey)[0]
   if (userPhoto === null) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
     return true
   }
 
@@ -122,7 +122,7 @@ export const handleApproveHouseholdInvitation = async (
       url: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`,
     })
   } else {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
   }
   return true
 }

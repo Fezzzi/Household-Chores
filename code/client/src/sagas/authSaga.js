@@ -29,9 +29,7 @@ function* logInSaga({ payload }) {
 function* logInFacebookSaga(action) {
   const { payload: { profile: { first_name: nickname, email, id }, tokenDetail: { userID, signedRequest } } } = action
   if (!(nickname || email || id || userID || signedRequest)) {
-    yield put(NotificationActions.addNotifications({
-      [NOTIFICATION_TYPE.ERRORS]: [ERROR.LOG_IN_MISSING_FIELDS],
-    }))
+    yield put(NotificationActions.addNotifications({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.LOG_IN_MISSING_FIELDS] }))
   } else {
     yield put(AuthActions.signUp({ inputs: {
       nickname,
@@ -49,9 +47,7 @@ function* logInFacebookSaga(action) {
 function* logInGoogleSaga(action) {
   const { payload: { profileObj: { name, email, imageUrl, googleId }, tokenObj: { id_token: googleToken } } } = action
   if (!(name || email || googleId || googleToken)) {
-    yield put(NotificationActions.addNotifications({
-      [NOTIFICATION_TYPE.ERRORS]: [ERROR.LOG_IN_MISSING_FIELDS],
-    }))
+    yield put(NotificationActions.addNotifications({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.LOG_IN_MISSING_FIELDS] }))
   } else {
     yield put(AuthActions.signUp({ inputs: {
       nickname: name,

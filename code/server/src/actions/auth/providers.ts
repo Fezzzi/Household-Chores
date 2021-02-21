@@ -81,12 +81,12 @@ export const handleProvidersLogIn = async (
   facebook: FacebookObject | null,
 ): Promise<boolean> => {
   if (googleId === null) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_GOOGLE_DATA] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_GOOGLE_DATA] })
     return true
   }
 
   if (facebookId === null) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_FACEBOOK_DATA] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_FACEBOOK_DATA] })
     return true
   }
 

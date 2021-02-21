@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { SettingsActions } from 'clientSrc/actions'
+import { SettingsActions, ConnectionActions } from 'clientSrc/actions'
 import { SETTING_CATEGORIES, CONNECTION_STATE_TYPE } from 'shared/constants'
 
 const initialState = {
@@ -43,5 +43,5 @@ const connectionRequested = (state, { payload: { userId, message } }) => ({
 export default createReducer(initialState, {
   [SettingsActions.loadSettingsSuccess.toString()]: settingsLoaded,
   [SettingsActions.settingsDataUpdated.toString()]: settingsDataUpdated,
-  [SettingsActions.connectionRequestSuccess.toString()]: connectionRequested,
+  [ConnectionActions.connectionRequestSuccess.toString()]: connectionRequested,
 })

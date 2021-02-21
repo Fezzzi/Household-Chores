@@ -16,7 +16,7 @@ export default () => {
       const key = deApifyKey(body.key)
       const valid = Object.values(tDialogsCols).filter(name => name !== tDialogsCols.id_user).includes(key)
       if (!valid) {
-        res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+        res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
         return
       }
 
@@ -24,7 +24,7 @@ export default () => {
       if (success) {
         res.status(204).send()
       } else {
-        res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+        res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
       }
 
       return

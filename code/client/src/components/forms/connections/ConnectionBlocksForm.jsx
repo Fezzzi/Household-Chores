@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { CalendarToday, Group, Message, SortByAlpha } from '@material-ui/icons'
 
-import { SettingsActions } from 'clientSrc/actions'
+import { ConnectionActions } from 'clientSrc/actions'
 import { connectionUnblock } from 'clientSrc/effects/conectionEffects'
 import { AppendMessageAnchor, AppendMessageIcon } from 'clientSrc/styles/blocks/users'
 import { FormBody, FormWrapper, SectionHeadline } from 'clientSrc/styles/blocks/settings'
@@ -18,7 +18,7 @@ const ConnectionBlocksForm = ({ data }) => {
   const dispatch = useDispatch()
 
   const unblockHandler = useCallback(userId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionUnblock, userId })),
+    dispatch(ConnectionActions.connectionAction({ effect: connectionUnblock, userId })),
   [dispatch])
 
   return (

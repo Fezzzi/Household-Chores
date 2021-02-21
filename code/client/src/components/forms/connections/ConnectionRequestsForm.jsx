@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { CalendarToday, Message, SortByAlpha, Group } from '@material-ui/icons'
 
-import { SettingsActions } from 'clientSrc/actions'
+import { ConnectionActions } from 'clientSrc/actions'
 import { connectionApprove, connectionBlock, connectionIgnore } from 'clientSrc/effects/conectionEffects'
 import { AppendMessageAnchor, AppendMessageIcon } from 'clientSrc/styles/blocks/users'
 import { FormBody, FormWrapper, SectionHeadline } from 'clientSrc/styles/blocks/settings'
@@ -19,15 +19,15 @@ const ConnectionRequestsForm = ({ data }) => {
   const dispatch = useDispatch()
 
   const blockHandler = useCallback(userId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionBlock, userId })),
+    dispatch(ConnectionActions.connectionAction({ effect: connectionBlock, userId })),
   [dispatch])
 
   const approveHandler = useCallback(userId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionApprove, userId })),
+    dispatch(ConnectionActions.connectionAction({ effect: connectionApprove, userId })),
   [dispatch])
 
   const ignoreHandler = useCallback(userId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionIgnore, userId })),
+    dispatch(ConnectionActions.connectionAction({ effect: connectionIgnore, userId })),
   [dispatch])
 
   return (
