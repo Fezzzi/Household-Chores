@@ -12,4 +12,4 @@ from IDE plugins.
 
 | Previous Page | Next Page |
 |:-------------:|:-----:|
-| <sup>[Migrations](./migrations.md)</sup>  | |
+| <sup>[Migrations](./migrations.md)</sup>  | <sup>[Modules](./modules.md)</sup> |
