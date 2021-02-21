@@ -3,7 +3,7 @@ import { USER_VISIBILITY_TYPE, CONNECTION_STATE_TYPE } from 'shared/constants'
 import { migrateWithQueries } from 'serverSrc/helpers/migrations'
 
 module.exports = {
-  up: async (conn, cb) => migrateWithQueries(cb,
+  up: async (conn, cb) => await migrateWithQueries(cb, async () =>
     await conn.query(`
       CREATE TABLE ${tConnectionsName} (
         ${tConnectionsCols.id_from} INT NOT NULL,
@@ -23,7 +23,7 @@ module.exports = {
       ) NOT NULL DEFAULT '${USER_VISIBILITY_TYPE.ALL}'
     `)
   ),
-  down: async (conn, cb) => migrateWithQueries(cb,
+  down: async (conn, cb) => await migrateWithQueries(cb, async () =>
     await conn.query(`DROP TABLE ${tConnectionsName}`)
     && await conn.query(`ALTER TABLE ${tUsersName} DROP COLUMN ${tUsersCols.visibility}`)
   ),

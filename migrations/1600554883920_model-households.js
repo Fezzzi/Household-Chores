@@ -5,7 +5,7 @@ import {
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 
 module.exports = {
-  up: async (conn, cb) => migrateWithQueries(cb,
+  up: async (conn, cb) => await migrateWithQueries(cb, async () =>
     await conn.query(`
       CREATE TABLE ${tHouseholdsName} (
         ${tHouseholdsCols.id} INT AUTO_INCREMENT PRIMARY KEY,
@@ -36,7 +36,7 @@ module.exports = {
       )
     `)
   ),
-  down: async (conn, cb) => migrateWithQueries(cb,
+  down: async (conn, cb) => await migrateWithQueries(cb, async () =>
     await conn.query(`DROP TABLE ${tHouseholdsName}`)
     && await conn.query(`DROP TABLE ${tHouseMemName}`)
     && await conn.query(`DROP TABLE ${tHouseInvName}`)

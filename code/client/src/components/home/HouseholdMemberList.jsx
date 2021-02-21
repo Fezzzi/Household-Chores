@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Remove, Add } from '@material-ui/icons'
 
-import { MEMBER_KEYS } from 'shared/constants/mappingKeys'
 import {
   ExpandableMemberList, ExpandableMemberListBox, ExpandMemberListButton, HouseholdMemberName,
   HouseholdMemberNode, HouseholdMemberPhoto, HouseholdMemberRole,
@@ -13,17 +12,17 @@ const HouseholdMemberList = ({ members }) => {
   const [expanded, setExpanded] = useState(false)
 
   const sortedMembers = useMemo(() => [...members].sort((a, b) =>
-    a[MEMBER_KEYS.ROLE] < b[MEMBER_KEYS.ROLE] ? -1 : 1),
+    a.role < b.role ? -1 : 1),
   [members])
 
   return (
     <ExpandableMemberListBox>
       <ExpandableMemberList>
-        {sortedMembers.map((member, index) => {
+        {sortedMembers.map(({ role, photo, nickname }, index) => {
           if (index >= 5 && !expanded) {
             return null
           }
-          const { background, color } = getLabelColors(member[MEMBER_KEYS.ROLE])
+          const { background, color } = getLabelColors(role)
 
           return (
             <HouseholdMemberNode
@@ -31,12 +30,12 @@ const HouseholdMemberList = ({ members }) => {
               borderColor={background}
             >
               <HouseholdMemberRole background={background} textColor={color}>
-                {member[MEMBER_KEYS.ROLE]}
+                {role}
               </HouseholdMemberRole>
               <HouseholdMemberPhoto>
-                <img src={member[MEMBER_KEYS.PHOTO]} alt="" />
+                <img src={photo} alt="" />
               </HouseholdMemberPhoto>
-              <HouseholdMemberName>{member[MEMBER_KEYS.NAME]}</HouseholdMemberName>
+              <HouseholdMemberName>{nickname}</HouseholdMemberName>
             </HouseholdMemberNode>
           )
         })}
@@ -56,9 +55,9 @@ const HouseholdMemberList = ({ members }) => {
 
 HouseholdMemberList.propTypes = {
   members: PropTypes.arrayOf(PropTypes.shape({
-    [MEMBER_KEYS.NAME]: PropTypes.string,
-    [MEMBER_KEYS.ROLE]: PropTypes.string,
-    [MEMBER_KEYS.PHOTO]: PropTypes.string,
+    nickname: PropTypes.string,
+    role: PropTypes.string,
+    photo: PropTypes.string,
   })).isRequired,
 }
 

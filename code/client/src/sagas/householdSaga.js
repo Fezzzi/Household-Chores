@@ -5,7 +5,8 @@ import { generalSaga } from 'clientSrc/helpers/sagas'
 import {
   createHousehold, leaveHousehold, deleteHousehold, invitationApprove, invitationIgnore,
 } from 'clientSrc/effects/householdEffects'
-import { HouseholdActions, SettingsActions } from 'clientSrc/actions'
+import { HouseholdActions } from 'clientSrc/actions'
+import { API, HOUSEHOLD_TABS, SETTING_CATEGORIES } from 'shared/constants'
 
 function* approveInvitationSaga({ payload }) {
   yield call(generalSaga, invitationApprove, payload, function* ({ url }) {
@@ -14,9 +15,7 @@ function* approveInvitationSaga({ payload }) {
 }
 
 function* ignoreInvitationSaga({ payload }) {
-  yield call(generalSaga, invitationIgnore, payload, function* (data) {
-    yield put(SettingsActions.settingsDataUpdated(data))
-  })
+  yield call(generalSaga, invitationIgnore, payload)
 }
 
 function* createHouseholdSaga({ payload }) {
@@ -26,14 +25,18 @@ function* createHouseholdSaga({ payload }) {
 }
 
 function* leaveHouseholdSaga({ payload }) {
-  yield call(generalSaga, leaveHousehold, payload, function* ({ url }) {
-    yield put(push(url))
+  yield call(generalSaga, leaveHousehold, payload, function* (success) {
+    if (success) {
+      yield put(push(`/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=${HOUSEHOLD_TABS.INVITATIONS}`))
+    }
   })
 }
 
 function* deleteHouseholdSaga({ payload }) {
-  yield call(generalSaga, deleteHousehold, payload, function* ({ url }) {
-    yield put(push(url))
+  yield call(generalSaga, deleteHousehold, payload, function* (success) {
+    if (success) {
+      yield put(push(`/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=${HOUSEHOLD_TABS.INVITATIONS}`))
+    }
   })
 }
 

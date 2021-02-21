@@ -1,7 +1,6 @@
 import {
   USER_VISIBILITY_TYPE, SETTING_COLUMNS, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, SETTING_CATEGORIES,
 } from 'shared/constants'
-import { DIALOG_KEYS } from 'shared/constants/mappingKeys'
 
 export const AUTH = {
   BACK_TO_LOGIN: 'auth.backToLogin',
@@ -76,7 +75,6 @@ export const INFO = {
 
 export const FORM = {
   DELETE_ACCOUNT: 'form.deleteAccount',
-  DISABLED_DIALOGS: 'form.disabledDialogs',
   DROP_PHOTO_HERE: 'form.dropPhotoHere',
   CLICK_TO_UPLOAD: 'form.clickToUpload',
   CONNECTIONS: 'form.connections',
@@ -120,21 +118,21 @@ export const FORM = {
   MUTUAL_FRIENDS: 'form.mutualFriends',
   SET_ALIAS: 'form.setAlias',
 
-  EMAIL_NOTIFICATIONS: 'form.email_notifications',
-  BROWSER_NOTIFICATIONS: 'form.browser_notifications',
-  MOBILE_NOTIFICATIONS: 'form.mobile_notifications',
-  CONNECTION_APPROVAL: 'form.connection_approval',
-  CONNECTION_REQUEST: 'form.connection_request',
-  HOUSEHOLD_DELETING: 'form.household_deleting',
-  HOUSEHOLD_EXPELLING: 'form.household_expelling',
-  HOUSEHOLD_INVITATION: 'form.household_invitation',
-  HOUSEHOLD_JOINING: 'form.household_joining',
-  HOUSEHOLD_LEAVING: 'form.household_leaving',
+  EMAIL_NOTIFICATIONS: 'form.emailNotifications',
+  BROWSER_NOTIFICATIONS: 'form.browserNotifications',
+  MOBILE_NOTIFICATIONS: 'form.mobileNotifications',
+  CONNECTION_APPROVAL: 'form.connectionApproval',
+  CONNECTION_REQUEST: 'form.connectionRequest',
+  HOUSEHOLD_DELETING: 'form.householdDeleting',
+  HOUSEHOLD_EXPELLING: 'form.householdExpelling',
+  HOUSEHOLD_INVITATION: 'form.householdInvitation',
+  HOUSEHOLD_JOINING: 'form.householdJoining',
+  HOUSEHOLD_LEAVING: 'form.householdLeaving',
 
   [USER_VISIBILITY_TYPE.FOF]: 'form.userVisibilityFOF',
   [USER_VISIBILITY_TYPE.ALL]: 'form.userVisibilityALL',
 
-  HOUSEHOLD_USER_DELETING_DIALOG: `form.${DIALOG_KEYS.HOUSEHOLD_MEMBER_DELETING}`,
+  HOUSEHOLD_USER_DELETING_DIALOG: 'form.householdMemberDeleting',
 }
 
 export const HINT = {
@@ -188,4 +186,5 @@ export const SUCCESS = {
   RESET_LINK: 'success.resetLink',
   SETTINGS_UPDATED: 'success.settingsUpdated',
   ACCOUNT_CREATED: 'success.accountCreated',
+  CONNECTION_REQUEST_SENT: 'success.connectionRequestSent',
 }

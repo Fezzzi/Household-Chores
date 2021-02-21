@@ -7,7 +7,7 @@ module.exports = {
       CREATE TABLE ${tDialogsName} (
         ${tDialogsCols.id_user} INT PRIMARY KEY,
         ${tDialogsCols.tutorial} TINYINT(1) NOT NULL DEFAULT 0,
-        ${tDialogsCols.household_user_deleting} TINYINT(1) NOT NULL DEFAULT 0
+        ${tDialogsCols.household_member_deleting} TINYINT(1) NOT NULL DEFAULT 0
       )
     `)
     && await conn.query(`

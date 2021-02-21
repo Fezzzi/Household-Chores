@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer'
+import nodemailer, { SentMessageInfo } from 'nodemailer'
 import dotenv from 'dotenv'
 
 import { Logger } from './logger'
@@ -14,7 +14,7 @@ const getTemplate = (templateName: string, data: any): { subject: string; html: 
   }
 }
 
-export const sendEmails = async (templateName: string, data: any, recipients: [string]) => {
+export const sendEmails = async (templateName: string, data: any, recipients: [string]): Promise<boolean> => {
   const testAccount = await nodemailer.createTestAccount()
 
   const transporter = nodemailer.createTransport({
@@ -32,22 +32,20 @@ export const sendEmails = async (templateName: string, data: any, recipients: [s
 
   // todo: Add locale translations to data
   const { subject, html } = getTemplate(templateName, data)
-  return transporter.sendMail({
+
+  const info: SentMessageInfo = await transporter.sendMail({
     from: 'Household App',
     to: process.env.TEST === 'true'
       ? process.env.TEST_EMAIL
       : recipients.join(','),
     subject,
     html,
-  }).then(value => {
-    Logger(
-      LOGS.MAIL_LOG,
-      `Sent ${value.accepted.length} of ${value.accepted.length + value.rejected.length} ${templateName} emails, `
-      + `approved: [${value.accepted.join(',')}] failed: [${value.rejected.join(',')}]`
-    )
-    return value.accepted.length > 0
-  }).catch(reason => {
-    Logger(LOGS.MAIL_LOG, `Sending ${templateName} emails to ${recipients.join(',')} failed - ${reason.code}`)
-    return false
-  })
+  }, err => err && Logger(LOGS.MAIL_LOG, `Sending ${templateName} emails to ${recipients.join(',')} failed - ${err.message}`))
+
+  Logger(
+    LOGS.MAIL_LOG,
+    `Sent ${info.accepted.length} of ${info.accepted.length + info.rejected.length} ${templateName} emails, `
+    + `approved: [${info.accepted.join(',')}] failed: [${info.rejected.join(',')}]`
+  )
+  return info.accepted.length > 0
 }

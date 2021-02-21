@@ -11,9 +11,6 @@ import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { formatDate } from 'shared/helpers/date'
-import {
-  CONNECTION_KEYS, HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, MEMBER_KEYS, PROFILE,
-} from 'shared/constants/mappingKeys'
 
 import HouseholdFormHeader from './HouseholdFormHeader'
 import HouseholdInvitationForm from './HouseholdInvitationForm'
@@ -22,11 +19,11 @@ import { SimpleFloatingElement } from '../../portals'
 
 const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
   const {
-    [HOUSEHOLD_KEYS.ID]: householdId,
-    [HOUSEHOLD_KEYS.PHOTO]: photo,
-    [HOUSEHOLD_KEYS.NAME]: name,
-    [HOUSEHOLD_GROUP_KEYS.MEMBERS]: members,
-    [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations,
+    householdId,
+    photo,
+    name,
+    members,
+    invitations,
   } = household
 
   // This state holds information about sending state of leave/delete buttons in household header
@@ -49,139 +46,141 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
   } = useFormState([household, connections])
 
   const handleSubmit = useCallback(() =>
-    onSubmit({ ...inputs, [HOUSEHOLD_KEYS.ID]: householdId }, setFormState),
+    onSubmit({ ...inputs, householdId }, setFormState),
   [inputs, setFormState])
 
   const {
-    [HOUSEHOLD_KEYS.INVITED_CONNECTIONS]: invitedConnections,
-    [HOUSEHOLD_KEYS.REMOVED_INVITATIONS]: removedInvitations,
-    [HOUSEHOLD_KEYS.REMOVED_MEMBERS]: removedMembers,
-    [HOUSEHOLD_KEYS.CHANGED_ROLES]: changedRoles,
+    newInvitations,
+    removedInvitations,
+    removedMembers,
+    changedRoles,
   } = inputs
   const updateInput = useMemo(() => useUpdateHandler(setFormState), [setFormState])
 
   const updateArrayValue = useCallback((key, value, add = true) => {
     const newValue = (
       inputs[key]?.filter(input => typeof input === 'object'
-        ? input?.id !== value?.id
+        ? input?.userId !== value?.userId
         : input !== value)
     ) ?? []
     if (add) {
       newValue.push(value)
     }
     updateInput(key, true, newValue, null, [])
-  }, [invitedConnections, removedInvitations, removedMembers, changedRoles, updateInput])
+  }, [newInvitations, removedInvitations, removedMembers, changedRoles, updateInput])
 
   const userState = useSelector(({ app }) => app.user)
   const currentUser = useMemo(() => {
-    const member = members.find(member => member[MEMBER_KEYS.ID] === userState[PROFILE.ID])
+    const { id, photo, nickname } = userState
+    const member = members.find(member => member.userId === id)
     return {
-      id: userState[PROFILE.ID],
-      photo: member[MEMBER_KEYS.PHOTO] ?? userState[PROFILE.PHOTO],
-      name: member[MEMBER_KEYS.NAME] ?? userState[PROFILE.NAME],
-      role: member[MEMBER_KEYS.ROLE],
+      id,
+      photo: member.photo ?? photo,
+      nickname: member.nickname ?? nickname,
+      role: member.role,
     }
   }, [members, userState])
 
-  const invitableConnections = useMemo(() => connections.filter(({ [CONNECTION_KEYS.ID]: id }) =>
-    !members.find(member => member[MEMBER_KEYS.ID] === id)
-    && !invitations.find(invitation => invitation[INVITATION_KEYS.TO_ID] === id)
-    && !invitedConnections?.find(user => user.id === id)
-  ), [connections, members, invitations, invitedConnections])
+  const invitableConnections = useMemo(() => connections.filter(({ userId }) =>
+    !members.find(member => member.userId === userId)
+    && !invitations.find(invitation => invitation.toId === userId)
+    && !newInvitations?.find(user => user.userId === userId)
+  ), [connections, members, invitations, newInvitations])
 
   const memberTableProps = useMemberListProps(
-    members.map(member => ({
-      memberId: member[MEMBER_KEYS.ID],
-      memberRole: member[MEMBER_KEYS.ROLE],
-      changedRole: changedRoles?.find(obj => obj.id === member[MEMBER_KEYS.ID])?.role,
-      memberPhoto: member[MEMBER_KEYS.PHOTO],
-      memberDateJoined: member[MEMBER_KEYS.DATE_JOINED],
-      memberName: member[MEMBER_KEYS.NAME],
+    members.map(({ userId, role, photo, dateJoined, nickname }) => ({
+      memberId: userId,
+      memberRole: role,
+      changedRole: changedRoles?.find(obj => obj.userId === userId)?.role,
+      memberPhoto: photo,
+      memberDateJoined: dateJoined,
+      memberName: nickname,
     })),
     currentUser,
-    useCallback(toId => removedMembers?.includes(toId), [removedMembers]),
-    useCallback((toId, role) => {
-      const isChangedRole = role !== members.find(member => toId === member[MEMBER_KEYS.ID])?.[MEMBER_KEYS.ROLE]
+    useCallback(userId => removedMembers?.includes(userId), [removedMembers]),
+    useCallback((userId, role) => {
+      const isChangedRole = role !== members.find(member => userId === member.userId)?.role
       if (isChangedRole) {
-        updateArrayValue(HOUSEHOLD_KEYS.CHANGED_ROLES, { id: toId, role })
+        updateArrayValue('changedRoles', { userId, role })
       } else {
-        updateArrayValue(HOUSEHOLD_KEYS.CHANGED_ROLES, { id: toId, role }, false)
+        updateArrayValue('changedRoles', { userId, role }, false)
       }
     }, [members]),
-    toId => updateArrayValue(HOUSEHOLD_KEYS.REMOVED_MEMBERS, toId),
-    toId => updateArrayValue(HOUSEHOLD_KEYS.REMOVED_MEMBERS, toId, false)
+    userId => updateArrayValue('removedMembers', userId),
+    userId => updateArrayValue('removedMembers', userId, false)
   )
 
   const invitationTableProps = useMemo(() =>
     useInvitationListProps([
-      ...(invitedConnections
-        ? invitedConnections.map(({ id, message }) => {
-          const connectedUser = connections.find(user => user[CONNECTION_KEYS.ID] === id)
+      ...(newInvitations
+        ? newInvitations.map(({ userId, message }) => {
+          const connectedUser = connections.find(connection => connection.userId === userId)
           return {
             fromPhoto: currentUser.photo,
-            fromNickname: currentUser.name,
+            fromNickname: currentUser.nickname,
             fromId: currentUser.id,
-            toPhoto: connectedUser[CONNECTION_KEYS.PHOTO],
-            toNickname: connectedUser[CONNECTION_KEYS.NICKNAME],
-            toId: id,
+            toPhoto: connectedUser.photo,
+            toNickname: connectedUser.nickname,
+            toId: userId,
             message,
             dateCreated: '(PENDING)',
           }
         })
         : []
       ),
-      ...invitations.map(invitation => {
-        const invitor = members.find(member => member[MEMBER_KEYS.ID] === invitation[INVITATION_KEYS.FROM_ID])
-        const allowCancellation = removedInvitations?.includes(invitation[INVITATION_KEYS.TO_ID])
+      ...invitations.map(({ fromId, toId, toNickname, toPhoto, message, dateCreated }) => {
+        const invitor = members.find(member => member.userId === fromId)
+        const allowCancellation = removedInvitations?.includes(toId)
         const disableDeletion = allowCancellation || currentUser.role === HOUSEHOLD_ROLE_TYPE.MEMBER
+
         return invitor && {
-          fromPhoto: invitor[MEMBER_KEYS.PHOTO],
-          fromNickname: invitor[MEMBER_KEYS.NAME],
-          fromId: invitation[INVITATION_KEYS.FROM_ID],
-          toPhoto: invitation[INVITATION_KEYS.TO_PHOTO],
-          toNickname: invitation[INVITATION_KEYS.TO_NICKNAME],
-          toId: invitation[INVITATION_KEYS.TO_ID],
-          message: invitation[INVITATION_KEYS.MESSAGE],
-          dateCreated: formatDate(invitation[INVITATION_KEYS.DATE_CREATED]),
+          fromPhoto: invitor.photo,
+          fromNickname: invitor.nickname,
+          fromId,
+          toPhoto,
+          toNickname,
+          toId,
+          message,
+          dateCreated: formatDate(dateCreated),
           disableDeletion,
           allowCancellation,
         }
       }).filter(Boolean),
     ],
-    toId => {
-      const isExistingInvitation = invitations.find(invitation => invitation[INVITATION_KEYS.TO_ID] === toId)
+    userId => {
+      const isExistingInvitation = invitations.find(invitation => invitation.toId === userId)
       if (isExistingInvitation) {
-        updateArrayValue(HOUSEHOLD_KEYS.REMOVED_INVITATIONS, toId)
+        updateArrayValue('removedInvitations', userId)
       } else {
-        updateArrayValue(HOUSEHOLD_KEYS.INVITED_CONNECTIONS, { id: toId }, false)
+        updateArrayValue('newInvitations', { userId }, false)
       }
     },
-    toId => updateArrayValue(HOUSEHOLD_KEYS.REMOVED_INVITATIONS, toId, false)
+    userId => updateArrayValue('removedInvitations', userId, false)
     ),
-  [invitedConnections, removedInvitations, invitations, members, currentUser])
+  [newInvitations, removedInvitations, invitations, members, currentUser])
 
   const dispatch = useDispatch()
   const handleLeaveHousehold = useCallback(() => {
     setSendingField({ [HOUSEHOLD.LEAVE]: HOUSEHOLD.LEAVING })
-    dispatch(HouseholdActions.leaveHousehold({ householdId }))
+    dispatch(HouseholdActions.leaveHousehold(householdId))
     setTimer(setTimeout(() => setSendingField && setSendingField(null), SUBMIT_TIMEOUT))
   }, [householdId, dispatch])
 
   const handleDeleteHousehold = useCallback(() => {
     setSendingField({ [HOUSEHOLD.DELETE]: HOUSEHOLD.DELETING })
-    dispatch(HouseholdActions.deleteHousehold({ householdId }))
+    dispatch(HouseholdActions.deleteHousehold(householdId))
     setTimer(setTimeout(() => setSendingField && setSendingField(null), SUBMIT_TIMEOUT))
   }, [householdId, dispatch])
 
   const canDeleteHousehold = useMemo(() => {
     const admins = members
-      .filter(member => member[MEMBER_KEYS.ROLE] === HOUSEHOLD_ROLE_TYPE.ADMIN)
-      .map(admin => admin[MEMBER_KEYS.ID])
+      .filter(member => member.role === HOUSEHOLD_ROLE_TYPE.ADMIN)
+      .map(member => member.userId)
     return admins.length > 1 || admins.indexOf(currentUser.id) === -1
   }, [members, currentUser])
 
   const memberAdmins = useMemo(() =>
-    members.filter(member => member[MEMBER_KEYS.ROLE] === HOUSEHOLD_ROLE_TYPE.ADMIN),
+    members.filter(member => member.role === HOUSEHOLD_ROLE_TYPE.ADMIN),
   [members])
 
   return (
@@ -223,7 +222,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
           </SectionHeadline>
           <HouseholdInvitationForm
             connections={invitableConnections}
-            onInvite={(id, message) => updateArrayValue(HOUSEHOLD_KEYS.INVITED_CONNECTIONS, { id, message })}
+            onInvite={(userId, message) => updateArrayValue('newInvitations', { userId, message })}
           />
         </>
       )}
@@ -246,26 +245,26 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
 
 HouseholdModificationForm.defaultProps = {
   household: {
-    [HOUSEHOLD_KEYS.PHOTO]: '',
-    [HOUSEHOLD_KEYS.NAME]: '',
-    [HOUSEHOLD_GROUP_KEYS.MEMBERS]: [],
-    [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: [],
+    photo: '',
+    name: '',
+    members: [],
+    invitations: [],
   },
   connections: [],
 }
 
 HouseholdModificationForm.propTypes = {
   household: PropTypes.shape({
-    [HOUSEHOLD_KEYS.ID]: PropTypes.number,
-    [HOUSEHOLD_KEYS.PHOTO]: PropTypes.string,
-    [HOUSEHOLD_KEYS.NAME]: PropTypes.string,
-    [HOUSEHOLD_GROUP_KEYS.MEMBERS]: PropTypes.array,
-    [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: PropTypes.array,
+    householdId: PropTypes.number,
+    photo: PropTypes.string,
+    name: PropTypes.string,
+    members: PropTypes.array,
+    invitations: PropTypes.array,
   }),
   connections: PropTypes.arrayOf(PropTypes.shape({
-    [CONNECTION_KEYS.ID]: PropTypes.number.isRequired,
-    [CONNECTION_KEYS.NICKNAME]: PropTypes.string.isRequired,
-    [CONNECTION_KEYS.PHOTO]: PropTypes.string,
+    userId: PropTypes.number.isRequired,
+    nickname: PropTypes.string.isRequired,
+    photo: PropTypes.string,
   })),
   onSubmit: PropTypes.func.isRequired,
 }

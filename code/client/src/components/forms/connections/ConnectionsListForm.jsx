@@ -3,25 +3,24 @@ import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { CalendarToday, SortByAlpha } from '@material-ui/icons'
 
-import { SettingsActions } from 'clientSrc/actions'
+import { ConnectionActions } from 'clientSrc/actions'
 import { connectionBlock, connectionRemove } from 'clientSrc/effects/conectionEffects'
 import { FormBody, FormWrapper, SectionHeadline } from 'clientSrc/styles/blocks/settings'
 import { TableBigPhoto } from 'clientSrc/styles/blocks/table'
 import { getButtonForUser, getTimeString } from 'clientSrc/helpers/connections'
 import { FORM } from 'shared/constants/localeMessages'
-import { CONNECTION_KEYS } from 'shared/constants/mappingKeys'
 
 import { LocaleText, Table } from '../../common'
 
 const ConnectionsListForm = ({ data }) => {
   const dispatch = useDispatch()
 
-  const removeHandler = useCallback(targetId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionRemove, targetId })),
+  const removeHandler = useCallback(userId =>
+    dispatch(ConnectionActions.connectionAction({ effect: connectionRemove, userId })),
   [dispatch])
 
-  const blockHandler = useCallback(targetId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionBlock, targetId })),
+  const blockHandler = useCallback(userId =>
+    dispatch(ConnectionActions.connectionAction({ effect: connectionBlock, userId })),
   [dispatch])
 
   return (
@@ -36,28 +35,29 @@ const ConnectionsListForm = ({ data }) => {
         ? (
           <Table
             rows={data.map(({
-              [CONNECTION_KEYS.ID]: userId,
-              [CONNECTION_KEYS.PHOTO]: userPhoto,
+              userId,
+              photo,
+              dateCreated,
               ...user
             }) => ({
               ...user,
-              userPhoto: <TableBigPhoto src={userPhoto} />,
-              date: getTimeString(user[CONNECTION_KEYS.DATE_CREATED]),
+              photo: <TableBigPhoto src={photo} />,
+              dateCreated: getTimeString(dateCreated),
               removeBtn: getButtonForUser(FORM.REMOVE, userId, removeHandler),
               blockBtn: getButtonForUser(FORM.BLOCK, userId, blockHandler),
             }))}
             keys={[
-              { name: 'userPhoto' },
-              { name: CONNECTION_KEYS.NICKNAME, bold: true, growing: true },
-              { name: 'date', fading: true },
+              { name: 'photo' },
+              { name: 'nickname', bold: true, growing: true },
+              { name: 'dateCreated', fading: true },
               { name: 'removeBtn' },
               { name: 'blockBtn' },
             ]}
             sortConfig={[
-              { key: CONNECTION_KEYS.NICKNAME, icon: <SortByAlpha /> },
-              { key: CONNECTION_KEYS.DATE_CREATED, icon: <CalendarToday /> },
+              { key: 'nickname', icon: <SortByAlpha /> },
+              { key: 'dateCreated', icon: <CalendarToday /> },
             ]}
-            filterKey={CONNECTION_KEYS.NICKNAME}
+            filterKey="nickname"
             bigCells
             freeHeight
           />

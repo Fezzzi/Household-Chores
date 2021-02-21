@@ -1,4 +1,5 @@
-import banner from '~/static/resources/banners/test.jpg';
+// @ts-ignore
+import banner from '~/static/resources/banners/test.jpg'
 
 export default {
   headline: 'Podminky Pouziti',
@@ -7,4 +8,4 @@ export default {
   body: `
     <div>Podminky pouziti</div>
   `,
-};
+}

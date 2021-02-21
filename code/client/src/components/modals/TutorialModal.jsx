@@ -8,7 +8,6 @@ import {
 import { LocaleText, PrimaryButton } from 'clientSrc/components/common'
 import { COLORS } from 'clientSrc/constants'
 import { COMMON } from 'shared/constants/localeMessages'
-import { DIALOG_KEYS } from 'shared/constants/mappingKeys'
 
 const TutorialModal = () => {
   const TUTORIAL_PAGES = 3
@@ -16,7 +15,7 @@ const TutorialModal = () => {
 
   const dispatch = useDispatch()
   const closeModal = useCallback(() => {
-    dispatch(DialogActions.disableDialog(DIALOG_KEYS.TUTORIAL))
+    dispatch(DialogActions.disableDialog('tutorial'))
     dispatch(ModalActions.closeModal())
   }, [dispatch])
 

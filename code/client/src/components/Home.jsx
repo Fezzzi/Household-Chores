@@ -5,9 +5,9 @@ import { PropTypes } from 'prop-types'
 import { HomeActions } from 'clientSrc/actions'
 import { EmptyContentMessage, HomeWrapper } from 'clientSrc/styles/blocks/home'
 import { linkify } from 'clientSrc/helpers/textLinks'
-import { HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 import { HOME } from 'shared/constants/localeMessages'
 
+// eslint-disable-next-line import/no-useless-path-segments
 import { HouseholdSwitch, HouseholdMemberList, HouseholdBody } from './home/'
 import { LocaleText } from './common'
 
@@ -20,15 +20,18 @@ const Home = ({ history }) => {
   const { selectedHousehold, households } = useSelector(({ home }) => home)
   const currentHouseholdIndex = useMemo(() => {
     if (selectedHousehold == null) {
-      return households[0]?.[HOUSEHOLD_KEYS.ID]
+      return households[0]?.householdId ?? null
     }
 
-    return households.findIndex(household => household[HOUSEHOLD_KEYS.ID] === Number(selectedHousehold))
+    const householdIndex = households.findIndex(household => household.householdId === Number(selectedHousehold))
+    return householdIndex >= 0
+      ? householdIndex
+      : null
   }, [selectedHousehold, households])
 
   return (
     <HomeWrapper>
-      {currentHouseholdIndex !== -1
+      {currentHouseholdIndex !== null
         ? (
           <>
             <HouseholdSwitch
@@ -37,7 +40,7 @@ const Home = ({ history }) => {
               nextData={households[(currentHouseholdIndex + 1) % households.length]}
               prevData={households[(currentHouseholdIndex + households.length - 1) % households.length]}
             />
-            <HouseholdMemberList members={households[currentHouseholdIndex][HOUSEHOLD_GROUP_KEYS.MEMBERS]} />
+            <HouseholdMemberList members={households[currentHouseholdIndex].members} />
             <HouseholdBody householdData={households[currentHouseholdIndex]} />
           </>
         ) : (

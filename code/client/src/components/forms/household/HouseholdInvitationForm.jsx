@@ -12,15 +12,14 @@ import { TableBox, TableHeaderBox, TableHeaderCell, TableSingleRowBox, TableSort
 import { useTableLogic } from 'clientSrc/helpers/table'
 import { COMMON } from 'shared/constants/localeMessages'
 import { INVITATION_MESSAGE_LENGTH } from 'shared/constants'
-import { CONNECTION_KEYS } from 'shared/constants/mappingKeys'
 
 import { MiniTextInput } from '../../common'
 
 const HouseholdInvitationForm = ({ connections, onInvite }) => {
   const { processedRows, setQuery, sorters } = useTableLogic(
     connections,
-    [{ key: CONNECTION_KEYS.NICKNAME, icon: <SortByAlpha /> }],
-    CONNECTION_KEYS.NICKNAME
+    [{ key: 'nickname', icon: <SortByAlpha /> }],
+    'nickname'
   )
 
   const textInputRef = useRef(null)
@@ -48,12 +47,12 @@ const HouseholdInvitationForm = ({ connections, onInvite }) => {
   }, [nodesRef.current, processedRows])
 
   const dispatch = useDispatch()
-  const handleInvitationClick = id => dispatch(ModalActions.openModal({
+  const handleInvitationClick = userId => dispatch(ModalActions.openModal({
     type: MODAL_TYPE.APPEND_MESSAGE,
     data: {
       maxLength: INVITATION_MESSAGE_LENGTH,
       onSubmit: message => {
-        onInvite(id, message)
+        onInvite(userId, message)
         setHoveredNode(null)
       },
     },
@@ -77,16 +76,12 @@ const HouseholdInvitationForm = ({ connections, onInvite }) => {
       </TableHeaderBox>
       <TableSingleRowBox height={connections.length ? '130px' : '0px'}>
         <InvitationNodesWrapper>
-          {processedRows.map(({
-            [CONNECTION_KEYS.ID]: id,
-            [CONNECTION_KEYS.NICKNAME]: nickname,
-            [CONNECTION_KEYS.PHOTO]: photo,
-          }, index) => (
+          {processedRows.map(({ userId, nickname, photo }, index) => (
             <InvitationFormNode
-              key={`connection-${id}`}
+              key={`connection-${userId}`}
               onMouseEnter={() => setHoveredNode(index)}
               onMouseLeave={() => setHoveredNode(null)}
-              onClick={() => handleInvitationClick(id)}
+              onClick={() => handleInvitationClick(userId)}
             >
               {hoveredNode === index && (<InvitationFormButton><Add /></InvitationFormButton>)}
               <InvitationFormNodePhoto src={photo} />
@@ -101,9 +96,9 @@ const HouseholdInvitationForm = ({ connections, onInvite }) => {
 
 HouseholdInvitationForm.propTypes = {
   connections: PropTypes.arrayOf(PropTypes.shape({
-    [CONNECTION_KEYS.ID]: PropTypes.number.isRequired,
-    [CONNECTION_KEYS.NICKNAME]: PropTypes.string.isRequired,
-    [CONNECTION_KEYS.PHOTO]: PropTypes.string,
+    userId: PropTypes.number.isRequired,
+    nickname: PropTypes.string.isRequired,
+    photo: PropTypes.string,
   })).isRequired,
   onInvite: PropTypes.func.isRequired,
 }

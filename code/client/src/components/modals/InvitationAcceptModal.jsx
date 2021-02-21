@@ -14,7 +14,7 @@ import { COMMON, FORM } from 'shared/constants/localeMessages'
 
 import { PrimaryButton, LocaleText, EditablePhotoField, EditableTextField } from '../common'
 
-const InvitationAcceptModal = ({ data: { userName, userPhoto, onSubmit } }) => {
+const InvitationAcceptModal = ({ data: { userNickname, userPhoto, onSubmit } }) => {
   const {
     isFormValid,
     inputs,
@@ -52,11 +52,11 @@ const InvitationAcceptModal = ({ data: { userName, userPhoto, onSubmit } }) => {
             <EditableTextField
               name="name"
               edited={name}
-              placeholder={userName}
+              placeholder={userNickname}
               error={errors.name}
               setFormState={setFormState}
             >
-              {name ?? userName}
+              {name ?? userNickname}
             </EditableTextField>
           </UserName>
         </InvitationAcceptModalFields>
@@ -73,7 +73,7 @@ const InvitationAcceptModal = ({ data: { userName, userPhoto, onSubmit } }) => {
 
 InvitationAcceptModal.propTypes = {
   data: PropTypes.shape({
-    userName: PropTypes.string.isRequired,
+    userNickname: PropTypes.string.isRequired,
     userPhoto: PropTypes.string.isRequired,
     onSubmit: PropTypes.func.isRequired,
   }).isRequired,

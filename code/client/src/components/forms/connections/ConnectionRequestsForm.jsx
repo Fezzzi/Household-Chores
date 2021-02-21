@@ -3,14 +3,13 @@ import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { CalendarToday, Message, SortByAlpha, Group } from '@material-ui/icons'
 
-import { SettingsActions } from 'clientSrc/actions'
+import { ConnectionActions } from 'clientSrc/actions'
 import { connectionApprove, connectionBlock, connectionIgnore } from 'clientSrc/effects/conectionEffects'
 import { AppendMessageAnchor, AppendMessageIcon } from 'clientSrc/styles/blocks/users'
 import { FormBody, FormWrapper, SectionHeadline } from 'clientSrc/styles/blocks/settings'
 import { TableBigPhoto } from 'clientSrc/styles/blocks/table'
 import { getTimeString, getButtonForUser } from 'clientSrc/helpers/connections'
 import { FORM } from 'shared/constants/localeMessages'
-import { CONNECTION_KEYS } from 'shared/constants/mappingKeys'
 import { PORTAL_TYPE } from 'clientSrc/constants'
 
 import { LocaleText, Table } from '../../common'
@@ -19,16 +18,16 @@ import { MessageTooltip } from '../../portals'
 const ConnectionRequestsForm = ({ data }) => {
   const dispatch = useDispatch()
 
-  const blockHandler = useCallback(targetId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionBlock, targetId })),
+  const blockHandler = useCallback(userId =>
+    dispatch(ConnectionActions.connectionAction({ effect: connectionBlock, userId })),
   [dispatch])
 
-  const approveHandler = useCallback(targetId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionApprove, targetId })),
+  const approveHandler = useCallback(userId =>
+    dispatch(ConnectionActions.connectionAction({ effect: connectionApprove, userId })),
   [dispatch])
 
-  const ignoreHandler = useCallback(targetId =>
-    dispatch(SettingsActions.connectionAction({ effect: connectionIgnore, targetId })),
+  const ignoreHandler = useCallback(userId =>
+    dispatch(ConnectionActions.connectionAction({ effect: connectionIgnore, userId })),
   [dispatch])
 
   return (
@@ -43,20 +42,19 @@ const ConnectionRequestsForm = ({ data }) => {
         ? (
           <Table
             rows={data.map(({
-              [CONNECTION_KEYS.ID]: userId,
-              [CONNECTION_KEYS.PHOTO]: userPhoto,
-              [CONNECTION_KEYS.MESSAGE]: userMessage,
-              [CONNECTION_KEYS.MUTUAL_CONNECTIONS]: userMutualConnections,
-              ...user
+              userId,
+              photo,
+              message,
+              mutualConnections,
+              dateCreated,
             }) => ({
-              ...user,
-              userPhoto: <TableBigPhoto src={userPhoto} />,
-              userMutualConnections: <>({userMutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
-              userMessage: userMessage && (
+              photo: <TableBigPhoto src={photo} />,
+              mutualConnections: <>({mutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
+              message: message && (
                 <AppendMessageAnchor>
                   <MessageTooltip
                     icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
-                    text={userMessage}
+                    text={message}
                     customOffsetY={-5}
                     customOffsetX={-10}
                     scrollRoot="settingsWrapper"
@@ -64,28 +62,28 @@ const ConnectionRequestsForm = ({ data }) => {
                   />
                 </AppendMessageAnchor>
               ),
-              date: getTimeString(user[CONNECTION_KEYS.DATE_CREATED]),
+              dateCreated: getTimeString(dateCreated),
               approveBtn: getButtonForUser(FORM.APPROVE, userId, approveHandler),
               ignoreBtn: getButtonForUser(FORM.IGNORE, userId, ignoreHandler),
               blockBtn: getButtonForUser(FORM.BLOCK, userId, blockHandler),
             }))}
             keys={[
-              { name: 'userPhoto' },
-              { name: CONNECTION_KEYS.NICKNAME, bold: true },
-              { name: 'userMutualConnections', fading: true, growing: true },
-              { name: 'userMessage' },
-              { name: 'date', fading: true },
+              { name: 'photo' },
+              { name: 'nickname', bold: true },
+              { name: 'mutualConnections', fading: true, growing: true },
+              { name: 'message' },
+              { name: 'dateCreated', fading: true },
               { name: 'approveBtn' },
               { name: 'ignoreBtn' },
               { name: 'blockBtn' },
             ]}
             sortConfig={[
-              { key: CONNECTION_KEYS.NICKNAME, icon: <SortByAlpha /> },
-              { key: CONNECTION_KEYS.DATE_CREATED, icon: <CalendarToday /> },
-              { key: CONNECTION_KEYS.MUTUAL_CONNECTIONS, icon: <Group /> },
+              { key: 'nickname', icon: <SortByAlpha /> },
+              { key: 'dateCreated', icon: <CalendarToday /> },
+              { key: 'mutualConnections', icon: <Group /> },
             ]}
             defaultSorter={-2}
-            filterKey={CONNECTION_KEYS.NICKNAME}
+            filterKey="nickname"
             bigCells
             freeHeight
           />

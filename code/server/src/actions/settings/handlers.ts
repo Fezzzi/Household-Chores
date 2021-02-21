@@ -1,14 +1,14 @@
+import { HOUSEHOLD_DIR, PROFILE_DIR, uploadFiles } from 'serverSrc/helpers/files'
 import {
-  getTabList, validateNotificationData, validateProfileData, validateEditHouseholdData, validateDialogsData,
+  getTabList, validateProfileData, validateEditHouseholdData, tryRemapBoolData,
 } from 'serverSrc/helpers/settings'
-import { HOUSEHOLD_DIR, PROFILE_DIR, uploadFiles } from 'serverSrc/helpers/files.'
 import {
   findProfileData, updateUserData, findApprovedConnections, findConnections, findUserHouseholds,
   findUserInvitations, findNotificationSettings, updateNotificationSettings, editHousehold, updateDialogSettings,
 } from 'serverSrc/database/models'
 import { SETTING_CATEGORIES, PROFILE_TABS, HOUSEHOLD_TABS, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { HOUSEHOLD_KEYS, PROFILE } from 'shared/constants/mappingKeys'
+import { tDialogsCols, tNotifySettingsCols } from 'serverSrc/database/models/tables'
 
 const getTabData = async (category: string, tab: string, req: any) => {
   switch (category) {
@@ -35,9 +35,10 @@ const getTabData = async (category: string, tab: string, req: any) => {
 export const handleSettingsDataFetch = async (category: string, tab: string, req: any, res: any): Promise<void> => {
   const data = await getTabData(category, tab, req)
   if (!data) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] })
     return
   }
+
   const { tabs, messages: tabMessages, types: tabTypes } = getTabList(data, category)
   res.status(200).send({
     tabs,
@@ -49,7 +50,7 @@ export const handleSettingsDataFetch = async (category: string, tab: string, req
 
 const handleUpdate = (res: any, updated: boolean): boolean => {
   if (!updated) {
-    res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
     return true
   }
   return false
@@ -66,31 +67,35 @@ export const handleSettingsDataUpdate = async (
           if (!valid) {
             return true
           }
-          if (!inputs[PROFILE.PHOTO]) {
+          if (!inputs.photo) {
             return handleUpdate(res, await updateUserData(inputs, req.session.user))
           }
-          const [photo] = uploadFiles([inputs[PROFILE.PHOTO] as any], PROFILE_DIR, req.session.fsKey)
+          const [photo] = uploadFiles([inputs.photo as any], PROFILE_DIR, req.session.fsKey)
           if (photo === null) {
-            res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
+            res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
             return true
           }
-          return handleUpdate(res, await updateUserData({ ...inputs, [PROFILE.PHOTO]: photo }, req.session.user))
+          return handleUpdate(res, await updateUserData({ ...inputs, photo }, req.session.user))
         }
         case PROFILE_TABS.NOTIFICATIONS: {
-          const valid = validateNotificationData(inputs, req, res)
-          if (!valid) {
-            return true
-          }
-          return handleUpdate(res, await updateNotificationSettings(inputs, req.session.user))
-        }
-        case PROFILE_TABS.DIALOGS: {
-          const validData = validateDialogsData(inputs, req, res)
+          const allowedKeys = Object.values(tNotifySettingsCols).filter(name => name !== tNotifySettingsCols.id_user)
+          const valueMapper = (val: string | number) => val ? 1 : 0
+          const validData = tryRemapBoolData(inputs, allowedKeys, valueMapper, req, res)
           if (!validData) {
             return true
           }
-          const updated = handleUpdate(res, await updateDialogSettings(req.session.user, validData))
+          return handleUpdate(res, await updateNotificationSettings(validData, req.session.user))
+        }
+        case PROFILE_TABS.DIALOGS: {
+          const allowedKeys = Object.values(tDialogsCols).filter(name => name !== tDialogsCols.id_user)
+          const valueMapper = (val: string | number) => val ? 0 : 1
+          const validData = tryRemapBoolData(inputs, allowedKeys, valueMapper, req, res)
+          if (!validData) {
+            return true
+          }
+          const updated = handleUpdate(res, await updateDialogSettings(validData, req.session.user))
           if (!updated) {
-            res.status(200).send({})
+            res.status(204).send()
           }
           return true
         }
@@ -104,31 +109,31 @@ export const handleSettingsDataUpdate = async (
           return true
         }
 
-        const photo = inputs[HOUSEHOLD_KEYS.PHOTO]
-          ? uploadFiles([inputs[HOUSEHOLD_KEYS.PHOTO] as any], HOUSEHOLD_DIR, req.session!.fsKey)
+        const photo = inputs.photo
+          ? uploadFiles([inputs.photo as any], HOUSEHOLD_DIR, req.session!.fsKey)
           : undefined
 
-        const userPhoto = inputs[HOUSEHOLD_KEYS.USER_PHOTO]
-          ? uploadFiles([inputs[HOUSEHOLD_KEYS.USER_PHOTO] as any], HOUSEHOLD_DIR, req.session!.fsKey)
+        const userPhoto = inputs.userPhoto
+          ? uploadFiles([inputs.userPhoto as any], HOUSEHOLD_DIR, req.session!.fsKey)
           : undefined
 
         if (photo === null || userPhoto === null) {
-          res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
+          res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
           return true
         }
 
         return handleUpdate(res, !!await editHousehold(
-          inputs[HOUSEHOLD_KEYS.ID] as number,
+          inputs.householdId as number,
           {
             ...inputs,
-            [HOUSEHOLD_KEYS.PHOTO]: photo,
-            [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
+            photo,
+            userPhoto,
           },
           userId
         ))
       }
       break
   }
-  res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
+  res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
   return true
 }

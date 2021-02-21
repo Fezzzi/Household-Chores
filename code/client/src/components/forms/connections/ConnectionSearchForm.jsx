@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import { Message } from '@material-ui/icons'
 
-import { SettingsActions, ModalActions } from 'clientSrc/actions'
+import { ConnectionActions, ModalActions } from 'clientSrc/actions'
 import { COLORS, MODAL_TYPE, PORTAL_TYPE } from 'clientSrc/constants'
 import {
   SearchFormMessageAnchor, AppendMessageIcon, UserButtonsBox, UserList, UserMutualFriends,
@@ -21,11 +21,11 @@ import SearchBar from '../SearchBar'
 const ConnectionSearchForm = ({ data }) => {
   const dispatch = useDispatch()
   const searchQuery = useCallback(query =>
-    dispatch(SettingsActions.searchConnectionAction(query)),
+    dispatch(ConnectionActions.searchConnectionAction(query)),
   [dispatch])
 
-  const connectHandler = useCallback((targetId, message) =>
-    dispatch(SettingsActions.connectionRequest({ targetId, message })),
+  const connectHandler = useCallback((userId, message) =>
+    dispatch(ConnectionActions.connectionRequest({ userId, message })),
   [dispatch])
 
   const handleClick = userId => () => dispatch(ModalActions.openModal({
@@ -55,23 +55,16 @@ const ConnectionSearchForm = ({ data }) => {
       {data?.length
         ? (
           <UserList>
-            {data.map(({
-              id: userId,
-              nickname: userName,
-              photo: userPhoto,
-              mutualConnections: userMutualConnections,
-              state: userState,
-              message: userMessage,
-            }) => (
+            {data.map(({ userId, nickname, photo, mutualConnections, state, message }) => (
               <WrapperBox key={`userResult-${userId}`}>
                 <UserNode>
                   <UserPhotoBox>
-                    <UserPhoto src={userPhoto} />
-                    {userMessage && (
+                    <UserPhoto src={photo} />
+                    {message && (
                       <SearchFormMessageAnchor>
                         <MessageTooltip
                           icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
-                          text={userMessage}
+                          text={message}
                           customOffsetY={3}
                           customOffsetX={-10}
                           centered
@@ -81,21 +74,21 @@ const ConnectionSearchForm = ({ data }) => {
                       </SearchFormMessageAnchor>
                     )}
                   </UserPhotoBox>
-                  <UserName>{userName}</UserName>
-                  {userMutualConnections > 0 && (
+                  <UserName>{nickname}</UserName>
+                  {mutualConnections > 0 && (
                     <UserMutualFriends>
-                      ({userMutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)
+                      ({mutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)
                     </UserMutualFriends>
                   )}
                   <UserButtonsBox>
                     <PrimaryButton
-                      disabled={userState === CONNECTION_STATE_TYPE.WAITING}
+                      disabled={state === CONNECTION_STATE_TYPE.WAITING}
                       onClick={handleClick(userId)}
                       margin="0 0 6px"
                       background={COLORS.BLUE_PRIMARY}
                       backgroundHover={COLORS.BLUE_SECONDARY}
                     >
-                      <LocaleText message={userState === CONNECTION_STATE_TYPE.WAITING && FORM.CONNECTION_SENT || FORM.CONNECT} />
+                      <LocaleText message={state === CONNECTION_STATE_TYPE.WAITING && FORM.CONNECTION_SENT || FORM.CONNECT} />
                     </PrimaryButton>
                   </UserButtonsBox>
                 </UserNode>

@@ -44,3 +44,7 @@ export const isLocalImage = (image: string, userFsKey: string) => image.startsWi
   && image.startsWith(`/${UPLOAD_DIR}/${userFsKey}/`)
   && image.length < 140
 
+export const isExternalImage = (image: string) => image.startsWith
+  && image.match(/[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/)
+  && image.length < 140
+

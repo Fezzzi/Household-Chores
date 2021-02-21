@@ -10,7 +10,6 @@ import { INPUT_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
 import { COLORS, SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { SettingsActions } from 'clientSrc/actions'
 import { COMMON, FORM, HINT } from 'shared/constants/localeMessages'
-import { PROFILE } from 'shared/constants/mappingKeys'
 
 import { SimpleFloatingElement } from '../../portals'
 import ProfileFormHeader from './ProfileFormHeader'
@@ -32,10 +31,10 @@ const ProfileForm = ({ data, onSubmit }) => {
   }, [data])
 
   const {
-    [PROFILE.PHOTO]: photo,
-    [PROFILE.NAME]: name,
-    [PROFILE.EMAIL]: email,
-    [PROFILE.CONNECTION_VISIBILITY]: visibility,
+    photo,
+    nickname,
+    email,
+    visibility,
   } = data
 
   const [timer, setTimer] = useState(null)
@@ -71,7 +70,7 @@ const ProfileForm = ({ data, onSubmit }) => {
       <ProfileFormHeader
         key={`profileFormHeader-${headerKey}`}
         photo={photo}
-        name={name}
+        nickname={nickname}
         email={email}
         inputs={inputs}
         errors={errors}
@@ -80,7 +79,7 @@ const ProfileForm = ({ data, onSubmit }) => {
 
       <FormBody>
         <Input
-          name={PROFILE.CONNECTION_VISIBILITY}
+          name="visibility"
           type={INPUT_TYPE.SWITCH}
           label={FORM.USER_VISIBILITY}
           hint={HINT.VISIBILITY}
@@ -107,10 +106,10 @@ const ProfileForm = ({ data, onSubmit }) => {
 
 ProfileForm.propTypes = {
   data: PropTypes.shape({
-    [PROFILE.PHOTO]: PropTypes.string,
-    [PROFILE.NAME]: PropTypes.string,
-    [PROFILE.EMAIL]: PropTypes.string,
-    [PROFILE.CONNECTION_VISIBILITY]: PropTypes.string,
+    photo: PropTypes.string,
+    nickname: PropTypes.string,
+    email: PropTypes.string,
+    visibility: PropTypes.string,
   }).isRequired,
   onSubmit: PropTypes.func.isRequired,
 }

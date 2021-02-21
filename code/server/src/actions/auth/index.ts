@@ -5,87 +5,158 @@ import { ERROR, SUCCESS } from 'shared/constants/localeMessages'
 import { MAILS } from 'serverSrc/constants'
 import { sendEmails } from 'serverSrc/helpers/mailer'
 import { logInUser, SignUpUser, findUser } from 'serverSrc/database/models'
-import { handleAction, setSession } from 'serverSrc/helpers/auth'
+import { setSession } from 'serverSrc/helpers/auth'
 
 import { validateLoginData, validateResetData, validateSignupData } from './validation'
 import { getProvidersUserId, handleProvidersLogIn, logInWithIds } from './providers'
 
-const resetPass = async ({ email }: any) => {
+const resetPass = async ({ email }: any, req: any, res: any) => {
   const emailSent = await sendEmails(MAILS.RESET_PASSWORD, {
     resetLink: 'resetLink',
   }, [email])
 
-  return {
-    [NOTIFICATION_TYPE.ERRORS]: emailSent ? [] : [ERROR.RESET_PASS_ERROR],
-    [NOTIFICATION_TYPE.SUCCESSES]: emailSent ? [SUCCESS.RESET_LINK] : [],
+  if (emailSent) {
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.RESET_PASS_ERROR] })
+  } else {
+    res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.RESET_LINK] })
   }
+  return true
 }
 
-const logIn = async ({ email, password }: any, req: any, res: any) => {
-  const result = await logInUser(email, password)
+const logIn = async ({ email, password }: any, req: any, res: any): Promise<boolean> => {
+  const result = await logInUser(email, password, res)
   if (result === null) {
-    return {
-      [NOTIFICATION_TYPE.ERRORS]: [ERROR.INCORRECT_PASS],
-    }
+    return true
   }
 
   setSession(req, res, result.userId, result.fsKey)
-  return {}
+  res.status(204).send()
+  return true
 }
 
-const signUp = async (inputs: any, req: any, res: any) => {
+const signUp = async (inputs: any, req: any, res: any): Promise<boolean> => {
   const { email, nickname, password, photo, googleToken, facebook } = inputs
-  const { googleId, facebookId } = await getProvidersUserId(googleToken, facebook)
-  const result = await handleProvidersLogIn(req, res, googleId, facebookId, googleToken, facebook)
-  if (result !== false) {
-    return result
+
+  let googleId = null
+  let facebookId = null
+  if (googleToken || facebook) {
+    // We validate googleToken or facebook data and try resolve appropriate user ids for these providers
+    const providerIds = await getProvidersUserId(googleToken, facebook)
+    googleId = providerIds.googleId
+    facebookId = providerIds.facebookId
+
+    // We attempt to log in the user with retrieved ids or return error in case of invalid validation
+    const loggedIn = await handleProvidersLogIn(req, res, googleId, facebookId, googleToken, facebook)
+    if (loggedIn) {
+      return true
+    }
   }
 
+  // In case the user could not be logged in with google or facebook provider, we proceed to email/password
   const user = await findUser(email)
   if (user !== null) {
+    // In case user with such email exists but does not yet have assigned any provider id, we assign them and perform log in
     if (googleId || facebookId) {
       if (await logInWithIds(req, res, user.userId, googleId, facebookId, user.fsKey)) {
-        return {}
+        res.status(204).send()
       } else {
-        return {
-          [NOTIFICATION_TYPE.ERRORS]: [ERROR.SMTH_BROKE_LOGIN],
-        }
+        res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.SMTH_BROKE_LOGIN] })
       }
+      return true
     }
+    // In case there are no providers' data available but the user exists, we continue as with standrd log in attempt
     return logIn(inputs, req, res)
   }
 
+  // In case the user is truly signing up, create new account and possibly assign available provider ids
   const signUpResult = await SignUpUser(
-    email, nickname,
-    (password && password.value) || null,
-    photo || null,
-    googleId, facebookId,
+    email,
+    nickname,
+    password ?? null,
+    photo ?? null,
+    googleId,
+    facebookId,
   )
   if (!signUpResult?.insertId) {
-    return { [NOTIFICATION_TYPE.ERRORS]: [ERROR.SIGN_UP_ERROR] }
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.SIGN_UP_ERROR] })
+    return true
   }
   setSession(req, res, signUpResult.insertId, signUpResult.fsKey)
-  return { [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.ACCOUNT_CREATED] }
+  res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.ACCOUNT_CREATED] })
+  return true
 }
 
 export default () => {
   const router = express.Router()
-  router.post('/:action', (req, res) => {
+  router.post('/:action', async (req, res) => {
     const { params: { action }, body: { inputs } } = req
+
+    if (action === API.AUTH_SIGN_UP) {
+      const valid = validateSignupData(inputs)
+      if (!valid) {
+        res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+        return
+      }
+
+      const handled = await signUp(inputs, req, res)
+      if (!handled) {
+        res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+      }
+      return
+    }
+
+    res.status(404).send('Not Found')
+  })
+
+  router.put('/:action', async (req, res) => {
+    const { params: { action }, body: { inputs } } = req
+
     switch (action) {
-      case API.AUTH_LOG_IN:
-        return handleAction(inputs, validateLoginData, logIn, req, res)
-      case API.AUTH_SIGN_UP:
-        return handleAction(inputs, validateSignupData, signUp, req, res)
-      case API.AUTH_RESET:
-        return handleAction(inputs, validateResetData, resetPass, req, res)
-      case API.AUTH_DELETE:
-        // todo: Finish within navbar issue when logging off is implemented
-        return false
+      case API.AUTH_LOG_IN: {
+        const valid = validateLoginData(inputs)
+        if (!valid) {
+          res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+          return
+        }
+
+        const handled = await logIn(inputs, req, res)
+        if (handled) {
+          return
+        }
+        break
+      }
+      case API.AUTH_RESET: {
+        const valid = validateResetData(inputs)
+        if (!valid) {
+          res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+          return
+        }
+
+        const handled = await resetPass(inputs, req, res)
+        if (handled) {
+          return
+        }
+        break
+      }
       default:
         res.status(404).send('Not Found')
-        return false
+        return
     }
+
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+  })
+
+  router.delete('/:action', async (req, res) => {
+    const { params: { action } } = req
+
+    if (action === API.AUTH_DELETE) {
+      // todo: Finish within navbar issue when logging off is implemented
+
+      res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+      return
+    }
+
+    res.status(404).send('Not Found')
   })
 
   return router

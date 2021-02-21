@@ -1,0 +1,1696 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Household API",
+    "description": "Household App API documentation",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:{port}",
+      "description": "Local server",
+      "variables": {
+        "port": {
+          "default": "8080"
+        }
+      }
+    },
+    {
+      "url": "https://household-chores-beta.azurewebsites.net",
+      "description": "Beta server"
+    },
+    {
+      "url": "https://household-chores.azurewebsites.net",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/load/state": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "get": {
+        "summary": "Returns data identifying current user and environment",
+        "operationId": "loadState",
+        "tags": ["Load"],
+        "responses": {
+          "200": {
+            "description": "Data about current user and environment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/State"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/resources/{resource}": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "get": {
+        "summary": "Returns information for given resource",
+        "operationId": "resources",
+        "tags": ["Resources"],
+        "parameters": [
+          {
+            "name": "resource",
+            "in": "path",
+            "description": "Identifies resource to display",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Locale to display resource page in",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en_US",
+              "enum": [
+                "cs_CZ",
+                "en_US"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data of requested resource page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/auth/sign-up": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "post": {
+        "summary": "Signs up the user",
+        "operationId": "authSignup",
+        "tags": ["Auth"],
+        "requestBody": {
+          "description": "Sign up form input values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["inputs"],
+                "properties": {
+                  "inputs": {
+                    "$ref": "#/components/schemas/SignUpForm"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Notification about successful sign-up action",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Successes"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "In case of successful log-in action",
+            "headers": {
+              "Set-Header": {
+                "schema": {
+                  "type": "string",
+                  "example": "user_sid=s%3Ab7pTnC4Scuw_Vpiu_0fKhij0hZ9oOitu.4z9glr85D...; Path=/; Expires=Sun, 06 Feb 2022 16:16:03 GMT; HttpOnly"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/log-in": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "put": {
+        "summary": "Logs in the user",
+        "operationId": "authLogin",
+        "tags": ["Auth"],
+        "requestBody": {
+          "description": "Log in form input values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["inputs"],
+                "properties": {
+                  "inputs": {
+                    "$ref": "#/components/schemas/LogInForm"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "In case of successful action",
+            "headers": {
+              "Set-Header": {
+                "schema": {
+                  "type": "string",
+                  "example": "user_sid=s%3Ab7pTnC4Scuw_Vpiu_0fKhij0hZ9oOitu.4z9glr85D...; Path=/; Expires=Sun, 06 Feb 2022 16:16:03 GMT; HttpOnly"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/reset": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "put": {
+        "summary": "Resets user's password",
+        "operationId": "authReset",
+        "tags": ["Auth"],
+        "requestBody": {
+          "description": "Reset pass form input values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["inputs"],
+                "properties": {
+                  "inputs": {
+                    "$ref": "#/components/schemas/ResetPassForm"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Notification about successful result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Successes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/delete": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "delete": {
+        "summary": "Deletes user's account",
+        "operationId": "authDelete",
+        "tags": ["Auth"],
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Notification about successful result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Successes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/connections/find": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "get": {
+        "summary": "Searches for users with names/emails matching query provided",
+        "operationId": "connectionsFind",
+        "tags": ["Connections"],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "description": "Query string to search users with",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["query"],
+                "properties": {
+                  "query": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Found users matching given query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["found"],
+                  "properties": {
+                    "found": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/FoundUser"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/connections/request": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "post": {
+        "summary": "Sends connection request to the user",
+        "operationId": "connectionsRequest",
+        "tags": ["Connections"],
+        "security": [{"cookieAuth": []}],
+        "requestBody": {
+          "description": "Information about connection request",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["userId"],
+                "properties": {
+                  "userId": {
+                    "type": "number",
+                    "format": "uuid"
+                  },
+                  "message": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Notification about successful result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Successes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/connections/{action}": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "put": {
+        "summary": "Performs given connection action",
+        "operationId": "connectionsAction",
+        "tags": ["Connections"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [
+          {
+            "name": "action",
+            "in": "path",
+            "description": "Identifies the action to be performed",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["approve", "block"]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Information about the target user of the action",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["userId"],
+                "properties": {
+                  "userId": {
+                    "type": "number",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/foundConnections"
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Performs given connection action",
+        "operationId": "connectionsAction",
+        "tags": ["Connections"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [
+          {
+            "name": "action",
+            "in": "path",
+            "description": "Identifies the action to be performed",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["ignore", "remove", "unblock"]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Information about the target user of the action",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["userId"],
+                "properties": {
+                  "userId": {
+                    "type": "number",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/foundConnections"
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/households/load": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "get": {
+        "summary": "Loads information about user's households",
+        "operationId": "householdsLoad",
+        "tags": ["Households"],
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Information about user's households",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Household"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/households/create": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "post": {
+        "summary": "Creates new household",
+        "operationId": "householdsCreate",
+        "tags": ["Households"],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "description": "Create household form input values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["inputs", "invitations"],
+                "properties": {
+                  "inputs": {
+                    "$ref": "#/components/schemas/CreateHouseholdForm"
+                  },
+                  "invitations": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/NewInvitation"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Link to settings page of new created household",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["url"],
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "pattern": "^/settings/households?tab=household-[0-9]+",
+                      "format": "link"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/households/{action}": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "delete": {
+        "summary": "Deletes/Leaves given household",
+        "operationId": "householdsAction",
+        "tags": ["Households"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [
+          {
+            "name": "action",
+            "in": "path",
+            "description": "Identifies the action to be performed",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["delete", "leave"]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Information about the target household of the action",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["householdId"],
+                "properties": {
+                  "householdId": {
+                    "type": "number",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": { "description": "In case of successful action" },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/households/approve": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "put": {
+        "summary": "Approves household invitation",
+        "operationId": "householdsApprove",
+        "tags": ["Households"],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "description": "Information about the target household of the action",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["fromId", "householdId"],
+                "properties": {
+                  "fromId": {
+                    "type": "number",
+                    "format": "uuid"
+                  },
+                  "householdId": {
+                    "type": "number",
+                    "format": "uuid"
+                  },
+                  "userNickname": {
+                    "type": "string"
+                  },
+                  "userPhoto": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/PhotoObject"
+                      },
+                      {
+                        "type": "string",
+                        "format": "link"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Link to settings page of joined household",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "pattern": "^/settings/households?tab=household-[0-9]+",
+                      "format": "link"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/households/ignore": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "delete": {
+        "summary": "Ignores household invitation",
+        "operationId": "householdsIgnore",
+        "tags": ["Households"],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "description": "Information about the target household invitation",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["fromId", "householdId"],
+                "properties": {
+                  "fromId": {
+                    "type": "number",
+                    "format": "uuid"
+                  },
+                  "householdId": {
+                    "type": "number",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": { "description": "In case of successful action" },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/settings": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "get": {
+        "summary": "Fetches data for a settings page",
+        "operationId": "settingsLoad",
+        "tags": ["Settings"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Setting page's parent category",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/SettingsCategories"
+            }
+          },
+          {
+            "name": "tab",
+            "in": "query",
+            "description": "Setting page's parent tab",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/SettingsTabs"
+            }
+          }
+        ],
+        "responses": {
+          "204": { "description": "in case invalid category parameter was supplied" },
+          "200": {
+            "description": "Settings page data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about fetching error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Updated data for a settings page",
+        "operationId": "settingsUpdate",
+        "tags": ["Settings"],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "description": "Settings form input values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["category", "tab", "inputs"],
+                "properties": {
+                  "category": {
+                    "$ref": "#/components/schemas/SettingsCategories"
+                  },
+                  "tab": {
+                    "$ref": "#/components/schemas/SettingsTabs"
+                  },
+                  "inputs": {
+                    "anyOf": [
+                      { "$ref": "#/components/schemas/ProfileEditForm" },
+                      { "$ref": "#/components/schemas/NotificationsEditForm" },
+                      { "$ref": "#/components/schemas/DialogsEditForm" },
+                      { "$ref": "#/components/schemas/HouseholdEditForm" }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": { "description": "In case of successful edit action." },
+          "200": {
+            "description": "Settings page data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dialogs/disable": {
+      "parameters": [{ "$ref": "#/components/parameters/xhrHeader" }],
+      "put": {
+        "summary": "Disables appearing of specified dialog",
+        "operationId": "dialogDisable",
+        "tags": ["Settings"],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "description": "Log in form input values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["key"],
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": { "description":  "In case of successful action" },
+          "400": {
+            "description": "Notification about error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "user_sid"
+      }
+    },
+    "responses": {
+      "foundConnections": {
+        "description": "List of user's current connections",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Connections"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "xhrHeader": {
+        "in": "header",
+        "name": "X-Requested-With",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "default": "XMLHttpRequest"
+        }
+      }
+    },
+    "schemas": {
+      "State": {
+        "required": [
+          "debug",
+          "isUserLogged"
+        ],
+        "properties": {
+          "debug": {
+            "type": "boolean"
+          },
+          "isUserLogged": {
+            "type": "boolean"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "activityFeed": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Activity"
+            }
+          },
+          "dialogSettings": {
+            "$ref": "#/components/schemas/DialogSettings"
+          }
+        }
+      },
+      "User": {
+        "required": [
+          "nickname",
+          "email",
+          "photo",
+          "visibility"
+        ],
+        "properties": {
+          "nickname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "photo": {
+            "type": "string",
+            "format": "link"
+          },
+          "visibility": {
+            "type": "string",
+            "default": "FRIENDS_OF_FRIENDS",
+            "enum": [
+              "ALL",
+              "FRIENDS_OF_FRIENDS"
+            ]
+          }
+        }
+      },
+      "UserRole": {
+        "type": "string",
+        "enum": [
+          "ADMIN",
+          "MANAGER",
+          "MEMBER"
+        ]
+      },
+      "Activity": {
+        "required": [
+          "id",
+          "message",
+          "link",
+          "dateCreated"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "uuid"
+          },
+          "message": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string",
+            "format": "link"
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DialogSettings": {
+        "required": [
+          "tutorial",
+          "householdMemberDeleting"
+        ],
+        "properties": {
+          "tutorial": {
+            "type": "boolean"
+          },
+          "householdMemberDeleting": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Resource": {
+        "required": [
+          "headline",
+          "body"
+        ],
+        "properties": {
+          "headline": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string",
+            "format": "html"
+          },
+          "banner": {
+            "type": "string",
+            "format": "base64"
+          },
+          "icon": {
+            "type": "string",
+            "format": "base64"
+          }
+        }
+      },
+      "SignUpForm": {
+        "required": [
+          "email",
+          "nickname"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "format": "pass"
+          },
+          "photo": {
+            "type": "string",
+            "format": "link"
+          },
+          "googleToken": {
+            "type": "string"
+          },
+          "facebook": {
+            "type": "object",
+            "properties": {
+              "userId": {
+                "type": "string"
+              },
+              "signedRequest": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "LogInForm": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "pass"
+          }
+        }
+      },
+      "ResetPassForm": {
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      "CreateHouseholdForm": {
+        "required": ["name", "photo", "userNickname", "userPhoto"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "photo": {
+            "type": "string",
+            "format": "link"
+          },
+          "userNickname": {
+            "type": "string"
+          },
+          "userPhoto": {
+            "type": "string",
+            "format": "link"
+          }
+        }
+      },
+      "ProfileEditForm": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "photo": {
+            "type": "string",
+            "format": "link"
+          },
+          "oldPassword": {
+            "type": "string",
+            "format": "password"
+          },
+          "newPassword": {
+            "type": "string",
+            "format": "password"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": ["ALL", "FRIENDS_OF_FRIENDS"]
+          }
+        }
+      },
+      "NotificationsEditForm": {
+        "anyOf": [
+          { "$ref": "#/components/schemas/GeneralNotifications" },
+          { "$ref": "#/components/schemas/ConnectionNotifications" },
+          { "$ref": "#/components/schemas/HouseholdNotifications" }
+        ]
+      },
+      "DialogsEditForm": {
+        "type": "object",
+        "properties": {
+          "tutorial": {
+            "type": "boolean"
+          },
+          "householdMemberDeleting": {
+            "type": "boolean"
+          }
+        }
+      },
+      "HouseholdEditForm": {
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "uuid"
+          },
+          "userRole": {
+            "$ref": "#/components/schemas/UserRole"
+          },
+          "userNickname": {
+            "type": "string"
+          },
+          "userPhoto": {
+            "type": "string",
+            "format": "link"
+          },
+          "name": {
+            "type": "string"
+          },
+          "photo": {
+            "type": "string",
+            "format": "link"
+          },
+          "newInvitations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NewInvitation"
+            }
+          },
+          "changedRoles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["userId", "role"],
+              "properties": {
+                "userId": {
+                  "type": "number",
+                  "format": "uuid"
+                },
+                "role": {
+                  "$ref": "#/components/schemas/UserRole"
+                }
+              }
+            }
+          },
+          "removedMembers": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "uuid"
+            }
+          },
+          "removedInvitations": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "uuid"
+            }
+          }
+        }
+      },
+      "Errors": {
+        "required": [ "errors" ],
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Successes": {
+        "required": [ "successes" ],
+        "properties": {
+          "successes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Connections": {
+        "required": [
+          "approved",
+          "blocked",
+          "waiting"
+        ],
+        "properties": {
+          "approved": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Connection"
+            }
+          },
+          "blocked": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Connection"
+            }
+          },
+          "waiting": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Connection"
+            }
+          }
+        }
+      },
+      "Connection": {
+        "required": [
+          "userId",
+          "nickname",
+          "photo",
+          "mutualConnections",
+          "dateCreated"
+        ],
+        "properties": {
+          "userId": {
+            "type": "number",
+            "format": "uuid"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "photo": {
+            "type": "string",
+            "format": "link"
+          },
+          "message": {
+            "type": "string"
+          },
+          "mutualConnections": {
+            "type": "number"
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "FoundUser": {
+        "required": [
+          "id",
+          "nickname",
+          "photo",
+          "visibility",
+          "mutualConnections"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "uuid"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "photo": {
+            "type": "string",
+            "format": "link"
+          },
+          "message": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": ["WAITING"]
+          },
+          "visibility": {
+            "type": "string",
+            "enum": ["ALL", "FRIENDS_OF_FRIENDS"]
+          },
+          "mutualConnections": {
+            "type": "number"
+          }
+        }
+      },
+      "Household": {
+        "required": [
+          "id",
+          "name",
+          "photo",
+          "key",
+          "dateCreated",
+          "members"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "photo": {
+            "type": "string",
+            "format": "link"
+          },
+          "key": {
+            "type": "string"
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Member"
+            }
+          }
+        }
+      },
+      "Member": {
+        "required": [
+          "userId",
+          "role",
+          "nickname",
+          "photo"
+        ],
+        "properties": {
+          "userId": {
+            "type": "number",
+            "format": "uuid"
+          },
+          "role": {
+            "$ref": "#/components/schemas/UserRole"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "photo": {
+            "type": "string",
+            "format": "link"
+          },
+          "dateJoined": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "NewInvitation": {
+        "required": ["userId"],
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "UserInvitation": {
+        "required": ["householdId", "name", "photo", "fromId", "fromNickname", "fromPhoto", "dateCreated"],
+        "properties": {
+          "householdId": {
+            "type": "number",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "photo": {
+            "type": "string",
+            "format": "link"
+          },
+          "fromId": {
+            "type": "number",
+            "format": "uuid"
+          },
+          "fromNickname": {
+            "type": "string"
+          },
+          "fromPhoto": {
+            "type": "string",
+            "format": "link"
+          },
+          "message": {
+            "type": "string"
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "HouseholdInvitation": {
+        "required": ["fromId", "toId", "toNickname", "toPhoto", "dateCreated"],
+        "properties": {
+          "fromId": {
+            "type": "number",
+            "format": "uuid"
+          },
+          "toId": {
+            "type": "number",
+            "format": "uuid"
+          },
+          "toNickname": {
+            "type": "string"
+          },
+          "toPhoto": {
+            "type": "string",
+            "format": "link"
+          },
+          "message": {
+            "type": "string"
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PhotoObject": {
+        "required": [
+          "type",
+          "size",
+          "name",
+          "data"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "MIME"
+          },
+          "size": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string",
+            "format": "base64"
+          }
+        }
+      },
+      "SettingsCategories": {
+        "type": "string",
+        "enum": ["profile", "connections", "households"]
+      },
+      "SettingsTabs": {
+        "type": "string",
+        "enum": [
+          "dialogs", "general", "notifications",
+          "myConnections", "findConnection", "pending", "blocked",
+          "newHousehold", "invitations", "household"
+        ]
+      },
+      "SettingsData": {
+        "required": [
+          "tabs",
+          "data",
+          "tabMessages",
+          "tabTypes"
+        ],
+        "properties": {
+          "tabs": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                { "type": "string" },
+                { "$ref": "#/components/schemas/SettingsTabs" }
+              ]
+            }
+          },
+          "data": {
+            "oneOf": [
+              { "$ref": "#/components/schemas/ProfileData" },
+              { "$ref": "#/components/schemas/NotificationData" },
+              { "$ref": "#/components/schemas/HouseholdsData" },
+              { "$ref": "#/components/schemas/Connections" },
+              {}
+            ]
+          },
+          "tabMessages": {
+            "type": "object",
+            "properties": {
+              "household-[0-9]+": {
+                "type": "string"
+              }
+            }
+          },
+          "tabTypes": {
+            "type": "object",
+            "properties": {
+              "household-[0-9]+": {
+                "type": "string",
+                "enum": ["household"]
+              }
+            }
+          }
+        }
+      },
+      "ProfileData": {
+        "required": ["id", "nickname", "email", "photo", "visibility"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "uuid"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "photo": {
+            "type": "string",
+            "format": "link"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": ["ALL", "FRIENDS_OF_FRIENDS"]
+          }
+        }
+      },
+      "GeneralNotifications": {
+        "properties": {
+          "emailNotifications": { "type": "boolean" },
+          "browserNotifications": { "type": "boolean" },
+          "mobileNotifications": { "type": "boolean" }
+        }
+      },
+      "ConnectionNotifications": {
+        "properties": {
+          "connectionApproval": { "type": "boolean" },
+          "connectionRequest": { "type": "boolean" }
+        }
+      },
+      "HouseholdNotifications": {
+        "properties": {
+          "householdDeleting": { "type": "boolean" },
+          "householdExpelling": { "type": "boolean" },
+          "householdInvitation": { "type": "boolean" },
+          "householdJoining": { "type": "boolean" },
+          "householdLeaving": { "type": "boolean" }
+        }
+      },
+      "NotificationData": {
+        "required": ["general", "connections", "households"],
+        "properties": {
+          "general": {
+            "$ref": "#/components/schemas/GeneralNotifications"
+          },
+          "connections": {
+            "$ref": "#/components/schemas/ConnectionNotifications"
+          },
+          "households": {
+            "$ref": "#/components/schemas/HouseholdNotifications"
+          }
+        }
+      },
+      "HouseholdsData": {
+        "required": ["invitations", "households", "connections"],
+        "properties": {
+          "invitations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserInvitation"
+            }
+          },
+          "households": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                { "$ref": "#/components/schemas/Household" },
+                {
+                  "required": true,
+                  "properties": {
+                    "invitations": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/HouseholdInvitation"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "connections": {
+            "type": "object",
+            "required": ["id", "nickname", "photo", "dateCreated"],
+            "properties": {
+              "id": {
+                "type": "number",
+                "format": "uuid"
+              },
+              "nickname": {
+                "type": "string"
+              },
+              "photo": {
+                "type": "string",
+                "format": "link"
+              },
+              "dateCreated": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

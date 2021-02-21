@@ -3,6 +3,6 @@ export default {
   columns: {
     id_user: 'id_user',
     tutorial: 'tutorial',
-    household_user_deleting: 'household_user_deleting',
+    household_member_deleting: 'household_member_deleting',
   },
 }

@@ -10,13 +10,12 @@ import {
 } from 'clientSrc/styles/blocks/settings'
 import { INPUT_TYPE } from 'shared/constants'
 import { FORM } from 'shared/constants/localeMessages'
-import { PROFILE } from 'shared/constants/mappingKeys'
 
 import {
   LocaleText, Input, LocaleSwitch, ThemeSwitch, EditableField, EditablePhotoField, EditableTextField,
 } from '../../common'
 
-const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState }) => {
+const ProfileFormHeader = ({ photo, nickname, email, inputs, errors, setFormState }) => {
   const [passwordEditing, setPasswordEditing] = useState(false)
 
   const clearPasswords = useCallback(e => {
@@ -25,12 +24,12 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
 
     setFormState(prevState => {
       const newInputs = { ...prevState.inputs }
-      delete newInputs[PROFILE.OLD_PASSWORD]
-      delete newInputs[PROFILE.NEW_PASSWORD]
+      delete newInputs.oldPassword
+      delete newInputs.newPassword
 
       const newErrors = { ...prevState.errors }
-      delete newErrors[PROFILE.OLD_PASSWORD]
-      delete newErrors[PROFILE.NEW_PASSWORD]
+      delete newErrors.oldPassword
+      delete newErrors.newPassword
 
       return {
         ...prevState,
@@ -56,17 +55,17 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
                   <HighlightOff />
                 </ProfilePasswordClose>
                 <Input
-                  name={PROFILE.OLD_PASSWORD}
+                  name="oldPassword"
                   type={INPUT_TYPE.PASSWORD}
                   value={FORM.OLD_PASSWORD}
-                  inputError={errors[PROFILE.OLD_PASSWORD]}
+                  inputError={errors.oldPassword}
                   onUpdate={useUpdateHandler(setFormState)}
                 />
                 <Input
-                  name={PROFILE.NEW_PASSWORD}
+                  name="newPassword"
                   type={INPUT_TYPE.PASSWORD}
                   value={FORM.NEW_PASSWORD}
-                  inputError={errors[PROFILE.NEW_PASSWORD]}
+                  inputError={errors.newPassword}
                   onUpdate={useUpdateHandler(setFormState)}
                 />
               </ProfilePasswordInputs>
@@ -84,31 +83,31 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
       </ProfilePasswordBlock>
 
       <EditablePhotoField
-        name={PROFILE.PHOTO}
+        name="photo"
         setFormState={setFormState}
-        error={errors[PROFILE.PHOTO]}
+        error={errors.photo}
       >
         <FormHeaderPhoto src={photo} />
       </EditablePhotoField>
       <FormHeaderTitle>
         <EditableTextField
-          name={PROFILE.NAME}
-          edited={!!inputs[PROFILE.NAME]}
-          placeholder={name}
+          name="nickname"
+          edited={!!inputs.nickname}
+          placeholder={nickname}
           setFormState={setFormState}
-          error={errors[PROFILE.NAME]}
+          error={errors.nickname}
         >
-          {name}
+          {nickname}
         </EditableTextField>
       </FormHeaderTitle>
       <ProfileHeaderSubtitle>
         <EditableTextField
-          name={PROFILE.EMAIL}
-          edited={!!inputs[PROFILE.EMAIL]}
+          name="email"
+          edited={!!inputs.email}
           placeholder={email}
           isEmail
           setFormState={setFormState}
-          error={errors[PROFILE.EMAIL]}
+          error={errors.email}
         >
           {email}
         </EditableTextField>
@@ -124,7 +123,7 @@ const ProfileFormHeader = ({ photo, name, email, inputs, errors, setFormState })
 
 ProfileFormHeader.propTypes = {
   photo: PropTypes.string,
-  name: PropTypes.string,
+  nickname: PropTypes.string,
   email: PropTypes.string,
   inputs: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,

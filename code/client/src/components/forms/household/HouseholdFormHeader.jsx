@@ -11,7 +11,6 @@ import {
 } from 'clientSrc/styles/blocks/households'
 import { FormHeader, FormButtonContentWrapper, FormHeaderPhoto, FormHeaderTitle } from 'clientSrc/styles/blocks/form'
 import { COMMON, HOUSEHOLD } from 'shared/constants/localeMessages'
-import { HOUSEHOLD_KEYS } from 'shared/constants/mappingKeys'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 
 import { LocaleText, PrimaryButton, EditableTextField, EditablePhotoField, EditableLabelField } from '../../common'
@@ -20,9 +19,7 @@ const HouseholdFormHeader = ({
   photo, name, inputs, errors, currentUser, membersCount, editableRole, isAdmin,
   setFormState, sendingField, onLeaveHousehold, onDeleteHousehold, onCreateHousehold,
 }) => {
-  const currentRole = useMemo(() =>
-    inputs[HOUSEHOLD_KEYS.USER_ROLE] ?? currentUser.role,
-  [inputs, currentUser])
+  const currentRole = useMemo(() => inputs.userRole ?? currentUser.role, [inputs, currentUser])
 
   const availableRoles = useMemo(() => {
     const allRoles = Object.values(HOUSEHOLD_ROLE_TYPE)
@@ -53,8 +50,8 @@ const HouseholdFormHeader = ({
     <FormHeader>
       <CurrentUserBlock>
         <EditablePhotoField
-          name={HOUSEHOLD_KEYS.USER_PHOTO}
-          error={errors[HOUSEHOLD_KEYS.USER_PHOTO]}
+          name="userPhoto"
+          error={errors.userPhoto}
           setFormState={setFormState}
           size={100}
           iconRight={40}
@@ -63,20 +60,20 @@ const HouseholdFormHeader = ({
         </EditablePhotoField>
         <UserName>
           <EditableTextField
-            name={HOUSEHOLD_KEYS.USER_NAME}
-            edited={!!inputs[HOUSEHOLD_KEYS.USER_NAME]}
-            placeholder={currentUser.name}
-            error={errors[HOUSEHOLD_KEYS.USER_NAME]}
+            name="userNickname"
+            edited={!!inputs.userNickname}
+            placeholder={currentUser.nickname}
+            error={errors.userNickname}
             setFormState={setFormState}
           >
-            {currentUser.name}
+            {currentUser.nickname}
           </EditableTextField>
         </UserName>
 
         {editableRole && availableRoles.length > 1
           ? (
             <EditableLabelField
-              name={HOUSEHOLD_KEYS.USER_ROLE}
+              name="userRole"
               defaultValue={currentUser.role}
               placeholder={currentRole}
               values={availableRoles}
@@ -90,8 +87,8 @@ const HouseholdFormHeader = ({
       {isAdmin
         ? (
           <EditablePhotoField
-            name={HOUSEHOLD_KEYS.PHOTO}
-            error={errors[HOUSEHOLD_KEYS.PHOTO]}
+            name="photo"
+            error={errors.photo}
             setFormState={setFormState}
           >
             <FormHeaderPhoto src={photo} />
@@ -101,10 +98,10 @@ const HouseholdFormHeader = ({
         {isAdmin
           ? (
             <EditableTextField
-              name={HOUSEHOLD_KEYS.NAME}
-              edited={!!inputs[HOUSEHOLD_KEYS.NAME]}
+              name="name"
+              edited={!!inputs.name}
               placeholder={name}
-              error={errors[HOUSEHOLD_KEYS.NAME]}
+              error={errors.name}
               setFormState={setFormState}
             >
               {name}
@@ -146,7 +143,7 @@ HouseholdFormHeader.propTypes = {
   photo: PropTypes.string.isRequired,
   currentUser: PropTypes.shape({
     photo: PropTypes.string,
-    name: PropTypes.string,
+    nickname: PropTypes.string,
     role: PropTypes.string,
   }).isRequired,
   editableRole: PropTypes.bool,

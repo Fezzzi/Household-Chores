@@ -1,5 +1,5 @@
 import { CONNECTION_STATE_TYPE } from 'shared/constants'
-import { CONNECTION_KEYS } from 'shared/constants/mappingKeys'
+import { apify } from 'serverSrc/helpers/api'
 
 import { database } from '..'
 import { tConnectionsName, tConnectionsCols, tUsersName, tUsersCols } from './tables'
@@ -11,8 +11,9 @@ export const findBlockedConnections = async (userId: number): Promise<Array<numb
   `)
 
 export const findApprovedConnections = async (userId: number): Promise<Array<Record<string, string | number>>> =>
-  database.query(`
-    SELECT users.${tUsersCols.id}, users.${tUsersCols.nickname}, users.${tUsersCols.photo}, ${tConnectionsCols.date_created}
+  apify(database.query(`
+    SELECT users.${tUsersCols.id} as id_user, users.${tUsersCols.nickname}, users.${tUsersCols.photo},
+      ${tConnectionsCols.date_created}
     FROM ${tConnectionsName}
     INNER JOIN ${tUsersName} AS users
       ON (users.${tUsersCols.id}=${tConnectionsCols.id_from} AND ${tConnectionsCols.id_to}=${userId})
@@ -20,7 +21,7 @@ export const findApprovedConnections = async (userId: number): Promise<Array<Rec
     WHERE (${tConnectionsCols.id_to}=${userId}
       OR ${tConnectionsCols.id_from}=${userId})
       AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
-  `)
+  `))
 
 type ConnectionsType = {
   [CONNECTION_STATE_TYPE.APPROVED]: Array<object>;
@@ -75,26 +76,26 @@ export const findConnections = async (userId: number): Promise<ConnectionsType |
     return connections.length
       ? connections.reduce((acc: any, connection: any) =>
         acc[connection[tConnectionsCols.state]].push({
-          [CONNECTION_KEYS.ID]: connection[tUsersCols.id],
-          [CONNECTION_KEYS.NICKNAME]: connection[tUsersCols.nickname],
-          [CONNECTION_KEYS.PHOTO]: connection[tUsersCols.photo],
-          [CONNECTION_KEYS.MESSAGE]: connection[tConnectionsCols.message],
-          [CONNECTION_KEYS.MUTUAL_CONNECTIONS]: connection.mutualConnections ?? 0,
-          [CONNECTION_KEYS.DATE_CREATED]: connection[tConnectionsCols.date_created],
+          userId: connection[tUsersCols.id],
+          nickname: connection[tUsersCols.nickname],
+          photo: connection[tUsersCols.photo],
+          message: connection[tConnectionsCols.message],
+          mutualConnections: connection.mutualConnections ?? 0,
+          dateCreated: connection[tConnectionsCols.date_created],
         }) && acc, groupedConnections
       ) : groupedConnections
   })
 
-export const approveConnection = async (currentId: number, targetId: number): Promise<boolean> =>
+export const approveConnection = async (currentId: number, userId: number): Promise<boolean> =>
   database.query(`
     UPDATE ${tConnectionsName}
     SET ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}', ${tConnectionsCols.date_created}=NOW() 
     WHERE ${tConnectionsCols.id_from}=? AND ${tConnectionsCols.id_to}=${currentId}
-  `, [targetId])
+  `, [userId])
 
-export const createConnection = async (
+export const createConnectionRequest = async (
   currentId: number,
-  targetId: number,
+  userId: number,
   message: string | null | undefined
 ): Promise<boolean> =>
   database.query(`
@@ -102,17 +103,17 @@ export const createConnection = async (
       ${tConnectionsCols.id_from}, ${tConnectionsCols.id_to}, ${tConnectionsCols.message},
       ${tConnectionsCols.state}, ${tConnectionsCols.date_created}
     ) VALUES (${currentId}, ?, ${message ? '?' : 'NULL'}, '${CONNECTION_STATE_TYPE.WAITING}', NOW())
-  `, [targetId, message])
+  `, [userId, message])
 
-export const removeConnection = async (currentId: number, targetId: number): Promise<boolean> =>
+export const removeConnection = async (currentId: number, userId: number): Promise<boolean> =>
   database.query(`
     DELETE FROM ${tConnectionsName}
     WHERE (${tConnectionsCols.id_from}=? AND ${tConnectionsCols.id_to}=${currentId})
       OR (${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
       AND ${tConnectionsCols.id_from}=${currentId} AND ${tConnectionsCols.id_to}=?)
-  `, [targetId, targetId])
+  `, [userId, userId])
 
-export const blockConnection = async (currentId: number, targetId: number): Promise<boolean> =>
+export const blockConnection = async (currentId: number, userId: number): Promise<boolean> =>
   database.query(`
     UPDATE ${tConnectionsName}
     SET ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.BLOCKED}', ${tConnectionsCols.date_created}=NOW(),
@@ -120,4 +121,4 @@ export const blockConnection = async (currentId: number, targetId: number): Prom
     WHERE (${tConnectionsCols.id_from}=? AND ${tConnectionsCols.id_to}=${currentId})
       OR (${tConnectionsCols.id_from}=${currentId} AND ${tConnectionsCols.id_to}=?
       AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}')
-  `, [targetId, targetId, targetId])
+  `, [userId, userId, userId])

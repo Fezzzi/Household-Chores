@@ -9,9 +9,6 @@ import { useInvitationListProps } from 'clientSrc/helpers/household'
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { HouseholdActions } from 'clientSrc/actions'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
-import {
-  CONNECTION_KEYS, HOUSEHOLD_GROUP_KEYS, HOUSEHOLD_KEYS, INVITATION_KEYS, PROFILE,
-} from 'shared/constants/mappingKeys'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 
 import HouseholdFormHeader from './HouseholdFormHeader'
@@ -33,24 +30,22 @@ const HouseholdCreateForm = ({ connections }) => {
 
   const userState = useSelector(({ app }) => app.user)
   const currentUser = useMemo(() => ({
-    id: userState[PROFILE.ID],
-    photo: userState[PROFILE.PHOTO],
-    name: userState[PROFILE.NAME],
+    ...userState,
     role: HOUSEHOLD_ROLE_TYPE.ADMIN,
   }), [userState])
 
   const invitationTableProps = useMemo(() => useInvitationListProps(
-    invitations.map(user => ({
-      toPhoto: user.photo,
-      toNickname: user.nickname,
-      toId: user.id,
+    invitations.map(({ toId, toPhoto, toNickname, message }) => ({
+      toId,
+      toPhoto,
+      toNickname,
       fromPhoto: currentUser.photo,
-      fromNickname: currentUser.name,
+      fromNickname: currentUser.nickname,
       fromId: currentUser.id,
-      message: user[INVITATION_KEYS.MESSAGE],
+      message,
       dateCreated: '(PENDING)',
     })),
-    toId => setInvitations(prevState => prevState.filter(user => user.id !== toId))
+    toId => setInvitations(prevState => prevState.filter(invitation => invitation.toId !== toId))
   ), [connections, invitations])
 
   const loadImageUrlWithCallback = (image, type, callback) => {
@@ -80,47 +75,47 @@ const HouseholdCreateForm = ({ connections }) => {
     }))
 
     const inputsData = {
-      [HOUSEHOLD_KEYS.USER_NAME]: currentUser.name,
-      [HOUSEHOLD_KEYS.NAME]: 'New Household',
+      userNickname: currentUser.nickname,
+      name: 'New Household',
       ...inputs,
     }
 
     // TODO: Add default photo to user after registering
-    if (!inputs[HOUSEHOLD_KEYS.PHOTO]) {
+    if (!inputs.photo) {
       loadImageUrlWithCallback(newHouseholdIcon, 'image/svg+xml', householdPhoto => {
-        if (!inputs[HOUSEHOLD_KEYS.USER_PHOTO]) {
+        if (!inputs.userPhoto) {
           loadImageUrlWithCallback(currentUser.photo, `image/${currentUser.photo.split('.').splice(-1)[0]}`, userPhoto => {
             dispatch(HouseholdActions.createHousehold({
               inputs: {
                 ...inputsData,
-                [HOUSEHOLD_KEYS.PHOTO]: householdPhoto,
-                [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
+                photo: householdPhoto,
+                userPhoto,
               },
-              [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations,
+              invitations,
             }))
           })
         } else {
           dispatch(HouseholdActions.createHousehold({
             inputs: {
               ...inputsData,
-              [HOUSEHOLD_KEYS.PHOTO]: householdPhoto,
+              photo: householdPhoto,
             },
-            [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations,
+            invitations,
           }))
         }
       })
-    } else if (!inputs[HOUSEHOLD_KEYS.USER_PHOTO]) {
+    } else if (!inputs.userPhoto) {
       loadImageUrlWithCallback(currentUser.photo, `image/${currentUser.photo.split('.').splice(-1)[0]}`, userPhoto => {
         dispatch(HouseholdActions.createHousehold({
           inputs: {
             ...inputsData,
-            [HOUSEHOLD_KEYS.USER_PHOTO]: userPhoto,
+            userPhoto,
           },
-          [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations,
+          invitations,
         }))
       })
     } else {
-      dispatch(HouseholdActions.createHousehold({ inputs: inputsData, [HOUSEHOLD_GROUP_KEYS.INVITATIONS]: invitations }))
+      dispatch(HouseholdActions.createHousehold({ inputs: inputsData, invitations }))
     }
 
     setTimer(setTimeout(
@@ -149,14 +144,20 @@ const HouseholdCreateForm = ({ connections }) => {
         <LocaleText message={HOUSEHOLD.INVITE_USERS} />
       </SectionHeadline>
       <HouseholdInvitationForm
-        connections={connections.filter(({ [CONNECTION_KEYS.ID]: id }) => !invitations.find(user => user.id === id))}
-        onInvite={(id, message) => setInvitations(prevState => [
-          ...prevState,
-          {
-            ...connections.find(user => user[CONNECTION_KEYS.ID] === id),
-            [INVITATION_KEYS.MESSAGE]: message,
-          },
-        ])}
+        connections={connections.filter(({ userId }) => !invitations.find(invitation => invitation.toId === userId))}
+        onInvite={(id, message) => {
+          const connection = connections.find(connection => connection.userId === id)
+
+          setInvitations(prevState => [
+            ...prevState,
+            {
+              toId: connection.userId,
+              toPhoto: connection.photo,
+              toNickname: connection.nickname,
+              message,
+            },
+          ])
+        }}
       />
 
       <SectionHeadline>
@@ -177,9 +178,9 @@ HouseholdCreateForm.defaultProps = {
 
 HouseholdCreateForm.propTypes = {
   connections: PropTypes.arrayOf(PropTypes.shape({
-    [CONNECTION_KEYS.ID]: PropTypes.number.isRequired,
-    [CONNECTION_KEYS.NICKNAME]: PropTypes.string.isRequired,
-    [CONNECTION_KEYS.PHOTO]: PropTypes.string,
+    userId: PropTypes.number.isRequired,
+    nickname: PropTypes.string.isRequired,
+    photo: PropTypes.string,
   })),
 }
 

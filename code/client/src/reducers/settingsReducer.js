@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { SettingsActions } from 'clientSrc/actions'
+import { SettingsActions, ConnectionActions } from 'clientSrc/actions'
 import { SETTING_CATEGORIES, CONNECTION_STATE_TYPE } from 'shared/constants'
 
 const initialState = {
@@ -24,13 +24,16 @@ const settingsDataUpdated = (state, { payload }) => ({
   },
 })
 
-const connectionRequested = (state, { payload: { targetId } }) => ({
+const connectionRequested = (state, { payload: { userId, message } }) => ({
   ...state,
   data: {
     ...state.data,
     [CONNECTION_STATE_TYPE.FOUND]: state.data[CONNECTION_STATE_TYPE.FOUND].map(connection => ({
       ...connection,
-      state: connection.id === targetId
+      message: connection.userId === userId
+        ? message
+        : connection.message,
+      state: connection.userId === userId
         ? CONNECTION_STATE_TYPE.WAITING
         : connection.state,
     })),
@@ -40,5 +43,5 @@ const connectionRequested = (state, { payload: { targetId } }) => ({
 export default createReducer(initialState, {
   [SettingsActions.loadSettingsSuccess.toString()]: settingsLoaded,
   [SettingsActions.settingsDataUpdated.toString()]: settingsDataUpdated,
-  [SettingsActions.connectionRequestSuccess.toString()]: connectionRequested,
+  [ConnectionActions.connectionRequestSuccess.toString()]: connectionRequested,
 })

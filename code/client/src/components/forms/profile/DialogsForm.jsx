@@ -9,7 +9,6 @@ import { NotificationGroupBox, SectionHeadline } from 'clientSrc/styles/blocks/s
 import { TableBox, TableHeaderBox, TableHeaderCell } from 'clientSrc/styles/blocks/table'
 import { INPUT_TYPE } from 'shared/constants'
 import { COMMON, FORM } from 'shared/constants/localeMessages'
-import { DIALOG_KEYS } from 'shared/constants/mappingKeys'
 import { MODAL_TYPE } from 'clientSrc/constants'
 
 import { LocaleText, Input, PrimaryButton } from '../../common'
@@ -28,7 +27,7 @@ const DialogsForm = ({ onSubmit }) => {
   const dispatch = useDispatch()
   const handleSubmit = useCallback(() => {
     onSubmit(inputs, setFormState)
-    dispatch(DialogActions.loadDialogSettings(inputs))
+    dispatch(DialogActions.loadDialogSettings(Object.fromEntries(Object.entries(inputs).map(([key, val]) => [key, !val]))))
   }, [inputs, setFormState, dispatch])
 
   const openTutorialDialog = useCallback(() =>
@@ -68,7 +67,7 @@ const DialogsForm = ({ onSubmit }) => {
           </TableHeaderCell>
         </TableHeaderBox>
         <NotificationGroupBox>
-          {dialogSettings && Object.entries(dialogSettings).map(([name, value]) => name !== DIALOG_KEYS.TUTORIAL && (
+          {dialogSettings && Object.entries(dialogSettings).map(([name, value]) => name !== 'tutorial' && (
             <Input
               key={name}
               type={INPUT_TYPE.BOOL}

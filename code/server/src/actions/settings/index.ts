@@ -12,29 +12,28 @@ export default () => {
   router.get(/.*/, (req: { query: { category: string; tab: string }}, res) => {
     const { query: { category, tab } } = req
     if (Object.values(SETTING_CATEGORIES).find(cat => cat === category) !== null) {
-      return handleSettingsDataFetch(category, tab, req, res)
-    } else {
-      res.status(200).send([])
-      return true
+      handleSettingsDataFetch(category, tab, req, res)
+      return
     }
+
+    res.status(204).send()
   })
 
-  router.post(/.*/, async (req, res) => {
+  router.put(/.*/, async (req, res) => {
     const { body: { category, tab, inputs } } = req
 
     if (inputs && Object.values(inputs).length > 0) {
       if (category && tab && SETTING_TAB_ROWS[category] !== undefined) {
         const handled = await handleSettingsDataUpdate(category, tab, inputs, req, res)
         if (!handled) {
-          return handleSettingsDataFetch(category, tab, req, res)
+          handleSettingsDataFetch(category, tab, req, res)
         }
       } else {
-        res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
+        res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
       }
     } else {
-      res.status(200).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
+      res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
     }
-    return true
   })
 
   return router
