@@ -23,24 +23,6 @@ function* editSettingsSaga({ payload }) {
   }
 }
 
-function* connectionActionSaga({ payload: { effect, userId } }) {
-  yield call(generalSaga, effect, userId, function* (data) {
-    yield put(SettingsActions.settingsDataUpdated(data))
-  })
-}
-
-function* searchConnectionActionSaga({ payload }) {
-  yield call(generalSaga, findUsers, payload, function* (data) {
-    yield put(SettingsActions.settingsDataUpdated(data))
-  })
-}
-
-function* connectionRequestSaga({ payload }) {
-  yield call(generalSaga, connectionRequest, payload, function* () {
-    yield put(SettingsActions.connectionRequestSuccess(payload))
-  })
-}
-
 export function* settingsSaga() {
   yield takeEvery(SettingsActions.loadSettings.toString(), loadSettingsSaga)
   yield takeEvery(SettingsActions.editSettings.toString(), editSettingsSaga)
