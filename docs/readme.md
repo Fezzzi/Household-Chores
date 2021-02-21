@@ -1,4 +1,5 @@
 # Documentation
- - [Application Setup](./docs/setup.md)
- - [Migrations](./docs/migrations.md)
- - [API](./docs/api.md)
+ - [Application Setup](./setup.md)
+ - [Migrations](./migrations.md)
+ - [API](./api.md)
+ - [Modules](./modules.md)
