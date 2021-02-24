@@ -1525,14 +1525,15 @@
       },
       "SettingsCategories": {
         "type": "string",
-        "enum": ["profile", "connections", "households"]
+        "enum": ["profile", "connections", "households", "more"]
       },
       "SettingsTabs": {
         "type": "string",
         "enum": [
           "dialogs", "general", "notifications",
           "myConnections", "findConnection", "pending", "blocked",
-          "newHousehold", "invitations", "household"
+          "newHousehold", "invitations", "household",
+          "about", "support", "contribute"
         ]
       },
       "SettingsData": {
@@ -1558,6 +1559,7 @@
               { "$ref": "#/components/schemas/NotificationData" },
               { "$ref": "#/components/schemas/HouseholdsData" },
               { "$ref": "#/components/schemas/Connections" },
+              { "$ref": "#/components/schemas/MoreData" },
               {}
             ]
           },
@@ -1601,6 +1603,35 @@
           "visibility": {
             "type": "string",
             "enum": ["ALL", "FRIENDS_OF_FRIENDS"]
+          }
+        }
+      },
+      "MoreData": {
+        "required": ["supporters", "contributors"],
+        "properties": {
+          "supporters": {
+            "type": "array",
+            "items": {}
+          },
+          "contributors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "photo", "link"],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "photo": {
+                  "type": "string",
+                  "format": "link"
+                },
+                "link": {
+                  "type": "string",
+                  "format": "link"
+                }
+              }
+            }
           }
         }
       },

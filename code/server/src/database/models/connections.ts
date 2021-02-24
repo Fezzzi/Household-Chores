@@ -24,9 +24,9 @@ export const findApprovedConnections = async (userId: number): Promise<Array<Rec
   `))
 
 type ConnectionsType = {
-  [CONNECTION_STATE_TYPE.APPROVED]: Array<object>;
-  [CONNECTION_STATE_TYPE.BLOCKED]: Array<object>;
-  [CONNECTION_STATE_TYPE.WAITING]: Array<object>;
+  [CONNECTION_STATE_TYPE.APPROVED]: Array<object>
+  [CONNECTION_STATE_TYPE.BLOCKED]: Array<object>
+  [CONNECTION_STATE_TYPE.WAITING]: Array<object>
 }
 export const findConnections = async (userId: number): Promise<ConnectionsType | null> =>
   database.withTransaction(async (): Promise<ConnectionsType> => {

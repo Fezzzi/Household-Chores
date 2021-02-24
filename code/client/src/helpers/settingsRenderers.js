@@ -4,7 +4,10 @@ import {
   ConnectionRequestsForm, ConnectionSearchForm, HouseholdCreateForm, HouseholdModificationForm, DialogsForm,
   HouseholdInvitationListForm, ProfileForm, NotificationForm, ConnectionsListForm, ConnectionBlocksForm,
 } from 'clientSrc/components/forms'
-import { SETTING_CATEGORIES, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, CONNECTION_STATE_TYPE } from 'shared/constants'
+import { AboutPage, ContributePage, SupportPage } from 'clientSrc/components/settings/more'
+import {
+  SETTING_CATEGORIES, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, CONNECTION_STATE_TYPE, MORE_TABS,
+} from 'shared/constants'
 
 export const settingsRenderers = {
   [SETTING_CATEGORIES.PROFILE]: {
@@ -37,5 +40,10 @@ export const settingsRenderers = {
         onSubmit={handleSubmit}
       />
     ),
+  },
+  [SETTING_CATEGORIES.MORE]: {
+    [MORE_TABS.ABOUT]: data => <AboutPage {...data} />,
+    [MORE_TABS.SUPPORT]: () => <SupportPage />,
+    [MORE_TABS.CONTRIBUTE]: () => <ContributePage />,
   },
 }
