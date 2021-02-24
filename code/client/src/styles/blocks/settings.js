@@ -152,6 +152,15 @@ export const SectionHeadline = styled.h2`
   text-transform: capitalize;
 `
 
+export const SectionHeadlineNote = styled.div`
+  float: right;
+  user-select: none;
+  font-size: 0.5em;
+  font-weight: 500;
+  text-transform: none;
+  opacity: 0.8;
+`
+
 export const SearchBarWrapper = styled.div`
   display: flex;
   margin: 0 auto;
@@ -245,4 +254,91 @@ export const BottomFormButton = styled.div`
 
 export const NotificationGroupBox = styled.div`
   margin: 0 50px;
+`
+
+export const AboutApplicationText = styled.p`
+  margin: 30px 100px;
+  font-size: 1.1em;
+  line-height: 1.2em;
+`
+
+export const ContributorsCentered = styled.div`
+  margin: 30px 90px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`
+
+export const Contributor = styled.a`
+  width: 80px;
+  height: 80px;
+  margin: 0 -20px 5px 0;
+  
+  & > img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+`
+
+export const ContributorsMore = styled.div`
+  width: 50px;
+  float: right;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  text-align: center;
+  font-weight: 500;
+  margin-left: 30px;
+  opacity: 0.7;
+  user-select: none;
+  
+  :hover {
+    cursor: pointer;
+    opacity: 1;
+  }
+`
+
+export const TeamList = styled.div`
+  margin: 30px 100px 0;
+  display: flex;
+  flex-direction: column;
+`
+
+export const TeamMember = styled.div`
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: row;
+`
+
+export const TeamMemberDescription = styled.div`
+  display: flex;
+  flex-flow: column;
+  margin-left: 15px;
+  width: 100%;
+`
+
+export const TeamMemberText = styled.p`
+  width: fit-content;
+  font-style: italic;
+  font-size: 1.1em;
+  text-align: justify;
+  margin: 0 10px;
+  position: relative;
+  
+  :before {
+    position: absolute;
+    top: -5px;
+    left: -10px;
+    font-size: 1.4em;
+    content: open-quote;
+  }
+
+  :after {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 1.4em;
+    content: close-quote;
+  }
 `

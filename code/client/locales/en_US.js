@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
 import {
-  AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, SETTINGS, SUCCESS,
+  AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, SETTINGS, SUCCESS, MORE,
 } from 'shared/constants/localeMessages'
 import {
-  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS,
+  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, MORE_TABS,
 } from 'shared/constants'
 import { LINKS } from 'clientSrc/constants'
 
@@ -22,10 +22,12 @@ export default {
   [AUTH.SIGN_UP]: 'Sign Up',
   [AUTH.TERMS_AGREEMENT]: 'By signing up, You agree to our ',
 
+  [COMMON.AND_X_MORE]: 'and @\nmore',
   [COMMON.ARE_YOU_SURE]: 'Are you sure?',
   [COMMON.CANT_UNDO]: 'This action cannot be undone.',
   [COMMON.CANT_UNDO_SAVING]: 'You won\'t be able to undo this action after saving.',
   [COMMON.CONFIRM]: 'Confirm',
+  [COMMON.CONTRIBUTORS]: 'contributors',
   [COMMON.CANCEL]: 'Cancel',
   [COMMON.CONTINUE]: 'Continue',
   [COMMON.FINISH]: 'Finish',
@@ -150,9 +152,32 @@ export default {
   [HOUSEHOLD.MODULES]: 'modules',
   [HOUSEHOLD.ADD_MODULES]: 'add modules',
 
+  [MORE.ABOUT_THE_APPLICATION]: 'About the application',
+  [MORE.TEAM]: 'Team',
+  [MORE.CONTRIBUTORS]: 'Contributors',
+  [MORE.SUPPORTERS]: 'Supporters',
+  [MORE.FEZZI]: `
+    I am a passionate full-stack developer with a clear goal of providing easy to use, community-powered and highly customizable
+    application without unnecessary stalking or information selling bullshit. Aside all that, I enjoy jumping around in a
+    square room with a rocket in hand and baby talking to a bunch of colorful shrimps.
+  `,
+  [MORE.ABOUT_TEXT]: `
+    This project originated as a react, node and typescript playground.
+    Soon after, I was struck by an idea of an application fusing together multiple functionalities that come in hand during
+    usual daily activities of both family and shared household of any size. Such idea was in no regard breakthrough, yet I was not
+    able to find any application that would provide what I needed. There were always some functionalities lacking and some redundant.
+    I gave it some thought and quickly realised that it is not actually possible to simply provide every functionality needed without
+    unnecessary redundancies for a wider range of users. Furthermore, just providing every functionality needed for even a small group of
+    individuals requires a tremendous amount of development power. With these points in mind, I came up with an application that enables
+    each and every user to configure which functionalities he or she wants to use. Moreover, every functionality is distributed as
+    'independent' package in the public gitHub repository, thus effectively combining development power of the whole community. This way,
+    everyone is free to create his or her own functionalities for the application.
+  `,
+
   [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.PROFILE}`]]: 'Profile',
   [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.CONNECTIONS}`]]: 'Connections',
   [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.HOUSEHOLDS}`]]: 'Households',
+  [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.MORE}`]]: 'More',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.GENERAL}`]]: 'General',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.NOTIFICATIONS}`]]: 'Notifications',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.DIALOGS}`]]: 'Dialogs',
@@ -163,6 +188,9 @@ export default {
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.NEW_HOUSEHOLD}`]]: 'Create household',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.INVITATIONS}`]]: 'Invitations',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS._HOUSEHOLD}`]]: 'Household',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${MORE_TABS.ABOUT}`]]: 'About',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${MORE_TABS.SUPPORT}`]]: 'Support',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${MORE_TABS.CONTRIBUTE}`]]: 'Contribute',
 
   [SUCCESS.RESET_LINK]: 'A reset link has been sent to your email address.',
   [SUCCESS.SETTINGS_UPDATED]: 'Settings have been successfully updated.',

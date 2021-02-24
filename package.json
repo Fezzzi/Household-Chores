@@ -81,6 +81,7 @@
     "express": "^4.17.1",
     "express-mysql-session": "^2.1.4",
     "express-session": "^1.17.1",
+    "github-api": "^3.4.0",
     "google-auth-library": "^6.0.5",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",

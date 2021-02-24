@@ -29,8 +29,8 @@ const getGoogleUserId = async (googleToken: string): Promise<string | null> => {
 }
 
 interface FacebookObject {
-  userId: string;
-  signedRequest: string;
+  userId: string
+  signedRequest: string
 }
 
 const APP_SECRET = process.env.FB_APP_SECRET ?? ''
@@ -48,8 +48,8 @@ const getFacebookUserId = ({ userId, signedRequest }: FacebookObject): string | 
 }
 
 interface ProviderIds {
-  googleId: string | null;
-  facebookId: string | null;
+  googleId: string | null
+  facebookId: string | null
 }
 
 export const getProvidersUserId = async (googleToken: string, facebook: FacebookObject): Promise<ProviderIds> => ({

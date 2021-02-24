@@ -1,5 +1,5 @@
 import {
-  USER_VISIBILITY_TYPE, SETTING_COLUMNS, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, SETTING_CATEGORIES,
+  USER_VISIBILITY_TYPE, SETTING_COLUMNS, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, SETTING_CATEGORIES, MORE_TABS,
 } from 'shared/constants'
 
 export const AUTH = {
@@ -19,9 +19,11 @@ export const AUTH = {
 }
 
 export const COMMON = {
+  AND_X_MORE: 'common.andXMore',
   ARE_YOU_SURE: 'common.areYouSure',
   CANT_UNDO: 'common.cantUndo',
   CANT_UNDO_SAVING: 'common.cantUndoSaving',
+  CONTRIBUTORS: 'common.contributors',
   CONFIRM: 'common.confirm',
   CONTINUE: 'common.continue',
   FINISH: 'common.finish',
@@ -143,6 +145,15 @@ export const HOME = {
   NO_HOUSEHOLD: 'home.noHousehold',
 }
 
+export const MORE = {
+  ABOUT_THE_APPLICATION: 'more.aboutTheApplication',
+  TEAM: 'more.team',
+  CONTRIBUTORS: 'more.contributors',
+  SUPPORTERS: 'more.supporters',
+  FEZZI: 'more.fezzi',
+  ABOUT_TEXT: 'more.aboutText',
+}
+
 export const HOUSEHOLD = {
   LEAVE: 'household.leave',
   LEAVING: 'household.leaving',
@@ -167,6 +178,7 @@ export const SETTINGS = {
   [`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.PROFILE}`]: 'settings.categoryProfile',
   [`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.CONNECTIONS}`]: 'settings.categoryConnections',
   [`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.HOUSEHOLDS}`]: 'settings.categoryHouseholds',
+  [`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.MORE}`]: 'settings.categoryMore',
 
   [`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.GENERAL}`]: 'settings.tabGeneral',
   [`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.NOTIFICATIONS}`]: 'settings.tabNotifications',
@@ -180,6 +192,10 @@ export const SETTINGS = {
   [`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.NEW_HOUSEHOLD}`]: 'settings.newHousehold',
   [`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.INVITATIONS}`]: 'settings.invitations',
   [`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS._HOUSEHOLD}`]: 'settings.household',
+
+  [`${SETTING_COLUMNS.TAB}_${MORE_TABS.ABOUT}`]: 'settings.about',
+  [`${SETTING_COLUMNS.TAB}_${MORE_TABS.SUPPORT}`]: 'settings.support',
+  [`${SETTING_COLUMNS.TAB}_${MORE_TABS.CONTRIBUTE}`]: 'settings.contribute',
 }
 
 export const SUCCESS = {

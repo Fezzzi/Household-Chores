@@ -9,6 +9,7 @@ import {
 import { SETTING_CATEGORIES, PROFILE_TABS, HOUSEHOLD_TABS, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 import { tDialogsCols, tNotifySettingsCols } from 'serverSrc/database/models/tables'
+import { findContributors, findSupporters } from 'serverSrc/helpers/externalResources'
 
 const getTabData = async (category: string, tab: string, req: any) => {
   switch (category) {
@@ -27,6 +28,11 @@ const getTabData = async (category: string, tab: string, req: any) => {
       }
     case SETTING_CATEGORIES.CONNECTIONS:
       return findConnections(req.session.user)
+    case SETTING_CATEGORIES.MORE:
+      return {
+        supporters: await findSupporters(),
+        contributors: await findContributors(),
+      }
     default:
       return {}
   }

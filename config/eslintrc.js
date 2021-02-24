@@ -2,6 +2,7 @@ const webpackAliases = require('./webpack-aliases.config')
 
 const tsRules = {
   'no-unused-vars': 0,
+  'camelcase': 0,
   '@typescript-eslint/ban-ts-ignore': 0,
   '@typescript-eslint/no-var-requires': 0,
   '@typescript-eslint/no-use-before-define': 0,
@@ -18,7 +19,6 @@ const tsRules = {
   '@typescript-eslint/no-array-constructor': 1,
   '@typescript-eslint/interface-name-prefix': 1,
   '@typescript-eslint/no-useless-constructor': 1,
-  '@typescript-eslint/member-delimiter-style': 1,
   '@typescript-eslint/triple-slash-reference': 1,
   '@typescript-eslint/type-annotation-spacing': 1,
   '@typescript-eslint/prefer-namespace-keyword': 1,
@@ -26,6 +26,7 @@ const tsRules = {
   '@typescript-eslint/adjacent-overload-signatures': 1,
 
   '@typescript-eslint/no-unused-vars': 2,
+  '@typescript-eslint/member-delimiter-style': [2, { multiline: { delimiter: 'none' } }],
   '@typescript-eslint/prefer-nullish-coalescing': 2,
 }
 
@@ -60,6 +61,7 @@ module.exports = {
     'no-use-before-define': 0,
     'no-underscore-dangle': 0,
     'object-curly-newline': 0,
+    'no-useless-constructor': 0,
     'function-paren-newline': 0,
     'implicit-arrow-linebreak': 0,
     'lines-between-class-members': 0,
@@ -117,7 +119,6 @@ module.exports = {
     'react/sort-comp': 0,
     'react/jsx-no-bind': 0,
     'react/button-has-type': 0,
-    'no-useless-constructor': 0,
     'react/forbid-prop-types': 0,
     'react/no-array-index-key': 0,
     'react/require-default-props': 0,

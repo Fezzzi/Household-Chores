@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
 import {
-  AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, SETTINGS, SUCCESS,
+  AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, MORE, SETTINGS, SUCCESS,
 } from 'shared/constants/localeMessages'
 import {
-  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS,
+  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, MORE_TABS,
 } from 'shared/constants'
 import { LINKS } from 'clientSrc/constants'
 
@@ -22,10 +22,12 @@ export default {
   [AUTH.SIGN_UP]: 'Zaregistrovat se',
   [AUTH.TERMS_AGREEMENT]: 'Registrací potvrzujete naše ',
 
+  [COMMON.AND_X_MORE]: 'A další\n@',
   [COMMON.ARE_YOU_SURE]: 'Opravdu provést?',
   [COMMON.CANT_UNDO]: 'Tuto akci nelze vzít zpět.',
   [COMMON.CANT_UNDO_SAVING]: 'Po uložení již nepůjde vzít tuto akci zpět.',
   [COMMON.CONFIRM]: 'Potvrdit',
+  [COMMON.CONTRIBUTORS]: 'přispěvatelů',
   [COMMON.CANCEL]: 'Zrušit',
   [COMMON.CONTINUE]: 'Pokračovat',
   [COMMON.FINISH]: 'Dokončit',
@@ -150,9 +152,32 @@ export default {
   [HOUSEHOLD.MODULES]: 'moduly',
   [HOUSEHOLD.ADD_MODULES]: 'přidat moduly',
 
+  [MORE.ABOUT_THE_APPLICATION]: 'O aplikaci',
+  [MORE.TEAM]: 'Tým',
+  [MORE.CONTRIBUTORS]: 'Komunita',
+  [MORE.SUPPORTERS]: 'Sponzoři',
+  [MORE.FEZZI]: `
+    Jsem nadšený full-stack vývojář s jasným cílem vytvořit snadno použitelnou, komunitou poháněnou a vysoce přizpůsobitelnou
+    aplikaci bez zbytečného stalkingu a prodeje osobních údajů. Mimo to rád poskakuji ve čtvercové místnosti s raketou v ruce a
+    žvatlám na kupu barevných krevetek.
+  `,
+  [MORE.ABOUT_TEXT]: `
+    Tento projekt původně vznikl jako hřiště pro react, node a typescript.
+    Krátce poté, jsem byl zasažen nápadem na aplikaci seskupující mnoho funkcionalit které příjdou vhod během obvyklých denních
+    aktivit jak rodiny tak sdílené domácnosti libovolné velikosti. Tento nápad jako takový není ničím průlomový, i přes to se mi
+    však nepodařilo najít jedinou aplikaci poskytující co jsem potřeboval. Vždy některé funkcionality chyběly a jiné přebývali.
+    Brzy jsem si uvědomil, že poskytnout každou potřebnou funkcionalitu bez žádných přebytečných pro širší škálu uživatelů jednoduše
+    není možné. Dokonce poskytnout vše potřebné jen malé skupině jedinců vyžaduje znatelnou vývojářskou sílu.
+    S ohledem na tyto body jsem přišel s aplikací umožňující každému uživateli konfigurovat které funkcionality si on nebo ona
+    přeje využívat. Mimoto je každá funkcionalita poskytována jako 'nezávislý' baliček ve veřejně dostupném gitHub repozitáři, čímž
+    se efektivně kombinuje vývojářská síla celé komunity. Tímto způsobem si potom může každý vytvořit svoji vlastní novou
+    funkcionalitu pro aplikaci.
+  `,
+
   [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.PROFILE}`]]: 'Profil',
   [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.CONNECTIONS}`]]: 'Spojení',
   [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.HOUSEHOLDS}`]]: 'Domácnosti',
+  [SETTINGS[`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.MORE}`]]: 'Více',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.GENERAL}`]]: 'Obecné',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.NOTIFICATIONS}`]]: 'Notifikace',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${PROFILE_TABS.DIALOGS}`]]: 'Dialogy',
@@ -163,6 +188,9 @@ export default {
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.NEW_HOUSEHOLD}`]]: 'Vytvořit domácnost',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS.INVITATIONS}`]]: 'Pozvánky',
   [SETTINGS[`${SETTING_COLUMNS.TAB}_${HOUSEHOLD_TABS._HOUSEHOLD}`]]: 'Domácnost',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${MORE_TABS.ABOUT}`]]: 'Informace',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${MORE_TABS.SUPPORT}`]]: 'Podpořit',
+  [SETTINGS[`${SETTING_COLUMNS.TAB}_${MORE_TABS.CONTRIBUTE}`]]: 'Podílet se',
 
   [SUCCESS.RESET_LINK]: 'Link pro obnovu hesla byl úspěšně zaslán na Vaši emailovou adresu.',
   [SUCCESS.SETTINGS_UPDATED]: 'Nastavaní bylo úspěšně upraveno.',
