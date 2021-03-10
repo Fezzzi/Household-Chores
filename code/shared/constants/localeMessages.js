@@ -2,6 +2,15 @@ import {
   USER_VISIBILITY_TYPE, SETTING_COLUMNS, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, SETTING_CATEGORIES, MORE_TABS,
 } from 'shared/constants'
 
+export const ACTIVITY = {
+  CONNECTION_REQUEST: 'activity.connectionRequest',
+  CONNECTION_APPROVAL: 'activity.connectionApproval',
+  HOUSEHOLD_INVITATION: 'activity.householdInvitation',
+  HOUSEHOLD_JOIN: 'activity.householdJoin',
+  HOUSEHOLD_LEAVE: 'activity.householdLeave',
+  HOUSEHOLD_REMOVE: 'activity.householdRemove',
+}
+
 export const AUTH = {
   BACK_TO_LOGIN: 'auth.backToLogin',
   CREATE_ACCOUNT: 'auth.createAccount',

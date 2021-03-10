@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useHistory } from 'react-router-dom'
 import { Settings } from '@material-ui/icons'
 
 import { HomeActions } from 'clientSrc/actions'
@@ -10,8 +11,9 @@ import {
 } from 'clientSrc/styles/blocks/home'
 import { API, SETTING_CATEGORIES } from 'shared/constants'
 
-const HouseholdSwitch = ({ history, householdData, nextData, prevData }) => {
+const HouseholdSwitch = ({ householdData, nextData, prevData }) => {
   const dispatch = useDispatch()
+  const history = useHistory()
   const handleHouseholdSelection = useCallback(householdId =>
     dispatch(HomeActions.changeSelectedHousehold(householdId)), [dispatch]
   )
@@ -57,7 +59,6 @@ const HouseholdSwitch = ({ history, householdData, nextData, prevData }) => {
 }
 
 HouseholdSwitch.propTypes = {
-  history: PropTypes.object.isRequired,
   householdData: PropTypes.object.isRequired,
   nextData: PropTypes.object.isRequired,
   prevData: PropTypes.object.isRequired,

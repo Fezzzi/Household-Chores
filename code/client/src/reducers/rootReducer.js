@@ -1,4 +1,5 @@
 import { createReducer, combineReducers } from '@reduxjs/toolkit'
+import { connectRouter } from 'connected-react-router'
 
 import { RootActions, AuthActions } from 'clientSrc/actions'
 
@@ -38,7 +39,8 @@ const rootReducer = createReducer(initialState, {
 }
 )
 
-export default combineReducers({
+export default history => combineReducers({
+  router: connectRouter(history),
   app: rootReducer,
   notifications: notificationsReducer,
   theme: themeReducer,

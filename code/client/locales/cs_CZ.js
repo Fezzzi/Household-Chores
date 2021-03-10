@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import {
-  AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, MORE, SETTINGS, SUCCESS,
+  ACTIVITY, AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, MORE, SETTINGS, SUCCESS,
 } from 'shared/constants/localeMessages'
 import {
   USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, MORE_TABS,
@@ -8,6 +8,13 @@ import {
 import { LINKS } from 'clientSrc/constants'
 
 export default {
+  [ACTIVITY.CONNECTION_REQUEST]: 'Nová žádost o spojení od uživatele $1$.',
+  [ACTIVITY.CONNECTION_APPROVAL]: 'Uživatel $1$ přijal vaši žádost o spojení.',
+  [ACTIVITY.HOUSEHOLD_INVITATION]: 'Nová pozvánka do domácnosti $1$ od uživatele $2$.',
+  [ACTIVITY.HOUSEHOLD_JOIN]: 'Uživatel $1$ se přidal do domácnosti $2$.',
+  [ACTIVITY.HOUSEHOLD_LEAVE]: 'Uživatel $1$ opustil domácnost $2$.',
+  [ACTIVITY.HOUSEHOLD_REMOVE]: 'Uživatel $1$ byl odstraněn z domácnosti $2$ uživatelem $3$.',
+
   [AUTH.BACK_TO_LOGIN]: 'Zpět na přihlášení',
   [AUTH.CREATE_ACCOUNT]: 'Vytvořit nový účet',
   [AUTH.DONT_HAVE_ACCOUNT]: 'Nemáte účet?',

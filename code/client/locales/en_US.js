@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import {
-  AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, SETTINGS, SUCCESS, MORE,
+  ACTIVITY, AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, SETTINGS, SUCCESS, MORE,
 } from 'shared/constants/localeMessages'
 import {
   USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, MORE_TABS,
@@ -8,6 +8,13 @@ import {
 import { LINKS } from 'clientSrc/constants'
 
 export default {
+  [ACTIVITY.CONNECTION_REQUEST]: 'New connection request from user $1$.',
+  [ACTIVITY.CONNECTION_APPROVAL]: 'User $1$ has approved your connection request.',
+  [ACTIVITY.HOUSEHOLD_INVITATION]: 'New invitation to household $1$ from user $2$.',
+  [ACTIVITY.HOUSEHOLD_JOIN]: 'User $1$ has joined household $2$.',
+  [ACTIVITY.HOUSEHOLD_LEAVE]: 'User $1$ has left household $2$.',
+  [ACTIVITY.HOUSEHOLD_REMOVE]: 'User $1$ was removed from household $2$ by user $3$.',
+
   [AUTH.BACK_TO_LOGIN]: 'Back to Login',
   [AUTH.CREATE_ACCOUNT]: 'Create New Account',
   [AUTH.DONT_HAVE_ACCOUNT]: 'Don\'t have an account?',
