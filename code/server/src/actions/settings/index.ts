@@ -24,6 +24,7 @@ export default () => {
 
     if (inputs && Object.values(inputs).length > 0) {
       if (category && tab && SETTING_TAB_ROWS[category] !== undefined) {
+        // todo: Move switch from handlers here and break underlaying handler to multiple functions
         const handled = await handleSettingsDataUpdate(category, tab, inputs, req, res)
         if (!handled) {
           handleSettingsDataFetch(category, tab, req, res)

@@ -29,7 +29,7 @@ const logIn = async ({ email, password }: any, req: any, res: any): Promise<bool
     return true
   }
 
-  setSession(req, res, result.userId, result.fsKey)
+  setSession(req, res, result.userId, result.nickname, result.fsKey)
   res.status(204).send()
   return true
 }
@@ -57,7 +57,7 @@ const signUp = async (inputs: any, req: any, res: any): Promise<boolean> => {
   if (user !== null) {
     // In case user with such email exists but does not yet have assigned any provider id, we assign them and perform log in
     if (googleId || facebookId) {
-      if (await logInWithIds(req, res, user.userId, googleId, facebookId, user.fsKey)) {
+      if (await logInWithIds(req, res, user.userId, user.nickname, user.fsKey, googleId, facebookId)) {
         res.status(204).send()
       } else {
         res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.SMTH_BROKE_LOGIN] })
@@ -81,7 +81,7 @@ const signUp = async (inputs: any, req: any, res: any): Promise<boolean> => {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.SIGN_UP_ERROR] })
     return true
   }
-  setSession(req, res, signUpResult.insertId, signUpResult.fsKey)
+  setSession(req, res, signUpResult.insertId, signUpResult.nickname, signUpResult.fsKey)
   res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.ACCOUNT_CREATED] })
   return true
 }
@@ -150,7 +150,8 @@ export default () => {
     const { params: { action } } = req
 
     if (action === API.AUTH_DELETE) {
-      // todo: Finish within navbar issue when logging off is implemented
+      // todo: Finish within separate issue when logging off is implemented
+      // todo: Also implement activity associated with removing user from all households and deleting all his households
 
       res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
       return

@@ -1,64 +1,32 @@
 import { HOUSEHOLD_DIR, isLocalImage, uploadFiles } from 'serverSrc/helpers/files'
 import { validateField } from 'serverSrc/helpers/settings'
 import {
-  addHouseholdInvitations, approveInvitation, createHousehold, findApprovedConnections,
+  addActivityForUsers, addHouseholdInvitations, approveInvitation, createHousehold,
+  deleteHousehold, getHouseholdMembers, getHouseholdName, leaveHousehold,
 } from 'serverSrc/database/models'
-import { NOTIFICATION_TYPE, INPUT_TYPE, API, SETTING_CATEGORIES, INVITATION_MESSAGE_LENGTH } from 'shared/constants'
-import { ERROR } from 'shared/constants/localeMessages'
+import { NOTIFICATION_TYPE, INPUT_TYPE, API, SETTING_CATEGORIES, HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
+import { ACTIVITY, ERROR } from 'shared/constants/localeMessages'
+import { SETTINGS_PREFIX } from 'shared/constants/api'
 
-const validateCreateData = async (
-  inputs: Record<string, string | number>,
-  invitations: Array<Record<string, string | number>>,
-  userId: number,
-  res: any
-): Promise<boolean> => {
-  const { name, photo, userNickname, userPhoto } = inputs
-
-  if (!name || !userNickname || !photo || !userPhoto) {
-    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
-    return false
-  }
-
-  if (!(validateField(res, name, INPUT_TYPE.TEXT)
-    && validateField(res, userNickname, INPUT_TYPE.TEXT)
-    && validateField(res, photo, INPUT_TYPE.PHOTO)
-    && validateField(res, userPhoto, INPUT_TYPE.PHOTO)
-  )) {
-    return false
-  }
-
-  if (invitations.length > 0) {
-    const connections = await findApprovedConnections(userId)
-    const connectionIds = connections.map(({ userId }) => userId)
-    const validRequest = invitations.every(({ userId }) => connectionIds.indexOf(userId) !== -1)
-    if (!validRequest) {
-      res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
-      return false
-    }
-    const validMessages = invitations.every(({ message }) => !message
-      || validateField(res, message, INPUT_TYPE.TEXT_AREA, { max: INVITATION_MESSAGE_LENGTH }))
-    if (!validMessages) {
-      return false
-    }
-  }
-  return true
-}
+import { ApproveInvitationRequest, CreateHouseholdInputs, CreateHouseholdInvitation } from './types'
+import { validateCreateData } from './validate'
 
 export const handleCreateHousehold = async (
-  inputs: Record<string, string | number>,
-  invitations: Array<Record<string, string | number>>,
+  inputs: CreateHouseholdInputs,
+  invitations: CreateHouseholdInvitation[],
   userId: number,
-  req: any,
+  fsKey: string,
   res: any,
 ): Promise<boolean> => {
   const valid = await validateCreateData(inputs, invitations, userId, res)
   if (!valid) {
     return true
   }
+
   const [photo, userPhoto] = uploadFiles([
-    inputs.photo as any,
-    inputs.userPhoto as any,
-  ], HOUSEHOLD_DIR, req.session!.fsKey)
+    inputs.photo,
+    inputs.userPhoto,
+  ], HOUSEHOLD_DIR, fsKey)
 
   if (photo === null || userPhoto === null) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
@@ -77,6 +45,11 @@ export const handleCreateHousehold = async (
   }
   const success = invitations.length === 0 || await addHouseholdInvitations(householdId, invitations, userId)
   if (success) {
+    addActivityForUsers(
+      invitations.map(user => user.toId),
+      `${ACTIVITY.HOUSEHOLD_INVITATION}$[${inputs.name}, ${inputs.userNickname}]$`,
+      `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
+    )
     res.status(200).send({
       url: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`,
     })
@@ -87,30 +60,64 @@ export const handleCreateHousehold = async (
   return true
 }
 
-export const handleApproveHouseholdInvitation = async (
-  fromId: number,
-  householdId: number,
-  nickname: string,
-  photo: any,
+export const handleDeleteHousehold = async (
   userId: number,
-  req: any,
+  userNickname: string,
+  householdId: number,
   res: any,
 ): Promise<boolean> => {
+  const members = await getHouseholdMembers(householdId)
+  const isAdmin = members?.find(({ userId: memberId }) => userId === memberId)?.role === HOUSEHOLD_ROLE_TYPE.ADMIN
+
+  if (!isAdmin) {
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.BAD_PERMISSIONS] })
+    return false
+  } else {
+    const householdName = await getHouseholdName(householdId)
+    const success = await deleteHousehold(householdId)
+
+    if (success) {
+      const notifiedMembers = members!
+        .map(({ userId }) => userId)
+        .filter(memberId => memberId !== userId)
+
+      addActivityForUsers(
+        notifiedMembers,
+        `${ACTIVITY.HOUSEHOLD_DELETE}$[${userNickname}, ${householdName}]$`
+      )
+      res.status(204).send()
+    } else {
+      res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+      return false
+    }
+  }
+  return true
+}
+
+export const handleApproveHouseholdInvitation = async (
+  invitationBody: ApproveInvitationRequest,
+  userId: number,
+  userNickname: string,
+  fsKey: string,
+  res: any,
+): Promise<boolean> => {
+  const { fromId, householdId, userNickname: nickname, userPhoto: photo } = invitationBody
+
   if (!fromId || !householdId || !nickname || !photo) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return false
   }
 
   if (!(validateField(res, nickname, INPUT_TYPE.TEXT)
-    && (isLocalImage(photo, req.session!.fsKey)
+    && (isLocalImage(photo, fsKey)
     || validateField(res, photo, INPUT_TYPE.PHOTO)))
   ) {
     return false
   }
 
-  const userPhoto = isLocalImage(photo, req.session!.fsKey)
+  const userPhoto = isLocalImage(photo, fsKey)
     ? photo
-    : uploadFiles([photo as any], HOUSEHOLD_DIR, req.session!.fsKey)[0]
+    : uploadFiles([photo], HOUSEHOLD_DIR, fsKey)[0]
   if (userPhoto === null) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
     return true
@@ -118,6 +125,12 @@ export const handleApproveHouseholdInvitation = async (
 
   const success = await approveInvitation(userId, fromId, householdId, nickname, userPhoto)
   if (success) {
+    const householdName = await getHouseholdName(householdId)
+    addActivityForUsers(
+      [userId],
+      `${ACTIVITY.HOUSEHOLD_JOIN}$[${userNickname}, ${householdName}]$`,
+      `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
+    )
     res.status(200).send({
       url: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`,
     })
@@ -125,4 +138,40 @@ export const handleApproveHouseholdInvitation = async (
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
   }
   return true
+}
+
+export const handleLeaveHousehold = async (
+  userId: number,
+  userNickname: string,
+  householdId: number,
+  res: any,
+): Promise<boolean> => {
+  const members = await getHouseholdMembers(householdId)
+  const admins = members
+    ?.filter(({ role }) => role === HOUSEHOLD_ROLE_TYPE.ADMIN)
+    ?.map(({ userId }) => userId)
+
+  if (!admins || (admins.length === 1 && admins.indexOf(userId) !== -1)) {
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ADMIN_REQUIRED] })
+    return false
+  }
+
+  const success = await leaveHousehold(userId, householdId)
+  if (success) {
+    const householdName = await getHouseholdName(householdId)
+    const notifiedMembers = members!
+      .map(({ userId }) => userId)
+      .filter(memberId => memberId !== userId)
+
+    addActivityForUsers(
+      notifiedMembers,
+      `${ACTIVITY.HOUSEHOLD_LEAVE}$[${userNickname}, ${householdName}]$`,
+      `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
+    )
+    res.status(204).send()
+    return true
+  } else {
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+  }
+  return false
 }

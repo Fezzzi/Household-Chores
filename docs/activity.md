@@ -7,6 +7,7 @@ trigger addition to the table:
  - Joining household
  - Leaving household
  - Removing user from the household
+ - Deleting household user is member of
 
 ---
 

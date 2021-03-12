@@ -21,7 +21,7 @@ export const markActivityForUser = async (activityIds: number[]) =>
 export const addActivityForUsers = async (
   userIds: Array<number>,
   message: string,
-  link: string
+  link: string | null = null
 ): Promise<boolean> =>
   database.query(`
     INSERT INTO ${tActivityName} (

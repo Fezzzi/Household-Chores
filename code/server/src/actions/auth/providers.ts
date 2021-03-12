@@ -60,7 +60,7 @@ export const getProvidersUserId = async (googleToken: string, facebook: Facebook
 const logInWithProvider = async (
   req: any,
   res: any,
-  getID: () => Promise<{ userId: number; fsKey: string } | null>,
+  getID: () => Promise<{ userId: number; nickname: string; fsKey: string } | null>,
 ): Promise<boolean> => {
   const result = await getID()
   if (result === null) {
@@ -68,7 +68,7 @@ const logInWithProvider = async (
   }
 
   updateLoginTime(result.userId)
-  setSession(req, res, result.userId, result.fsKey)
+  setSession(req, res, result.userId, result.nickname, result.fsKey)
   return true
 }
 
@@ -105,9 +105,10 @@ export const logInWithIds = async (
   req: any,
   res: any,
   userId: number,
+  userNickname: string,
+  fsKey: string,
   googleId: string | null,
   facebookId: string | null,
-  fsKey: string,
 ): Promise<boolean> => {
   let success = false
 
@@ -121,6 +122,6 @@ export const logInWithIds = async (
     return false
   }
   updateLoginTime(userId)
-  setSession(req, res, userId, fsKey)
+  setSession(req, res, userId, userNickname, fsKey)
   return true
 }

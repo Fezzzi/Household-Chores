@@ -3,6 +3,8 @@ import { writeFileSync, mkdirSync, existsSync } from 'fs'
 import path from 'path'
 import dotenv from 'dotenv'
 
+import { RequestImage, RequestRawImage } from 'serverSrc/actions/types'
+
 dotenv.config()
 
 export const PROFILE_DIR = 'profile'
@@ -10,7 +12,7 @@ export const HOUSEHOLD_DIR = 'household'
 const UPLOAD_DIR = process.env.UPLOAD_PATH ?? 'uploads'
 
 export const uploadFiles = (
-  files: { data: string; type: string; name: string; size: number }[],
+  files: RequestRawImage[],
   directory: string,
   userFsKey: string
 ): Array<string | null> => {
@@ -40,11 +42,13 @@ export const uploadFiles = (
   return uploadedFiles
 }
 
-export const isLocalImage = (image: string, userFsKey: string) => image.startsWith
+export const isLocalImage = (image: RequestImage, userFsKey: string): image is string =>
+  typeof image === 'string'
   && image.startsWith(`/${UPLOAD_DIR}/${userFsKey}/`)
   && image.length < 140
 
-export const isExternalImage = (image: string) => image.startsWith
+export const isExternalImage = (image: RequestImage) =>
+  typeof image === 'string'
   && image.match(/[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/)
   && image.length < 140
 

@@ -80,6 +80,8 @@ const HouseholdCreateForm = ({ connections }) => {
       ...inputs,
     }
 
+    const invitationsData = invitations.map(({ toId, message }) => ({ toId, message }))
+
     // TODO: Add default photo to user after registering
     if (!inputs.photo) {
       loadImageUrlWithCallback(newHouseholdIcon, 'image/svg+xml', householdPhoto => {
@@ -91,7 +93,7 @@ const HouseholdCreateForm = ({ connections }) => {
                 photo: householdPhoto,
                 userPhoto,
               },
-              invitations,
+              invitations: invitationsData,
             }))
           })
         } else {
@@ -100,7 +102,7 @@ const HouseholdCreateForm = ({ connections }) => {
               ...inputsData,
               photo: householdPhoto,
             },
-            invitations,
+            invitations: invitationsData,
           }))
         }
       })
@@ -111,11 +113,11 @@ const HouseholdCreateForm = ({ connections }) => {
             ...inputsData,
             userPhoto,
           },
-          invitations,
+          invitations: invitationsData,
         }))
       })
     } else {
-      dispatch(HouseholdActions.createHousehold({ inputs: inputsData, invitations }))
+      dispatch(HouseholdActions.createHousehold({ inputs: inputsData, invitations: invitationsData }))
     }
 
     setTimer(setTimeout(

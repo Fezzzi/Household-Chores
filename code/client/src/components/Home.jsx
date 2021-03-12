@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { HomeActions } from 'clientSrc/actions'
 import { EmptyContentMessage, HomeWrapper } from 'clientSrc/styles/blocks/home'
-import { HOME, ACTIVITY } from 'shared/constants/localeMessages'
+import { HOME } from 'shared/constants/localeMessages'
 
 // eslint-disable-next-line import/no-useless-path-segments
 import { HouseholdSwitch, HouseholdMemberList, HouseholdBody } from './home/'
@@ -29,7 +29,6 @@ const Home = () => {
 
   return (
     <HomeWrapper>
-      <LocaleText message={`${ACTIVITY.CONNECTION_APPROVAL}$[David Hanus, Bla bla, Ble Zble]$`} />
       {currentHouseholdIndex !== null
         ? (
           <>
