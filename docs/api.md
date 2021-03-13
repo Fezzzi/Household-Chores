@@ -12,4 +12,4 @@ from IDE plugins.
 
 | Previous Page | Next Page |
 |:-------------:|:-----:|
-| <sup>[Activity](./activity.md)</sup>  | <sup>[Modules](./modules.md)</sup> |
+| <sup>[Activity](./activity.md)</sup>  | <sup>[Crons](./crons.md)</sup> |

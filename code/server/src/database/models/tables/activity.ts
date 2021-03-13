@@ -5,7 +5,7 @@ export default {
     id_user: 'id_user',
     message: 'message',
     link: 'link',
-    seen: 'seen',
+    date_seen: 'date_seen',
     date_created: 'date_created',
   },
 }

@@ -9,18 +9,18 @@ import {
 } from 'serverSrc/database/models/tables'
 
 dotenv.config()
-const UPLOAD_DIR = process.env.UPLOAD_PATH || 'uploads'
+const UPLOAD_DIR = process.env.UPLOAD_PATH ?? 'uploads'
 
-const getFiles = dir => {
+const getFiles = (dir: string): string[] => {
   const dirents = readdirSync(dir, { withFileTypes: true })
-  const files = dirents.map(dirent => {
+  const files: Array<string | string[]> = dirents.map(dirent => {
     const fileOrDir = path.join(dir, dirent.name)
     return dirent.isDirectory() ? getFiles(fileOrDir) : fileOrDir
   })
   return Array.prototype.concat(...files)
 }
 
-const cleanDirectory = (dirPath, files) =>
+const cleanDirectory = (dirPath: string, files: string[]) =>
   getFiles(dirPath)
     .filter(storedFile => files.indexOf(storedFile) === -1)
     // eslint-disable-next-line no-console
@@ -39,17 +39,18 @@ const cleanUploads = async () => {
     SELECT ${tHouseholdsCols.photo} FROM ${tHouseholdsName} WHERE ${tHouseholdsCols.photo} IS NOT NULL
   `, [], false)
 
-  const photosByKeys = [...userResults, ...membershipResults, ...householdResults].reduce((acc, result) => {
-    const parts = result.photo.split('/')
-    const fsKey = parts[2]
-    const file = path.join(path.resolve('./'), UPLOAD_DIR, fsKey, parts[3], parts[4])
-    if (acc[fsKey]) {
-      acc[fsKey].push(file)
-    } else {
-      acc[fsKey] = [file]
-    }
-    return acc
-  }, {})
+  const photosByKeys: Record<string, string[]> = [...userResults, ...membershipResults, ...householdResults]
+    .reduce((acc, result) => {
+      const parts = result.photo.split('/')
+      const fsKey = parts[2]
+      const file = path.join(path.resolve('./'), UPLOAD_DIR, fsKey, parts[3], parts[4])
+      if (acc[fsKey]) {
+        acc[fsKey].push(file)
+      } else {
+        acc[fsKey] = [file]
+      }
+      return acc
+    }, {})
 
   const uploadsDir = path.join(path.resolve('./'), UPLOAD_DIR)
   const directories = readdirSync(uploadsDir, { withFileTypes: true })
@@ -58,16 +59,14 @@ const cleanUploads = async () => {
       if (photosByKeys[directory.name]) {
         cleanDirectory(path.join(uploadsDir, directory.name), photosByKeys[directory.name])
       } else {
+        rimraf.sync(path.join(uploadsDir, directory.name))
         // eslint-disable-next-line no-console
-        rimraf(path.join(uploadsDir, directory.name), [], () => console.log(`removed ${directory.name}/`))
+        console.log(`removed ${directory.name}/`)
       }
     }
   })
 }
 
 cleanUploads()
-  .then(() => process.exit())
-  .catch(err => {
-    console.error(err)
-    process.exit()
-  })
+  .catch(console.error)
+  .finally(() => process.exit())
