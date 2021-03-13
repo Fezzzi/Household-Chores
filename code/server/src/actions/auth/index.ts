@@ -7,7 +7,7 @@ import { sendEmails } from 'serverSrc/helpers/mailer'
 import { logInUser, SignUpUser, findUser } from 'serverSrc/database/models'
 import { setSession } from 'serverSrc/helpers/auth'
 
-import { validateLoginData, validateResetData, validateSignupData } from './validation'
+import { validateLoginData, validateResetData, validateSignupData } from './validate'
 import { getProvidersUserId, handleProvidersLogIn, logInWithIds } from './providers'
 
 const resetPass = async ({ email }: any, req: any, res: any) => {

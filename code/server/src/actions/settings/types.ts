@@ -1,6 +1,4 @@
-import { RequestRawImage } from '../types'
-
-export type SettingsUpdateRequestInputs = Record<string, string | number>
+import { RequestImage, RequestRawImage } from '../types'
 
 export interface HouseholdNewInvitation {
   userId: number
@@ -24,3 +22,16 @@ export interface HouseholdEditInputs {
   removedMembers: number[]
   removedInvitations: number[]
 }
+
+export interface GeneralEditInputs {
+  nickname?: string
+  email?: string
+  oldPassword?: string
+  newPassword?: string
+  photo?: RequestImage
+  visibility?: string
+}
+
+export type DialogEditInputs = Record<string, boolean>
+export type NotificationEditInputs = Record<string, boolean>
+export type SettingsUpdateRequestInputs = HouseholdEditInputs | GeneralEditInputs | DialogEditInputs | NotificationEditInputs

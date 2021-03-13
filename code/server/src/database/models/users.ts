@@ -1,6 +1,7 @@
 import { database } from 'serverSrc/database'
 import { apify } from 'serverSrc/helpers/api'
 import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords'
+import { GeneralEditInputs } from 'serverSrc/actions/settings/types'
 import { CONNECTION_STATE_TYPE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 
@@ -112,7 +113,7 @@ export const updateLoginTime = (userId: number) =>
   `, [userId])
 
 export const updateUserData = async (
-  data: Record<string, string | number>,
+  data: GeneralEditInputs,
   userId: number
 ): Promise<boolean> => {
   const newPass = data.newPassword && await encryptPass(data.newPassword as string)

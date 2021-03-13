@@ -1,9 +1,9 @@
 import { INPUT_TYPE, INVITATION_MESSAGE_LENGTH, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { validateField } from 'serverSrc/helpers/settings'
 import { findApprovedConnections } from 'serverSrc/database/models'
 
 import { CreateHouseholdInputs, CreateHouseholdInvitation } from './types'
+import { validateField } from '../validate'
 
 export const validateCreateData = async (
   inputs: CreateHouseholdInputs,

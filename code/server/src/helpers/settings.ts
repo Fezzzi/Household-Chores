@@ -1,9 +1,39 @@
 import { tHouseholdsCols } from 'serverSrc/database/models/tables'
+import {
+  findApprovedConnections, findConnections, findNotificationSettings,
+  findProfileData, findUserHouseholds, findUserInvitations,
+} from 'serverSrc/database/models'
 import { deApify } from 'serverSrc/helpers/api'
-import { RequestImage } from 'serverSrc/actions/types'
-import { NOTIFICATION_TYPE, SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS } from 'shared/constants'
+import { findContributors, findSupporters } from 'serverSrc/helpers/externalResources'
+import { NOTIFICATION_TYPE, SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS, PROFILE_TABS } from 'shared/constants'
 import { ERROR, INFO } from 'shared/constants/localeMessages'
-import { isInputValid } from 'shared/helpers/validation'
+
+export const getTabData = async (category: string, tab: string, req: any) => {
+  switch (category) {
+    case SETTING_CATEGORIES.PROFILE:
+      if (tab === PROFILE_TABS.NOTIFICATIONS) {
+        return findNotificationSettings(req.session.user)
+      } else if (tab === PROFILE_TABS.GENERAL) {
+        return findProfileData(req.session.user)
+      }
+      return {}
+    case SETTING_CATEGORIES.HOUSEHOLDS:
+      return {
+        invitations: await findUserInvitations(req.session.user),
+        households: await findUserHouseholds(req.session.user),
+        connections: await findApprovedConnections(req.session.user),
+      }
+    case SETTING_CATEGORIES.CONNECTIONS:
+      return findConnections(req.session.user)
+    case SETTING_CATEGORIES.MORE:
+      return {
+        supporters: await findSupporters(),
+        contributors: await findContributors(),
+      }
+    default:
+      return {}
+  }
+}
 
 export const getTabList = (
   data: any,
@@ -32,26 +62,10 @@ export const getTabList = (
   }
 }
 
-export const validateField = (
-  res: any,
-  field: string | number | RequestImage | undefined,
-  type: string,
-  constraints?: any
-): boolean => {
-  if (field !== undefined) {
-    const validity = isInputValid(type, field, constraints)
-    if (!validity.valid) {
-      res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [validity.message || ERROR.INVALID_DATA] })
-      return false
-    }
-  }
-  return true
-}
-
 export const tryRemapBoolData = (
-  inputs: Record<string, string | number>,
+  inputs: Record<string, any>,
   allowedKeys: string[],
-  valueMapper: (val: string | number) => number,
+  valueMapper: (val: any) => number,
   req: any,
   res: any
 ): Record<string, number> | null => {

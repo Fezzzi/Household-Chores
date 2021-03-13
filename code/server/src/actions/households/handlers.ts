@@ -1,5 +1,4 @@
 import { HOUSEHOLD_DIR, isLocalImage, uploadFiles } from 'serverSrc/helpers/files'
-import { validateField } from 'serverSrc/helpers/settings'
 import {
   addActivityForUsers, addHouseholdInvitations, approveInvitation, createHousehold,
   deleteHousehold, getHouseholdMembers, getHouseholdName, leaveHousehold,
@@ -10,6 +9,7 @@ import { SETTINGS_PREFIX } from 'shared/constants/api'
 
 import { ApproveInvitationRequest, CreateHouseholdInputs, CreateHouseholdInvitation } from './types'
 import { validateCreateData } from './validate'
+import { validateField } from '../validate'
 
 export const handleCreateHousehold = async (
   inputs: CreateHouseholdInputs,
@@ -109,15 +109,12 @@ export const handleApproveHouseholdInvitation = async (
   }
 
   if (!(validateField(res, nickname, INPUT_TYPE.TEXT)
-    && (isLocalImage(photo, fsKey)
-    || validateField(res, photo, INPUT_TYPE.PHOTO)))
+    && (isLocalImage(photo, fsKey) || validateField(res, photo, INPUT_TYPE.PHOTO)))
   ) {
     return false
   }
 
-  const userPhoto = isLocalImage(photo, fsKey)
-    ? photo
-    : uploadFiles([photo], HOUSEHOLD_DIR, fsKey)[0]
+  const userPhoto = uploadFiles([photo], HOUSEHOLD_DIR, fsKey)[0]
   if (userPhoto === null) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
     return true

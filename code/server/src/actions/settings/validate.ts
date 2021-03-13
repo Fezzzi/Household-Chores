@@ -3,15 +3,11 @@ import {
 } from 'shared/constants'
 import { ERROR, INFO } from 'shared/constants/localeMessages'
 import { findApprovedConnections, findUser, getUserRole, isCorrectPassword } from 'serverSrc/database/models'
-import { validateField } from 'serverSrc/helpers/settings'
 
-import { HouseholdEditInputs } from './types'
+import { GeneralEditInputs, HouseholdEditInputs } from './types'
+import { validateField } from '../validate'
 
-export const validateProfileData = async (
-  inputs: Record<string, string | number>,
-  req: any,
-  res: any
-): Promise<boolean> => {
+export const validateProfileData = async (inputs: GeneralEditInputs, req: any, res: any): Promise<boolean> => {
   const { nickname, email, oldPassword, newPassword, photo, visibility } = inputs
 
   const update = nickname !== undefined
@@ -39,12 +35,12 @@ export const validateProfileData = async (
     return false
   }
 
-  if (email !== undefined && await findUser(email as string) !== null) {
+  if (email !== undefined && await findUser(email) !== null) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.EMAIL_USED] })
     return false
   }
 
-  if (oldPassword && !await isCorrectPassword(oldPassword as string, req.session.user)) {
+  if (oldPassword && !await isCorrectPassword(oldPassword, req.session.user)) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INCORRECT_PASS] })
     return false
   }
