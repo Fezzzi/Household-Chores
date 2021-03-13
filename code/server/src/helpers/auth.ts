@@ -5,7 +5,8 @@ export const setSession = (req: any, res: any, userId: number, userNickname: str
     res.clearCookie('user_sid')
     return
   }
+
   req.session.user = userId
-  req.session.userNickanme = userNickname
+  req.session.userNickname = userNickname
   req.session.fsKey = fsKey
 }

@@ -278,13 +278,17 @@ export const getUserRole = async (
 
 export const getHouseholdMembers = async (
   householdId: number
-): Promise<Array<{ userId: number; role: string }> | null> => {
+): Promise<Array<{ userId: number; role: string; nickname: string }> | null> => {
   const members = await database.query(`
     SELECT * FROM ${tHouseMemName}
     WHERE ${tHouseMemCols.id_household}=?
   `, [householdId])
 
-  return members?.map((member: any) => ({ userId: member[tHouseMemCols.id_user], role: member[tHouseMemCols.role] }))
+  return members?.map((member: any) => ({
+    userId: member[tHouseMemCols.id_user],
+    role: member[tHouseMemCols.role],
+    nickname: member[tHouseMemCols.nickname],
+  }))
 }
 
 export const getHouseholdName = async (householdId: number): Promise<string> => {
@@ -294,5 +298,5 @@ export const getHouseholdName = async (householdId: number): Promise<string> => 
     LIMIT 1
   `, [householdId])
 
-  return householdNames[0]
+  return householdNames[0][tHouseholdsCols.name]
 }

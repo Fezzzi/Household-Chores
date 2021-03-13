@@ -5,9 +5,10 @@ import { HomeActions } from 'clientSrc/actions'
 import { EmptyContentMessage, HomeWrapper } from 'clientSrc/styles/blocks/home'
 import { HOME } from 'shared/constants/localeMessages'
 
-// eslint-disable-next-line import/no-useless-path-segments
-import { HouseholdSwitch, HouseholdMemberList, HouseholdBody } from './home/'
-import { LocaleText } from './common'
+import HouseholdSwitch from './HouseholdSwitch'
+import HouseholdMemberList from './HouseholdMemberList'
+import HouseholdBody from './HouseholdBody'
+import { LocaleText } from '../common'
 
 const Home = () => {
   const dispatch = useDispatch()

@@ -123,11 +123,15 @@ export const handleApproveHouseholdInvitation = async (
   const success = await approveInvitation(userId, fromId, householdId, nickname, userPhoto)
   if (success) {
     const householdName = await getHouseholdName(householdId)
-    addActivityForUsers(
-      [userId],
-      `${ACTIVITY.HOUSEHOLD_JOIN}$[${userNickname}, ${householdName}]$`,
-      `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
-    )
+    const members = await getHouseholdMembers(householdId)
+    const notifiedMembers = members?.map(({ userId }) => userId).filter(memberId => memberId !== userId)
+    if (notifiedMembers?.length) {
+      addActivityForUsers(
+        notifiedMembers,
+        `${ACTIVITY.HOUSEHOLD_JOIN}$[${userNickname}, ${householdName}]$`,
+        `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
+      )
+    }
     res.status(200).send({
       url: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`,
     })

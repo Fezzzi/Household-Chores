@@ -1,5 +1,3 @@
-import HouseholdSwitch from './HouseholdSwitch'
-import HouseholdMemberList from './HouseholdMemberList'
-import HouseholdBody from './HouseholdBody'
+import Home from './Home'
 
-export { HouseholdSwitch, HouseholdMemberList, HouseholdBody }
+export { Home }

@@ -4,8 +4,8 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 
 import { API, SETTING_TAB_ROWS, SETTING_CATEGORIES } from 'shared/constants'
 
-import Home from './Home'
 import Resource from './Resource'
+import { Home } from './home'
 import { AuthForm } from './forms'
 import Settings from './settings/Settings'
 

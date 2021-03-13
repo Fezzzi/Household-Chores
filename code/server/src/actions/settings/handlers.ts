@@ -134,20 +134,25 @@ const handleHouseholdEditActivity = async (
   householdId: number,
   userId: number,
   userNickname: string,
-  members: Array<{ userId: number; role: string }>,
-  removedMembers: number[],
+  members: Array<{ userId: number; role: string; nickname: string }>,
+  removedMemberIds: number[],
   newInvitations: HouseholdNewInvitation[],
 ) => {
   const householdName = await getHouseholdName(householdId)
+  const removedMemberNicknames = members
+    .filter(({ userId }) => removedMemberIds?.includes(userId))
+    .map(({ nickname }) => nickname)
   const remainingMembers = members
     .map(({ userId }) => userId)
-    .filter(memberId => !removedMembers?.includes(memberId) && memberId !== userId)
+    .filter(memberId => !removedMemberIds?.includes(memberId) && memberId !== userId)
 
   if (remainingMembers?.length) {
-    removedMembers.forEach(memberId => {
+    addActivityForUsers(removedMemberIds, `${ACTIVITY.HOUSEHOLD_REMOVE_YOU}$[${userNickname}, ${householdName}]$`)
+
+    removedMemberNicknames.forEach(memberNickname => {
       addActivityForUsers(
         remainingMembers,
-        `${ACTIVITY.HOUSEHOLD_REMOVE}$[${memberId}, ${householdName}, ${userNickname}]$`,
+        `${ACTIVITY.HOUSEHOLD_REMOVE}$[${memberNickname}, ${householdName}, ${userNickname}]$`,
         `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
       )
     })
@@ -158,7 +163,7 @@ const handleHouseholdEditActivity = async (
   if (sentInvitations?.length) {
     addActivityForUsers(
       sentInvitations,
-      `${ACTIVITY.HOUSEHOLD_INVITATION}$[${userNickname}, ${householdName}]$`,
+      `${ACTIVITY.HOUSEHOLD_INVITATION}$[${householdName}, ${userNickname}]$`,
       `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=${HOUSEHOLD_TABS.INVITATIONS}`
     )
   }

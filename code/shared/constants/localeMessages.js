@@ -9,6 +9,7 @@ export const ACTIVITY = {
   HOUSEHOLD_JOIN: 'activity.householdJoin',
   HOUSEHOLD_LEAVE: 'activity.householdLeave',
   HOUSEHOLD_REMOVE: 'activity.householdRemove',
+  HOUSEHOLD_REMOVE_YOU: 'activity.householdRemoveYou',
   HOUSEHOLD_DELETE: 'activity.householdDelete',
 }
 
