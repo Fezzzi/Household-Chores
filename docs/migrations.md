@@ -23,4 +23,4 @@ Migrating is controlled with two scripts:
 
 | Previous Page | Next Page |
 |:-------------:|:-----:|
-| <sup>[Application Setup](./setup.md)</sup>  | <sup>[API](./api.md)</sup> |
+| <sup>[Application Setup](./setup.md)</sup>  | <sup>[Localization](./localization.md)</sup> |

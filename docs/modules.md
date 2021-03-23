@@ -9,4 +9,4 @@ have to integrate this external resource and process of App's releasing upon new
 
 | Previous Page | Next Page |
 |:-------------:|:-----:|
-| <sup>[API](./api.md)</sup>  | |
+| <sup>[Crons](./crons.md)</sup>  | |

@@ -1,6 +1,7 @@
 import { database } from 'serverSrc/database'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { apify } from 'serverSrc/helpers/api'
+import { CreateHouseholdInvitation } from 'serverSrc/actions/households/types'
 
 import {
   tHouseholdsName, tHouseholdsCols, tHouseInvName, tHouseInvCols,
@@ -117,13 +118,13 @@ export const findUserHouseholds = async (currentUser: number): Promise<Array<obj
 
 export const addHouseholdInvitations = async (
   householdId: number,
-  invitations: Array<Record<string, string | number>>,
+  invitations: CreateHouseholdInvitation[],
   currentId: number,
 ): Promise<boolean> =>
   database.query(`
     INSERT INTO ${tHouseInvName}
     VALUES (${invitations.map(() => `${householdId}, ${currentId}, ?, ?, NOW()`).join('),(')})
-  `, invitations.flatMap(user => [user.userId, user.message || '']))
+  `, invitations.flatMap(user => [user.toId, user.message || '']))
 
 export const createHousehold = async (
   data: Record<string, string | number>,
@@ -277,11 +278,25 @@ export const getUserRole = async (
 
 export const getHouseholdMembers = async (
   householdId: number
-): Promise<Array<{ userId: number; role: string }> | null> => {
+): Promise<Array<{ userId: number; role: string; nickname: string }> | null> => {
   const members = await database.query(`
     SELECT * FROM ${tHouseMemName}
     WHERE ${tHouseMemCols.id_household}=?
   `, [householdId])
 
-  return members?.map((member: any) => ({ userId: member[tHouseMemCols.id_user], role: member[tHouseMemCols.role] }))
+  return members?.map((member: any) => ({
+    userId: member[tHouseMemCols.id_user],
+    role: member[tHouseMemCols.role],
+    nickname: member[tHouseMemCols.nickname],
+  }))
+}
+
+export const getHouseholdName = async (householdId: number): Promise<string> => {
+  const householdNames = await database.query(`
+    SELECT ${tHouseholdsCols.name} FROM ${tHouseholdsName}
+    WHERE ${tHouseholdsCols.id}=?
+    LIMIT 1
+  `, [householdId])
+
+  return householdNames[0][tHouseholdsCols.name]
 }

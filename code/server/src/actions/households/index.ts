@@ -1,19 +1,22 @@
 import express from 'express'
 
-import {
-  deleteHousehold, deleteInvitation, findHouseholdAdmins,
-  getUserRole, leaveHousehold, getUserHouseholdsData,
-} from 'serverSrc/database/models'
-import { API, NOTIFICATION_TYPE, HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
+import { deleteInvitation, getUserHouseholdsData } from 'serverSrc/database/models'
+import { API, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 
-import { handleApproveHouseholdInvitation, handleCreateHousehold } from './handlers'
+import {
+  handleApproveHouseholdInvitation, handleCreateHousehold, handleDeleteHousehold, handleLeaveHousehold,
+} from './handlers'
+import {
+  ApproveInvitationRequest, CreateHouseholdRequest, DeleteHouseholdRequest, IgnoreInvitationRequest,
+} from './types'
 
 export default () => {
   const router = express.Router()
   router.get('/:action', async (req, res) => {
     const { params: { action } } = req
     const userId = req.session!.user
+
     switch (action) {
       case API.HOUSEHOLDS_LOAD: {
         const households = await getUserHouseholdsData(userId)
@@ -33,78 +36,57 @@ export default () => {
 
   router.post('/:action', async (req, res) => {
     const { params: { action }, body } = req
-    const userId = req.session!.user
+    const { user: userId, fsKey } = req.session!
 
     if (action === API.HOUSEHOLD_CREATE) {
-      handleCreateHousehold(body.inputs, body.invitations, userId, req, res)
-      return
+      const { inputs, invitations }: CreateHouseholdRequest = body as any
+      return handleCreateHousehold(inputs, invitations, userId, fsKey, res)
     }
 
     res.status(404).send('Not Found')
+    return false
   })
 
   router.put('/:action', async (req, res) => {
     const { params: { action }, body } = req
-    const userId = req.session!.user
+    const { user: userId, userNickname, fsKey } = req.session!
 
     if (action === API.INVITATION_APPROVE) {
-      const {
-        fromId,
-        householdId,
-        userNickname,
-        userPhoto,
-      } = body
-
-      handleApproveHouseholdInvitation(fromId, householdId, userNickname, userPhoto, userId, req, res)
-      return
+      const invitationBody: ApproveInvitationRequest = body as any
+      return handleApproveHouseholdInvitation(invitationBody, userId, userNickname, fsKey, res)
     }
 
     res.status(404).send('Not Found')
+    return false
   })
 
   router.delete('/:action', async (req, res) => {
-    const { params: { action }, query: { fromId, householdId } } = req
-    const userId = req.session!.user
+    const { params: { action }, query } = req
+    const { user: userId, userNickname } = req.session!
+
     switch (action) {
       case API.HOUSEHOLD_DELETE: {
-        const role = await getUserRole(userId, Number(householdId))
-        if (role !== HOUSEHOLD_ROLE_TYPE.ADMIN) {
-          res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.BAD_PERMISSIONS] })
-        } else {
-          const success = await deleteHousehold(Number(householdId))
-          if (success) {
-            res.status(204).send()
-          } else {
-            res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
-          }
-        }
-        return
+        const { householdId }: DeleteHouseholdRequest = query as any
+        return handleDeleteHousehold(userId, userNickname, householdId, res)
       }
       case API.HOUSEHOLD_LEAVE: {
-        const admins = await findHouseholdAdmins(Number(householdId))
-        if (!admins || (admins.length === 1 && admins.indexOf(userId) !== -1)) {
-          res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ADMIN_REQUIRED] })
-          return
-        }
-        const success = await leaveHousehold(userId, Number(householdId))
-        if (success) {
-          res.status(204).send()
-        } else {
-          res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
-        }
-        return
+        const { householdId }: DeleteHouseholdRequest = query as any
+        return handleLeaveHousehold(userId, userNickname, householdId, res)
       }
       case API.INVITATION_IGNORE: {
-        const success = await deleteInvitation(userId, Number(fromId), Number(householdId))
+        const { fromId, householdId }: IgnoreInvitationRequest = query as any
+        const success = await deleteInvitation(userId, fromId, householdId)
         if (success) {
           res.status(204).send()
         } else {
           res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
+          return false
         }
-        return
+        return true
       }
       default:
         res.status(404).send('Not Found')
+        return false
     }
   })
 

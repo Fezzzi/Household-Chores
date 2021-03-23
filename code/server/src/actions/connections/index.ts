@@ -2,10 +2,11 @@ import express from 'express'
 
 import {
   queryUsers, approveConnection, createConnectionRequest, blockConnection,
-  removeConnection, findBlockedConnections, findConnections,
+  removeConnection, findBlockedConnections, findConnections, addActivityForUsers,
 } from 'serverSrc/database/models'
-import { API, CONNECTION_STATE_TYPE, NOTIFICATION_TYPE } from 'shared/constants'
-import { ERROR, SUCCESS } from 'shared/constants/localeMessages'
+import { API, CONNECTION_STATE_TYPE, CONNECTION_TABS, NOTIFICATION_TYPE, SETTING_CATEGORIES } from 'shared/constants'
+import { ACTIVITY, ERROR, SUCCESS } from 'shared/constants/localeMessages'
+import { SETTINGS_PREFIX } from 'shared/constants/api'
 
 const performConnectionAction = async (
   req: any,
@@ -35,6 +36,11 @@ const handleConnectionRequest = async (
   if (isRequestValid) {
     const success = await createConnectionRequest(currentUser, userId, message ?? null)
     if (success) {
+      addActivityForUsers(
+        [Number(userId)],
+        `${ACTIVITY.CONNECTION_REQUEST}$[${req.session!.userNickname}]$`,
+        `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.CONNECTIONS}?tab=${CONNECTION_TABS.PENDING}`
+      )
       res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.CONNECTION_REQUEST_SENT] })
     } else {
       res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] })
@@ -63,7 +69,15 @@ export default () => {
 
     switch (action) {
       case API.CONNECTION_APPROVE:
-        return performConnectionAction(req, res, Number(userId), approveConnection)
+        if (performConnectionAction(req, res, Number(userId), approveConnection)) {
+          addActivityForUsers(
+            [Number(userId)],
+            `${ACTIVITY.CONNECTION_APPROVAL}$[${req.session!.userNickname}]$`,
+            `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.CONNECTIONS}?tab=${CONNECTION_TABS.MY_CONNECTIONS}`
+          )
+          return true
+        }
+        return false
       case API.CONNECTION_BLOCK:
         return performConnectionAction(req, res, Number(userId), blockConnection)
       default:

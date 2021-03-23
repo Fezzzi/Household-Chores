@@ -1,9 +1,15 @@
 import express from 'express'
 import dotenv from 'dotenv'
 
-import { handleSettingsDataFetch, handleSettingsDataUpdate } from 'serverSrc/actions/settings/handlers'
 import { ERROR, INFO } from 'shared/constants/localeMessages'
-import { SETTING_CATEGORIES, SETTING_TAB_ROWS, NOTIFICATION_TYPE } from 'shared/constants'
+import { SETTING_CATEGORIES, SETTING_TAB_ROWS, NOTIFICATION_TYPE, PROFILE_TABS, HOUSEHOLD_TABS } from 'shared/constants'
+
+import {
+  DialogEditInputs, GeneralEditInputs, HouseholdEditInputs, NotificationEditInputs, SettingsUpdateRequestInputs,
+} from './types'
+import {
+  handleDialogsEdit, handleGeneralEdit, handleHouseholdEdit, handleNotificationsEdit, handleSettingsDataFetch,
+} from './handlers'
 
 dotenv.config()
 
@@ -24,7 +30,7 @@ export default () => {
 
     if (inputs && Object.values(inputs).length > 0) {
       if (category && tab && SETTING_TAB_ROWS[category] !== undefined) {
-        const handled = await handleSettingsDataUpdate(category, tab, inputs, req, res)
+        const handled = await editSettings(category, tab, inputs, req, res)
         if (!handled) {
           handleSettingsDataFetch(category, tab, req, res)
         }
@@ -37,4 +43,26 @@ export default () => {
   })
 
   return router
+}
+
+const editSettings = (category: string, tab: string, inputs: SettingsUpdateRequestInputs, req: any, res: any) => {
+  switch (category) {
+    case SETTING_CATEGORIES.PROFILE:
+      switch (tab) {
+        case PROFILE_TABS.GENERAL:
+          return handleGeneralEdit(inputs as GeneralEditInputs, req, res)
+        case PROFILE_TABS.NOTIFICATIONS:
+          return handleNotificationsEdit(inputs as NotificationEditInputs, req, res)
+        case PROFILE_TABS.DIALOGS:
+          return handleDialogsEdit(inputs as DialogEditInputs, req, res)
+      }
+      break
+    case SETTING_CATEGORIES.HOUSEHOLDS:
+      if (tab === HOUSEHOLD_TABS._HOUSEHOLD) {
+        return handleHouseholdEdit(inputs as HouseholdEditInputs, req, res)
+      }
+      break
+  }
+  res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
+  return true
 }

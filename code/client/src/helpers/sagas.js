@@ -29,7 +29,7 @@ export function* generalSaga(effect, payload, callback) {
     const response = yield call(effect, payload)
     yield call(handleResponse, response, callback)
   } catch (error) {
-    if (error.response.data) {
+    if (error.response?.data) {
       yield put(NotificationActions.addNotifications(error.response.data))
     } else {
       yield put(NotificationActions.addNotifications({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR] }))

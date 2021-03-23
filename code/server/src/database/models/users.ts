@@ -1,8 +1,9 @@
 import { database } from 'serverSrc/database'
+import { apify } from 'serverSrc/helpers/api'
 import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords'
+import { GeneralEditInputs } from 'serverSrc/actions/settings/types'
 import { CONNECTION_STATE_TYPE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { apify } from 'serverSrc/helpers/api'
 
 import {
   tUsersName, tUsersCols, tConnectionsName, tConnectionsCols,
@@ -28,9 +29,9 @@ export const findProfileData = async (userId: number): Promise<Record<string, st
   return result[0]
 }
 
-export const findUser = async (email: string): Promise<{ userId: number; fsKey: string } | null> => {
+export const findUser = async (email: string): Promise<{ userId: number; nickname: string; fsKey: string } | null> => {
   const result = await database.query(`
-    SELECT ${tUsersCols.id}, ${tUsersCols.fs_key}
+    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}
     FROM ${tUsersName}
     WHERE ${tUsersCols.email}=?
   `, [email])
@@ -40,9 +41,13 @@ export const findUser = async (email: string): Promise<{ userId: number; fsKey: 
     : null
 }
 
-export const findGoogleUser = async (googleId: string): Promise<{ userId: number; fsKey: string } | null> => {
+export const findGoogleUser = async (googleId: string): Promise<{
+  userId: number
+  nickname: string
+  fsKey: string
+} | null> => {
   const result = await database.query(`
-    SELECT ${tUsersCols.id}, ${tUsersCols.fs_key}
+    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}
     FROM ${tUsersName}
     WHERE ${tUsersCols.id_google}=?
   `, [googleId])
@@ -52,9 +57,13 @@ export const findGoogleUser = async (googleId: string): Promise<{ userId: number
     : null
 }
 
-export const findFacebookUser = async (facebookId: string): Promise<{ userId: number; fsKey: string } | null> => {
+export const findFacebookUser = async (facebookId: string): Promise<{
+  userId: number
+  nickname: string
+  fsKey: string
+} | null> => {
   const result = await database.query(`
-    SELECT ${tUsersCols.id}, ${tUsersCols.fs_key}
+    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}
     FROM ${tUsersName}
     WHERE ${tUsersCols.id_facebook}=?
   `, [facebookId])
@@ -68,9 +77,9 @@ export const logInUser = async (
   email: string,
   password: string,
   res: any
-): Promise<{ userId: number; fsKey: string } | null> => {
+): Promise<{ userId: number; nickname: string; fsKey: string } | null> => {
   const result = await database.query(`
-    SELECT ${tUsersCols.password}, ${tUsersCols.id}, ${tUsersCols.fs_key}
+    SELECT ${tUsersCols.password}, ${tUsersCols.nickname}, ${tUsersCols.id}, ${tUsersCols.fs_key}
     FROM ${tUsersName}
     WHERE ${tUsersCols.email}=?
   `, [email])
@@ -91,6 +100,7 @@ export const logInUser = async (
   updateLoginTime(userId)
   return {
     userId,
+    nickname: result[0][tUsersCols.nickname],
     fsKey: result[0][tUsersCols.fs_key],
   }
 }
@@ -103,7 +113,7 @@ export const updateLoginTime = (userId: number) =>
   `, [userId])
 
 export const updateUserData = async (
-  data: Record<string, string | number>,
+  data: GeneralEditInputs,
   userId: number
 ): Promise<boolean> => {
   const newPass = data.newPassword && await encryptPass(data.newPassword as string)
@@ -131,8 +141,8 @@ export const SignUpUser = async (
   photo: string | null,
   googleId: string | null,
   facebookId: string | null,
-): Promise<{ insertId: number; fsKey: string } | null> =>
-  database.withTransaction(async (): Promise<{ insertId: number; fsKey: string }> => {
+): Promise<{ insertId: number; nickname: string; fsKey: string } | null> =>
+  database.withTransaction(async (): Promise<{ insertId: number; nickname: string; fsKey: string }> => {
     const pass = await encryptPass(password ?? generatePass())
     const result = await database.query(`
       INSERT INTO ${tUsersName} (
@@ -156,6 +166,7 @@ export const SignUpUser = async (
       `)
       return {
         insertId: result.insertId,
+        nickname,
         fsKey,
       }
     }
