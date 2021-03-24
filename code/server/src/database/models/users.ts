@@ -1,5 +1,6 @@
 import { database } from 'serverSrc/database'
 import { apify } from 'serverSrc/helpers/api'
+import { UserCreationError } from 'serverSrc/helpers/errors'
 import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords'
 import { GeneralEditInputs } from 'serverSrc/actions/settings/types'
 import { CONNECTION_STATE_TYPE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
@@ -170,7 +171,7 @@ export const SignUpUser = async (
         fsKey,
       }
     }
-    throw new Error('User creation failed.')
+    throw new UserCreationError('User creation failed.')
   })
 
 export const assignGoogleProvider = async (userId: number, googleId: string): Promise<boolean> =>
