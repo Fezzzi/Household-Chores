@@ -2,8 +2,8 @@ import { useState, useMemo, useEffect } from 'react'
 
 import { DEVICES, MOBILE_WIDTH, TABLET_WIDTH } from 'clientSrc/constants'
 
-export const useScrollOffset = (scrollRoot = 'pageWrapper') => {
-  const element = useMemo(() => document.getElementById(scrollRoot), [])
+export const useScrollOffset = (scrollRootId = 'scrollRoot') => {
+  const element = useMemo(() => document.getElementById(scrollRootId), [])
   const style = useMemo(() => getComputedStyle(element), [element])
   const [scrolls, setScrolls] = useState(() => {
     const { scrollTop, scrollLeft } = element

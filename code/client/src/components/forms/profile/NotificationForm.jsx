@@ -26,10 +26,8 @@ const NotificationForm = ({ data, onSubmit }) => {
     const filtered = { ...general }
     if (filtered) {
       const isMobile = false
-      if (isMobile) {
-        delete filtered.browser_notifications
-      } else {
-        delete filtered.mobile_notifications
+      if (!isMobile) {
+        delete filtered.mobileNotifications
       }
     }
     return filtered

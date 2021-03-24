@@ -6,7 +6,6 @@ import { tNotifySettingsName, tNotifySettingsCols } from './tables'
 const groupMappings: Record<string, string[]> = {
   general: [
     tNotifySettingsCols.email_notifications,
-    tNotifySettingsCols.browser_notifications,
     tNotifySettingsCols.mobile_notifications,
   ],
   connections: [
@@ -27,8 +26,7 @@ export const findNotificationSettings = async (
   userId: number
 ): Promise<Record<string, Record<string, boolean>> | null> => {
   const result = await database.query(`
-    SELECT ${Object.values(tNotifySettingsCols).filter(column => column !== tNotifySettingsCols.id_user).join(', ')}
-    FROM ${tNotifySettingsName} WHERE ${tNotifySettingsCols.id_user}=${userId}
+    SELECT * FROM ${tNotifySettingsName} WHERE ${tNotifySettingsCols.id_user}=${userId}
   `)
 
   if (result[0]) {
@@ -41,6 +39,15 @@ export const findNotificationSettings = async (
   }
   return null
 }
+
+export const findNotificationSettingsForUsers = async (
+  userIds: number[]
+): Promise<any[] | null> =>
+  database.query(`
+    SELECT *
+    FROM ${tNotifySettingsName}
+    WHERE ${tNotifySettingsCols.id_user} IN (${userIds.join(',')})
+  `)
 
 export const updateNotificationSettings = (data: Record<string, string | number>, userId: number): Promise<boolean> =>
   database.query(`

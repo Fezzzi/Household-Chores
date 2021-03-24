@@ -1,8 +1,10 @@
 import { HOUSEHOLD_DIR, isLocalImage, uploadFiles } from 'serverSrc/helpers/files'
+import { logActivity } from 'serverSrc/helpers/activity'
 import {
-  addActivityForUsers, addHouseholdInvitations, approveInvitation, createHousehold,
+  addHouseholdInvitations, approveInvitation, createHousehold,
   deleteHousehold, getHouseholdMembers, getHouseholdName, leaveHousehold,
 } from 'serverSrc/database/models'
+import { NOTIFICATIONS } from 'serverSrc/constants'
 import { NOTIFICATION_TYPE, INPUT_TYPE, API, SETTING_CATEGORIES, HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { ACTIVITY, ERROR } from 'shared/constants/localeMessages'
 import { SETTINGS_PREFIX } from 'shared/constants/api'
@@ -45,7 +47,8 @@ export const handleCreateHousehold = async (
   }
   const success = invitations.length === 0 || await addHouseholdInvitations(householdId, invitations, userId)
   if (success) {
-    addActivityForUsers(
+    logActivity(
+      NOTIFICATIONS.HOUSEHOLD_INVITATION,
       invitations.map(user => user.toId),
       `${ACTIVITY.HOUSEHOLD_INVITATION}$[${inputs.name}, ${inputs.userNickname}]$`,
       `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
@@ -81,7 +84,8 @@ export const handleDeleteHousehold = async (
         .map(({ userId }) => userId)
         .filter(memberId => memberId !== userId)
 
-      addActivityForUsers(
+      logActivity(
+        NOTIFICATIONS.HOUSEHOLD_DELETING,
         notifiedMembers,
         `${ACTIVITY.HOUSEHOLD_DELETE}$[${userNickname}, ${householdName}]$`
       )
@@ -126,7 +130,8 @@ export const handleApproveHouseholdInvitation = async (
     const members = await getHouseholdMembers(householdId)
     const notifiedMembers = members?.map(({ userId }) => userId).filter(memberId => memberId !== userId)
     if (notifiedMembers?.length) {
-      addActivityForUsers(
+      logActivity(
+        NOTIFICATIONS.HOUSEHOLD_JOINING,
         notifiedMembers,
         `${ACTIVITY.HOUSEHOLD_JOIN}$[${userNickname}, ${householdName}]$`,
         `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
@@ -164,7 +169,8 @@ export const handleLeaveHousehold = async (
       .map(({ userId }) => userId)
       .filter(memberId => memberId !== userId)
 
-    addActivityForUsers(
+    logActivity(
+      NOTIFICATIONS.HOUSEHOLD_LEAVING,
       notifiedMembers,
       `${ACTIVITY.HOUSEHOLD_LEAVE}$[${userNickname}, ${householdName}]$`,
       `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`

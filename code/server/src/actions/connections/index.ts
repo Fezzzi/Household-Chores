@@ -1,9 +1,11 @@
 import express from 'express'
 
+import { logActivity } from 'serverSrc/helpers/activity'
 import {
   queryUsers, approveConnection, createConnectionRequest, blockConnection,
-  removeConnection, findBlockedConnections, findConnections, addActivityForUsers,
+  removeConnection, findBlockedConnections, findConnections,
 } from 'serverSrc/database/models'
+import { NOTIFICATIONS } from 'serverSrc/constants'
 import { API, CONNECTION_STATE_TYPE, CONNECTION_TABS, NOTIFICATION_TYPE, SETTING_CATEGORIES } from 'shared/constants'
 import { ACTIVITY, ERROR, SUCCESS } from 'shared/constants/localeMessages'
 import { SETTINGS_PREFIX } from 'shared/constants/api'
@@ -36,7 +38,8 @@ const handleConnectionRequest = async (
   if (isRequestValid) {
     const success = await createConnectionRequest(currentUser, userId, message ?? null)
     if (success) {
-      addActivityForUsers(
+      logActivity(
+        NOTIFICATIONS.CONNECTION_REQUEST,
         [Number(userId)],
         `${ACTIVITY.CONNECTION_REQUEST}$[${req.session!.userNickname}]$`,
         `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.CONNECTIONS}?tab=${CONNECTION_TABS.PENDING}`
@@ -70,7 +73,8 @@ export default () => {
     switch (action) {
       case API.CONNECTION_APPROVE:
         if (performConnectionAction(req, res, Number(userId), approveConnection)) {
-          addActivityForUsers(
+          logActivity(
+            NOTIFICATIONS.CONNECTION_APPROVAL,
             [Number(userId)],
             `${ACTIVITY.CONNECTION_APPROVAL}$[${req.session!.userNickname}]$`,
             `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.CONNECTIONS}?tab=${CONNECTION_TABS.MY_CONNECTIONS}`

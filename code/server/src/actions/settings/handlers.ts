@@ -1,10 +1,12 @@
 import { HOUSEHOLD_DIR, PROFILE_DIR, uploadFiles } from 'serverSrc/helpers/files'
 import { getTabData, getTabList, tryRemapBoolData } from 'serverSrc/helpers/settings'
+import { logActivity } from 'serverSrc/helpers/activity'
 import {
   updateUserData, updateNotificationSettings, editHousehold, updateDialogSettings,
   addActivityForUsers, getHouseholdMembers, getHouseholdName,
 } from 'serverSrc/database/models'
 import { tDialogsCols, tNotifySettingsCols } from 'serverSrc/database/models/tables'
+import { NOTIFICATIONS } from 'serverSrc/constants'
 import { SETTING_CATEGORIES, HOUSEHOLD_TABS, NOTIFICATION_TYPE } from 'shared/constants'
 import { ACTIVITY, ERROR } from 'shared/constants/localeMessages'
 import { SETTINGS_PREFIX } from 'shared/constants/api'
@@ -17,7 +19,7 @@ import { validateEditHouseholdData, validateProfileData } from './validate'
 export const handleSettingsDataFetch = async (category: string, tab: string, req: any, res: any): Promise<void> => {
   const data = await getTabData(category, tab, req)
   if (!data) {
-    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] })
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
     return
   }
 
@@ -147,7 +149,11 @@ const handleHouseholdEditActivity = async (
     .filter(memberId => !removedMemberIds?.includes(memberId) && memberId !== userId)
 
   if (remainingMembers?.length) {
-    addActivityForUsers(removedMemberIds, `${ACTIVITY.HOUSEHOLD_REMOVE_YOU}$[${userNickname}, ${householdName}]$`)
+    logActivity(
+      NOTIFICATIONS.HOUSEHOLD_EXPELLING,
+      removedMemberIds,
+      `${ACTIVITY.HOUSEHOLD_REMOVE_YOU}$[${userNickname}, ${householdName}]$`
+    )
 
     removedMemberNicknames.forEach(memberNickname => {
       addActivityForUsers(
@@ -161,7 +167,8 @@ const handleHouseholdEditActivity = async (
   const sentInvitations = newInvitations?.map(({ userId }) => userId)
 
   if (sentInvitations?.length) {
-    addActivityForUsers(
+    logActivity(
+      NOTIFICATIONS.HOUSEHOLD_INVITATION,
       sentInvitations,
       `${ACTIVITY.HOUSEHOLD_INVITATION}$[${householdName}, ${userNickname}]$`,
       `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=${HOUSEHOLD_TABS.INVITATIONS}`

@@ -170,7 +170,7 @@ export const SignUpUser = async (
         fsKey,
       }
     }
-    return result
+    throw new Error('User creation failed.')
   })
 
 export const assignGoogleProvider = async (userId: number, googleId: string): Promise<boolean> =>
