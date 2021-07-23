@@ -1,4 +1,4 @@
-import { takeEvery, call, put } from 'redux-saga/effects'
+import { takeEvery, call, put, select } from 'redux-saga/effects'
 
 import { NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
@@ -7,7 +7,8 @@ import { signUp, logIn, resetPass, deleteAccount } from 'clientSrc/effects/authE
 import { generalSaga } from 'clientSrc/helpers/sagas'
 
 function* resetPassSaga({ payload }) {
-  yield call(generalSaga, resetPass, payload, function* (data) {
+  const locale = yield select(({ locale }) => locale.locale)
+  yield call(generalSaga, resetPass, { ...payload, locale }, function* (data) {
     yield put(NotificationActions.addNotifications(data))
   })
 }

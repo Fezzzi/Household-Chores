@@ -10,15 +10,15 @@ import { setSession } from 'serverSrc/helpers/auth'
 import { validateLoginData, validateResetData, validateSignupData } from './validate'
 import { getProvidersUserId, handleProvidersLogIn, logInWithIds } from './providers'
 
-const resetPass = async ({ email }: any, req: any, res: any) => {
-  const emailSent = await sendEmails(MAILS.RESET_PASSWORD, {
-    resetLink: 'resetLink',
+const resetPass = async ({ email }: any, locale: string, req: any, res: any) => {
+  const emailSent = await sendEmails(MAILS.RESET_PASSWORD, locale, {
+    resetLink: ' >>resetLink<< ',
   }, [email])
 
   if (emailSent) {
-    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.RESET_PASS_ERROR] })
-  } else {
     res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.RESET_LINK] })
+  } else {
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.RESET_PASS_ERROR] })
   }
   return true
 }
@@ -109,7 +109,7 @@ export default () => {
   })
 
   router.put('/:action', async (req, res) => {
-    const { params: { action }, body: { inputs } } = req
+    const { params: { action }, body: { inputs, locale } } = req
 
     switch (action) {
       case API.AUTH_LOG_IN: {
@@ -132,7 +132,7 @@ export default () => {
           return
         }
 
-        const handled = await resetPass(inputs, req, res)
+        const handled = await resetPass(inputs, locale, req, res)
         if (handled) {
           return
         }
