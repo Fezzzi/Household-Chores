@@ -3,7 +3,8 @@ import { PropTypes } from 'prop-types'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-import { linkify, interpolate } from 'clientSrc/helpers/textTransformations'
+import { linkify } from 'clientSrc/helpers/textTransformations'
+import { interpolate } from 'shared/helpers/text'
 
 const LocaleText = ({ message, modifierFunc, transformations, clickHandler }) => {
   const history = useHistory()

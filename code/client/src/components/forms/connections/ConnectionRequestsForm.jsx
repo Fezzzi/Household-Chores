@@ -47,6 +47,7 @@ const ConnectionRequestsForm = ({ data }) => {
               message,
               mutualConnections,
               dateCreated,
+              ...rest
             }) => ({
               photo: <TableBigPhoto src={photo} />,
               mutualConnections: <>({mutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
@@ -66,6 +67,7 @@ const ConnectionRequestsForm = ({ data }) => {
               approveBtn: getButtonForUser(FORM.APPROVE, userId, approveHandler),
               ignoreBtn: getButtonForUser(FORM.IGNORE, userId, ignoreHandler),
               blockBtn: getButtonForUser(FORM.BLOCK, userId, blockHandler),
+              ...rest,
             }))}
             keys={[
               { name: 'photo' },

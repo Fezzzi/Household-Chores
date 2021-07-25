@@ -98,7 +98,7 @@
   },
   "scripts": {
     "start": "node code/server/dist/bundle.js",
-    "dev": "concurrently --kill-others-on-fail -n api,web \"npm:start-web\" \"npm:start-api\"",
+    "dev": "concurrently --kill-others-on-fail -n web,api \"npm:start-web\" \"npm:start-api\"",
     "start-web": "webpack-dev-server --config config/webpack-front.config.js --open --mode development",
     "start-api": "webpack --watch --config config/webpack-back.config.js --mode development",
     "build": "npm run build-web && npm run build-api",
