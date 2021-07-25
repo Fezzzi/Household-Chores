@@ -1,7 +1,6 @@
 import { assert } from 'chai'
 
-import applicationTexts from '~/code/client/locales'
-
+import applicationTexts from 'shared/locales'
 import { SETTINGS } from 'shared/constants/localeMessages'
 import { AVAILABLE_LOCALES, SETTING_CATEGORIES, SETTING_TAB_ROWS } from 'shared/constants'
 import { settingsRenderers } from 'clientSrc/helpers/settingsRenderers'

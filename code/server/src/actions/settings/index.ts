@@ -2,7 +2,10 @@ import express from 'express'
 import dotenv from 'dotenv'
 
 import { ERROR, INFO } from 'shared/constants/localeMessages'
-import { SETTING_CATEGORIES, SETTING_TAB_ROWS, NOTIFICATION_TYPE, PROFILE_TABS, HOUSEHOLD_TABS } from 'shared/constants'
+import {
+  SETTING_CATEGORIES, SETTING_TAB_ROWS, NOTIFICATION_TYPE, PROFILE_TABS, HOUSEHOLD_TABS, AVAILABLE_LOCALES, API,
+} from 'shared/constants'
+import { updateUserLocale } from 'serverSrc/database/models'
 
 import {
   DialogEditInputs, GeneralEditInputs, HouseholdEditInputs, NotificationEditInputs, SettingsUpdateRequestInputs,
@@ -25,20 +28,33 @@ export default () => {
     res.status(204).send()
   })
 
-  router.put(/.*/, async (req, res) => {
-    const { body: { category, tab, inputs } } = req
+  router.put('/:action', async (req, res) => {
+    const { params: { action }, body } = req
 
-    if (inputs && Object.values(inputs).length > 0) {
-      if (category && tab && SETTING_TAB_ROWS[category] !== undefined) {
-        const handled = await editSettings(category, tab, inputs, req, res)
-        if (!handled) {
-          handleSettingsDataFetch(category, tab, req, res)
-        }
+    if (action === API.CHANGE_LOCALE) {
+      const { locale } = body
+
+      if (locale && AVAILABLE_LOCALES.includes(locale as string) && req.session?.user) {
+        await updateUserLocale(req.session.user, locale)
+        res.status(204).send()
       } else {
         res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
       }
     } else {
-      res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
+      const { category, tab, inputs } = body
+
+      if (inputs && Object.values(inputs).length > 0) {
+        if (category && tab && SETTING_TAB_ROWS[category] !== undefined) {
+          const handled = await editSettings(category, tab, inputs, req, res)
+          if (!handled) {
+            handleSettingsDataFetch(category, tab, req, res)
+          }
+        } else {
+          res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
+        }
+      } else {
+        res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
+      }
     }
   })
 

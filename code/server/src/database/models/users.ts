@@ -3,7 +3,7 @@ import { apify } from 'serverSrc/helpers/api'
 import { UserCreationError } from 'serverSrc/helpers/errors'
 import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords'
 import { GeneralEditInputs } from 'serverSrc/actions/settings/types'
-import { CONNECTION_STATE_TYPE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
+import { CONNECTION_STATE_TYPE, DEFAULT_LOCALE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 
 import {
@@ -22,7 +22,8 @@ export const isCorrectPassword = async (password: string, userId: number): Promi
 }
 export const findProfileData = async (userId: number): Promise<Record<string, string | number>> => {
   const result = await apify<string | number>(database.query(`
-    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.email}, ${tUsersCols.photo}, ${tUsersCols.visibility}
+    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.email}, ${tUsersCols.photo},
+      ${tUsersCols.visibility}, ${tUsersCols.locale}
     FROM ${tUsersName}
     WHERE ${tUsersCols.id}=${userId}
   `))
@@ -30,9 +31,14 @@ export const findProfileData = async (userId: number): Promise<Record<string, st
   return result[0]
 }
 
-export const findUser = async (email: string): Promise<{ userId: number; nickname: string; fsKey: string } | null> => {
+export const findUser = async (email: string): Promise<{
+  userId: number
+  nickname: string
+  fsKey: string
+  locale: string
+} | null> => {
   const result = await database.query(`
-    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}
+    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}, ${tUsersCols.locale}
     FROM ${tUsersName}
     WHERE ${tUsersCols.email}=?
   `, [email])
@@ -46,9 +52,10 @@ export const findGoogleUser = async (googleId: string): Promise<{
   userId: number
   nickname: string
   fsKey: string
+  locale: string
 } | null> => {
   const result = await database.query(`
-    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}
+    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}, ${tUsersCols.locale}
     FROM ${tUsersName}
     WHERE ${tUsersCols.id_google}=?
   `, [googleId])
@@ -62,9 +69,10 @@ export const findFacebookUser = async (facebookId: string): Promise<{
   userId: number
   nickname: string
   fsKey: string
+  locale: string
 } | null> => {
   const result = await database.query(`
-    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}
+    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}, ${tUsersCols.locale}
     FROM ${tUsersName}
     WHERE ${tUsersCols.id_facebook}=?
   `, [facebookId])
@@ -78,9 +86,9 @@ export const logInUser = async (
   email: string,
   password: string,
   res: any
-): Promise<{ userId: number; nickname: string; fsKey: string } | null> => {
+): Promise<{ userId: number; nickname: string; fsKey: string; locale: string } | null> => {
   const result = await database.query(`
-    SELECT ${tUsersCols.password}, ${tUsersCols.nickname}, ${tUsersCols.id}, ${tUsersCols.fs_key}
+    SELECT ${tUsersCols.password}, ${tUsersCols.nickname}, ${tUsersCols.id}, ${tUsersCols.fs_key}, ${tUsersCols.locale}
     FROM ${tUsersName}
     WHERE ${tUsersCols.email}=?
   `, [email])
@@ -103,6 +111,7 @@ export const logInUser = async (
     userId,
     nickname: result[0][tUsersCols.nickname],
     fsKey: result[0][tUsersCols.fs_key],
+    locale: result[0][tUsersCols.locale],
   }
 }
 
@@ -142,8 +151,13 @@ export const SignUpUser = async (
   photo: string | null,
   googleId: string | null,
   facebookId: string | null,
-): Promise<{ insertId: number; nickname: string; fsKey: string } | null> =>
-  database.withTransaction(async (): Promise<{ insertId: number; nickname: string; fsKey: string }> => {
+): Promise<{ insertId: number; nickname: string; fsKey: string; locale: string } | null> =>
+  database.withTransaction(async (): Promise<{
+    insertId: number
+    nickname: string
+    fsKey: string
+    locale: string
+  }> => {
     const pass = await encryptPass(password ?? generatePass())
     const result = await database.query(`
       INSERT INTO ${tUsersName} (
@@ -165,14 +179,24 @@ export const SignUpUser = async (
       await database.query(`
         INSERT INTO ${tDialogsName} (${tDialogsCols.id_user}) VALUES (${result.insertId})
       `)
+
       return {
         insertId: result.insertId,
         nickname,
         fsKey,
+        locale: DEFAULT_LOCALE,
       }
     }
+
     throw new UserCreationError('User creation failed.')
   })
+
+export const updateUserLocale = async (userId: number, newLocale: string): Promise<boolean> =>
+  database.query(`
+    UPDATE ${tUsersName}
+    SET ${tUsersCols.locale}=?
+    WHERE ${tUsersCols.id}=?
+  `, [newLocale, userId])
 
 export const assignGoogleProvider = async (userId: number, googleId: string): Promise<boolean> =>
   database.query(`

@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
 import {
   ACTIVITY, AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, MORE, SETTINGS, SUCCESS,
-} from 'shared/constants/localeMessages'
+} from '../constants/localeMessages'
 import {
-  USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, MORE_TABS,
-} from 'shared/constants'
-import { LINKS } from 'clientSrc/constants'
+  LINKS, USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES,
+  CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, MORE_TABS,
+} from '../constants'
 
 export default {
   [ACTIVITY.CONNECTION_REQUEST]: 'Nová žádost o spojení od uživatele $1$.',

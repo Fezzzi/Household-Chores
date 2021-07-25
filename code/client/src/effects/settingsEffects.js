@@ -6,3 +6,6 @@ export const loadSettings = payload =>
 
 export const updateSettings = payload =>
   clientApi.put(API.SETTINGS_PREFIX, payload)
+
+export const changeLocale = payload =>
+  clientApi.put(`${API.SETTINGS_PREFIX}/${API.CHANGE_LOCALE}`, payload)

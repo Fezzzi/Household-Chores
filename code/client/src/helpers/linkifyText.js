@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react'
 
-import { LINKS } from 'clientSrc/constants'
 import { MessageLink } from 'clientSrc/styles/blocks/home'
-import { API, SETTING_CATEGORIES, HOUSEHOLD_TABS, CONNECTION_TABS } from 'shared/constants'
+import { API, LINKS, SETTING_CATEGORIES, HOUSEHOLD_TABS, CONNECTION_TABS } from 'shared/constants'
 
 const linksToUrls = {
   [LINKS.FIND_CONNECTION]: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.CONNECTIONS}?tab=${CONNECTION_TABS.FIND_CONNECTION}`,

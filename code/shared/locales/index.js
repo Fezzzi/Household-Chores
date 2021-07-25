@@ -1,5 +1,4 @@
-import { LOCALE_CODES } from 'shared/constants'
-
+import { LOCALE_CODES } from '../constants'
 import textsUS from './en_US'
 import textsCZ from './cs_CZ'
 

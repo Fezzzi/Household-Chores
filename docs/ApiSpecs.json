@@ -1603,6 +1603,9 @@
           "visibility": {
             "type": "string",
             "enum": ["ALL", "FRIENDS_OF_FRIENDS"]
+          },
+          "locale": {
+            "type": "string"
           }
         }
       },
