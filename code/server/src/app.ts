@@ -2,7 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
-import createStore from 'express-mysql-session'
+import createSession from 'express-pg-session'
 import cors from 'cors'
 import morgan from 'morgan'
 import path from 'path'
@@ -27,10 +27,10 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '3mb' }))
 app.use(cookieParser())
 
 // Initialize session store and session middleware
-// @ts-ignore: Property 'default' is missing in type (some bug in types config of express-mysql-session)
-const MySQLStore = createStore(session)
-const sessionStore = new MySQLStore({}, pool)
+const PGStore = createSession(session)
+const sessionStore = new PGStore({ pool })
 const YEAR_MILLISECONDS = 31540000000
+
 app.use(session({
   store: sessionStore,
   name: 'user_sid',

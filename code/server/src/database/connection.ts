@@ -1,8 +1,10 @@
 import mysql, { MysqlError } from 'mysql'
+import pg, { PoolConfig } from 'pg'
+import { parse } from 'pg-connection-string'
 import dotenv from 'dotenv'
 
 import { Logger } from '../helpers/logger'
-import { LOGS } from '../constants'
+import { CONFIG, LOGS } from '../constants'
 
 dotenv.config()
 
@@ -11,7 +13,9 @@ const FATAL_ERROR_CODES = [
   'PROTOCOL_CONNECTION_LOST',
 ]
 
-const config: object = {
+const config = parse(CONFIG.DATABASE_URL)
+
+const mySQLConfig: object = {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   user: process.env.DB_USERNAME,
@@ -30,7 +34,7 @@ export class Connection {
   private static __connection: mysql.Connection|null = null;
 
   private static __createConnection = () => mysql
-    .createConnection(config)
+    .createConnection(mySQLConfig)
     .on('error', err => handleConnectionError(err, 'Connection'));
 
   static get() {
@@ -49,4 +53,4 @@ export class Connection {
   }
 }
 
-export const pool = mysql.createPool(config)
+export const pool = new pg.Pool(config as PoolConfig)
