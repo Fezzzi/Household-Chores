@@ -40,7 +40,7 @@ export const validateProfileData = async (inputs: GeneralEditInputs, req: any, r
     return false
   }
 
-  if (oldPassword && !await isCorrectPassword(oldPassword, req.session.user)) {
+  if (oldPassword && !await isCorrectPassword(oldPassword, req.session.userId)) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INCORRECT_PASS] })
     return false
   }

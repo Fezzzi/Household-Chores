@@ -8,12 +8,12 @@ export const setSession = (
   fsKey: string,
   locale: string,
 ) => {
-  if (req.session.user && req.session.user !== userId && req.cookies.user_sid) {
+  if (req.session.userId && req.session.userId !== userId && req.cookies.user_sid) {
     res.clearCookie('user_sid')
     return
   }
 
-  req.session.user = userId
+  req.session.userId = userId
   req.session.userNickname = userNickname
   req.session.fsKey = fsKey
   req.session.locale = locale

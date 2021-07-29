@@ -34,8 +34,8 @@ export default () => {
     if (action === API.CHANGE_LOCALE) {
       const { locale } = body
 
-      if (locale && AVAILABLE_LOCALES.includes(locale as string) && req.session?.user) {
-        await updateUserLocale(req.session.user, locale)
+      if (locale && AVAILABLE_LOCALES.includes(locale as string) && req.session?.userId) {
+        await updateUserLocale(req.session.userId, locale)
         res.status(204).send()
       } else {
         res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })

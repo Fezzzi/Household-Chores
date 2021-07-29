@@ -16,9 +16,9 @@ const performConnectionAction = async (
   userId: number,
   action: (currentUser: number, targetUser: number) => Promise<boolean>
 ) => {
-  const success = await action(req.session.user, userId)
+  const success = await action(req.session.userId, userId)
   if (success) {
-    const data = await findConnections(req.session.user)
+    const data = await findConnections(req.session.userId)
     if (data) {
       res.status(200).send(data)
       return true
@@ -33,7 +33,7 @@ const handleConnectionRequest = async (
   res: any,
   { userId, message }: { userId: number; message: string | null },
 ) => {
-  const currentUser = req.session.user
+  const currentUser = req.session.userId
   const isRequestValid = !(await findBlockedConnections(userId)).find(blockedUser => blockedUser === currentUser)
   if (isRequestValid) {
     const success = await createConnectionRequest(currentUser, userId, message ?? null)
@@ -107,7 +107,7 @@ export default () => {
     const { params: { action }, query: { query } } = req
 
     if (action === API.CONNECTION_FIND) {
-      const foundUsers = await queryUsers(query as string, req.session!.user)
+      const foundUsers = await queryUsers(query as string, req.session!.userId)
       res.status(200).send({ [CONNECTION_STATE_TYPE.FOUND]: foundUsers })
       return
     }

@@ -1,6 +1,5 @@
 import mysql, { MysqlError } from 'mysql'
-import pg, { PoolConfig } from 'pg'
-import { parse } from 'pg-connection-string'
+import pg from 'pg'
 import dotenv from 'dotenv'
 
 import { Logger } from '../helpers/logger'
@@ -8,12 +7,17 @@ import { CONFIG, LOGS } from '../constants'
 
 dotenv.config()
 
+let rawPool = new pg.Pool({ connectionString: CONFIG.DATABASE_URL })
+rawPool.on('error', async err => {
+  Logger(LOGS.DB_LOG, `FATAL ERROR (${err.name}) [${err.message}] - Resetting connection...\n`)
+  await rawPool.end()
+  rawPool = new pg.Pool({ connectionString: CONFIG.DATABASE_URL })
+})
+
 const FATAL_ERROR_CODES = [
   'PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR',
   'PROTOCOL_CONNECTION_LOST',
 ]
-
-const config = parse(CONFIG.DATABASE_URL)
 
 const mySQLConfig: object = {
   host: process.env.DB_HOST,
@@ -52,5 +56,3 @@ export class Connection {
     this.__connection = this.__createConnection()
   }
 }
-
-export const pool = new pg.Pool(config as PoolConfig)

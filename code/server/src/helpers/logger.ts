@@ -1,13 +1,10 @@
-import dotenv from 'dotenv'
 import fs from 'fs'
 import path from 'path'
 
-import { LOGS } from 'serverSrc/constants'
+import { CONFIG, LOGS } from 'serverSrc/constants'
 import { formatDate } from 'shared/helpers/date'
 
-dotenv.config()
-
-const LOGS_PATH = path.join(path.resolve('./code/server'), process.env.LOGS_PATH ?? 'logs')
+const LOGS_PATH = path.join(path.resolve('./code/server'), CONFIG.LOGS_PATH)
 
 const formatMessage = (message: string): string => `[${formatDate()}] ${message}`
 

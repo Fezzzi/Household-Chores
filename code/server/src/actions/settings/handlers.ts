@@ -47,7 +47,7 @@ export const handleNotificationsEdit = async (inputs: NotificationEditInputs, re
   if (!validData) {
     return true
   }
-  return handleUpdate(res, await updateNotificationSettings(validData, req.session.user))
+  return handleUpdate(res, await updateNotificationSettings(validData, req.session.userId))
 }
 
 export const handleDialogsEdit = async (inputs: DialogEditInputs, req: any, res: any): Promise<boolean> => {
@@ -57,7 +57,7 @@ export const handleDialogsEdit = async (inputs: DialogEditInputs, req: any, res:
   if (!validData) {
     return true
   }
-  const error = handleUpdate(res, await updateDialogSettings(validData, req.session.user))
+  const error = handleUpdate(res, await updateDialogSettings(validData, req.session.userId))
   if (!error) {
     res.status(204).send()
   }
@@ -70,14 +70,14 @@ export const handleGeneralEdit = async (inputs: GeneralEditInputs, req: any, res
     return true
   }
   if (!inputs.photo) {
-    return handleUpdate(res, await updateUserData(inputs, req.session.user))
+    return handleUpdate(res, await updateUserData(inputs, req.session.userId))
   }
   const [photo] = uploadFiles([inputs.photo], PROFILE_DIR, req.session.fsKey)
   if (photo === null) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
     return true
   }
-  return handleUpdate(res, await updateUserData({ ...inputs, photo }, req.session.user))
+  return handleUpdate(res, await updateUserData({ ...inputs, photo }, req.session.userId))
 }
 
 export const handleHouseholdEdit = async (
@@ -92,7 +92,7 @@ export const handleHouseholdEdit = async (
     removedMembers,
     newInvitations,
   } = householdInputs
-  const { user: userId, userNickname, fsKey } = req.session
+  const { userId, userNickname, fsKey } = req.session
   if (!householdId) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return true

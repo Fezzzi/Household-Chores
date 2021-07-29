@@ -12,19 +12,19 @@ export const getTabData = async (category: string, tab: string, req: any) => {
   switch (category) {
     case SETTING_CATEGORIES.PROFILE:
       if (tab === PROFILE_TABS.NOTIFICATIONS) {
-        return findNotificationSettings(req.session.user)
+        return findNotificationSettings(req.session.userId)
       } else if (tab === PROFILE_TABS.GENERAL) {
-        return findProfileData(req.session.user)
+        return findProfileData(req.session.userId)
       }
       return {}
     case SETTING_CATEGORIES.HOUSEHOLDS:
       return {
-        invitations: await findUserInvitations(req.session.user),
-        households: await findUserHouseholds(req.session.user),
-        connections: await findApprovedConnections(req.session.user),
+        invitations: await findUserInvitations(req.session.userId),
+        households: await findUserHouseholds(req.session.userId),
+        connections: await findApprovedConnections(req.session.userId),
       }
     case SETTING_CATEGORIES.CONNECTIONS:
-      return findConnections(req.session.user)
+      return findConnections(req.session.userId)
     case SETTING_CATEGORIES.MORE:
       return {
         supporters: await findSupporters(),

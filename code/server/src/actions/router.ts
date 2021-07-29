@@ -13,7 +13,7 @@ import DialogsRouter from './dialogs'
 
 // Middleware function to check for logged-in users
 const sessionChecker = (req: any, res: any, next: NextFunction) => {
-  if (req.session && req.session.user && req.cookies.user_sid) {
+  if (req.session && req.session.userId && req.cookies.user_sid) {
     next()
   } else {
     res.status(403).send('Access denied!')

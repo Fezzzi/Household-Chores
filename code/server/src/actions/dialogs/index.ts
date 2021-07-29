@@ -10,7 +10,7 @@ export default () => {
   const router = express.Router()
   router.put('/:action', async (req, res) => {
     const { params: { action }, body } = req
-    const userId = req.session!.user
+    const userId = req.session!.userId
 
     if (action === API.DIALOGS_DISABLE) {
       const key = deApifyKey(body.key)

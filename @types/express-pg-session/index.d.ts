@@ -1,12 +1,16 @@
 declare module 'express-pg-session' {
   import { Session, Store } from 'express-session'
 
+  export interface PGSessionOptions {
+    conString?: string
+  }
+
   export interface PGSessionIface {
-    new(options: any): PGSession
+    new(options?: PGSessionOptions): PGSession
   }
 
   export class PGSession extends Store {
-    constructor (options: any)
+    constructor (options?: PGSessionOptions)
   }
 
   export default function (session: Session): PGSessionIface

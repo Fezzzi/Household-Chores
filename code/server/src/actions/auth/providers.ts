@@ -1,7 +1,6 @@
 import { OAuth2Client } from 'google-auth-library'
 import crypto from 'crypto'
 import base64url from 'base64url'
-import dotenv from 'dotenv'
 
 import { NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
@@ -9,19 +8,17 @@ import {
   findFacebookUser, findGoogleUser, updateLoginTime, assignGoogleProvider, assignFacebookProvider,
 } from 'serverSrc/database/models'
 import { setSession } from 'serverSrc/helpers/auth'
+import { CONFIG } from 'serverSrc/constants'
 
-dotenv.config()
-
-const CLIENT_ID = process.env.GCID ?? ''
-const client = new OAuth2Client(CLIENT_ID)
+const client = new OAuth2Client(CONFIG.GOOGLE_CLIENT_ID)
 const getGoogleUserId = async (googleToken: string): Promise<string | null> => {
   const ticket = await client.verifyIdToken({
     idToken: googleToken,
-    audience: CLIENT_ID,
+    audience: CONFIG.GOOGLE_CLIENT_ID,
   })
 
   const payload = ticket.getPayload()
-  if (!payload || payload.aud !== CLIENT_ID || !payload.sub) {
+  if (!payload || payload.aud !== CONFIG.GOOGLE_CLIENT_ID || !payload.sub) {
     return null
   }
 
@@ -33,11 +30,10 @@ interface FacebookObject {
   signedRequest: string
 }
 
-const APP_SECRET = process.env.FB_APP_SECRET ?? ''
 const getFacebookUserId = ({ userId, signedRequest }: FacebookObject): string | null => {
   const [encodedSignature, encodedPayload] = signedRequest.split('.')
   const signature = base64url.decode(encodedSignature)
-  const hmac = crypto.createHmac('sha256', APP_SECRET)
+  const hmac = crypto.createHmac('sha256', CONFIG.FACEBOOK_SECRET)
   const expectedSignature = hmac.update(encodedPayload).digest()
 
   if (signature !== expectedSignature.toString()) {

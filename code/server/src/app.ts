@@ -6,15 +6,11 @@ import createSession from 'express-pg-session'
 import cors from 'cors'
 import morgan from 'morgan'
 import path from 'path'
-import dotenv from 'dotenv'
 
 import errorHandler from './helpers/errorHandler'
 import router from './actions/router'
 import { Logger } from './helpers/logger'
-import { LOGS } from './constants'
-import { pool } from './database/connection'
-
-dotenv.config()
+import { CONFIG, LOGS } from './constants'
 
 // Initialize the server
 const app = express()
@@ -28,13 +24,13 @@ app.use(cookieParser())
 
 // Initialize session store and session middleware
 const PGStore = createSession(session)
-const sessionStore = new PGStore({ pool })
+const sessionStore = new PGStore({ conString: CONFIG.DATABASE_URL })
 const YEAR_MILLISECONDS = 31540000000
 
 app.use(session({
   store: sessionStore,
   name: 'user_sid',
-  secret: process.env.SESSION_SECRET ?? 'test',
+  secret: CONFIG.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -56,9 +52,9 @@ app.use(morgan(':remote-addr - :remote-user ":method :url" :status :response-tim
 
 // Setup CORS policy
 app.use(cors(
-  process.env.DEBUG === 'true'
+  CONFIG.DEBUG
     ? {
-      origin: `http://localhost:${process.env.PORT === '8080' ? 8081 : 8080}`,
+      origin: `http://localhost:${CONFIG.API_PORT === 8080 ? 8081 : 8080}`,
       credentials: true,
       optionsSuccessStatus: 200,
     }
@@ -72,7 +68,7 @@ app.use('/uploads', express.static(path.resolve('./uploads')))
 
 // Checks if user's cookie is still saved in the browser without associated user, then clears the cookie
 app.use((req, res, next) => {
-  if (req.cookies.user_sid && (req.session && !req.session.user)) {
+  if (req.cookies.user_sid && (req.session && !req.session.userId)) {
     res.clearCookie('user_sid')
   }
   next()

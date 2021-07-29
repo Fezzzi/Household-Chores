@@ -1,15 +1,12 @@
 import crypto from 'crypto'
 import { writeFileSync, mkdirSync, existsSync } from 'fs'
 import path from 'path'
-import dotenv from 'dotenv'
 
 import { RequestImage } from 'serverSrc/actions/types'
-
-dotenv.config()
+import { CONFIG } from 'serverSrc/constants'
 
 export const PROFILE_DIR = 'profile'
 export const HOUSEHOLD_DIR = 'household'
-const UPLOAD_DIR = process.env.UPLOAD_PATH ?? 'uploads'
 
 export const uploadFiles = (
   files: RequestImage[],
@@ -26,7 +23,7 @@ export const uploadFiles = (
 
     const fileHash = file.data.split(';base64,').pop()
 
-    const filePath = path.join(path.resolve('./'), UPLOAD_DIR, userFsKey, directory)
+    const filePath = path.join(path.resolve('./'), CONFIG.UPLOADS_PATH, userFsKey, directory)
     mkdirSync(filePath, { recursive: true })
 
     const fileExtension = file.type.substring(file.type.indexOf('/') + 1)
@@ -41,7 +38,7 @@ export const uploadFiles = (
       uploadedFiles.push(null)
     } else {
       writeFileSync(path.join(filePath, fileName), fileHash, { encoding: 'base64' })
-      uploadedFiles.push(`/${UPLOAD_DIR}/${userFsKey}/${directory}/${fileName}`)
+      uploadedFiles.push(`/${CONFIG.UPLOADS_PATH}/${userFsKey}/${directory}/${fileName}`)
     }
   })
   return uploadedFiles
@@ -52,7 +49,7 @@ export const isImageUrl = (image: RequestImage): image is string =>
 
 export const isLocalImage = (image: RequestImage, userFsKey: string): boolean =>
   isImageUrl(image)
-  && image.startsWith(`/${UPLOAD_DIR}/${userFsKey}/`)
+  && image.startsWith(`/${CONFIG.UPLOADS_PATH}/${userFsKey}/`)
   && image.length < 140
 
 export const isExternalImage = (image: RequestImage): boolean =>

@@ -15,7 +15,7 @@ export default () => {
   const router = express.Router()
   router.get('/:action', async (req, res) => {
     const { params: { action } } = req
-    const userId = req.session!.user
+    const userId = req.session!.userId
 
     switch (action) {
       case API.HOUSEHOLDS_LOAD: {
@@ -36,7 +36,7 @@ export default () => {
 
   router.post('/:action', async (req, res) => {
     const { params: { action }, body } = req
-    const { user: userId, fsKey } = req.session!
+    const { userId, fsKey } = req.session!
 
     if (action === API.HOUSEHOLD_CREATE) {
       const { inputs, invitations }: CreateHouseholdRequest = body as any
@@ -49,7 +49,7 @@ export default () => {
 
   router.put('/:action', async (req, res) => {
     const { params: { action }, body } = req
-    const { user: userId, userNickname, fsKey } = req.session!
+    const { userId, userNickname, fsKey } = req.session!
 
     if (action === API.INVITATION_APPROVE) {
       const invitationBody: ApproveInvitationRequest = body as any
@@ -62,7 +62,7 @@ export default () => {
 
   router.delete('/:action', async (req, res) => {
     const { params: { action }, query } = req
-    const { user: userId, userNickname } = req.session!
+    const { userId, userNickname } = req.session!
 
     switch (action) {
       case API.HOUSEHOLD_DELETE: {
