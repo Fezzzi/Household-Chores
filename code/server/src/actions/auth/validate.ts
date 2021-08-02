@@ -1,6 +1,6 @@
 import { isExternalImage } from 'serverSrc/helpers/files'
 import { INPUT_TYPE } from 'shared/constants'
-import { findUser } from 'serverSrc/database/models'
+import { findUser } from 'serverSrc/database'
 import { isInputValid } from 'shared/helpers/validation'
 
 export const validateResetData = async ({ email }: any): Promise<boolean> =>

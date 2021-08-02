@@ -1,6 +1,6 @@
 import { MigrationBuilder } from 'node-pg-migrate'
 
-import { tUsersCols, tUsersName } from 'serverSrc/database/models/tables'
+import { tUsersCols, tUsersName } from 'serverSrc/database/tables'
 import { DEFAULT_LOCALE } from 'shared/constants'
 
 exports.up = (pgm: MigrationBuilder) => pgm.sql(`

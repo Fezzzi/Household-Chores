@@ -6,7 +6,7 @@ import { NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 import {
   findFacebookUser, findGoogleUser, updateLoginTime, assignGoogleProvider, assignFacebookProvider,
-} from 'serverSrc/database/models'
+} from 'serverSrc/database'
 import { setSession } from 'serverSrc/helpers/auth'
 import { CONFIG } from 'serverSrc/constants'
 

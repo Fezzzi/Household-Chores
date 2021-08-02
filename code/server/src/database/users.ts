@@ -1,11 +1,11 @@
-import { database } from 'serverSrc/database'
 import { apify } from 'serverSrc/helpers/api'
 import { UserCreationError } from 'serverSrc/helpers/errors'
 import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords'
 import { GeneralEditInputs } from 'serverSrc/actions/settings/types'
-import { CONNECTION_STATE_TYPE, DEFAULT_LOCALE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
+import { CONNECTION_STATE_TYPE, DEFAULT_LOCALE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants/index'
 import { ERROR } from 'shared/constants/localeMessages'
 
+import { database } from './database'
 import {
   tUsersName, tUsersCols, tConnectionsName, tConnectionsCols,
   tNotifySettingsName, tNotifySettingsCols, tDialogsName, tDialogsCols,
@@ -57,7 +57,7 @@ export const findGoogleUser = async (googleId: string): Promise<{
   const result = await database.query(`
     SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}, ${tUsersCols.locale}
     FROM ${tUsersName}
-    WHERE ${tUsersCols.id_google}=?
+    WHERE ${tUsersCols.google_id}=?
   `, [googleId])
 
   return result && result.length
@@ -74,7 +74,7 @@ export const findFacebookUser = async (facebookId: string): Promise<{
   const result = await database.query(`
     SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}, ${tUsersCols.locale}
     FROM ${tUsersName}
-    WHERE ${tUsersCols.id_facebook}=?
+    WHERE ${tUsersCols.facebook_id}=?
   `, [facebookId])
 
   return result && result.length
@@ -162,7 +162,7 @@ export const SignUpUser = async (
     const result = await database.query(`
       INSERT INTO ${tUsersName} (
         ${tUsersCols.email}, ${tUsersCols.nickname}, ${tUsersCols.password}, ${tUsersCols.photo},
-        ${tUsersCols.id_google}, ${tUsersCols.id_facebook}, ${tUsersCols.date_registered}, ${tUsersCols.date_last_active}
+        ${tUsersCols.google_id}, ${tUsersCols.facebook_id}, ${tUsersCols.date_registered}, ${tUsersCols.date_last_active}
       ) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
     `, [email, nickname, pass, photo, googleId, facebookId], false)
 
@@ -174,10 +174,10 @@ export const SignUpUser = async (
         WHERE ${tUsersCols.id}=${result.insertId}
       `)
       await database.query(`
-        INSERT INTO ${tNotifySettingsName} (${tNotifySettingsCols.id_user}) VALUES (${result.insertId})
+        INSERT INTO ${tNotifySettingsName} (${tNotifySettingsCols.user_id}) VALUES (${result.insertId})
       `)
       await database.query(`
-        INSERT INTO ${tDialogsName} (${tDialogsCols.id_user}) VALUES (${result.insertId})
+        INSERT INTO ${tDialogsName} (${tDialogsCols.user_id}) VALUES (${result.insertId})
       `)
 
       return {
@@ -201,54 +201,54 @@ export const updateUserLocale = async (userId: number, newLocale: string): Promi
 export const assignGoogleProvider = async (userId: number, googleId: string): Promise<boolean> =>
   database.query(`
     UPDATE ${tUsersName}
-    SET ${tUsersCols.id_google}=?
+    SET ${tUsersCols.google_id}=?
     WHERE ${tUsersCols.id}=?
   `, [googleId, userId])
 
 export const assignFacebookProvider = async (userId: number, facebookId: string): Promise<boolean> =>
   database.query(`
     UPDATE ${tUsersName}
-    SET ${tUsersCols.id_facebook}=?
+    SET ${tUsersCols.facebook_id}=?
     WHERE ${tUsersCols.id}=?
   `, [facebookId, userId])
 
 // todo: Sort secondary by size of matching query
 export const queryUsers = async (query: string, userId: number): Promise<Array<object>> =>
   apify(database.query(`
-    SELECT users.${tUsersCols.id} as id_user, users.${tUsersCols.nickname}, users.${tUsersCols.photo},
+    SELECT users.${tUsersCols.id} as user_id, users.${tUsersCols.nickname}, users.${tUsersCols.photo},
       connections.${tConnectionsCols.state}, connections.${tConnectionsCols.message},
       users.${tUsersCols.visibility} AS visibility,
       (SELECT COUNT(*) FROM (
         SELECT * FROM (
-          SELECT ${tConnectionsCols.id_from} AS uf_id FROM ${tConnectionsName}
-          WHERE ${tConnectionsCols.id_to}=users.${tUsersCols.id}
+          SELECT ${tConnectionsCols.from_id} AS uf_id FROM ${tConnectionsName}
+          WHERE ${tConnectionsCols.to_id}=users.${tUsersCols.id}
             AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
           UNION
-          SELECT ${tConnectionsCols.id_to} AS uf_id FROM ${tConnectionsName}
-          WHERE ${tConnectionsCols.id_from}=users.${tUsersCols.id}
+          SELECT ${tConnectionsCols.to_id} AS uf_id FROM ${tConnectionsName}
+          WHERE ${tConnectionsCols.from_id}=users.${tUsersCols.id}
             AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
         ) AS userFriends INNER JOIN (
-          SELECT ${tConnectionsCols.id_from} AS tf_id FROM ${tConnectionsName}
-          WHERE ${tConnectionsCols.id_to}=${userId}
+          SELECT ${tConnectionsCols.from_id} AS tf_id FROM ${tConnectionsName}
+          WHERE ${tConnectionsCols.to_id}=${userId}
             AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
           UNION
-          SELECT ${tConnectionsCols.id_to} AS tf_id FROM ${tConnectionsName}
-          WHERE ${tConnectionsCols.id_from}=${userId}
+          SELECT ${tConnectionsCols.to_id} AS tf_id FROM ${tConnectionsName}
+          WHERE ${tConnectionsCols.from_id}=${userId}
             AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
         ) AS targetFriends ON userFriends.uf_id=targetFriends.tf_id
       ) AS mc) AS mutualConnections
     FROM ${tUsersName} AS users
     LEFT JOIN ${tConnectionsName} AS connections
-      ON connections.${tConnectionsCols.id_from}=${userId}
-        AND connections.${tConnectionsCols.id_to}=users.${tUsersCols.id}
+      ON connections.${tConnectionsCols.from_id}=${userId}
+        AND connections.${tConnectionsCols.to_id}=users.${tUsersCols.id}
         AND connections.${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.WAITING}'
     WHERE (users.${tUsersCols.nickname} LIKE ? OR users.${tUsersCols.email} LIKE ?)
       AND users.${tUsersCols.id}!=${userId}
       AND NOT EXISTS (
         SELECT * FROM ${tConnectionsName}
-        WHERE (${tConnectionsCols.id_from}=${userId} AND ${tConnectionsCols.id_to}=users.${tUsersCols.id}
+        WHERE (${tConnectionsCols.from_id}=${userId} AND ${tConnectionsCols.to_id}=users.${tUsersCols.id}
             AND ${tConnectionsCols.state}!='${CONNECTION_STATE_TYPE.WAITING}')
-          OR (${tConnectionsCols.id_from}=users.${tUsersCols.id} AND ${tConnectionsCols.id_to}=${userId})
+          OR (${tConnectionsCols.from_id}=users.${tUsersCols.id} AND ${tConnectionsCols.to_id}=${userId})
       )
     HAVING visibility='${USER_VISIBILITY_TYPE.ALL}' OR (visibility='${USER_VISIBILITY_TYPE.FOF}' AND mutualConnections > 0)
     ORDER BY mutualConnections DESC

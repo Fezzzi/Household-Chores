@@ -6,4 +6,4 @@ export default {
     photo: 'photo',
     date_created: 'date_created',
   },
-}
+} as const

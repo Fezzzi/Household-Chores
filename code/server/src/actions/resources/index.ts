@@ -5,7 +5,7 @@ import { resources } from 'serverSrc/resources'
 
 export default () => {
   const router = express.Router()
-  router.get('/:resource', async (req, res) => {
+  router.get('/:resource', async (req: any, res) => {
     const { params: { resource }, query } = req
     const locale = req.session?.locale ?? query.locale
     const localeCode = (locale && AVAILABLE_LOCALES.includes(locale as string) && locale as string) || DEFAULT_LOCALE

@@ -1,21 +1,19 @@
 import express from 'express'
 
-import { disableDialog } from 'serverSrc/database/models'
+import { disableDialog, isDialogColumnKey } from 'serverSrc/database'
 import { API, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 import { deApifyKey } from 'serverSrc/helpers/api'
-import { tDialogsCols } from 'serverSrc/database/models/tables'
 
 export default () => {
   const router = express.Router()
-  router.put('/:action', async (req, res) => {
+  router.put('/:action', async (req: any, res) => {
     const { params: { action }, body } = req
     const userId = req.session!.userId
 
     if (action === API.DIALOGS_DISABLE) {
       const key = deApifyKey(body.key)
-      const valid = Object.values(tDialogsCols).filter(name => name !== tDialogsCols.id_user).includes(key)
-      if (!valid) {
+      if (!isDialogColumnKey(key)) {
         res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
         return
       }

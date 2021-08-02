@@ -1,8 +1,8 @@
-import { tHouseholdsCols } from 'serverSrc/database/models/tables'
+import { tHouseholdsCols } from 'serverSrc/database/tables'
 import {
   findApprovedConnections, findConnections, findNotificationSettings,
   findProfileData, findUserHouseholds, findUserInvitations,
-} from 'serverSrc/database/models'
+} from 'serverSrc/database'
 import { deApify } from 'serverSrc/helpers/api'
 import { findContributors, findSupporters } from 'serverSrc/helpers/externalResources'
 import { NOTIFICATION_TYPE, SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS, PROFILE_TABS } from 'shared/constants'

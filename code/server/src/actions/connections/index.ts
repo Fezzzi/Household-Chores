@@ -2,9 +2,14 @@ import express from 'express'
 
 import { logActivity } from 'serverSrc/helpers/activity'
 import {
-  queryUsers, approveConnection, createConnectionRequest, blockConnection,
-  removeConnection, findBlockedConnections, findConnections,
-} from 'serverSrc/database/models'
+  approveConnection,
+  blockConnection,
+  createConnectionRequest,
+  findBlockedConnections,
+  findConnections,
+  queryUsers,
+  removeConnection,
+} from 'serverSrc/database'
 import { NOTIFICATIONS } from 'serverSrc/constants'
 import { API, CONNECTION_STATE_TYPE, CONNECTION_TABS, NOTIFICATION_TYPE, SETTING_CATEGORIES } from 'shared/constants'
 import { ACTIVITY, ERROR, SUCCESS } from 'shared/constants/localeMessages'
@@ -34,7 +39,7 @@ const handleConnectionRequest = async (
   { userId, message }: { userId: number; message: string | null },
 ) => {
   const currentUser = req.session.userId
-  const isRequestValid = !(await findBlockedConnections(userId)).find(blockedUser => blockedUser === currentUser)
+  const isRequestValid = (await findBlockedConnections(userId)).every(blockedUser => blockedUser !== currentUser)
   if (isRequestValid) {
     const success = await createConnectionRequest(currentUser, userId, message ?? null)
     if (success) {
@@ -67,7 +72,7 @@ export default () => {
     return false
   })
 
-  router.put('/:action', (req, res) => {
+  router.put('/:action', (req: any, res) => {
     const { params: { action }, body: { userId } } = req
 
     switch (action) {
@@ -103,7 +108,7 @@ export default () => {
     }
   })
 
-  router.get('/:action', async (req, res) => {
+  router.get('/:action', async (req: any, res) => {
     const { params: { action }, query: { query } } = req
 
     if (action === API.CONNECTION_FIND) {

@@ -7,13 +7,13 @@ import {
   tNotifySettingsName,
   tUsersCols,
   tUsersName
-} from 'serverSrc/database/models/tables'
+} from 'serverSrc/database/tables'
 
 exports.up = (pgm: MigrationBuilder) => {
   pgm.sql(`
     CREATE TABLE ${tActivityName} (
       ${tActivityCols.id} SERIAL PRIMARY KEY,
-      ${tActivityCols.id_user} INTEGER NOT NULL REFERENCES ${tUsersName} (${tUsersCols.id}) ON DELETE CASCADE,
+      ${tActivityCols.user_id} INTEGER NOT NULL REFERENCES ${tUsersName} (${tUsersCols.id}) ON DELETE CASCADE,
       ${tActivityCols.message} VARCHAR(2083) NOT NULL,
       ${tActivityCols.link} VARCHAR(255),
       ${tActivityCols.date_seen} TIMESTAMPTZ,
@@ -22,7 +22,7 @@ exports.up = (pgm: MigrationBuilder) => {
   `)
   pgm.sql(`
     CREATE TABLE ${tNotifySettingsName} (
-      ${tNotifySettingsCols.id_user} INTEGER PRIMARY KEY REFERENCES ${tUsersName} (${tUsersCols.id}) ON DELETE CASCADE,
+      ${tNotifySettingsCols.user_id} INTEGER PRIMARY KEY REFERENCES ${tUsersName} (${tUsersCols.id}) ON DELETE CASCADE,
       ${tNotifySettingsCols.email_notifications} BOOLEAN DEFAULT FALSE,
       ${tNotifySettingsCols.browser_notifications} BOOLEAN DEFAULT FALSE,
       ${tNotifySettingsCols.mobile_notifications} BOOLEAN DEFAULT FALSE,

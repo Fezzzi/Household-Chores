@@ -1,6 +1,6 @@
 import { INPUT_TYPE, INVITATION_MESSAGE_LENGTH, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { findApprovedConnections } from 'serverSrc/database/models'
+import { findApprovedConnections } from 'serverSrc/database'
 
 import { CreateHouseholdInputs, CreateHouseholdInvitation } from './types'
 import { validateField } from '../validate'

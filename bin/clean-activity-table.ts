@@ -1,5 +1,5 @@
 import { database } from 'serverSrc/database'
-import { tActivityName, tActivityCols } from 'serverSrc/database/models/tables'
+import { tActivityName, tActivityCols } from 'serverSrc/database/tables'
 
 database.query(`
   DELETE FROM ${tActivityName}

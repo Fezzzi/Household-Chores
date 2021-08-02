@@ -6,7 +6,7 @@ import { database } from 'serverSrc/database'
 import { CONFIG } from 'serverSrc/constants'
 import {
   tUsersName, tUsersCols, tHouseMemName, tHouseMemCols, tHouseholdsName, tHouseholdsCols,
-} from 'serverSrc/database/models/tables'
+} from 'serverSrc/database/tables'
 
 const getFiles = (dir: string): string[] => {
   const dirents = readdirSync(dir, { withFileTypes: true })

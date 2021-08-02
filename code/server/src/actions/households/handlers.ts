@@ -3,7 +3,7 @@ import { logActivity } from 'serverSrc/helpers/activity'
 import {
   addHouseholdInvitations, approveInvitation, createHousehold,
   deleteHousehold, getHouseholdMembers, getHouseholdName, leaveHousehold,
-} from 'serverSrc/database/models'
+} from 'serverSrc/database'
 import { NOTIFICATIONS } from 'serverSrc/constants'
 import { NOTIFICATION_TYPE, INPUT_TYPE, API, SETTING_CATEGORIES, HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { ACTIVITY, ERROR } from 'shared/constants/localeMessages'

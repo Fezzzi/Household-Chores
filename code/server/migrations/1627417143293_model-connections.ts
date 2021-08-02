@@ -1,6 +1,6 @@
 import { MigrationBuilder } from 'node-pg-migrate'
 
-import { tConnectionsCols, tConnectionsName, tUsersCols, tUsersName } from 'serverSrc/database/models/tables'
+import { tConnectionsCols, tConnectionsName, tUsersCols, tUsersName } from 'serverSrc/database/tables'
 import { CONNECTION_STATE_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
 
 exports.up = (pgm: MigrationBuilder) => {
@@ -11,12 +11,12 @@ exports.up = (pgm: MigrationBuilder) => {
   `)
   pgm.sql(`
     CREATE TABLE ${tConnectionsName} (
-      ${tConnectionsCols.id_from} INTEGER NOT NULL REFERENCES ${tUsersName} (${tUsersCols.id}) ON DELETE CASCADE,
-      ${tConnectionsCols.id_to} INTEGER NOT NULL REFERENCES ${tUsersName} (${tUsersCols.id}) ON DELETE CASCADE,
+      ${tConnectionsCols.from_id} INTEGER NOT NULL REFERENCES ${tUsersName} (${tUsersCols.id}) ON DELETE CASCADE,
+      ${tConnectionsCols.to_id} INTEGER NOT NULL REFERENCES ${tUsersName} (${tUsersCols.id}) ON DELETE CASCADE,
       ${tConnectionsCols.message} VARCHAR(255) DEFAULT NULL,
       ${tConnectionsCols.state} connectionStatus NOT NULL DEFAULT '${CONNECTION_STATE_TYPE.WAITING}',
       ${tConnectionsCols.date_created} TIMESTAMPTZ NOT NULL,
-      PRIMARY KEY (${tConnectionsCols.id_from}, ${tConnectionsCols.id_to})
+      PRIMARY KEY (${tConnectionsCols.from_id}, ${tConnectionsCols.to_id})
     )
   `)
   pgm.sql(`

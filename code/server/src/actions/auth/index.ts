@@ -4,7 +4,7 @@ import { NOTIFICATION_TYPE, API } from 'shared/constants'
 import { ERROR, SUCCESS } from 'shared/constants/localeMessages'
 import { MAILS } from 'serverSrc/constants'
 import { sendEmails } from 'serverSrc/helpers/mailer'
-import { logInUser, SignUpUser, findUser } from 'serverSrc/database/models'
+import { logInUser, SignUpUser, findUser } from 'serverSrc/database'
 import { setSession } from 'serverSrc/helpers/auth'
 
 import { validateLoginData, validateResetData, validateSignupData } from './validate'

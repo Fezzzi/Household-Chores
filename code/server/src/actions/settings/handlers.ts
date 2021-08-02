@@ -4,8 +4,8 @@ import { logActivity } from 'serverSrc/helpers/activity'
 import {
   updateUserData, updateNotificationSettings, editHousehold, updateDialogSettings,
   addActivityForUsers, getHouseholdMembers, getHouseholdName,
-} from 'serverSrc/database/models'
-import { tDialogsCols, tNotifySettingsCols } from 'serverSrc/database/models/tables'
+} from 'serverSrc/database'
+import { tDialogsCols, tNotifySettingsCols } from 'serverSrc/database/tables'
 import { NOTIFICATIONS } from 'serverSrc/constants'
 import { SETTING_CATEGORIES, HOUSEHOLD_TABS, NOTIFICATION_TYPE } from 'shared/constants'
 import { ACTIVITY, ERROR } from 'shared/constants/localeMessages'
@@ -41,7 +41,7 @@ const handleUpdate = (res: any, updated: boolean): boolean => {
 }
 
 export const handleNotificationsEdit = async (inputs: NotificationEditInputs, req: any, res: any): Promise<boolean> => {
-  const allowedKeys = Object.values(tNotifySettingsCols).filter(name => name !== tNotifySettingsCols.id_user)
+  const allowedKeys = Object.values(tNotifySettingsCols).filter(name => name !== tNotifySettingsCols.user_id)
   const valueMapper = (val: string | number) => val ? 1 : 0
   const validData = tryRemapBoolData(inputs, allowedKeys, valueMapper, req, res)
   if (!validData) {
@@ -51,7 +51,7 @@ export const handleNotificationsEdit = async (inputs: NotificationEditInputs, re
 }
 
 export const handleDialogsEdit = async (inputs: DialogEditInputs, req: any, res: any): Promise<boolean> => {
-  const allowedKeys = Object.values(tDialogsCols).filter(name => name !== tDialogsCols.id_user)
+  const allowedKeys = Object.values(tDialogsCols).filter(name => name !== tDialogsCols.user_id)
   const valueMapper = (val: boolean) => val ? 0 : 1
   const validData = tryRemapBoolData(inputs, allowedKeys, valueMapper, req, res)
   if (!validData) {

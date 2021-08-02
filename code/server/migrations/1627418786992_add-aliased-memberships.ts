@@ -1,6 +1,6 @@
 import { MigrationBuilder } from 'node-pg-migrate'
 
-import { tHouseMemCols, tHouseMemName } from 'serverSrc/database/models/tables'
+import { tHouseMemCols, tHouseMemName } from 'serverSrc/database/tables'
 
 exports.up = (pgm: MigrationBuilder) => pgm.sql(`
   ALTER TABLE ${tHouseMemName} 

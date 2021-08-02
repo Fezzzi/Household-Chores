@@ -1,6 +1,6 @@
 import { MigrationBuilder } from 'node-pg-migrate'
 
-import { tNotifySettingsCols, tNotifySettingsName } from 'serverSrc/database/models/tables'
+import { tNotifySettingsCols, tNotifySettingsName } from 'serverSrc/database/tables'
 
 exports.up = (pgm: MigrationBuilder) => pgm.sql(`
   ALTER TABLE ${tNotifySettingsName} 

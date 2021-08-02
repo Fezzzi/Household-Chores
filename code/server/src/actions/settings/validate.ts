@@ -2,7 +2,7 @@ import {
   HOUSEHOLD_ROLE_TYPE, INPUT_TYPE, INVITATION_MESSAGE_LENGTH, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE,
 } from 'shared/constants'
 import { ERROR, INFO } from 'shared/constants/localeMessages'
-import { findApprovedConnections, findUser, getUserRole, isCorrectPassword } from 'serverSrc/database/models'
+import { findApprovedConnections, findUser, getUserRole, isCorrectPassword } from 'serverSrc/database'
 
 import { GeneralEditInputs, HouseholdEditInputs } from './types'
 import { validateField } from '../validate'

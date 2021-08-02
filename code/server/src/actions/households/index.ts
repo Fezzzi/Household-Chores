@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { deleteInvitation, getUserHouseholdsData } from 'serverSrc/database/models'
+import { deleteInvitation, getUserHouseholdsData } from 'serverSrc/database'
 import { API, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 

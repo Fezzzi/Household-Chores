@@ -1,21 +1,21 @@
-import { database } from 'serverSrc/database'
 import { apify } from 'serverSrc/helpers/api'
 
-import { tActivityName, tActivityCols } from './tables'
+import { database } from './database'
+import { tActivityName, tActivityCols, TActivityType } from './tables'
 
-export const getActivityForUser = async (userId: number): Promise<Array<object> | null> =>
-  apify(database.query(`
+export const getActivityForUser = async (userId: number) =>
+  apify(database.query<Omit<TActivityType, typeof tActivityCols.user_id>>(`
     SELECT
       ${tActivityCols.id}, ${tActivityCols.message}, ${tActivityCols.link},
       ${tActivityCols.date_created}, ${tActivityCols.date_seen}
     FROM ${tActivityName}
-    WHERE ${tActivityCols.id_user}=${userId}
+    WHERE ${tActivityCols.user_id}=${userId}
     ORDER BY ${tActivityCols.date_seen} IS NULL DESC, ${tActivityCols.date_created} DESC
     LIMIT 25
   `))
 
 export const markActivityForUser = async (activityIds: number[]) =>
-  database.query(`
+  database.queryBool(`
     UPDATE ${tActivityName}
     SET ${tActivityCols.date_seen}=NOW()
     WHERE ${tActivityCols.id} IN (${activityIds.join(',')})
@@ -27,8 +27,10 @@ export const addActivityForUsers = async (
   message: string,
   link: string | null = null
 ): Promise<boolean> =>
-  database.query(`
+  database.queryBool(`
     INSERT INTO ${tActivityName} (
-      ${tActivityCols.id_user}, ${tActivityCols.message}, ${tActivityCols.link}, ${tActivityCols.date_created}
-    ) VALUES (${userIds.map(id => `${id}, ?, ?, NOW()`).join('),(')})
+      ${tActivityCols.user_id}, ${tActivityCols.message}, ${tActivityCols.link}, ${tActivityCols.date_created}
+    ) VALUES (
+      ${userIds.map((id, index) => `${id}, $${index * 2}, $${index * 2 + 1}, NOW()`).join('),(')}
+    )
   `, userIds.flatMap(() => [message, link]))

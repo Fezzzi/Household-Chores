@@ -5,7 +5,7 @@ import { ERROR, INFO } from 'shared/constants/localeMessages'
 import {
   SETTING_CATEGORIES, SETTING_TAB_ROWS, NOTIFICATION_TYPE, PROFILE_TABS, HOUSEHOLD_TABS, AVAILABLE_LOCALES, API,
 } from 'shared/constants'
-import { updateUserLocale } from 'serverSrc/database/models'
+import { updateUserLocale } from 'serverSrc/database'
 
 import {
   DialogEditInputs, GeneralEditInputs, HouseholdEditInputs, NotificationEditInputs, SettingsUpdateRequestInputs,
@@ -28,7 +28,7 @@ export default () => {
     res.status(204).send()
   })
 
-  router.put('/:action', async (req, res) => {
+  router.put('/:action', async (req: any, res) => {
     const { params: { action }, body } = req
 
     if (action === API.CHANGE_LOCALE) {

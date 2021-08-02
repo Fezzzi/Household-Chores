@@ -1,7 +1,9 @@
-import { database } from 'serverSrc/database'
 import { apifyKey } from 'serverSrc/helpers/api'
 
-import { tNotifySettingsName, tNotifySettingsCols } from './tables'
+import { database } from './database'
+import { tNotifySettingsName, tNotifySettingsCols, TNotifySettingsType } from './tables'
+
+export type NotificationSettingsColumn = keyof Omit<TNotifySettingsType, typeof tNotifySettingsCols.user_id>
 
 const groupMappings: Record<string, string[]> = {
   general: [
@@ -26,7 +28,7 @@ export const findNotificationSettings = async (
   userId: number
 ): Promise<Record<string, Record<string, boolean>> | null> => {
   const result = await database.query(`
-    SELECT * FROM ${tNotifySettingsName} WHERE ${tNotifySettingsCols.id_user}=${userId}
+    SELECT * FROM ${tNotifySettingsName} WHERE ${tNotifySettingsCols.user_id}=${userId}
   `)
 
   if (result[0]) {
@@ -40,18 +42,16 @@ export const findNotificationSettings = async (
   return null
 }
 
-export const findNotificationSettingsForUsers = async (
-  userIds: number[]
-): Promise<any[] | null> =>
-  database.query(`
+export const findNotificationSettingsForUsers = async (userIds: number[]) =>
+  database.query<TNotifySettingsType>(`
     SELECT *
     FROM ${tNotifySettingsName}
-    WHERE ${tNotifySettingsCols.id_user} IN (${userIds.join(',')})
+    WHERE ${tNotifySettingsCols.user_id} IN (${userIds.join(',')})
   `)
 
-export const updateNotificationSettings = (data: Record<string, string | number>, userId: number): Promise<boolean> =>
-  database.query(`
+export const updateNotificationSettings = (data: Record<NotificationSettingsColumn, boolean>, userId: number) =>
+  database.queryBool(`
     UPDATE ${tNotifySettingsName}
-    SET ${Object.entries(data).map(([key, value]) => `${key}=${value ? 1 : 0}`).join(', ')}
-    WHERE ${tNotifySettingsCols.id_user}=${userId}
+    SET ${Object.entries(data).map(([key, value]) => `${key}=${value}`).join(', ')}
+    WHERE ${tNotifySettingsCols.user_id}=${userId}
   `)
