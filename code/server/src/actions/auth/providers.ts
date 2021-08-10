@@ -7,6 +7,7 @@ import { ERROR } from 'shared/constants/localeMessages'
 import {
   findFacebookUser, findGoogleUser, updateLoginTime, assignGoogleProvider, assignFacebookProvider,
 } from 'serverSrc/database'
+import { UserDataApiType } from 'serverSrc/database/mappers'
 import { setSession } from 'serverSrc/helpers/auth'
 import { CONFIG } from 'serverSrc/constants'
 
@@ -56,7 +57,7 @@ export const getProvidersUserId = async (googleToken: string, facebook: Facebook
 const logInWithProvider = async (
   req: any,
   res: any,
-  getID: () => Promise<{ userId: number; nickname: string; fsKey: string; locale: string } | null>,
+  getID: () => Promise<UserDataApiType | null>,
 ): Promise<boolean> => {
   const result = await getID()
   if (result === null) {

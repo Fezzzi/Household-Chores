@@ -1,148 +1,95 @@
 import { apify } from 'serverSrc/helpers/api'
 import { UserCreationError } from 'serverSrc/helpers/errors'
 import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords'
-import { GeneralEditInputs } from 'serverSrc/actions/settings/types'
-import { CONNECTION_STATE_TYPE, DEFAULT_LOCALE, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants/index'
-import { ERROR } from 'shared/constants/localeMessages'
+import { CONNECTION_STATE_TYPE, DEFAULT_LOCALE, USER_VISIBILITY_TYPE } from 'shared/constants'
 
 import { database } from './database'
 import {
   tUsersName, tUsersCols, tConnectionsName, tConnectionsCols,
-  tNotifySettingsName, tNotifySettingsCols, tDialogsName, tDialogsCols,
+  tNotifySettingsName, tNotifySettingsCols, tDialogsName, tDialogsCols, TUsersType, TConnectionsType,
 } from './tables'
+import { mapToUserDataApiType, UserDataDbType, UserEditDbType } from './mappers'
 
-export const isCorrectPassword = async (password: string, userId: number): Promise<boolean> => {
-  const result = await database.query(`
+export const isCorrectPassword = async (password: string, userId: number) => {
+  const result = await database.query<Pick<TUsersType, typeof tUsersCols.password>>(`
     SELECT ${tUsersCols.password}
     FROM ${tUsersName}
-    WHERE ${tUsersCols.id}=?
+    WHERE ${tUsersCols.id}=$1
   `, [userId])
 
-  return result?.[0]?.[tUsersCols.password] && checkPass(password, result[0][tUsersCols.password])
+  if (!result[0]?.[tUsersCols.password]) {
+    return false
+  }
+
+  return checkPass(password, result[0][tUsersCols.password])
 }
-export const findProfileData = async (userId: number): Promise<Record<string, string | number>> => {
-  const result = await apify<string | number>(database.query(`
+
+type ProfileDataType = typeof tUsersCols.id | typeof tUsersCols.nickname | typeof tUsersCols.email
+  | typeof tUsersCols.photo | typeof tUsersCols.visibility | typeof tUsersCols.locale
+
+export const findProfileData = async (userId: number) => {
+  const result = await apify(database.query<Pick<TUsersType, ProfileDataType>>(`
     SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.email}, ${tUsersCols.photo},
       ${tUsersCols.visibility}, ${tUsersCols.locale}
     FROM ${tUsersName}
     WHERE ${tUsersCols.id}=${userId}
   `))
 
-  return result[0]
+  return result[0] ?? null
 }
 
-export const findUser = async (email: string): Promise<{
-  userId: number
-  nickname: string
-  fsKey: string
-  locale: string
-} | null> => {
-  const result = await database.query(`
+export const findUser = async (email: string) => {
+  const result = await database.query<UserDataDbType>(`
     SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}, ${tUsersCols.locale}
     FROM ${tUsersName}
-    WHERE ${tUsersCols.email}=?
+    WHERE ${tUsersCols.email}=$1
   `, [email])
 
-  return result && result.length
-    ? result[0]
+  return result[0]
+    ? mapToUserDataApiType(result[0])
     : null
 }
 
-export const findGoogleUser = async (googleId: string): Promise<{
-  userId: number
-  nickname: string
-  fsKey: string
-  locale: string
-} | null> => {
-  const result = await database.query(`
+export const findGoogleUser = async (googleId: string) => {
+  const result = await database.query<UserDataDbType>(`
     SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}, ${tUsersCols.locale}
     FROM ${tUsersName}
-    WHERE ${tUsersCols.google_id}=?
+    WHERE ${tUsersCols.google_id}=$1
   `, [googleId])
 
-  return result && result.length
-    ? result[0]
+  return result[0]
+    ? mapToUserDataApiType(result[0])
     : null
 }
 
-export const findFacebookUser = async (facebookId: string): Promise<{
-  userId: number
-  nickname: string
-  fsKey: string
-  locale: string
-} | null> => {
-  const result = await database.query(`
+export const findFacebookUser = async (facebookId: string) => {
+  const result = await database.query<UserDataDbType>(`
     SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}, ${tUsersCols.locale}
     FROM ${tUsersName}
-    WHERE ${tUsersCols.facebook_id}=?
+    WHERE ${tUsersCols.facebook_id}=$1
   `, [facebookId])
 
-  return result && result.length
-    ? result[0]
+  return result[0]
+    ? mapToUserDataApiType(result[0])
     : null
-}
-
-export const logInUser = async (
-  email: string,
-  password: string,
-  res: any
-): Promise<{ userId: number; nickname: string; fsKey: string; locale: string } | null> => {
-  const result = await database.query(`
-    SELECT ${tUsersCols.password}, ${tUsersCols.nickname}, ${tUsersCols.id}, ${tUsersCols.fs_key}, ${tUsersCols.locale}
-    FROM ${tUsersName}
-    WHERE ${tUsersCols.email}=?
-  `, [email])
-
-  const userExists = result && result.length > 0
-  if (!userExists) {
-    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.NO_ACCOUNT] })
-    return null
-  }
-
-  const validPass = await checkPass(password, result[0][tUsersCols.password])
-  if (!validPass) {
-    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INCORRECT_PASS] })
-    return null
-  }
-
-  const userId = result[0][tUsersCols.id]
-  updateLoginTime(userId)
-  return {
-    userId,
-    nickname: result[0][tUsersCols.nickname],
-    fsKey: result[0][tUsersCols.fs_key],
-    locale: result[0][tUsersCols.locale],
-  }
 }
 
 export const updateLoginTime = (userId: number) =>
-  database.query(`
+  database.queryBool(`
     UPDATE ${tUsersName}
     SET ${tUsersCols.date_last_active}=NOW()
-    WHERE ${tUsersCols.id}=?
+    WHERE ${tUsersCols.id}=$1
   `, [userId])
 
-export const updateUserData = async (
-  data: GeneralEditInputs,
-  userId: number
-): Promise<boolean> => {
-  const newPass = data.newPassword && await encryptPass(data.newPassword as string)
-  /* eslint-disable indent */
-  return database.query(`
-    UPDATE ${tUsersName} SET ${
-      [
-        data.nickname && `${tUsersCols.nickname}=?`,
-        data.email && `${tUsersCols.email}=?`,
-        data.photo && `${tUsersCols.photo}=?`,
-        data.newPassword && `${tUsersCols.password}=?`,
-        data.visibility && `${tUsersCols.visibility}=?`,
-      ].filter(Boolean).join(',')
-    } WHERE ${tUsersCols.id}=${userId}
-  `, [
-    data.nickname, data.email, data.photo, newPass, data.visibility,
-  ].filter(Boolean))
-  /* eslint-enable indent */
-}
+export const updateUserData = async (data: UserEditDbType, userId: number) =>
+  database.queryBool(`
+    UPDATE ${tUsersName}
+    SET ${Object.entries(data)
+      .filter(([, value]) => Boolean(value))
+      .map(([key], index) => `${key}=$${index + 1}`)
+      .join(', ')}
+    WHERE ${tUsersCols.id}=${userId}
+  `, Object.values(data).filter(Boolean))
 
 export const SignUpUser = async (
   email: string,
@@ -151,7 +98,7 @@ export const SignUpUser = async (
   photo: string | null,
   googleId: string | null,
   facebookId: string | null,
-): Promise<{ insertId: number; nickname: string; fsKey: string; locale: string } | null> =>
+) =>
   database.withTransaction(async (): Promise<{
     insertId: number
     nickname: string
@@ -159,29 +106,33 @@ export const SignUpUser = async (
     locale: string
   }> => {
     const pass = await encryptPass(password ?? generatePass())
-    const result = await database.query(`
+    const result = await database.query<{
+      [tUsersCols.id]: TUsersType[typeof tUsersCols.id]
+    }>(`
       INSERT INTO ${tUsersName} (
-        ${tUsersCols.email}, ${tUsersCols.nickname}, ${tUsersCols.password}, ${tUsersCols.photo},
+        ${tUsersCols.email}, ${tUsersCols.nickname}, ${tUsersCols.password}, ${tUsersCols.photo}, ${tUsersCols.fs_key},
         ${tUsersCols.google_id}, ${tUsersCols.facebook_id}, ${tUsersCols.date_registered}, ${tUsersCols.date_last_active}
-      ) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
-    `, [email, nickname, pass, photo, googleId, facebookId], false)
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
+      RETURNING ${tUsersCols.id}
+    `, [email, nickname, pass, photo, '', googleId, facebookId], false)
 
-    if (result.insertId) {
-      const fsKey = generateFsKey(result.insertId)
-      await database.query(`
+    const newUserId = result[0]?.[tUsersCols.id]
+    if (newUserId) {
+      const fsKey = generateFsKey(newUserId)
+      await database.queryBool(`
         UPDATE ${tUsersName}
         SET ${tUsersCols.fs_key}='${fsKey}'
-        WHERE ${tUsersCols.id}=${result.insertId}
+        WHERE ${tUsersCols.id}=${newUserId}
       `)
-      await database.query(`
-        INSERT INTO ${tNotifySettingsName} (${tNotifySettingsCols.user_id}) VALUES (${result.insertId})
+      await database.queryBool(`
+        INSERT INTO ${tNotifySettingsName} (${tNotifySettingsCols.user_id}) VALUES (${newUserId})
       `)
-      await database.query(`
-        INSERT INTO ${tDialogsName} (${tDialogsCols.user_id}) VALUES (${result.insertId})
+      await database.queryBool(`
+        INSERT INTO ${tDialogsName} (${tDialogsCols.user_id}) VALUES (${newUserId})
       `)
 
       return {
-        insertId: result.insertId,
+        insertId: newUserId,
         nickname,
         fsKey,
         locale: DEFAULT_LOCALE,
@@ -191,65 +142,53 @@ export const SignUpUser = async (
     throw new UserCreationError('User creation failed.')
   })
 
-export const updateUserLocale = async (userId: number, newLocale: string): Promise<boolean> =>
-  database.query(`
+export const updateUserLocale = (userId: number, newLocale: string) =>
+  database.queryBool(`
     UPDATE ${tUsersName}
-    SET ${tUsersCols.locale}=?
-    WHERE ${tUsersCols.id}=?
+    SET ${tUsersCols.locale}=$1
+    WHERE ${tUsersCols.id}=$2
   `, [newLocale, userId])
 
-export const assignGoogleProvider = async (userId: number, googleId: string): Promise<boolean> =>
-  database.query(`
+export const assignGoogleProvider = (userId: number, googleId: string) =>
+  database.queryBool(`
     UPDATE ${tUsersName}
-    SET ${tUsersCols.google_id}=?
-    WHERE ${tUsersCols.id}=?
+    SET ${tUsersCols.google_id}=$1
+    WHERE ${tUsersCols.id}=$2
   `, [googleId, userId])
 
-export const assignFacebookProvider = async (userId: number, facebookId: string): Promise<boolean> =>
-  database.query(`
+export const assignFacebookProvider = (userId: number, facebookId: string) =>
+  database.queryBool(`
     UPDATE ${tUsersName}
-    SET ${tUsersCols.facebook_id}=?
-    WHERE ${tUsersCols.id}=?
+    SET ${tUsersCols.facebook_id}=$1
+    WHERE ${tUsersCols.id}=$2
   `, [facebookId, userId])
 
-// todo: Sort secondary by size of matching query
-export const queryUsers = async (query: string, userId: number): Promise<Array<object>> =>
-  apify(database.query(`
-    SELECT users.${tUsersCols.id} as user_id, users.${tUsersCols.nickname}, users.${tUsersCols.photo},
-      connections.${tConnectionsCols.state}, connections.${tConnectionsCols.message},
-      users.${tUsersCols.visibility} AS visibility,
-      (SELECT COUNT(*) FROM (
-        SELECT * FROM (
-          SELECT ${tConnectionsCols.from_id} AS uf_id FROM ${tConnectionsName}
-          WHERE ${tConnectionsCols.to_id}=users.${tUsersCols.id}
-            AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
-          UNION
-          SELECT ${tConnectionsCols.to_id} AS uf_id FROM ${tConnectionsName}
-          WHERE ${tConnectionsCols.from_id}=users.${tUsersCols.id}
-            AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
-        ) AS userFriends INNER JOIN (
-          SELECT ${tConnectionsCols.from_id} AS tf_id FROM ${tConnectionsName}
-          WHERE ${tConnectionsCols.to_id}=${userId}
-            AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
-          UNION
-          SELECT ${tConnectionsCols.to_id} AS tf_id FROM ${tConnectionsName}
-          WHERE ${tConnectionsCols.from_id}=${userId}
-            AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
-        ) AS targetFriends ON userFriends.uf_id=targetFriends.tf_id
-      ) AS mc) AS mutualConnections
-    FROM ${tUsersName} AS users
-    LEFT JOIN ${tConnectionsName} AS connections
-      ON connections.${tConnectionsCols.from_id}=${userId}
-        AND connections.${tConnectionsCols.to_id}=users.${tUsersCols.id}
-        AND connections.${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.WAITING}'
-    WHERE (users.${tUsersCols.nickname} LIKE ? OR users.${tUsersCols.email} LIKE ?)
-      AND users.${tUsersCols.id}!=${userId}
+type UsersType = { user_id: number; mutual_connections: number }
+  & Pick<TUsersType, typeof tUsersCols.nickname | typeof tUsersCols.photo | typeof tUsersCols.visibility>
+  & Pick<TConnectionsType, typeof tConnectionsCols.message | typeof tConnectionsCols.state>
+
+// todo: Fix the quuery with materialized view + auto refresh trigger
+// todo: Sort secondary by size of matching query - max(strlen(nickname) - levenshtein(query, nickname), strlen(email) - levenshtein(query, email))
+export const queryUsers = async (query: string, userId: number) =>
+  apify(database.query<UsersType>(`
+    SELECT ${tUsersCols.id} as user_id, ${tUsersCols.nickname}, ${tUsersCols.photo},
+      ${tConnectionsCols.state}, ${tConnectionsCols.message}, ${tUsersCols.visibility},
+      0 AS mutual_connections
+    FROM ${tUsersName}
+    LEFT JOIN ${tConnectionsName}
+      ON ${tConnectionsCols.from_id}=${userId}
+        AND ${tConnectionsCols.to_id}=${tUsersCols.id}
+        AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.WAITING}'
+    WHERE
+      (
+        ${tUsersCols.visibility}='${USER_VISIBILITY_TYPE.ALL}' OR (${tUsersCols.visibility}='${USER_VISIBILITY_TYPE.FOF}')
+      )
+      AND (${tUsersCols.nickname} LIKE $1 OR ${tUsersCols.email} LIKE $1)
+      AND ${tUsersCols.id}!=${userId}
       AND NOT EXISTS (
         SELECT * FROM ${tConnectionsName}
-        WHERE (${tConnectionsCols.from_id}=${userId} AND ${tConnectionsCols.to_id}=users.${tUsersCols.id}
+        WHERE (${tConnectionsCols.from_id}=${userId} AND ${tConnectionsCols.to_id}=${tUsersCols.id}
             AND ${tConnectionsCols.state}!='${CONNECTION_STATE_TYPE.WAITING}')
-          OR (${tConnectionsCols.from_id}=users.${tUsersCols.id} AND ${tConnectionsCols.to_id}=${userId})
+          OR (${tConnectionsCols.from_id}=${tUsersCols.id} AND ${tConnectionsCols.to_id}=${userId})
       )
-    HAVING visibility='${USER_VISIBILITY_TYPE.ALL}' OR (visibility='${USER_VISIBILITY_TYPE.FOF}' AND mutualConnections > 0)
-    ORDER BY mutualConnections DESC
-  `, [`%${query}%`, `%${query}%`]))
+  `, [`%${query}%`]))

@@ -13,6 +13,6 @@ export interface TActivityType {
   [tActivityCols.user_id]: number
   [tActivityCols.message]: string
   [tActivityCols.link]: string | null
-  [tActivityCols.date_seen]: string | null
-  [tActivityCols.date_created]: string
+  [tActivityCols.date_seen]: Date | null
+  [tActivityCols.date_created]: Date
 }

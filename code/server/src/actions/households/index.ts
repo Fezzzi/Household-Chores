@@ -13,7 +13,7 @@ import {
 
 export default () => {
   const router = express.Router()
-  router.get('/:action', async (req, res) => {
+  router.get('/:action', async (req: any, res) => {
     const { params: { action } } = req
     const userId = req.session!.userId
 
@@ -34,7 +34,7 @@ export default () => {
     return true
   })
 
-  router.post('/:action', async (req, res) => {
+  router.post('/:action', async (req: any, res) => {
     const { params: { action }, body } = req
     const { userId, fsKey } = req.session!
 
@@ -47,7 +47,7 @@ export default () => {
     return false
   })
 
-  router.put('/:action', async (req, res) => {
+  router.put('/:action', async (req: any, res) => {
     const { params: { action }, body } = req
     const { userId, userNickname, fsKey } = req.session!
 
@@ -60,7 +60,7 @@ export default () => {
     return false
   })
 
-  router.delete('/:action', async (req, res) => {
+  router.delete('/:action', async (req: any, res) => {
     const { params: { action }, query } = req
     const { userId, userNickname } = req.session!
 

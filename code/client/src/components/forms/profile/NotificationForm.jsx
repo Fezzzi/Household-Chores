@@ -11,7 +11,23 @@ import { FORM } from 'shared/constants/localeMessages'
 import { LocaleText, Input } from '../../common'
 import { SimpleFloatingElement } from '../../portals'
 
+// todo: New shape of notifications needs to be tested!
+const NOTIFICATION_GROUPS = ['connections', 'households']
+
 const NotificationForm = ({ data, onSubmit }) => {
+  const grouppedData = data
+    ? Object.entries(data).reduce((acc, [key, value]) => {
+      for (const group of NOTIFICATION_GROUPS) {
+        if (key.match(new RegExp(`^${group}[A-Z]`))) {
+          acc[group][key] = value
+          return acc
+        }
+      }
+      acc.general[key] = value
+      return acc
+    }, { general: [], connections: [], households: [] })
+    : {}
+
   const {
     submitMessage,
     isFormValid,
@@ -20,7 +36,7 @@ const NotificationForm = ({ data, onSubmit }) => {
     setFormState,
   } = useFormState([data])
 
-  const { general, connections, households } = data
+  const { general, connections, households } = grouppedData
 
   const filteredGeneral = useMemo(() => {
     const filtered = { ...general }
@@ -82,11 +98,7 @@ const NotificationForm = ({ data, onSubmit }) => {
 }
 
 NotificationForm.propTypes = {
-  data: PropTypes.shape({
-    general: PropTypes.object,
-    connections: PropTypes.object,
-    households: PropTypes.object,
-  }).isRequired,
+  data: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
 }
 

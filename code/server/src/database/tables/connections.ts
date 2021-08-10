@@ -1,4 +1,4 @@
-import { CONNECTION_STATE_TYPE } from 'shared/constants/index'
+import { CONNECTION_STATE_TYPE } from 'shared/constants'
 
 export const tConnectionsName = 'connections'
 export const tConnectionsCols = {
@@ -15,5 +15,5 @@ export interface TConnectionsType {
   [tConnectionsCols.to_id]: number
   [tConnectionsCols.message]: string | null
   [tConnectionsCols.state]: typeof CONNECTION_STATE_TYPE.APPROVED | typeof CONNECTION_STATE_TYPE.BLOCKED | typeof CONNECTION_STATE_TYPE.WAITING
-  [tConnectionsCols.date_created]: string
+  [tConnectionsCols.date_created]: Date
 }

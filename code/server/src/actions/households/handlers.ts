@@ -25,21 +25,15 @@ export const handleCreateHousehold = async (
     return true
   }
 
-  const [photo, userPhoto] = uploadFiles([
-    inputs.photo,
-    inputs.userPhoto,
-  ], HOUSEHOLD_DIR, fsKey)
+  const [photo, userPhoto] = uploadFiles([inputs.photo, inputs.userPhoto], HOUSEHOLD_DIR, fsKey, res)
 
-  if (photo === null || userPhoto === null) {
-    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
-    return true
-  }
-
-  const householdId = await createHousehold({
-    ...inputs,
-    photo,
-    userPhoto,
-  }, userId)
+  const householdId = await createHousehold(
+    inputs.name,
+    photo!,
+    inputs.userNickname,
+    userPhoto!,
+    userId
+  )
 
   if (householdId === null) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
@@ -118,13 +112,9 @@ export const handleApproveHouseholdInvitation = async (
     return false
   }
 
-  const userPhoto = uploadFiles([photo], HOUSEHOLD_DIR, fsKey)[0]
-  if (userPhoto === null) {
-    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
-    return true
-  }
+  const [userPhoto] = uploadFiles([photo], HOUSEHOLD_DIR, fsKey, res)
+  const success = await approveInvitation(userId, fromId, householdId, nickname, userPhoto!)
 
-  const success = await approveInvitation(userId, fromId, householdId, nickname, userPhoto)
   if (success) {
     const householdName = await getHouseholdName(householdId)
     const members = await getHouseholdMembers(householdId)

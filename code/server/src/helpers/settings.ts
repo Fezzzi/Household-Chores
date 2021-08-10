@@ -1,12 +1,14 @@
 import { tHouseholdsCols } from 'serverSrc/database/tables'
 import {
-  findApprovedConnections, findConnections, findNotificationSettings,
-  findProfileData, findUserHouseholds, findUserInvitations,
+  findApprovedConnections,
+  findConnections,
+  findNotificationSettings,
+  findProfileData,
+  findUserHouseholds,
+  findUserInvitations,
 } from 'serverSrc/database'
-import { deApify } from 'serverSrc/helpers/api'
 import { findContributors, findSupporters } from 'serverSrc/helpers/externalResources'
-import { NOTIFICATION_TYPE, SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS, PROFILE_TABS } from 'shared/constants'
-import { ERROR, INFO } from 'shared/constants/localeMessages'
+import { SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS, PROFILE_TABS } from 'shared/constants'
 
 export const getTabData = async (category: string, tab: string, req: any) => {
   switch (category) {
@@ -60,24 +62,4 @@ export const getTabList = (
     }
     default: return { tabs: SETTING_TAB_ROWS[category], messages: {}, types: {} }
   }
-}
-
-export const tryRemapBoolData = (
-  inputs: Record<string, any>,
-  allowedKeys: string[],
-  valueMapper: (val: any) => number,
-  req: any,
-  res: any
-): Record<string, number> | null => {
-  const inputEntries = Object.entries(deApify(inputs))
-  if (inputEntries.length === 0) {
-    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
-    return null
-  }
-
-  if (!inputEntries.every(([name]) => allowedKeys.includes(name))) {
-    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
-    return null
-  }
-  return Object.fromEntries(inputEntries.map(([name, value]) => [name, valueMapper(value)]))
 }

@@ -1,4 +1,4 @@
-import { USER_VISIBILITY_TYPE } from 'shared/constants/index'
+import { USER_VISIBILITY_TYPE } from 'shared/constants'
 
 export const tUsersName = 'users'
 export const tUsersCols = {
@@ -27,8 +27,8 @@ export interface TUsersType {
   [tUsersCols.photo]: string | null
   [tUsersCols.confirmed]: boolean
   [tUsersCols.visibility]: typeof USER_VISIBILITY_TYPE.FOF | typeof USER_VISIBILITY_TYPE.ALL
-  [tUsersCols.date_registered]: string
-  [tUsersCols.date_last_active]: string | null
+  [tUsersCols.date_registered]: Date
+  [tUsersCols.date_last_active]: Date | null
   [tUsersCols.fs_key]: string
   [tUsersCols.locale]: string
 }

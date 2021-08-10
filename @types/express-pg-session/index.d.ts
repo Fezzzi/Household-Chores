@@ -1,5 +1,5 @@
 declare module 'express-pg-session' {
-  import { Session, Store } from 'express-session'
+  import { session, Store } from 'express-session'
 
   export interface PGSessionOptions {
     conString?: string
@@ -13,5 +13,5 @@ declare module 'express-pg-session' {
     constructor (options?: PGSessionOptions)
   }
 
-  export default function (session: Session): PGSessionIface
+  export default function (s: typeof session): PGSessionIface
 }

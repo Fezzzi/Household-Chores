@@ -4,7 +4,7 @@ import { NOTIFICATION_TYPE, API } from 'shared/constants'
 import { ERROR, SUCCESS } from 'shared/constants/localeMessages'
 import { MAILS } from 'serverSrc/constants'
 import { sendEmails } from 'serverSrc/helpers/mailer'
-import { logInUser, SignUpUser, findUser } from 'serverSrc/database'
+import { SignUpUser, findUser, isCorrectPassword, updateLoginTime } from 'serverSrc/database'
 import { setSession } from 'serverSrc/helpers/auth'
 
 import { validateLoginData, validateResetData, validateSignupData } from './validate'
@@ -24,13 +24,23 @@ const resetPass = async ({ email }: any, locale: string, req: any, res: any) => 
 }
 
 const logIn = async ({ email, password }: any, req: any, res: any): Promise<boolean> => {
-  const result = await logInUser(email, password, res)
-  if (result === null) {
-    return true
+  const user = await findUser(email)
+
+  if (!user) {
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.NO_ACCOUNT] })
+  } else {
+    const { userId, nickname, fsKey, locale } = user
+    const correctPassword = await isCorrectPassword(password, userId)
+
+    if (!correctPassword) {
+      res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INCORRECT_PASS] })
+    } else {
+      updateLoginTime(userId)
+      setSession(req, res, userId, nickname, fsKey, locale)
+      res.status(204).send()
+    }
   }
 
-  setSession(req, res, result.userId, result.nickname, result.fsKey, result.locale)
-  res.status(204).send()
   return true
 }
 
@@ -77,7 +87,7 @@ const signUp = async (inputs: any, req: any, res: any): Promise<boolean> => {
     googleId,
     facebookId,
   )
-  if (!signUpResult?.insertId) {
+  if (!signUpResult.insertId) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.SIGN_UP_ERROR] })
     return true
   }
@@ -108,7 +118,7 @@ export default () => {
     res.status(404).send('Not Found')
   })
 
-  router.put('/:action', async (req, res) => {
+  router.put('/:action', async (req: any, res) => {
     const { params: { action }, body: { inputs, locale } } = req
 
     switch (action) {

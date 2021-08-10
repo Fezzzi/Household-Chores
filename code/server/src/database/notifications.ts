@@ -1,48 +1,25 @@
-import { apifyKey } from 'serverSrc/helpers/api'
+import { apify, SnakeCaseObjectToCamelCase } from 'serverSrc/helpers/api'
 
 import { database } from './database'
 import { tNotifySettingsName, tNotifySettingsCols, TNotifySettingsType } from './tables'
 
 export type NotificationSettingsColumn = keyof Omit<TNotifySettingsType, typeof tNotifySettingsCols.user_id>
-
-const groupMappings: Record<string, string[]> = {
-  general: [
-    tNotifySettingsCols.email_notifications,
-    tNotifySettingsCols.mobile_notifications,
-  ],
-  connections: [
-    tNotifySettingsCols.connection_approval,
-    tNotifySettingsCols.connection_request,
-  ],
-  households: [
-    tNotifySettingsCols.household_deleting,
-    tNotifySettingsCols.household_expelling,
-    tNotifySettingsCols.household_invitation,
-    tNotifySettingsCols.household_joining,
-    tNotifySettingsCols.household_leaving,
-  ],
-}
-const groups = Object.keys(groupMappings)
+export const notificationSettingsColumns = Object.values(tNotifySettingsCols)
+  .filter(col => col !== tNotifySettingsCols.user_id)
 
 export const findNotificationSettings = async (
   userId: number
-): Promise<Record<string, Record<string, boolean>> | null> => {
-  const result = await database.query(`
-    SELECT * FROM ${tNotifySettingsName} WHERE ${tNotifySettingsCols.user_id}=${userId}
-  `)
+): Promise<SnakeCaseObjectToCamelCase<TNotifySettingsType> | null> => {
+  const result = await apify(database.query<TNotifySettingsType>(`
+    SELECT *
+    FROM ${tNotifySettingsName}
+    WHERE ${tNotifySettingsCols.user_id}=${userId}
+  `))
 
-  if (result[0]) {
-    const settings: Record<string, Record<string, boolean>> = {}
-    groups.forEach(group => {
-      settings[group] = Object.fromEntries(groupMappings[group].map(key => [apifyKey(key), result[0][key]]))
-    })
-
-    return settings
-  }
-  return null
+  return result[0] ?? null
 }
 
-export const findNotificationSettingsForUsers = async (userIds: number[]) =>
+export const findNotificationSettingsForUsers = (userIds: number[]) =>
   database.query<TNotifySettingsType>(`
     SELECT *
     FROM ${tNotifySettingsName}

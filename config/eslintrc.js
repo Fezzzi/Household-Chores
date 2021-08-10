@@ -55,6 +55,7 @@ module.exports = {
     'no-empty-function': 0,
     'no-confusing-arrow': 0,
     'no-mixed-operators': 0,
+    'no-restricted-syntax': 0,
     'prefer-destructuring': 0,
     'no-use-before-define': 0,
     'no-underscore-dangle': 0,
@@ -68,6 +69,7 @@ module.exports = {
     'no-await-in-loop': 1,
 
     'semi': [2, 'never'],
+    'indent': [2, 2, { 'SwitchCase': 1, 'ignoredNodes': ['TemplateLiteral *'] }],
     'max-len': [2, { code: 160, tabWidth: 2 }],
     'quote-props': [2, 'as-needed', { unnecessary: false }],
     'comma-dangle': [2, {
