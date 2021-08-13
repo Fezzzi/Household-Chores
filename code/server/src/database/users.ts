@@ -1,14 +1,26 @@
-import { apify } from 'serverSrc/helpers/api'
 import { UserCreationError } from 'serverSrc/helpers/errors'
 import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords'
 import { CONNECTION_STATE_TYPE, DEFAULT_LOCALE, USER_VISIBILITY_TYPE } from 'shared/constants'
 
 import { database } from './database'
 import {
-  tUsersName, tUsersCols, tConnectionsName, tConnectionsCols,
-  tNotifySettingsName, tNotifySettingsCols, tDialogsName, tDialogsCols, TUsersType, TConnectionsType,
+  tUsersName, tUsersCols,
+  tConnectionsName, tConnectionsCols,
+  tNotifySettingsName, tNotifySettingsCols,
+  tDialogsName, tDialogsCols,
+  TUsersType,
+  TConnectionsType,
 } from './tables'
-import { mapToUserDataApiType, UserDataDbType, UserEditDbType } from './mappers'
+import { fMutualConnectionsName, fMutualConnectionsOut } from './functions'
+import {
+  mapToUserDataApiType,
+  mapToUserProfileApiType,
+  mapToUserQueryApiType,
+  UserDataDbType,
+  UserEditDbType,
+  UserProfileDbType,
+  UserQueryDbType,
+} from './mappers'
 
 export const isCorrectPassword = async (password: string, userId: number) => {
   const result = await database.query<Pick<TUsersType, typeof tUsersCols.password>>(`
@@ -24,18 +36,17 @@ export const isCorrectPassword = async (password: string, userId: number) => {
   return checkPass(password, result[0][tUsersCols.password])
 }
 
-type ProfileDataType = typeof tUsersCols.id | typeof tUsersCols.nickname | typeof tUsersCols.email
-  | typeof tUsersCols.photo | typeof tUsersCols.visibility | typeof tUsersCols.locale
-
 export const findProfileData = async (userId: number) => {
-  const result = await apify(database.query<Pick<TUsersType, ProfileDataType>>(`
+  const result = await database.query<UserProfileDbType>(`
     SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.email}, ${tUsersCols.photo},
       ${tUsersCols.visibility}, ${tUsersCols.locale}
     FROM ${tUsersName}
     WHERE ${tUsersCols.id}=${userId}
-  `))
+  `)
 
-  return result[0] ?? null
+  return result[0]
+    ? mapToUserProfileApiType(result[0])
+    : null
 }
 
 export const findUser = async (email: string) => {
@@ -163,32 +174,45 @@ export const assignFacebookProvider = (userId: number, facebookId: string) =>
     WHERE ${tUsersCols.id}=$2
   `, [facebookId, userId])
 
-type UsersType = { user_id: number; mutual_connections: number }
-  & Pick<TUsersType, typeof tUsersCols.nickname | typeof tUsersCols.photo | typeof tUsersCols.visibility>
-  & Pick<TConnectionsType, typeof tConnectionsCols.message | typeof tConnectionsCols.state>
+export const getUserFriendIds = async (userId: number) => {
+  const friends = await database.query<
+    Pick<TConnectionsType, typeof tConnectionsCols.from_id | typeof tConnectionsCols.to_id>
+  >(`
+    SELECT ${tConnectionsCols.from_id}, ${tConnectionsCols.to_id}
+    FROM ${tConnectionsName}
+    WHERE ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
+      AND ${tConnectionsCols.to_id}=${userId} OR ${tConnectionsCols.from_id}=${userId}
+  `)
 
-// todo: Fix the quuery with materialized view + auto refresh trigger
-// todo: Sort secondary by size of matching query - max(strlen(nickname) - levenshtein(query, nickname), strlen(email) - levenshtein(query, email))
+  return friends.map(friend => friend[tConnectionsCols.from_id] === userId
+    ? friend[tConnectionsCols.to_id]
+    : friend[tConnectionsCols.from_id]
+  )
+}
+
+// todo: Would be great if it could be ordered by users' 'connection' distance
 export const queryUsers = async (query: string, userId: number) =>
-  apify(database.query<UsersType>(`
-    SELECT ${tUsersCols.id} as user_id, ${tUsersCols.nickname}, ${tUsersCols.photo},
-      ${tConnectionsCols.state}, ${tConnectionsCols.message}, ${tUsersCols.visibility},
-      0 AS mutual_connections
-    FROM ${tUsersName}
-    LEFT JOIN ${tConnectionsName}
-      ON ${tConnectionsCols.from_id}=${userId}
-        AND ${tConnectionsCols.to_id}=${tUsersCols.id}
-        AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.WAITING}'
-    WHERE
-      (
-        ${tUsersCols.visibility}='${USER_VISIBILITY_TYPE.ALL}' OR (${tUsersCols.visibility}='${USER_VISIBILITY_TYPE.FOF}')
-      )
-      AND (${tUsersCols.nickname} LIKE $1 OR ${tUsersCols.email} LIKE $1)
-      AND ${tUsersCols.id}!=${userId}
-      AND NOT EXISTS (
-        SELECT * FROM ${tConnectionsName}
-        WHERE (${tConnectionsCols.from_id}=${userId} AND ${tConnectionsCols.to_id}=${tUsersCols.id}
-            AND ${tConnectionsCols.state}!='${CONNECTION_STATE_TYPE.WAITING}')
-          OR (${tConnectionsCols.from_id}=${tUsersCols.id} AND ${tConnectionsCols.to_id}=${userId})
-      )
-  `, [`%${query}%`]))
+  database.withTransaction(async () => {
+    const friendIds = await getUserFriendIds(userId)
+
+    const users = await database.query<UserQueryDbType>(`
+      SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.photo},
+        ${tConnectionsCols.state}, ${tConnectionsCols.message}, ${tUsersCols.visibility},
+        ${fMutualConnectionsOut.mutual_connections}
+      FROM ${tUsersName}
+      LEFT JOIN ${tConnectionsName}
+        ON (${tConnectionsCols.from_id}=${userId} AND ${tConnectionsCols.to_id}=${tUsersCols.id})
+        OR (${tConnectionsCols.to_id}=${userId} AND ${tConnectionsCols.from_id}=${tUsersCols.id})
+      LEFT JOIN ${fMutualConnectionsName}('{${friendIds}}')
+        ON ${fMutualConnectionsOut.target_user_id}=${tUsersCols.id}
+      WHERE LOWER(${tUsersCols.nickname}) LIKE LOWER($1)
+        AND (${tConnectionsCols.state} IS NULL
+          OR (${tConnectionsCols.from_id}=${userId} AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.WAITING}'))
+        AND ${tUsersCols.id}!=${userId}
+        AND (${tUsersCols.visibility}='${USER_VISIBILITY_TYPE.ALL}'
+          OR (${tUsersCols.visibility}='${USER_VISIBILITY_TYPE.FOF}' AND mutual_connections > 0))
+      ORDER BY mutual_connections DESC
+    `, [`%${query}%`])
+
+    return users.map(mapToUserQueryApiType)
+  })

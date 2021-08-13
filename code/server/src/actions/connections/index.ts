@@ -5,7 +5,7 @@ import {
   approveConnection,
   blockConnection,
   createConnectionRequest,
-  findBlockedConnections,
+  findBlockedConnectionIds,
   findConnections,
   queryUsers,
   removeConnection,
@@ -39,7 +39,8 @@ const handleConnectionRequest = async (
   { userId, message }: { userId: number; message: string | null },
 ) => {
   const currentUser = req.session.userId
-  const isRequestValid = (await findBlockedConnections(userId)).every(blockedUser => blockedUser !== currentUser)
+  const isRequestValid = (await findBlockedConnectionIds(userId)).every(blockedUser => blockedUser !== currentUser)
+
   if (isRequestValid) {
     const success = await createConnectionRequest(currentUser, userId, message ?? null)
     if (success) {

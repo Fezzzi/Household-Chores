@@ -3,4 +3,4 @@ migrations
 dist
 docs
 code/server/src/resources
-config/migration-template.js
+config/migration-template.ts

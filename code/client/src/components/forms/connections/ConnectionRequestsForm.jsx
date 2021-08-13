@@ -50,7 +50,7 @@ const ConnectionRequestsForm = ({ data }) => {
               ...rest
             }) => ({
               photo: <TableBigPhoto src={photo} />,
-              mutualConnections: <>({mutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
+              mutualConnections: <>({mutualConnections ?? 0} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
               message: message && (
                 <AppendMessageAnchor>
                   <MessageTooltip

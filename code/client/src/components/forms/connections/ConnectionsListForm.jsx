@@ -38,17 +38,20 @@ const ConnectionsListForm = ({ data }) => {
               userId,
               photo,
               dateCreated,
+              mutualConnections,
               ...user
             }) => ({
               ...user,
               photo: <TableBigPhoto src={photo} />,
+              mutualConnections: <>({mutualConnections ?? 0} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
               dateCreated: getTimeString(dateCreated),
               removeBtn: getButtonForUser(FORM.REMOVE, userId, removeHandler),
               blockBtn: getButtonForUser(FORM.BLOCK, userId, blockHandler),
             }))}
             keys={[
               { name: 'photo' },
-              { name: 'nickname', bold: true, growing: true },
+              { name: 'nickname', bold: true },
+              { name: 'mutualConnections', fading: true, growing: true },
               { name: 'dateCreated', fading: true },
               { name: 'removeBtn' },
               { name: 'blockBtn' },
