@@ -2,7 +2,7 @@ import {
   HOUSEHOLD_ROLE_TYPE, INPUT_TYPE, INVITATION_MESSAGE_LENGTH, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE,
 } from 'shared/constants'
 import { ERROR, INFO } from 'shared/constants/localeMessages'
-import { findApprovedConnections, findUser, getUserRole, isCorrectPassword } from 'serverSrc/database'
+import { getApprovedConnections, getUser, getUserRole, isCorrectPassword } from 'serverSrc/database'
 
 import { GeneralEditInputs, HouseholdEditInputs } from './types'
 import { validateField } from '../validate'
@@ -35,7 +35,7 @@ export const validateProfileData = async (inputs: GeneralEditInputs, req: any, r
     return false
   }
 
-  if (email !== undefined && await findUser(email) !== null) {
+  if (email !== undefined && await getUser(email) !== null) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.EMAIL_USED] })
     return false
   }
@@ -110,7 +110,7 @@ export const validateEditHouseholdData = async (
   }
 
   if (newInvitations?.length > 0) {
-    const connections = await findApprovedConnections(userId)
+    const connections = await getApprovedConnections(userId)
     const connectionIds = connections.map(({ userId }) => userId)
     const valid = newInvitations.every(({ userId }) => connectionIds.indexOf(userId) !== -1)
     if (!valid) {

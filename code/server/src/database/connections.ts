@@ -12,7 +12,7 @@ import {
 } from './mappers'
 import { getUserFriendIds } from './users'
 
-export const findBlockedConnectionIds = async (userId: number) => {
+export const getBlockedConnectionIds = async (userId: number) => {
   const blockedIds = await database.query<Pick<TConnectionsType, typeof tConnectionsCols.from_id>>(`
     SELECT ${tConnectionsCols.from_id} FROM ${tConnectionsName}
     WHERE ${tConnectionsCols.to_id}=${userId} AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.BLOCKED}'
@@ -21,13 +21,13 @@ export const findBlockedConnectionIds = async (userId: number) => {
   return blockedIds.map(({ [tConnectionsCols.from_id]: id }) => id)
 }
 
-export const findApprovedConnections = async (userId: number) => {
+export const getApprovedConnections = async (userId: number) => {
   const connections = await database.query<ApprovedConnectionDbType>(`
-    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.photo}, ${tConnectionsCols.date_created}
+    SELECT ${tUsersCols.user_id}, ${tUsersCols.nickname}, ${tUsersCols.photo}, ${tConnectionsCols.date_created}
     FROM ${tConnectionsName}
     INNER JOIN ${tUsersName}
-      ON (${tUsersCols.id}=${tConnectionsCols.from_id} AND ${tConnectionsCols.to_id}=${userId})
-        OR (${tUsersCols.id}=${tConnectionsCols.to_id} AND ${tConnectionsCols.from_id}=${userId})
+      ON (${tUsersCols.user_id}=${tConnectionsCols.from_id} AND ${tConnectionsCols.to_id}=${userId})
+        OR (${tUsersCols.user_id}=${tConnectionsCols.to_id} AND ${tConnectionsCols.from_id}=${userId})
     WHERE (${tConnectionsCols.to_id}=${userId}
       OR ${tConnectionsCols.from_id}=${userId})
       AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
@@ -43,28 +43,28 @@ type GroupedConnectionsType = {
   [CONNECTION_STATE_TYPE.WAITING]: ConnectionApiType[]
 }
 
-export const findConnections = (userId: number): Promise<GroupedConnectionsType> =>
+export const getConnections = (userId: number): Promise<GroupedConnectionsType> =>
   database.withTransaction(async (): Promise<GroupedConnectionsType> => {
     const friendIds = await getUserFriendIds(userId)
 
     const approvedFromConnections = await database.query<ConnectionDbType>(`
-      SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.photo}, ${tConnectionsCols.message},
+      SELECT ${tUsersCols.user_id}, ${tUsersCols.nickname}, ${tUsersCols.photo}, ${tConnectionsCols.message},
         ${tConnectionsCols.state}, ${tConnectionsCols.date_created}, ${fMutualConnectionsOut.mutual_connections}
       FROM ${tUsersName}
-      INNER JOIN ${tConnectionsName} ON ${tUsersCols.id}=${tConnectionsCols.to_id}
+      INNER JOIN ${tConnectionsName} ON ${tUsersCols.user_id}=${tConnectionsCols.to_id}
       LEFT JOIN ${fMutualConnectionsName}('{${friendIds}}')
-        ON ${fMutualConnectionsOut.target_user_id}=${tUsersCols.id}
+        ON ${fMutualConnectionsOut.target_user_id}=${tUsersCols.user_id}
       WHERE ${tConnectionsCols.from_id}=${userId} AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
     `)
 
     const otherConnections = await database.query<ConnectionDbType>(`
-      SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.photo},
+      SELECT ${tUsersCols.user_id}, ${tUsersCols.nickname}, ${tUsersCols.photo},
         ${tConnectionsCols.message}, ${tConnectionsCols.state}, ${tConnectionsCols.date_created},
         ${fMutualConnectionsOut.mutual_connections}
       FROM ${tUsersName}
-      INNER JOIN ${tConnectionsName} ON ${tUsersCols.id}=${tConnectionsCols.from_id}
+      INNER JOIN ${tConnectionsName} ON ${tUsersCols.user_id}=${tConnectionsCols.from_id}
       LEFT JOIN ${fMutualConnectionsName}('{${friendIds}}')
-        ON ${fMutualConnectionsOut.target_user_id}=${tUsersCols.id}
+        ON ${fMutualConnectionsOut.target_user_id}=${tUsersCols.user_id}
       WHERE ${tConnectionsCols.to_id}=${userId}
     `)
 

@@ -11,8 +11,8 @@ exports.up = (pgm: MigrationBuilder) => {
   `)
   pgm.sql(`
     CREATE TABLE ${tConnectionsName} (
-      ${tConnectionsCols.from_id} INTEGER NOT NULL REFERENCES ${tUsersName} (${tUsersCols.id}) ON DELETE CASCADE,
-      ${tConnectionsCols.to_id} INTEGER NOT NULL REFERENCES ${tUsersName} (${tUsersCols.id}) ON DELETE CASCADE,
+      ${tConnectionsCols.from_id} INTEGER NOT NULL REFERENCES ${tUsersName} (${tUsersCols.user_id}) ON DELETE CASCADE,
+      ${tConnectionsCols.to_id} INTEGER NOT NULL REFERENCES ${tUsersName} (${tUsersCols.user_id}) ON DELETE CASCADE,
       ${tConnectionsCols.message} VARCHAR(255) DEFAULT NULL,
       ${tConnectionsCols.state} connectionStatus NOT NULL DEFAULT '${CONNECTION_STATE_TYPE.WAITING}',
       ${tConnectionsCols.date_created} TIMESTAMPTZ NOT NULL,

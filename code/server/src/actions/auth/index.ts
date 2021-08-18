@@ -4,7 +4,7 @@ import { NOTIFICATION_TYPE, API } from 'shared/constants'
 import { ERROR, SUCCESS } from 'shared/constants/localeMessages'
 import { MAILS } from 'serverSrc/constants'
 import { sendEmails } from 'serverSrc/helpers/mailer'
-import { SignUpUser, findUser, isCorrectPassword, updateLoginTime } from 'serverSrc/database'
+import { signUpUser, getUser, isCorrectPassword, updateLoginTime } from 'serverSrc/database'
 import { setSession } from 'serverSrc/helpers/auth'
 
 import { validateLoginData, validateResetData, validateSignupData } from './validate'
@@ -24,7 +24,7 @@ const resetPass = async ({ email }: any, locale: string, req: any, res: any) => 
 }
 
 const logIn = async ({ email, password }: any, req: any, res: any): Promise<boolean> => {
-  const user = await findUser(email)
+  const user = await getUser(email)
 
   if (!user) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.NO_ACCOUNT] })
@@ -63,7 +63,7 @@ const signUp = async (inputs: any, req: any, res: any): Promise<boolean> => {
   }
 
   // In case the user could not be logged in with google or facebook provider, we proceed to email/password
-  const user = await findUser(email)
+  const user = await getUser(email)
   if (user !== null) {
     // In case user with such email exists but does not yet have assigned any provider id, we assign them and perform log in
     if (googleId || facebookId) {
@@ -79,7 +79,7 @@ const signUp = async (inputs: any, req: any, res: any): Promise<boolean> => {
   }
 
   // In case the user is truly signing up, create new account and possibly assign available provider ids
-  const signUpResult = await SignUpUser(
+  const signUpResult = await signUpUser(
     email,
     nickname,
     password ?? null,

@@ -26,7 +26,7 @@ export const isCorrectPassword = async (password: string, userId: number) => {
   const result = await database.query<Pick<TUsersType, typeof tUsersCols.password>>(`
     SELECT ${tUsersCols.password}
     FROM ${tUsersName}
-    WHERE ${tUsersCols.id}=$1
+    WHERE ${tUsersCols.user_id}=$1
   `, [userId])
 
   if (!result[0]?.[tUsersCols.password]) {
@@ -36,12 +36,12 @@ export const isCorrectPassword = async (password: string, userId: number) => {
   return checkPass(password, result[0][tUsersCols.password])
 }
 
-export const findProfileData = async (userId: number) => {
+export const getProfileData = async (userId: number) => {
   const result = await database.query<UserProfileDbType>(`
-    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.email}, ${tUsersCols.photo},
+    SELECT ${tUsersCols.user_id}, ${tUsersCols.nickname}, ${tUsersCols.email}, ${tUsersCols.photo},
       ${tUsersCols.visibility}, ${tUsersCols.locale}
     FROM ${tUsersName}
-    WHERE ${tUsersCols.id}=${userId}
+    WHERE ${tUsersCols.user_id}=${userId}
   `)
 
   return result[0]
@@ -49,9 +49,9 @@ export const findProfileData = async (userId: number) => {
     : null
 }
 
-export const findUser = async (email: string) => {
+export const getUser = async (email: string) => {
   const result = await database.query<UserDataDbType>(`
-    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}, ${tUsersCols.locale}
+    SELECT ${tUsersCols.user_id}, ${tUsersCols.nickname}, ${tUsersCols.file_system_key}, ${tUsersCols.locale}
     FROM ${tUsersName}
     WHERE ${tUsersCols.email}=$1
   `, [email])
@@ -61,9 +61,9 @@ export const findUser = async (email: string) => {
     : null
 }
 
-export const findGoogleUser = async (googleId: string) => {
+export const getGoogleUser = async (googleId: string) => {
   const result = await database.query<UserDataDbType>(`
-    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}, ${tUsersCols.locale}
+    SELECT ${tUsersCols.user_id}, ${tUsersCols.nickname}, ${tUsersCols.file_system_key}, ${tUsersCols.locale}
     FROM ${tUsersName}
     WHERE ${tUsersCols.google_id}=$1
   `, [googleId])
@@ -73,9 +73,9 @@ export const findGoogleUser = async (googleId: string) => {
     : null
 }
 
-export const findFacebookUser = async (facebookId: string) => {
+export const getFacebookUser = async (facebookId: string) => {
   const result = await database.query<UserDataDbType>(`
-    SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.fs_key}, ${tUsersCols.locale}
+    SELECT ${tUsersCols.user_id}, ${tUsersCols.nickname}, ${tUsersCols.file_system_key}, ${tUsersCols.locale}
     FROM ${tUsersName}
     WHERE ${tUsersCols.facebook_id}=$1
   `, [facebookId])
@@ -89,7 +89,7 @@ export const updateLoginTime = (userId: number) =>
   database.queryBool(`
     UPDATE ${tUsersName}
     SET ${tUsersCols.date_last_active}=NOW()
-    WHERE ${tUsersCols.id}=$1
+    WHERE ${tUsersCols.user_id}=$1
   `, [userId])
 
 export const updateUserData = async (data: UserEditDbType, userId: number) =>
@@ -99,10 +99,10 @@ export const updateUserData = async (data: UserEditDbType, userId: number) =>
       .filter(([, value]) => Boolean(value))
       .map(([key], index) => `${key}=$${index + 1}`)
       .join(', ')}
-    WHERE ${tUsersCols.id}=${userId}
+    WHERE ${tUsersCols.user_id}=${userId}
   `, Object.values(data).filter(Boolean))
 
-export const SignUpUser = async (
+export const signUpUser = async (
   email: string,
   nickname: string,
   password: string | null,
@@ -110,30 +110,25 @@ export const SignUpUser = async (
   googleId: string | null,
   facebookId: string | null,
 ) =>
-  database.withTransaction(async (): Promise<{
-    insertId: number
-    nickname: string
-    fsKey: string
-    locale: string
-  }> => {
+  database.withTransaction(async () => {
     const pass = await encryptPass(password ?? generatePass())
     const result = await database.query<{
-      [tUsersCols.id]: TUsersType[typeof tUsersCols.id]
+      [tUsersCols.user_id]: TUsersType[typeof tUsersCols.user_id]
     }>(`
       INSERT INTO ${tUsersName} (
-        ${tUsersCols.email}, ${tUsersCols.nickname}, ${tUsersCols.password}, ${tUsersCols.photo}, ${tUsersCols.fs_key},
+        ${tUsersCols.email}, ${tUsersCols.nickname}, ${tUsersCols.password}, ${tUsersCols.photo}, ${tUsersCols.file_system_key},
         ${tUsersCols.google_id}, ${tUsersCols.facebook_id}, ${tUsersCols.date_registered}, ${tUsersCols.date_last_active}
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
-      RETURNING ${tUsersCols.id}
+      RETURNING ${tUsersCols.user_id}
     `, [email, nickname, pass, photo, '', googleId, facebookId], false)
 
-    const newUserId = result[0]?.[tUsersCols.id]
+    const newUserId = result[0]?.[tUsersCols.user_id]
     if (newUserId) {
       const fsKey = generateFsKey(newUserId)
       await database.queryBool(`
         UPDATE ${tUsersName}
-        SET ${tUsersCols.fs_key}='${fsKey}'
-        WHERE ${tUsersCols.id}=${newUserId}
+        SET ${tUsersCols.file_system_key}='${fsKey}'
+        WHERE ${tUsersCols.user_id}=${newUserId}
       `)
       await database.queryBool(`
         INSERT INTO ${tNotifySettingsName} (${tNotifySettingsCols.user_id}) VALUES (${newUserId})
@@ -157,21 +152,21 @@ export const updateUserLocale = (userId: number, newLocale: string) =>
   database.queryBool(`
     UPDATE ${tUsersName}
     SET ${tUsersCols.locale}=$1
-    WHERE ${tUsersCols.id}=$2
+    WHERE ${tUsersCols.user_id}=$2
   `, [newLocale, userId])
 
 export const assignGoogleProvider = (userId: number, googleId: string) =>
   database.queryBool(`
     UPDATE ${tUsersName}
     SET ${tUsersCols.google_id}=$1
-    WHERE ${tUsersCols.id}=$2
+    WHERE ${tUsersCols.user_id}=$2
   `, [googleId, userId])
 
 export const assignFacebookProvider = (userId: number, facebookId: string) =>
   database.queryBool(`
     UPDATE ${tUsersName}
     SET ${tUsersCols.facebook_id}=$1
-    WHERE ${tUsersCols.id}=$2
+    WHERE ${tUsersCols.user_id}=$2
   `, [facebookId, userId])
 
 export const getUserFriendIds = async (userId: number) => {
@@ -196,19 +191,19 @@ export const queryUsers = async (query: string, userId: number) =>
     const friendIds = await getUserFriendIds(userId)
 
     const users = await database.query<UserQueryDbType>(`
-      SELECT ${tUsersCols.id}, ${tUsersCols.nickname}, ${tUsersCols.photo},
+      SELECT ${tUsersCols.user_id}, ${tUsersCols.nickname}, ${tUsersCols.photo},
         ${tConnectionsCols.state}, ${tConnectionsCols.message}, ${tUsersCols.visibility},
         ${fMutualConnectionsOut.mutual_connections}
       FROM ${tUsersName}
       LEFT JOIN ${tConnectionsName}
-        ON (${tConnectionsCols.from_id}=${userId} AND ${tConnectionsCols.to_id}=${tUsersCols.id})
-        OR (${tConnectionsCols.to_id}=${userId} AND ${tConnectionsCols.from_id}=${tUsersCols.id})
+        ON (${tConnectionsCols.from_id}=${userId} AND ${tConnectionsCols.to_id}=${tUsersCols.user_id})
+        OR (${tConnectionsCols.to_id}=${userId} AND ${tConnectionsCols.from_id}=${tUsersCols.user_id})
       LEFT JOIN ${fMutualConnectionsName}('{${friendIds}}')
-        ON ${fMutualConnectionsOut.target_user_id}=${tUsersCols.id}
+        ON ${fMutualConnectionsOut.target_user_id}=${tUsersCols.user_id}
       WHERE LOWER(${tUsersCols.nickname}) LIKE LOWER($1)
         AND (${tConnectionsCols.state} IS NULL
           OR (${tConnectionsCols.from_id}=${userId} AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.WAITING}'))
-        AND ${tUsersCols.id}!=${userId}
+        AND ${tUsersCols.user_id}!=${userId}
         AND (${tUsersCols.visibility}='${USER_VISIBILITY_TYPE.ALL}'
           OR (${tUsersCols.visibility}='${USER_VISIBILITY_TYPE.FOF}' AND mutual_connections > 0))
       ORDER BY mutual_connections DESC

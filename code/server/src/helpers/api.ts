@@ -20,16 +20,6 @@ export type CamelCaseObjectToSnakeCase<T extends Record<string, any>> =
   { [k in Extract<keyof T, string> as CamelToSnakeCase<k>]: T[k] }
 
 /**
- * Helper function that maps all fields in db query's output to match the specified API from openAPI docs by converting
- * all snake_case fields in the db response to camelCase.
- */
-export const apify = async<T extends Record<string, any>> (queryResult: Promise<T[]>) => {
-  const queriedData = await queryResult
-
-  return queriedData.map(apifyObject)
-}
-
-/**
  * Helper function that maps a single db object's output fields to match the specified API from openAPI docs by converting
  * all snake_case fields in the db response to camelCase.
  */

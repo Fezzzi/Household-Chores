@@ -4,7 +4,7 @@ import { tUsersCols, tUsersName } from 'serverSrc/database/tables'
 
 exports.up = (pgm: MigrationBuilder) => pgm.sql(`
   CREATE TABLE ${tUsersName} (
-    ${tUsersCols.id} SERIAL PRIMARY KEY,
+    ${tUsersCols.user_id} SERIAL PRIMARY KEY,
     ${tUsersCols.google_id} VARCHAR(255) UNIQUE DEFAULT NULL,
     ${tUsersCols.facebook_id} VARCHAR(255) UNIQUE DEFAULT NULL,
     ${tUsersCols.email} VARCHAR(255) NOT NULL,

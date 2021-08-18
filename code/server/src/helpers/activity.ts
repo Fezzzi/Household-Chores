@@ -1,4 +1,4 @@
-import { addActivityForUsers, findNotificationDataForUsers } from 'serverSrc/database'
+import { addActivityForUsers, getNotificationDataForUsers } from 'serverSrc/database'
 import { NOTIFICATION_EMAILS, NOTIFICATIONS } from 'serverSrc/constants'
 
 /**
@@ -13,7 +13,7 @@ export const logActivity = async (
 ) => {
   addActivityForUsers(userIds, message, link)
 
-  const notificationData = await findNotificationDataForUsers(userIds)
+  const notificationData = await getNotificationDataForUsers(userIds)
   const notificationEmail = NOTIFICATION_EMAILS[notification]
   const userIdsToEmail = notificationData
     ?.filter(data => data.emailNotifications && data[notification])

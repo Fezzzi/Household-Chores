@@ -5,8 +5,8 @@ import {
   approveConnection,
   blockConnection,
   createConnectionRequest,
-  findBlockedConnectionIds,
-  findConnections,
+  getBlockedConnectionIds,
+  getConnections,
   queryUsers,
   removeConnection,
 } from 'serverSrc/database'
@@ -23,7 +23,7 @@ const performConnectionAction = async (
 ) => {
   const success = await action(req.session.userId, userId)
   if (success) {
-    const data = await findConnections(req.session.userId)
+    const data = await getConnections(req.session.userId)
     if (data) {
       res.status(200).send(data)
       return true
@@ -39,7 +39,7 @@ const handleConnectionRequest = async (
   { userId, message }: { userId: number; message: string | null },
 ) => {
   const currentUser = req.session.userId
-  const isRequestValid = (await findBlockedConnectionIds(userId)).every(blockedUser => blockedUser !== currentUser)
+  const isRequestValid = (await getBlockedConnectionIds(userId)).every(blockedUser => blockedUser !== currentUser)
 
   if (isRequestValid) {
     const success = await createConnectionRequest(currentUser, userId, message ?? null)

@@ -7,7 +7,7 @@ import {
   NotifySettingsUnforcedDbType,
 } from './mappers'
 
-export const findNotificationSettings = async (userId: number) => {
+export const getNotificationSettings = async (userId: number) => {
   const result = await database.query<NotifySettingsDbType>(`
     SELECT ${Object.values(tNotifySettingsCols).filter(key => key !== tNotifySettingsCols.user_id).join(', ')}
     FROM ${tNotifySettingsName}
@@ -20,7 +20,7 @@ export const findNotificationSettings = async (userId: number) => {
     : null
 }
 
-export const findNotificationDataForUsers = async (userIds: number[]) => {
+export const getNotificationDataForUsers = async (userIds: number[]) => {
   const results = await database.query<TNotifySettingsType>(`
     SELECT *
     FROM ${tNotifySettingsName}

@@ -19,7 +19,7 @@ export default () => {
 
     switch (action) {
       case API.HOUSEHOLDS_LOAD: {
-        const households = await getUserHouseholdsData(userId)
+        const households = await getUserHouseholdsData(userId, true)
         if (!households) {
           res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR] })
           return true

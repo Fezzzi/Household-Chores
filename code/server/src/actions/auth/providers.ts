@@ -5,7 +5,7 @@ import base64url from 'base64url'
 import { NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 import {
-  findFacebookUser, findGoogleUser, updateLoginTime, assignGoogleProvider, assignFacebookProvider,
+  getFacebookUser, getGoogleUser, updateLoginTime, assignGoogleProvider, assignFacebookProvider,
 } from 'serverSrc/database'
 import { UserDataApiType } from 'serverSrc/database/mappers'
 import { setSession } from 'serverSrc/helpers/auth'
@@ -87,8 +87,8 @@ export const handleProvidersLogIn = async (
     return true
   }
 
-  const loggedIn = (googleToken !== null && await logInWithProvider(req, res, () => findGoogleUser(googleId)))
-    || (facebook && facebook.signedRequest && await logInWithProvider(req, res, () => findFacebookUser(facebookId)))
+  const loggedIn = (googleToken !== null && await logInWithProvider(req, res, () => getGoogleUser(googleId)))
+    || (facebook && facebook.signedRequest && await logInWithProvider(req, res, () => getFacebookUser(facebookId)))
 
   if (loggedIn) {
     res.status(204).send()

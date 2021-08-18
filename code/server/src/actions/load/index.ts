@@ -2,7 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 
 import { API } from 'shared/constants'
-import { findProfileData, getActivityForUser, getDialogSettings } from 'serverSrc/database'
+import { getProfileData, getActivityForUser, getDialogSettings } from 'serverSrc/database'
 import { CONFIG } from 'serverSrc/constants'
 
 dotenv.config()
@@ -18,7 +18,7 @@ export default () => {
           res.status(200).send({
             debug: CONFIG.DEBUG,
             isUserLogged: true,
-            user: await findProfileData(userId),
+            user: await getProfileData(userId),
             activityFeed: await getActivityForUser(userId),
             dialogSettings: await getDialogSettings(userId),
           })

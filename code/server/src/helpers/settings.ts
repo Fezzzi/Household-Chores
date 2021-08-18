@@ -1,11 +1,11 @@
 import { tHouseholdsCols } from 'serverSrc/database/tables'
 import {
-  findApprovedConnections,
-  findConnections,
-  findNotificationSettings,
-  findProfileData,
-  findUserHouseholds,
-  findUserInvitations,
+  getApprovedConnections,
+  getConnections,
+  getNotificationSettings,
+  getProfileData,
+  getUserInvitations,
+  getUserHouseholdsData,
 } from 'serverSrc/database'
 import { findContributors, findSupporters } from 'serverSrc/helpers/externalResources'
 import { SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS, PROFILE_TABS } from 'shared/constants'
@@ -16,19 +16,19 @@ export const getTabData = async (category: string, tab: string, req: any) => {
   switch (category) {
     case SETTING_CATEGORIES.PROFILE:
       if (tab === PROFILE_TABS.NOTIFICATIONS) {
-        return findNotificationSettings(userId)
+        return getNotificationSettings(userId)
       } else if (tab === PROFILE_TABS.GENERAL) {
-        return findProfileData(userId)
+        return getProfileData(userId)
       }
       return {}
     case SETTING_CATEGORIES.HOUSEHOLDS:
       return {
-        invitations: await findUserInvitations(userId),
-        households: await findUserHouseholds(userId),
-        connections: await findApprovedConnections(userId),
+        invitations: await getUserInvitations(userId),
+        households: await getUserHouseholdsData(userId, true, true),
+        connections: await getApprovedConnections(userId),
       }
     case SETTING_CATEGORIES.CONNECTIONS:
-      return findConnections(userId)
+      return getConnections(userId)
     case SETTING_CATEGORIES.MORE:
       return {
         supporters: await findSupporters(),
@@ -42,7 +42,7 @@ export const getTabData = async (category: string, tab: string, req: any) => {
 export const getTabList = (
   data: any,
   category: string
-): { tabs: string[]; messages: object; types: object } => {
+): { tabs: string[]; messages: Record<string, string>; types: Record<string, string> } => {
   switch (category) {
     case SETTING_CATEGORIES.HOUSEHOLDS: return {
       tabs: [
