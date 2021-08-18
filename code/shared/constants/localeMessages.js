@@ -132,7 +132,6 @@ export const FORM = {
   SET_ALIAS: 'form.setAlias',
 
   EMAIL_NOTIFICATIONS: 'form.emailNotifications',
-  BROWSER_NOTIFICATIONS: 'form.browserNotifications',
   MOBILE_NOTIFICATIONS: 'form.mobileNotifications',
   CONNECTION_APPROVAL: 'form.connectionApproval',
   CONNECTION_REQUEST: 'form.connectionRequest',

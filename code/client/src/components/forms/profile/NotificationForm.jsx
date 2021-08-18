@@ -11,22 +11,24 @@ import { FORM } from 'shared/constants/localeMessages'
 import { LocaleText, Input } from '../../common'
 import { SimpleFloatingElement } from '../../portals'
 
-// todo: New shape of notifications needs to be tested!
-const NOTIFICATION_GROUPS = ['connections', 'households']
+const NOTIFICATION_GROUPS = ['connection', 'household']
 
 const NotificationForm = ({ data, onSubmit }) => {
-  const grouppedData = data
-    ? Object.entries(data).reduce((acc, [key, value]) => {
-      for (const group of NOTIFICATION_GROUPS) {
-        if (key.match(new RegExp(`^${group}[A-Z]`))) {
-          acc[group][key] = value
-          return acc
-        }
+  if (!data) {
+    return null
+  }
+
+  const { general, connection, household } = Object.entries(data).reduce((acc, [key, value]) => {
+    for (const group of NOTIFICATION_GROUPS) {
+      if (key.match(new RegExp(`^${group}[A-Z]`))) {
+        acc[group][key] = value
+        return acc
       }
-      acc.general[key] = value
-      return acc
-    }, { general: [], connections: [], households: [] })
-    : {}
+    }
+
+    acc.general[key] = value
+    return acc
+  }, { general: {}, connection: {}, household: {} })
 
   const {
     submitMessage,
@@ -35,8 +37,6 @@ const NotificationForm = ({ data, onSubmit }) => {
     inputs,
     setFormState,
   } = useFormState([data])
-
-  const { general, connections, households } = grouppedData
 
   const filteredGeneral = useMemo(() => {
     const filtered = { ...general }
@@ -91,8 +91,8 @@ const NotificationForm = ({ data, onSubmit }) => {
       </SectionHeadline>
 
       {getNotificationsBlock(filteredGeneral)}
-      {getNotificationsBlock(connections, FORM.CONNECTIONS)}
-      {getNotificationsBlock(households, FORM.HOUSEHOLDS)}
+      {getNotificationsBlock(connection, FORM.CONNECTIONS)}
+      {getNotificationsBlock(household, FORM.HOUSEHOLDS)}
     </>
   )
 }

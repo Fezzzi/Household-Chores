@@ -1,11 +1,11 @@
 enum NOTIFICATIONS {
-  CONNECTION_REQUEST = 'connection_request',
-  CONNECTION_APPROVAL = 'connection_approval',
-  HOUSEHOLD_INVITATION = 'household_invitation',
-  HOUSEHOLD_JOINING = 'household_joining',
-  HOUSEHOLD_LEAVING = 'household_leaving',
-  HOUSEHOLD_DELETING = 'household_deleting',
-  HOUSEHOLD_EXPELLING = 'household_expelling',
+  CONNECTION_REQUEST = 'connectionRequest',
+  CONNECTION_APPROVAL = 'connectionApproval',
+  HOUSEHOLD_INVITATION = 'householdInvitation',
+  HOUSEHOLD_JOINING = 'householdJoining',
+  HOUSEHOLD_LEAVING = 'householdLeaving',
+  HOUSEHOLD_DELETING = 'householdDeleting',
+  HOUSEHOLD_EXPELLING = 'householdExpelling',
 }
 
 const NOTIFICATION_EMAILS: Record<NOTIFICATIONS, string> = {

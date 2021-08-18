@@ -4,8 +4,8 @@ import { clientApi } from 'clientSrc/client-api'
 export const loadSettings = payload =>
   clientApi.get(API.SETTINGS_PREFIX, { params: payload })
 
-export const updateSettings = payload =>
-  clientApi.put(API.SETTINGS_PREFIX, payload)
+export const updateProfile = payload =>
+  clientApi.put(`${API.SETTINGS_PREFIX}/${API.UPDATE_PROFILE}`, payload)
 
-export const changeLocale = payload =>
-  clientApi.put(`${API.SETTINGS_PREFIX}/${API.CHANGE_LOCALE}`, payload)
+export const updateLocale = payload =>
+  clientApi.put(`${API.SETTINGS_PREFIX}/${API.UPDATE_LOCALE}`, payload)

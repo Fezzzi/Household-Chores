@@ -27,7 +27,7 @@ const DialogsForm = ({ onSubmit }) => {
   const dispatch = useDispatch()
   const handleSubmit = useCallback(() => {
     onSubmit(inputs, setFormState)
-    dispatch(DialogActions.loadDialogSettings(Object.fromEntries(Object.entries(inputs).map(([key, val]) => [key, !val]))))
+    dispatch(DialogActions.loadDialogSettings(inputs))
   }, [inputs, setFormState, dispatch])
 
   const openTutorialDialog = useCallback(() =>
@@ -73,7 +73,7 @@ const DialogsForm = ({ onSubmit }) => {
               type={INPUT_TYPE.BOOL}
               name={name}
               label={`form.${name}`}
-              value={!value}
+              value={value}
               hasDefaultValue
               onUpdate={useUpdateHandler(setFormState)}
             />

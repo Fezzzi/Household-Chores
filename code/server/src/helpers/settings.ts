@@ -11,22 +11,24 @@ import { findContributors, findSupporters } from 'serverSrc/helpers/externalReso
 import { SETTING_CATEGORIES, HOUSEHOLD_TABS, SETTING_TAB_ROWS, PROFILE_TABS } from 'shared/constants'
 
 export const getTabData = async (category: string, tab: string, req: any) => {
+  const userId = req.session.userId
+
   switch (category) {
     case SETTING_CATEGORIES.PROFILE:
       if (tab === PROFILE_TABS.NOTIFICATIONS) {
-        return findNotificationSettings(req.session.userId)
+        return findNotificationSettings(userId)
       } else if (tab === PROFILE_TABS.GENERAL) {
-        return findProfileData(req.session.userId)
+        return findProfileData(userId)
       }
       return {}
     case SETTING_CATEGORIES.HOUSEHOLDS:
       return {
-        invitations: await findUserInvitations(req.session.userId),
-        households: await findUserHouseholds(req.session.userId),
-        connections: await findApprovedConnections(req.session.userId),
+        invitations: await findUserInvitations(userId),
+        households: await findUserHouseholds(userId),
+        connections: await findApprovedConnections(userId),
       }
     case SETTING_CATEGORIES.CONNECTIONS:
-      return findConnections(req.session.userId)
+      return findConnections(userId)
     case SETTING_CATEGORIES.MORE:
       return {
         supporters: await findSupporters(),

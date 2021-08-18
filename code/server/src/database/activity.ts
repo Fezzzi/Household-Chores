@@ -1,10 +1,9 @@
-import { apify } from 'serverSrc/helpers/api'
-
 import { database } from './database'
 import { tActivityName, tActivityCols, TActivityType } from './tables'
+import { mapToUserActivityApiType } from './mappers'
 
-export const getActivityForUser = (userId: number) =>
-  apify(database.query<Omit<TActivityType, typeof tActivityCols.user_id>>(`
+export const getActivityForUser = async (userId: number) => {
+  const result = await database.query<Omit<TActivityType, typeof tActivityCols.user_id>>(`
     SELECT
       ${tActivityCols.id}, ${tActivityCols.message}, ${tActivityCols.link},
       ${tActivityCols.date_created}, ${tActivityCols.date_seen}
@@ -12,7 +11,10 @@ export const getActivityForUser = (userId: number) =>
     WHERE ${tActivityCols.user_id}=${userId}
     ORDER BY ${tActivityCols.date_seen} IS NULL DESC, ${tActivityCols.date_created} DESC
     LIMIT 25
-  `))
+  `)
+
+  return result.map(mapToUserActivityApiType)
+}
 
 export const markActivityForUser = (activityIds: number[]) =>
   database.queryBool(`

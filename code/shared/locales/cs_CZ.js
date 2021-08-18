@@ -126,7 +126,6 @@ export default {
   [FORM.HOUSEHOLD_INVITATIONS]: 'Pozvánky do domácností',
   [FORM.MUTUAL_FRIENDS]: 'Společných přátel',
   [FORM.EMAIL_NOTIFICATIONS]: 'Emailové notifikace',
-  [FORM.BROWSER_NOTIFICATIONS]: 'Notifikace prohlížeče',
   [FORM.MOBILE_NOTIFICATIONS]: 'Mobilní notifikace',
   [FORM.CONNECTION_APPROVAL]: 'Schválení žádosti',
   [FORM.CONNECTION_REQUEST]: 'Nová žádost',

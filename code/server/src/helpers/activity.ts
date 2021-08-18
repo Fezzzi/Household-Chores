@@ -1,6 +1,5 @@
-import { addActivityForUsers, findNotificationSettingsForUsers } from 'serverSrc/database'
+import { addActivityForUsers, findNotificationDataForUsers } from 'serverSrc/database'
 import { NOTIFICATION_EMAILS, NOTIFICATIONS } from 'serverSrc/constants'
-import { tNotifySettingsCols } from 'serverSrc/database/tables'
 
 /**
  * This is entrypoint function that does activity processing.
@@ -14,11 +13,11 @@ export const logActivity = async (
 ) => {
   addActivityForUsers(userIds, message, link)
 
-  const notificationSettings = await findNotificationSettingsForUsers(userIds)
+  const notificationData = await findNotificationDataForUsers(userIds)
   const notificationEmail = NOTIFICATION_EMAILS[notification]
-  const userIdsToEmail = notificationSettings
-    ?.filter(settings => settings[tNotifySettingsCols.email_notifications] && settings[notification])
-    .map(settings => settings[tNotifySettingsCols.user_id])
+  const userIdsToEmail = notificationData
+    ?.filter(data => data.emailNotifications && data[notification])
+    .map(data => data.userId)
 
   if (userIdsToEmail && userIdsToEmail.length > 0) {
     batchNotificationEmails(notificationEmail, userIdsToEmail, message, link)

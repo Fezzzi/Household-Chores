@@ -10,7 +10,12 @@ import {
   tHouseMemName, tHouseMemCols, tUsersName, tUsersCols,
   THouseholdsType, THouseMemType, THouseInvType,
 } from './tables'
-import { HouseholdEditDbType, HouseholdEditMemberDbType } from './mappers/households'
+import {
+  HouseholdEditMemberDbType,
+  HouseholdEditUnforcedDbType,
+  HouseholdMemberDbType,
+  mapToHouseholdMemberApiType,
+} from './mappers/households'
 
 export const findUserInvitations = (currentUser: number) =>
   apify(database.query<
@@ -184,7 +189,7 @@ export const createHousehold = (
 export const editHousehold = (
   householdId: number,
   memberData: HouseholdEditMemberDbType,
-  householdData: HouseholdEditDbType,
+  householdData: HouseholdEditUnforcedDbType,
   newInvitations: HouseholdNewInvitation[],
   changedRoles: HouseholdChangedRole[],
   removedMembers: number[],
@@ -224,7 +229,7 @@ export const editHousehold = (
       `, changedRoles.flatMap(({ userId, role }) => [userId, role]))
     }
 
-    const memberDataEntries = Object.entries(memberData).filter(([, val]) => Boolean(val))
+    const memberDataEntries = Object.entries(memberData).filter(([, val]) => val !== undefined)
     if (memberDataEntries.length > 0) {
       await database.queryBool(`
         UPDATE ${tHouseMemName} SET ${
@@ -235,7 +240,7 @@ export const editHousehold = (
       `, [...memberDataEntries.map(([, val]) => val), householdId])
     }
 
-    const householdDataEntries = Object.entries(householdData).filter(([, val]) => Boolean(val))
+    const householdDataEntries = Object.entries(householdData).filter(([, val]) => val !== undefined)
     if (householdDataEntries.length > 0) {
       await database.queryBool(`
         UPDATE ${tHouseholdsName} SET ${
@@ -253,7 +258,7 @@ export const deleteHousehold = (householdId: number) =>
     WHERE ${tHouseholdsCols.id}=$1
   `, [householdId])
 
-export const findHouseholdAdmins = async (householdId: number): Promise<number[]> => {
+export const findHouseholdAdminIds = async (householdId: number): Promise<number[]> => {
   const admins = await database.query<
     Pick<THouseMemType, typeof tHouseMemCols.user_id>
   >(`
@@ -265,20 +270,13 @@ export const findHouseholdAdmins = async (householdId: number): Promise<number[]
   return admins.map(admin => Number(admin[tHouseMemCols.user_id]))
 }
 
-export const leaveHousehold = (
-  userId: number,
-  householdId: number
-) =>
+export const leaveHousehold = (userId: number, householdId: number) =>
   database.queryBool(`
     DELETE FROM ${tHouseMemName}
     WHERE ${tHouseMemCols.household_id}=$1 AND ${tHouseMemCols.user_id}=${userId}
   `, [householdId])
 
-export const deleteInvitation = (
-  currentId: number,
-  fromId: number,
-  householdId: number,
-) =>
+export const deleteInvitation = (currentId: number, fromId: number, householdId: number) =>
   database.queryBool(`
     DELETE FROM ${tHouseInvName}
     WHERE ${tHouseInvCols.to_id}=${currentId} AND ${tHouseInvCols.from_id}=$1 AND ${tHouseInvCols.household_id}=$2
@@ -302,10 +300,7 @@ export const approveInvitation = (
     `, [householdId, fromId, nickname, photo])
   })
 
-export const getUserRole = async (
-  userId: number,
-  householdId: number
-) => {
+export const getUserRole = async (userId: number, householdId: number) => {
   const role = await database.query<
     Pick<THouseMemType, typeof tHouseMemCols.role>
   >(`
@@ -319,19 +314,13 @@ export const getUserRole = async (
 }
 
 export const getHouseholdMembers = async (householdId: number) => {
-  const members = await database.query<
-      Pick<THouseMemType, typeof tHouseMemCols.user_id | typeof tHouseMemCols.role | typeof tHouseMemCols.nickname>
-    >(`
+  const members = await database.query<HouseholdMemberDbType>(`
     SELECT ${tHouseMemCols.user_id}, ${tHouseMemCols.role}, ${tHouseMemCols.nickname}
     FROM ${tHouseMemName}
     WHERE ${tHouseMemCols.household_id}=$1
   `, [householdId])
 
-  return members.map(member => ({
-    userId: member[tHouseMemCols.user_id],
-    role: member[tHouseMemCols.role],
-    nickname: member[tHouseMemCols.nickname],
-  }))
+  return members.map(mapToHouseholdMemberApiType)
 }
 
 export const getHouseholdName = async (householdId: number) => {

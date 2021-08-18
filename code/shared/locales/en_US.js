@@ -126,7 +126,6 @@ export default {
   [FORM.HOUSEHOLD_INVITATIONS]: 'Household invitations',
   [FORM.MUTUAL_FRIENDS]: 'Mutual friends',
   [FORM.EMAIL_NOTIFICATIONS]: 'Email notifications',
-  [FORM.BROWSER_NOTIFICATIONS]: 'Browser notifications',
   [FORM.MOBILE_NOTIFICATIONS]: 'Mobile notifications',
   [FORM.CONNECTION_APPROVAL]: 'Request approval',
   [FORM.CONNECTION_REQUEST]: 'New request',

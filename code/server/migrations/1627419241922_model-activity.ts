@@ -24,7 +24,6 @@ exports.up = (pgm: MigrationBuilder) => {
     CREATE TABLE ${tNotifySettingsName} (
       ${tNotifySettingsCols.user_id} INTEGER PRIMARY KEY REFERENCES ${tUsersName} (${tUsersCols.id}) ON DELETE CASCADE,
       ${tNotifySettingsCols.email_notifications} BOOLEAN DEFAULT FALSE,
-      ${tNotifySettingsCols.browser_notifications} BOOLEAN DEFAULT FALSE,
       ${tNotifySettingsCols.mobile_notifications} BOOLEAN DEFAULT FALSE,
       ${tNotifySettingsCols.connection_request} BOOLEAN DEFAULT FALSE,
       ${tNotifySettingsCols.connection_approval} BOOLEAN DEFAULT FALSE,

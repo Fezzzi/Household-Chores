@@ -1,9 +1,9 @@
 import express from 'express'
 
-import { disableDialog, isDialogColumnKey } from 'serverSrc/database'
 import { API, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
-import { deApifyKey } from 'serverSrc/helpers/api'
+import { updateDialogSettings } from 'serverSrc/database'
+import { mapFromUserDialogsUnforcedApiType } from 'serverSrc/database/mappers'
 
 export default () => {
   const router = express.Router()
@@ -12,13 +12,13 @@ export default () => {
     const userId = req.session!.userId
 
     if (action === API.DIALOGS_DISABLE) {
-      const key = deApifyKey(body.key)
-      if (!isDialogColumnKey(key)) {
+      const settings = mapFromUserDialogsUnforcedApiType({ [body.key]: false })
+      if (Object.keys(settings).length === 0) {
         res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
         return
       }
 
-      const success = await disableDialog(key, userId)
+      const success = await updateDialogSettings(settings, userId)
       if (success) {
         res.status(204).send()
       } else {

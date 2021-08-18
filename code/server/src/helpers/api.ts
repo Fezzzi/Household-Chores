@@ -1,9 +1,23 @@
-type SnakeToCamelCase<S extends string | number | symbol> = S extends `${infer T}_${infer U}`
+type SnakeToCamelCase<S extends string> = S extends `${infer T}_${infer U}`
   ? `${T}${Capitalize<SnakeToCamelCase<U>>}`
   : S
 
+type FirstCapitalLetter<S extends string> = S extends `${infer T}${infer U}`
+  ? (<G>() => G extends T ? 1 : 2) extends (<G>() => G extends Capitalize<T> ? 1 : 2)
+    ? T
+    : FirstCapitalLetter<U>
+  : never
+
+type CamelToSnakeCase<S extends string, D extends string = FirstCapitalLetter<S>> =
+  S extends `${infer T}${D}${infer R}`
+    ? `${T}_${Lowercase<D>}${CamelToSnakeCase<R>}`
+    : S
+
 export type SnakeCaseObjectToCamelCase<T extends Record<string, any>> =
-  { [k in keyof T as SnakeToCamelCase<k>]: T[k] }
+  { [k in Extract<keyof T, string> as SnakeToCamelCase<k>]: T[k] }
+
+export type CamelCaseObjectToSnakeCase<T extends Record<string, any>> =
+  { [k in Extract<keyof T, string> as CamelToSnakeCase<k>]: T[k] }
 
 /**
  * Helper function that maps all fields in db query's output to match the specified API from openAPI docs by converting
@@ -36,20 +50,20 @@ export const apifyKey = (key: string): SnakeToCamelCase<typeof key> => {
 }
 
 /**
- * Helper function that de-maps fields matching the specified API from openAPI docs to db field names by convertin
- * all camelCase fields to snake_case accepted by db.
+ * Helper function that de-maps fields matching the specified API from openAPI docs to db field names by converting
+ * all camelCase fields to snake_case.
  */
-export const deApify = <T>(data: Record<string, T>): Record<string, T> => Object.fromEntries(
-  Object.entries(data).map(([key, value]) => [deApifyKey(key), value])
-)
+export const deApifyObject = <T extends Record<string, any>>(queriedDataObject: T) =>
+  Object.fromEntries(
+    Object.entries(queriedDataObject).map(([key, value]) => [deApifyKey(key), value])
+  ) as CamelCaseObjectToSnakeCase<T>
 
 /**
  * Converts a single key from camelCase to snake_case.
  *
  * @param {string} key
  */
-export const deApifyKey = (key: string): string => {
-  const keyParts = key.split(/(?=[A-Z])/)
-
-  return keyParts.map(keyPart => keyPart.toLowerCase()).join('_')
-}
+export const deApifyKey = (key: string): CamelToSnakeCase<typeof key> => key
+  .split(/(?=[A-Z])/)
+  .map(keyPart => keyPart.toLowerCase())
+  .join('_')

@@ -9,30 +9,23 @@ import {
   addActivityForUsers,
   getHouseholdMembers,
   getHouseholdName,
-  DialogSettingsColumn,
-  dialogSettingsColumns,
-  NotificationSettingsColumn,
-  notificationSettingsColumns,
 } from 'serverSrc/database'
 import {
   mapFromEditHouseholdMemberApiType,
   mapFromEditHouseholdApiType,
   mapFromUserEditApiType,
+  mapFromUserDialogsUnforcedApiType,
+  mapFromNotifySettingsUnforcedApiType,
+  UserDialogsUnforcedApiType,
+  NotifySettingsUnforcedApiType,
 } from 'serverSrc/database/mappers'
 import { NOTIFICATIONS } from 'serverSrc/constants'
-import { deApify } from 'serverSrc/helpers/api'
 import { SETTING_CATEGORIES, HOUSEHOLD_TABS, NOTIFICATION_TYPE } from 'shared/constants'
-import { ACTIVITY, ERROR, INFO } from 'shared/constants/localeMessages'
+import { ACTIVITY, ERROR } from 'shared/constants/localeMessages'
 import { SETTINGS_PREFIX } from 'shared/constants/api'
 import { encryptPass } from 'serverSrc/helpers/passwords'
 
-import {
-  DialogEditInputs,
-  GeneralEditInputs,
-  HouseholdEditInputs,
-  HouseholdNewInvitation,
-  NotificationEditInputs,
-} from './types'
+import { GeneralEditInputs, HouseholdEditInputs, HouseholdNewInvitation } from './types'
 import { validateEditHouseholdData, validateProfileData } from './validate'
 
 export const handleSettingsDataFetch = async (category: string, tab: string, req: any, res: any): Promise<void> => {
@@ -61,40 +54,26 @@ const handleUpdate = async (
     return true
   } else if (confirmResponse) {
     res.status(204).send()
+    return true
   }
   return false
 }
 
-const validateInputKeys = <T extends string>(
-  inputs: Record<string, boolean>,
-  allowedKeys: string[],
-  res: any
-): inputs is Record<T, boolean> => {
-  if (!Object.keys(inputs).every(key => key in allowedKeys)) {
+export const handleNotificationsEdit = async (inputs: NotifySettingsUnforcedApiType, req: any, res: any): Promise<boolean> => {
+  const inputCols = mapFromNotifySettingsUnforcedApiType(inputs)
+  if (Object.keys(inputCols).length === 0) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return false
-  }
-
-  if (Object.keys(inputs).length === 0) {
-    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
-    return false
-  }
-  return true
-}
-
-export const handleNotificationsEdit = async (inputs: NotificationEditInputs, req: any, res: any): Promise<boolean> => {
-  const inputCols = deApify(inputs)
-  if (!validateInputKeys<NotificationSettingsColumn>(inputCols, notificationSettingsColumns, res)) {
-    return true
   }
 
   return handleUpdate(res, updateNotificationSettings(inputCols, req.session.userId), true)
 }
 
-export const handleDialogsEdit = async (inputs: DialogEditInputs, req: any, res: any): Promise<boolean> => {
-  const inputCols = deApify(inputs)
-  if (!validateInputKeys<DialogSettingsColumn>(inputCols, dialogSettingsColumns, res)) {
-    return true
+export const handleDialogsEdit = async (inputs: UserDialogsUnforcedApiType, req: any, res: any): Promise<boolean> => {
+  const inputCols = mapFromUserDialogsUnforcedApiType(inputs)
+  if (Object.keys(inputCols).length === 0) {
+    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
+    return false
   }
 
   return handleUpdate(res, updateDialogSettings(inputCols, req.session.userId), true)

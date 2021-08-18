@@ -1,4 +1,5 @@
 import { HOUSEHOLD_ROLE_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
+import { NotifySettingsUnforcedApiType, UserDialogsUnforcedApiType } from 'serverSrc/database/mappers'
 
 import { RequestImage, RequestRawImage } from '../types'
 
@@ -14,7 +15,7 @@ export interface HouseholdChangedRole {
 
 export interface HouseholdEditInputs {
   householdId: number
-  name: string
+  name?: string
   photo?: RequestRawImage
   userNickname?: string
   userPhoto?: RequestRawImage
@@ -34,6 +35,5 @@ export interface GeneralEditInputs {
   visibility?: typeof USER_VISIBILITY_TYPE.FOF | typeof USER_VISIBILITY_TYPE.ALL
 }
 
-export type DialogEditInputs = Record<string, boolean>
-export type NotificationEditInputs = Record<string, boolean>
-export type SettingsUpdateRequestInputs = HouseholdEditInputs | GeneralEditInputs | DialogEditInputs | NotificationEditInputs
+export type SettingsUpdateRequestInputs = HouseholdEditInputs | GeneralEditInputs
+  | UserDialogsUnforcedApiType | NotifySettingsUnforcedApiType

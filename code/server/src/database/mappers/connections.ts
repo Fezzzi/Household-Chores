@@ -1,9 +1,8 @@
 import { tConnectionsCols, TConnectionsType, tUsersCols, TUsersType } from 'serverSrc/database/tables'
 import { fMutualConnectionsOut, FMutualConnectionsType } from 'serverSrc/database/functions'
 
-export type ApprovedConnectionDbType = Pick<TUsersType,
-    typeof tUsersCols.id | typeof tUsersCols.nickname | typeof tUsersCols.photo
-  >
+export type ApprovedConnectionDbType =
+  Pick<TUsersType, typeof tUsersCols.id | typeof tUsersCols.nickname | typeof tUsersCols.photo>
   & Pick<TConnectionsType, typeof tConnectionsCols.date_created>
 
 export type ApprovedConnectionApiType = {

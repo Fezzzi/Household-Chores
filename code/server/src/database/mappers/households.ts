@@ -1,6 +1,7 @@
 import { HouseholdEditInputs } from 'serverSrc/actions/settings/types'
+import { apifyObject, deApifyObject, SnakeCaseObjectToCamelCase } from 'serverSrc/helpers/api'
 
-import { tHouseholdsCols, tHouseMemCols } from '../tables'
+import { tHouseholdsCols, THouseholdsType, tHouseMemCols, THouseMemType } from '../tables'
 
 export type HouseholdEditMemberApiType = {
   userNickname: HouseholdEditInputs['userNickname']
@@ -21,16 +22,20 @@ export const mapFromEditHouseholdMemberApiType = (apiMembers: HouseholdEditMembe
 })
 
 export type HouseholdEditApiType = {
-  name: HouseholdEditInputs['name']
+  name?: HouseholdEditInputs['name']
   photo?: string
 }
 
-export type HouseholdEditDbType = {
-  [tHouseholdsCols.name]: HouseholdEditApiType['name']
-  [tHouseholdsCols.photo]: HouseholdEditApiType['photo']
-}
+export type HouseholdEditDbType = Pick<THouseholdsType, typeof tHouseholdsCols.name | typeof tHouseholdsCols.photo>
+export type HouseholdEditUnforcedDbType = { [key in keyof HouseholdEditDbType]?: HouseholdEditDbType[key] }
 
-export const mapFromEditHouseholdApiType = (apiHousehold: HouseholdEditApiType): HouseholdEditDbType => ({
-  [tHouseholdsCols.name]: apiHousehold.name,
-  [tHouseholdsCols.photo]: apiHousehold.photo,
-})
+export const mapFromEditHouseholdApiType = (household: HouseholdEditApiType): HouseholdEditUnforcedDbType =>
+  deApifyObject(household)
+
+export type HouseholdMemberDbType =
+  Pick<THouseMemType, typeof tHouseMemCols.user_id | typeof tHouseMemCols.role | typeof tHouseMemCols.nickname>
+
+export type HouseholdMemberApiType = SnakeCaseObjectToCamelCase<HouseholdMemberDbType>
+
+export const mapToHouseholdMemberApiType = (member: HouseholdMemberDbType): HouseholdMemberApiType =>
+  apifyObject(member)
