@@ -4,15 +4,15 @@ import { generalSaga } from 'clientSrc/helpers/sagas'
 import { findUsers, connectionRequest } from 'clientSrc/effects/conectionEffects'
 import { ConnectionActions, SettingsActions } from 'clientSrc/actions'
 
-function* connectionActionSaga({ payload: { effect, userId } }) {
-  yield call(generalSaga, effect, userId, function* (data) {
-    yield put(SettingsActions.settingsDataUpdated(data))
+function* connectionActionSaga({ payload: { effect, data } }) {
+  yield call(generalSaga, effect, data, function* (response) {
+    yield put(SettingsActions.settingsDataUpdated(response))
   })
 }
 
 function* searchConnectionActionSaga({ payload }) {
-  yield call(generalSaga, findUsers, payload, function* (data) {
-    yield put(SettingsActions.settingsDataUpdated(data))
+  yield call(generalSaga, findUsers, payload, function* (response) {
+    yield put(SettingsActions.settingsDataUpdated(response))
   })
 }
 

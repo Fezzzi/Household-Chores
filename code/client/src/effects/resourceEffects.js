@@ -1,5 +1,5 @@
 import { API } from 'shared/constants'
-import { clientApi } from 'clientSrc/client-api'
+import { apiClient } from 'clientSrc/apiClient'
 
 export const loadResource = ({ resourceId, locale }) =>
-  clientApi.get(`${API.RESOURCES_PREFIX}/${resourceId}`, { params: { locale } })
+  apiClient.get(`${API.RESOURCES_PREFIX}/${resourceId}`, { params: { locale } })

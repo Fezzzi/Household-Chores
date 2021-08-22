@@ -18,16 +18,16 @@ import { MessageTooltip } from '../../portals'
 const ConnectionRequestsForm = ({ data }) => {
   const dispatch = useDispatch()
 
-  const blockHandler = useCallback(userId =>
-    dispatch(ConnectionActions.connectionAction({ effect: connectionBlock, userId })),
+  const blockHandler = useCallback(targetId =>
+    dispatch(ConnectionActions.connectionAction({ effect: connectionBlock, data: targetId })),
   [dispatch])
 
-  const approveHandler = useCallback(userId =>
-    dispatch(ConnectionActions.connectionAction({ effect: connectionApprove, userId })),
+  const approveHandler = useCallback(targetId =>
+    dispatch(ConnectionActions.connectionAction({ effect: connectionApprove, data: { targetId } })),
   [dispatch])
 
-  const ignoreHandler = useCallback(userId =>
-    dispatch(ConnectionActions.connectionAction({ effect: connectionIgnore, userId })),
+  const ignoreHandler = useCallback(targetId =>
+    dispatch(ConnectionActions.connectionAction({ effect: connectionIgnore, data: targetId })),
   [dispatch])
 
   return (

@@ -17,8 +17,8 @@ import { LocaleText, Table } from '../../common'
 const ConnectionBlocksForm = ({ data }) => {
   const dispatch = useDispatch()
 
-  const unblockHandler = useCallback(userId =>
-    dispatch(ConnectionActions.connectionAction({ effect: connectionUnblock, userId })),
+  const unblockHandler = useCallback(targetId =>
+    dispatch(ConnectionActions.connectionAction({ effect: connectionUnblock, data: targetId })),
   [dispatch])
 
   return (

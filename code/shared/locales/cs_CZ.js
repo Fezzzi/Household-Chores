@@ -203,5 +203,6 @@ export default {
   [SUCCESS.RESET_LINK]: 'Link pro obnovu hesla byl úspěšně zaslán na Vaši emailovou adresu.',
   [SUCCESS.SETTINGS_UPDATED]: 'Nastavaní bylo úspěšně upraveno.',
   [SUCCESS.ACCOUNT_CREATED]: 'Váš účet byl úspěšně vytvořen.',
+  [SUCCESS.ACCOUNT_PAIRED]: 'Váš účet byl propojen s již existujícím.',
   [SUCCESS.CONNECTION_REQUEST_SENT]: 'Žádost o spojení byla odeslána.',
 }

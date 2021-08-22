@@ -1,3 +1,5 @@
+export const API_PREFIX = 'api'
+
 export const LOAD_PREFIX = 'load'
 export const LOAD_STATE = 'state'
 

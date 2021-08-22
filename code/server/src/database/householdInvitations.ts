@@ -1,3 +1,5 @@
+import { PoolClient } from 'pg'
+
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { CreateHouseholdInvitation } from 'serverSrc/actions/households/types'
 
@@ -29,6 +31,7 @@ export const getUserInvitations = async (currentUser: number) => {
     FROM ${tHouseInvName} AS invitations
     INNER JOIN ${tHouseholdsName} AS households ON invitations.${tHouseInvCols.household_id} = households.${tHouseholdsCols.household_id}
     LEFT JOIN ${tHouseMemName} AS members ON invitations.${tHouseInvCols.from_id} = members.${tHouseMemCols.user_id}
+      AND invitations.${tHouseInvCols.household_id}=members.${tHouseMemCols.household_id}
     WHERE invitations.${tHouseInvCols.to_id}=${currentUser}
   `)
 
@@ -48,7 +51,7 @@ export const approveInvitation = (
   nickname: string,
   photo: string,
 ) =>
-  database.withTransaction(async (): Promise<boolean> => {
+  database.withTransaction(async (client): Promise<boolean> => {
     const deleted = await deleteInvitation(currentId, fromId, householdId)
 
     return deleted && database.queryBool(`
@@ -56,7 +59,7 @@ export const approveInvitation = (
         ${tHouseMemCols.household_id}, ${tHouseMemCols.user_id}, ${tHouseMemCols.from_id}, ${tHouseMemCols.role},
         ${tHouseMemCols.nickname}, ${tHouseMemCols.photo}, ${tHouseMemCols.date_joined}
       ) VALUES ($1, ${currentId}, $2, '${HOUSEHOLD_ROLE_TYPE.MEMBER}', $3, $4, NOW())
-    `, [householdId, fromId, nickname, photo])
+    `, [householdId, fromId, nickname, photo], client)
   })
 
 export const addHouseholdInvitations = (
@@ -75,15 +78,15 @@ type HouseholdsInvitationsMap = Record<
   HouseholdsInvitationsDbType[typeof tHouseInvCols.household_id],
   HouseholdsInvitationsMapApiType[]
   >
-export const getHouseholdsInvitationsMap = async (householdIds: number[]) => {
+export const getHouseholdsInvitationsMap = async (householdIds: number[], client: PoolClient | null = null) => {
   const invitations = await database.query<HouseholdsInvitationsDbType>(`
-    SELECT invitations.${tHouseInvCols.from_id}, invitations.${tHouseInvCols.to_id},
-      invitations.${tHouseInvCols.message}, invitations.${tHouseInvCols.date_created},
-      users.${tUsersCols.nickname} AS to_nickname, users.${tUsersCols.photo} AS to_photo,
-    FROM ${tHouseInvName} AS invitations
+    SELECT ${tHouseInvCols.household_id}, ${tHouseInvCols.from_id}, ${tHouseInvCols.to_id},
+      ${tHouseInvCols.message}, ${tHouseInvCols.date_created},
+      ${tUsersCols.nickname} AS to_nickname, ${tUsersCols.photo} AS to_photo
+    FROM ${tHouseInvName}
+    LEFT JOIN ${tUsersName} ON ${tUsersCols.user_id}=${tHouseInvCols.to_id}
     WHERE ${tHouseInvCols.household_id} IN (${householdIds.join(', ')})
-    LEFT JOIN ${tUsersName} AS users ON users.${tUsersCols.user_id}=invitations.${tHouseInvCols.to_id}
-  `)
+  `, [], client)
 
   return invitations
     .map(mapToHouseholdsInvitationsApiType)

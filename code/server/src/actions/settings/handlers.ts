@@ -1,3 +1,5 @@
+import { Response } from 'express'
+
 import { HOUSEHOLD_DIR, PROFILE_DIR, uploadFiles } from 'serverSrc/helpers/files'
 import { getTabData, getTabList } from 'serverSrc/helpers/settings'
 import { logActivity } from 'serverSrc/helpers/activity'
@@ -8,7 +10,7 @@ import {
   updateDialogSettings,
   addActivityForUsers,
   getHouseholdMembers,
-  getHouseholdName,
+  getHouseholdInfo,
 } from 'serverSrc/database'
 import {
   mapFromEditHouseholdMemberApiType,
@@ -28,7 +30,7 @@ import { encryptPass } from 'serverSrc/helpers/passwords'
 import { GeneralEditInputs, HouseholdEditInputs, HouseholdNewInvitation } from './types'
 import { validateEditHouseholdData, validateProfileData } from './validate'
 
-export const handleSettingsDataFetch = async (category: string, tab: string, req: any, res: any): Promise<void> => {
+export const handleSettingsDataFetch = async (category: string, tab: string, req: any, res: Response): Promise<void> => {
   const data = await getTabData(category, tab, req)
   if (!data) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
@@ -45,7 +47,7 @@ export const handleSettingsDataFetch = async (category: string, tab: string, req
 }
 
 const handleUpdate = async (
-  res: any,
+  res: Response,
   updated: Promise<boolean>,
   confirmResponse = false
 ): Promise<boolean> => {
@@ -59,7 +61,7 @@ const handleUpdate = async (
   return false
 }
 
-export const handleNotificationsEdit = async (inputs: NotifySettingsUnforcedApiType, req: any, res: any): Promise<boolean> => {
+export const handleNotificationsEdit = async (inputs: NotifySettingsUnforcedApiType, req: any, res: Response): Promise<boolean> => {
   const inputCols = mapFromNotifySettingsUnforcedApiType(inputs)
   if (Object.keys(inputCols).length === 0) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
@@ -69,7 +71,7 @@ export const handleNotificationsEdit = async (inputs: NotifySettingsUnforcedApiT
   return handleUpdate(res, updateNotificationSettings(inputCols, req.session.userId), true)
 }
 
-export const handleDialogsEdit = async (inputs: UserDialogsUnforcedApiType, req: any, res: any): Promise<boolean> => {
+export const handleDialogsEdit = async (inputs: UserDialogsUnforcedApiType, req: any, res: Response): Promise<boolean> => {
   const inputCols = mapFromUserDialogsUnforcedApiType(inputs)
   if (Object.keys(inputCols).length === 0) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
@@ -79,7 +81,7 @@ export const handleDialogsEdit = async (inputs: UserDialogsUnforcedApiType, req:
   return handleUpdate(res, updateDialogSettings(inputCols, req.session.userId), true)
 }
 
-export const handleGeneralEdit = async (inputs: GeneralEditInputs, req: any, res: any): Promise<boolean> => {
+export const handleGeneralEdit = async (inputs: GeneralEditInputs, req: any, res: Response): Promise<boolean> => {
   const valid = await validateProfileData(inputs, req, res)
   if (!valid) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
@@ -97,7 +99,7 @@ export const handleGeneralEdit = async (inputs: GeneralEditInputs, req: any, res
 export const handleHouseholdEdit = async (
   householdInputs: HouseholdEditInputs,
   req: any,
-  res: any
+  res: Response
 ): Promise<boolean> => {
   const {
     householdId,
@@ -159,7 +161,7 @@ const handleHouseholdEditActivity = async (
   removedMemberIds: number[],
   newInvitations: HouseholdNewInvitation[],
 ) => {
-  const householdName = await getHouseholdName(householdId)
+  const { name, photo } = await getHouseholdInfo(householdId) ?? { name: null, photo: null }
   const removedMemberNicknames = members
     .filter(({ userId }) => removedMemberIds?.includes(userId))
     .map(({ nickname }) => nickname)
@@ -172,13 +174,18 @@ const handleHouseholdEditActivity = async (
     logActivity(
       NOTIFICATIONS.HOUSEHOLD_EXPELLING,
       removedMemberIds,
-      `${ACTIVITY.HOUSEHOLD_REMOVE_YOU}$[${userNickname}, ${householdName}]$`
+      `${ACTIVITY.HOUSEHOLD_REMOVE_YOU}$[${userNickname}, ${name}]$`,
+      [userNickname, name],
+      [photo],
+      `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
     )
 
     removedMemberNicknames.forEach(memberNickname => {
       addActivityForUsers(
         remainingMembers,
-        `${ACTIVITY.HOUSEHOLD_REMOVE}$[${memberNickname}, ${householdName}, ${userNickname}]$`,
+        `${ACTIVITY.HOUSEHOLD_REMOVE}$[${memberNickname}, ${name}, ${userNickname}]$`,
+        [memberNickname ?? '', name, userNickname],
+        [photo],
         `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
       )
     })
@@ -190,7 +197,9 @@ const handleHouseholdEditActivity = async (
     logActivity(
       NOTIFICATIONS.HOUSEHOLD_INVITATION,
       sentInvitations,
-      `${ACTIVITY.HOUSEHOLD_INVITATION}$[${householdName}, ${userNickname}]$`,
+      `${ACTIVITY.HOUSEHOLD_INVITATION}$[${name}, ${userNickname}]$`,
+      [name, userNickname],
+      [photo],
       `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=${HOUSEHOLD_TABS.INVITATIONS}`
     )
   }

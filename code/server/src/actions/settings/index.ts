@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Response } from 'express'
 
 import { ERROR, INFO } from 'shared/constants/localeMessages'
 import {
@@ -12,6 +12,7 @@ import {
 } from 'shared/constants'
 import { updateUserLocale } from 'serverSrc/database'
 import { NotifySettingsApiType, UserDialogsUnforcedApiType } from 'serverSrc/database/mappers'
+import { catchErrors } from 'serverSrc/helpers/errorHandler'
 
 import { GeneralEditInputs, HouseholdEditInputs, SettingsUpdateRequestInputs } from './types'
 import {
@@ -24,17 +25,18 @@ import {
 
 export default () => {
   const router = express.Router()
-  router.get(/.*/, (req: { query: { category: string; tab: string }}, res) => {
-    const { query: { category, tab } } = req
+  router.get(/.*/, catchErrors(async (req, res) => {
+    const { query: { category, tab } } = req as { query: { category: string; tab: string }}
+
     if (Object.values(SETTING_CATEGORIES).find(cat => cat === category) !== null) {
-      handleSettingsDataFetch(category, tab, req, res)
+      await handleSettingsDataFetch(category, tab, req, res)
       return
     }
 
     res.status(204).send()
-  })
+  }))
 
-  router.put(`/${API.UPDATE_LOCALE}`, async (req: any, res) => {
+  router.put(`/${API.UPDATE_LOCALE}`, catchErrors(async (req: any, res) => {
     const { locale } = req.body as { locale: string }
 
     if (locale && AVAILABLE_LOCALES.includes(locale as string) && req.session?.userId) {
@@ -43,16 +45,16 @@ export default () => {
     } else {
       res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
     }
-  })
+  }))
 
-  router.put(`/${API.UPDATE_PROFILE}`, async (req: any, res) => {
+  router.put(`/${API.UPDATE_PROFILE}`, catchErrors(async (req: any, res) => {
     const { category, tab, inputs } = req.body
 
     if (inputs && Object.values(inputs).length > 0) {
       if (category && tab && SETTING_TAB_ROWS[category] !== undefined) {
         const handled = await editSettings(category, tab, inputs, req, res)
         if (!handled) {
-          handleSettingsDataFetch(category, tab, req, res)
+          await handleSettingsDataFetch(category, tab, req, res)
         }
       } else {
         res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
@@ -60,12 +62,12 @@ export default () => {
     } else {
       res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
     }
-  })
+  }))
 
   return router
 }
 
-const editSettings = (category: string, tab: string, inputs: SettingsUpdateRequestInputs, req: any, res: any) => {
+const editSettings = (category: string, tab: string, inputs: SettingsUpdateRequestInputs, req: any, res: Response) => {
   if (Object.keys(inputs).length === 0) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
     return true

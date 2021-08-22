@@ -212,5 +212,6 @@ export const SUCCESS = {
   RESET_LINK: 'success.resetLink',
   SETTINGS_UPDATED: 'success.settingsUpdated',
   ACCOUNT_CREATED: 'success.accountCreated',
+  ACCOUNT_PAIRED: 'success.accountPaired',
   CONNECTION_REQUEST_SENT: 'success.connectionRequestSent',
 }

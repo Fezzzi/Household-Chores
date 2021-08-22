@@ -1,8 +1,15 @@
+import { Response } from 'express'
+
 import { HOUSEHOLD_DIR, isLocalImage, uploadFiles } from 'serverSrc/helpers/files'
 import { logActivity } from 'serverSrc/helpers/activity'
 import {
-  addHouseholdInvitations, approveInvitation, createHousehold,
-  deleteHousehold, getHouseholdMembers, getHouseholdName, leaveHousehold,
+  addHouseholdInvitations,
+  approveInvitation,
+  createHousehold,
+  deleteHousehold,
+  getHouseholdInfo,
+  getHouseholdMembers,
+  leaveHousehold,
 } from 'serverSrc/database'
 import { NOTIFICATIONS } from 'serverSrc/constants'
 import { NOTIFICATION_TYPE, INPUT_TYPE, API, SETTING_CATEGORIES, HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
@@ -18,7 +25,7 @@ export const handleCreateHousehold = async (
   invitations: CreateHouseholdInvitation[],
   userId: number,
   fsKey: string,
-  res: any,
+  res: Response,
 ): Promise<boolean> => {
   const valid = await validateCreateData(inputs, invitations, userId, res)
   if (!valid) {
@@ -45,6 +52,8 @@ export const handleCreateHousehold = async (
       NOTIFICATIONS.HOUSEHOLD_INVITATION,
       invitations.map(user => user.toId),
       `${ACTIVITY.HOUSEHOLD_INVITATION}$[${inputs.name}, ${inputs.userNickname}]$`,
+      [inputs.name, inputs.userNickname],
+      [photo!, userPhoto!],
       `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
     )
     res.status(200).send({
@@ -61,7 +70,7 @@ export const handleDeleteHousehold = async (
   userId: number,
   userNickname: string,
   householdId: number,
-  res: any,
+  res: Response,
 ): Promise<boolean> => {
   const members = await getHouseholdMembers(householdId)
   const isAdmin = members?.find(({ userId: memberId }) => userId === memberId)?.role === HOUSEHOLD_ROLE_TYPE.ADMIN
@@ -70,7 +79,7 @@ export const handleDeleteHousehold = async (
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.BAD_PERMISSIONS] })
     return false
   } else {
-    const householdName = await getHouseholdName(householdId)
+    const { name, photo } = await getHouseholdInfo(householdId) ?? { name: null, photo: null }
     const success = await deleteHousehold(householdId)
 
     if (success) {
@@ -81,7 +90,9 @@ export const handleDeleteHousehold = async (
       logActivity(
         NOTIFICATIONS.HOUSEHOLD_DELETING,
         notifiedMembers,
-        `${ACTIVITY.HOUSEHOLD_DELETE}$[${userNickname}, ${householdName}]$`
+        `${ACTIVITY.HOUSEHOLD_DELETE}$[${userNickname}, ${name}]$`,
+        [userNickname, name],
+        [photo]
       )
       res.status(204).send()
     } else {
@@ -97,7 +108,7 @@ export const handleApproveHouseholdInvitation = async (
   userId: number,
   userNickname: string,
   fsKey: string,
-  res: any,
+  res: Response,
 ): Promise<boolean> => {
   const { fromId, householdId, userNickname: nickname, userPhoto: photo } = invitationBody
 
@@ -116,14 +127,16 @@ export const handleApproveHouseholdInvitation = async (
   const success = await approveInvitation(userId, fromId, householdId, nickname, userPhoto!)
 
   if (success) {
-    const householdName = await getHouseholdName(householdId)
+    const { name, photo } = await getHouseholdInfo(householdId)
     const members = await getHouseholdMembers(householdId)
     const notifiedMembers = members?.map(({ userId }) => userId).filter(memberId => memberId !== userId)
     if (notifiedMembers?.length) {
       logActivity(
         NOTIFICATIONS.HOUSEHOLD_JOINING,
         notifiedMembers,
-        `${ACTIVITY.HOUSEHOLD_JOIN}$[${userNickname}, ${householdName}]$`,
+        `${ACTIVITY.HOUSEHOLD_JOIN}$[${userNickname}, ${name}]$`,
+        [userNickname, name],
+        [photo, userPhoto!],
         `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
       )
     }
@@ -140,7 +153,7 @@ export const handleLeaveHousehold = async (
   userId: number,
   userNickname: string,
   householdId: number,
-  res: any,
+  res: Response,
 ): Promise<boolean> => {
   const members = await getHouseholdMembers(householdId)
   const admins = members
@@ -154,7 +167,7 @@ export const handleLeaveHousehold = async (
 
   const success = await leaveHousehold(userId, householdId)
   if (success) {
-    const householdName = await getHouseholdName(householdId)
+    const { name, photo } = await getHouseholdInfo(householdId)
     const notifiedMembers = members!
       .map(({ userId }) => userId)
       .filter(memberId => memberId !== userId)
@@ -162,7 +175,9 @@ export const handleLeaveHousehold = async (
     logActivity(
       NOTIFICATIONS.HOUSEHOLD_LEAVING,
       notifiedMembers,
-      `${ACTIVITY.HOUSEHOLD_LEAVE}$[${userNickname}, ${householdName}]$`,
+      `${ACTIVITY.HOUSEHOLD_LEAVE}$[${userNickname}, ${name}]$`,
+      [userNickname, name],
+      [photo],
       `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
     )
     res.status(204).send()

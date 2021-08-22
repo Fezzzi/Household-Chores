@@ -4,9 +4,7 @@ import { mapToUserActivityApiType } from './mappers'
 
 export const getActivityForUser = async (userId: number) => {
   const result = await database.query<Omit<TActivityType, typeof tActivityCols.user_id>>(`
-    SELECT
-      ${tActivityCols.id}, ${tActivityCols.message}, ${tActivityCols.link},
-      ${tActivityCols.date_created}, ${tActivityCols.date_seen}
+    SELECT ${Object.values(tActivityCols).filter(key => key !== tActivityCols.user_id).join(', ')}
     FROM ${tActivityName}
     WHERE ${tActivityCols.user_id}=${userId}
     ORDER BY ${tActivityCols.date_seen} IS NULL DESC, ${tActivityCols.date_created} DESC
@@ -27,12 +25,17 @@ export const markActivityForUser = (activityIds: number[]) =>
 export const addActivityForUsers = (
   userIds: Array<number>,
   message: string,
+  messageTexts: string[],
+  messagePhotos: string[],
   link: string | null = null
 ) =>
   database.queryBool(`
     INSERT INTO ${tActivityName} (
-      ${tActivityCols.user_id}, ${tActivityCols.message}, ${tActivityCols.link}, ${tActivityCols.date_created}
+      ${tActivityCols.user_id}, ${tActivityCols.message}, ${tActivityCols.message_texts},
+      ${tActivityCols.message_photos}, ${tActivityCols.link}, ${tActivityCols.date_created}
     ) VALUES (
-      ${userIds.map((id, index) => `${id}, $${index * 2 + 1}, $${index * 2 + 2}, NOW()`).join('),(')}
+      ${userIds.map((id, index) => `
+        ${id}, $${index * 4 + 1}, $${index * 4 + 2}, $${index * 4 + 3}, $${index * 4 + 4}, NOW()
+      `).join('),(')}
     )
-  `, userIds.flatMap(() => [message, link]))
+  `, userIds.flatMap(() => [message, messageTexts, messagePhotos, link]))

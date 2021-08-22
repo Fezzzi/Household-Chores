@@ -1,3 +1,5 @@
+import { PoolClient } from 'pg'
+
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 import { HouseholdChangedRole, HouseholdNewInvitation } from 'serverSrc/actions/settings/types'
 import { HouseholdCreationError } from 'serverSrc/helpers/errors'
@@ -19,7 +21,7 @@ import {
   mapToHouseholdApiType,
 } from './mappers'
 
-export const getUserHouseholds = async (currentUser: number) => {
+export const getUserHouseholds = async (currentUser: number, client: PoolClient | null = null) => {
   const results = await database.query<HouseholdDbType>(`
     SELECT households.${tHouseholdsCols.household_id}, households.${tHouseholdsCols.name},
       households.${tHouseholdsCols.photo}, households.${tHouseholdsCols.date_created},
@@ -28,14 +30,14 @@ export const getUserHouseholds = async (currentUser: number) => {
     INNER JOIN ${tHouseMemName} AS members
       ON households.${tHouseholdsCols.household_id}=members.${tHouseMemCols.household_id}
       AND members.${tHouseMemCols.user_id}=${currentUser}
-  `)
+  `, [], client)
 
   return results.map(mapToHouseholdApiType)
 }
 
 export const getUserHouseholdsData = (currentUser: number, withMembers = false, withInvitations = false) =>
-  database.withTransaction(async () => {
-    const households = await getUserHouseholds(currentUser)
+  database.withTransaction(async client => {
+    const households = await getUserHouseholds(currentUser, client)
 
     if (!withMembers && !withInvitations || households.length === 0) {
       return households
@@ -43,11 +45,11 @@ export const getUserHouseholdsData = (currentUser: number, withMembers = false, 
 
     const householdIds = households.map(household => household.householdId)
     const membersMap = withMembers
-      ? await getHouseholdsMembersMap(householdIds)
+      ? await getHouseholdsMembersMap(householdIds, client)
       : {}
 
     const invitationsMap = withInvitations
-      ? await getHouseholdsInvitationsMap(householdIds)
+      ? await getHouseholdsInvitationsMap(householdIds, client)
       : {}
 
     return households.map(household => ({
@@ -64,7 +66,7 @@ export const createHousehold = (
   userPhoto: string,
   currentUserId: number
 ) =>
-  database.withTransaction(async (): Promise<number> => {
+  database.withTransaction(async (client): Promise<number | null> => {
     const result = await database.query<
       Pick<THouseholdsType, typeof tHouseholdsCols.household_id>
     >(`
@@ -72,14 +74,18 @@ export const createHousehold = (
         ${tHouseholdsCols.name}, ${tHouseholdsCols.photo}, ${tHouseholdsCols.date_created}
       ) VALUES ($1, $2, NOW())
       RETURNING ${tHouseholdsCols.household_id}
-    `, [householdName, householdPhoto])
+    `, [householdName, householdPhoto], client)
 
     const newHouseholdId = result[0]?.[tHouseholdsCols.household_id]
     if (newHouseholdId) {
       await database.query(`
-        INSERT INTO ${tHouseMemName}
-        VALUES (${newHouseholdId}, ${currentUserId}, ${currentUserId}, '${HOUSEHOLD_ROLE_TYPE.ADMIN}', $1, $2, NOW())
-      `, [userNickname, userPhoto])
+        INSERT INTO ${tHouseMemName} (
+          ${tHouseMemCols.household_id}, ${tHouseMemCols.user_id}, ${tHouseMemCols.from_id}, ${tHouseMemCols.role},
+          ${tHouseMemCols.nickname}, ${tHouseMemCols.photo}, ${tHouseMemCols.date_joined}
+        ) VALUES (
+          ${newHouseholdId}, ${currentUserId}, ${currentUserId}, '${HOUSEHOLD_ROLE_TYPE.ADMIN}', $1, $2, NOW()
+        )
+      `, [userNickname, userPhoto], client)
 
       return Number(newHouseholdId)
     }
@@ -97,26 +103,26 @@ export const editHousehold = (
   removedInvitations: number[],
   currentId: number
 ) =>
-  database.withTransaction(async () => {
+  database.withTransaction(async client => {
     if (removedInvitations?.length) {
       await database.queryBool(`
         DELETE FROM ${tHouseInvName}
         WHERE ${tHouseInvCols.to_id} IN ($1) AND ${tHouseInvCols.household_id}=$2
-      `, [removedInvitations.join(', '), householdId])
+      `, [removedInvitations.join(', '), householdId], client)
     }
 
     if (newInvitations?.length) {
       await database.queryBool(`
         INSERT INTO ${tHouseInvName}
         VALUES (${newInvitations.map((_, index) => `${householdId}, ${currentId}, $${index * 2 + 1}, $${index * 2 + 2}, NOW()`).join('),(')})
-      `, newInvitations.flatMap(user => [user.userId, user.message ?? '']))
+      `, newInvitations.flatMap(user => [user.userId, user.message ?? '']), client)
     }
 
     if (removedMembers?.length) {
       await database.queryBool(`
         DELETE FROM ${tHouseMemName}
         WHERE ${tHouseMemCols.user_id} IN ($1) AND ${tHouseMemCols.household_id}=$2
-      `, [removedMembers.join(', '), householdId])
+      `, [removedMembers.join(', '), householdId], client)
     }
 
     if (changedRoles?.length) {
@@ -124,10 +130,12 @@ export const editHousehold = (
         INSERT INTO ${tHouseMemName} (
           ${tHouseMemCols.household_id}, ${tHouseMemCols.user_id}, ${tHouseMemCols.from_id},
           ${tHouseMemCols.role}, ${tHouseMemCols.date_joined}
-        ) VALUES (${changedRoles.map((_, index) => `${householdId}, $${index * 2 + 1}, ${currentId}, $${index * 2 + 2}, NOW()`).join('),(')})
-        ON DUPLICATE KEY UPDATE
-          ${tHouseMemCols.role}=VALUES(${tHouseMemCols.role})
-      `, changedRoles.flatMap(({ userId, role }) => [userId, role]))
+        ) VALUES (
+          ${changedRoles.map((_, index) => `${householdId}, $${index * 2 + 1}, ${currentId}, $${index * 2 + 2}, NOW()`).join('),(')}
+        )
+        ON CONFLICT ON CONSTRAINT ${tHouseMemName}_pkey DO
+          UPDATE SET ${tHouseMemCols.role}=EXCLUDED.${tHouseMemCols.role}
+      `, changedRoles.flatMap(({ userId, role }) => [userId, role]), client)
     }
 
     const memberDataEntries = Object.entries(memberData).filter(([, val]) => val !== undefined)
@@ -138,7 +146,7 @@ export const editHousehold = (
             .map(([key], index) => `${key}=$${index + 1}`)
             .join(', ')
         } WHERE ${tHouseMemCols.user_id}=${currentId} AND ${tHouseMemCols.household_id}=$${memberDataEntries.length + 1}
-      `, [...memberDataEntries.map(([, val]) => val), householdId])
+      `, [...memberDataEntries.map(([, val]) => val), householdId], client)
     }
 
     const householdDataEntries = Object.entries(householdData).filter(([, val]) => val !== undefined)
@@ -149,7 +157,7 @@ export const editHousehold = (
             .map(([key], index) => `${key}=$${index + 1}`)
             .join(', ')
         } WHERE ${tHouseholdsCols.household_id}=$${householdDataEntries.length + 1}
-      `, [...householdDataEntries.map(([, val]) => val), householdId])
+      `, [...householdDataEntries.map(([, val]) => val), householdId], client)
     }
   })
 
@@ -178,17 +186,15 @@ export const getUserRole = async (userId: number, householdId: number) => {
   return role?.[0][tHouseMemCols.role] ?? null
 }
 
-export const getHouseholdName = async (householdId: number) => {
-  const householdNames = await database.query<
-    Pick<THouseholdsType, typeof tHouseholdsCols.name>
+export const getHouseholdInfo = async (householdId: number) => {
+  const info = await database.query<
+    Pick<THouseholdsType, typeof tHouseholdsCols.name | typeof tHouseholdsCols.photo>
   >(`
-    SELECT ${tHouseholdsCols.name}
+    SELECT ${tHouseholdsCols.name}, ${tHouseholdsCols.photo}
     FROM ${tHouseholdsName}
     WHERE ${tHouseholdsCols.household_id}=$1
     LIMIT 1
   `, [householdId])
 
-  return householdNames[0]
-    ? String(householdNames[0][tHouseholdsCols.name])
-    : null
+  return info[0] ?? null
 }

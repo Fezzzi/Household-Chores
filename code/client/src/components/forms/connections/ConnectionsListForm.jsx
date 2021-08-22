@@ -15,12 +15,12 @@ import { LocaleText, Table } from '../../common'
 const ConnectionsListForm = ({ data }) => {
   const dispatch = useDispatch()
 
-  const removeHandler = useCallback(userId =>
-    dispatch(ConnectionActions.connectionAction({ effect: connectionRemove, userId })),
+  const removeHandler = useCallback(targetId =>
+    dispatch(ConnectionActions.connectionAction({ effect: connectionRemove, data: targetId })),
   [dispatch])
 
-  const blockHandler = useCallback(userId =>
-    dispatch(ConnectionActions.connectionAction({ effect: connectionBlock, userId })),
+  const blockHandler = useCallback(targetId =>
+    dispatch(ConnectionActions.connectionAction({ effect: connectionBlock, data: targetId })),
   [dispatch])
 
   return (

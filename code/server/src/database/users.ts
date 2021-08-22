@@ -1,6 +1,8 @@
-import { UserCreationError } from 'serverSrc/helpers/errors'
-import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords'
+import { PoolClient } from 'pg'
+
 import { CONNECTION_STATE_TYPE, DEFAULT_LOCALE, USER_VISIBILITY_TYPE } from 'shared/constants'
+import { encryptPass, checkPass, generatePass, generateFsKey } from 'serverSrc/helpers/passwords'
+import { UserCreationError } from 'serverSrc/helpers/errors'
 
 import { database } from './database'
 import {
@@ -110,7 +112,7 @@ export const signUpUser = async (
   googleId: string | null,
   facebookId: string | null,
 ) =>
-  database.withTransaction(async () => {
+  database.withTransaction(async client => {
     const pass = await encryptPass(password ?? generatePass())
     const result = await database.query<{
       [tUsersCols.user_id]: TUsersType[typeof tUsersCols.user_id]
@@ -120,7 +122,7 @@ export const signUpUser = async (
         ${tUsersCols.google_id}, ${tUsersCols.facebook_id}, ${tUsersCols.date_registered}, ${tUsersCols.date_last_active}
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
       RETURNING ${tUsersCols.user_id}
-    `, [email, nickname, pass, photo, '', googleId, facebookId], false)
+    `, [email, nickname, pass, photo, '', googleId, facebookId], client, false)
 
     const newUserId = result[0]?.[tUsersCols.user_id]
     if (newUserId) {
@@ -129,13 +131,15 @@ export const signUpUser = async (
         UPDATE ${tUsersName}
         SET ${tUsersCols.file_system_key}='${fsKey}'
         WHERE ${tUsersCols.user_id}=${newUserId}
-      `)
+      `, [], client)
+
       await database.queryBool(`
         INSERT INTO ${tNotifySettingsName} (${tNotifySettingsCols.user_id}) VALUES (${newUserId})
-      `)
+      `, [], client)
+
       await database.queryBool(`
         INSERT INTO ${tDialogsName} (${tDialogsCols.user_id}) VALUES (${newUserId})
-      `)
+      `, [], client)
 
       return {
         insertId: newUserId,
@@ -169,7 +173,7 @@ export const assignFacebookProvider = (userId: number, facebookId: string) =>
     WHERE ${tUsersCols.user_id}=$2
   `, [facebookId, userId])
 
-export const getUserFriendIds = async (userId: number) => {
+export const getUserFriendIds = async (userId: number, client: PoolClient | null = null) => {
   const friends = await database.query<
     Pick<TConnectionsType, typeof tConnectionsCols.from_id | typeof tConnectionsCols.to_id>
   >(`
@@ -177,7 +181,7 @@ export const getUserFriendIds = async (userId: number) => {
     FROM ${tConnectionsName}
     WHERE ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
       AND ${tConnectionsCols.to_id}=${userId} OR ${tConnectionsCols.from_id}=${userId}
-  `)
+  `, [], client)
 
   return friends.map(friend => friend[tConnectionsCols.from_id] === userId
     ? friend[tConnectionsCols.to_id]
@@ -187,8 +191,8 @@ export const getUserFriendIds = async (userId: number) => {
 
 // todo: Would be great if it could be ordered by users' 'connection' distance
 export const queryUsers = async (query: string, userId: number) =>
-  database.withTransaction(async () => {
-    const friendIds = await getUserFriendIds(userId)
+  database.withTransaction(async client => {
+    const friendIds = await getUserFriendIds(userId, client)
 
     const users = await database.query<UserQueryDbType>(`
       SELECT ${tUsersCols.user_id}, ${tUsersCols.nickname}, ${tUsersCols.photo},
@@ -207,7 +211,20 @@ export const queryUsers = async (query: string, userId: number) =>
         AND (${tUsersCols.visibility}='${USER_VISIBILITY_TYPE.ALL}'
           OR (${tUsersCols.visibility}='${USER_VISIBILITY_TYPE.FOF}' AND mutual_connections > 0))
       ORDER BY mutual_connections DESC
-    `, [`%${query}%`])
+    `, [`%${query}%`], client)
 
     return users.map(mapToUserQueryApiType)
   })
+
+export const getUserInfo = async (userId: number) => {
+  const info = await database.query<
+    Pick<TUsersType, typeof tUsersCols.nickname | typeof tUsersCols.photo>
+  >(`
+    SELECT ${tUsersCols.nickname}, ${tUsersCols.photo}
+    FROM ${tUsersName}
+    WHERE ${tUsersCols.user_id}=$1
+    LIMIT 1
+  `, [userId])
+
+  return info[0] ?? null
+}

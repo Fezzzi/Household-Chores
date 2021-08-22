@@ -44,7 +44,7 @@ type GroupedConnectionsType = {
 }
 
 export const getConnections = (userId: number): Promise<GroupedConnectionsType> =>
-  database.withTransaction(async (): Promise<GroupedConnectionsType> => {
+  database.withTransaction(async (client): Promise<GroupedConnectionsType> => {
     const friendIds = await getUserFriendIds(userId)
 
     const approvedFromConnections = await database.query<ConnectionDbType>(`
@@ -55,7 +55,7 @@ export const getConnections = (userId: number): Promise<GroupedConnectionsType> 
       LEFT JOIN ${fMutualConnectionsName}('{${friendIds}}')
         ON ${fMutualConnectionsOut.target_user_id}=${tUsersCols.user_id}
       WHERE ${tConnectionsCols.from_id}=${userId} AND ${tConnectionsCols.state}='${CONNECTION_STATE_TYPE.APPROVED}'
-    `)
+    `, [], client)
 
     const otherConnections = await database.query<ConnectionDbType>(`
       SELECT ${tUsersCols.user_id}, ${tUsersCols.nickname}, ${tUsersCols.photo},
@@ -66,7 +66,7 @@ export const getConnections = (userId: number): Promise<GroupedConnectionsType> 
       LEFT JOIN ${fMutualConnectionsName}('{${friendIds}}')
         ON ${fMutualConnectionsOut.target_user_id}=${tUsersCols.user_id}
       WHERE ${tConnectionsCols.to_id}=${userId}
-    `)
+    `, [], client)
 
     return [...approvedFromConnections, ...otherConnections]
       .map(mapToConnectionApiType)

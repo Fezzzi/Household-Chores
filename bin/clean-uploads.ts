@@ -28,15 +28,15 @@ type UserPhotoType = Pick<TUsersType, typeof tUsersCols.photo>
 const cleanUploads = async () => {
   const userResults = await database.query<UserPhotoType>(`
     SELECT ${tUsersCols.photo} FROM ${tUsersName} WHERE ${tUsersCols.photo} IS NOT NULL
-  `, [], false)
+  `, [], null, false)
 
   const membershipResults = await database.query<UserPhotoType>(`
     SELECT ${tHouseMemCols.photo} FROM ${tHouseMemName} WHERE ${tHouseMemCols.photo} IS NOT NULL
-  `, [], false)
+  `, [], null, false)
 
   const householdResults = await database.query<UserPhotoType>(`
     SELECT ${tHouseholdsCols.photo} FROM ${tHouseholdsName} WHERE ${tHouseholdsCols.photo} IS NOT NULL
-  `, [], false)
+  `, [], null, false)
 
   const photosByKeys: Record<string, string[]> = [...userResults, ...membershipResults, ...householdResults]
     .filter(result => result[tUsersCols.photo])

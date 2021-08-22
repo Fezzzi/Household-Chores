@@ -1,3 +1,5 @@
+import { Response } from 'express'
+
 import { INPUT_TYPE, INVITATION_MESSAGE_LENGTH, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 import { getApprovedConnections } from 'serverSrc/database'
@@ -9,7 +11,7 @@ export const validateCreateData = async (
   inputs: CreateHouseholdInputs,
   invitations: CreateHouseholdInvitation[],
   userId: number,
-  res: any
+  res: Response
 ): Promise<boolean> => {
   const { name, photo, userNickname, userPhoto } = inputs
 

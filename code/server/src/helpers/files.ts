@@ -1,3 +1,4 @@
+import { Response } from 'express'
 import crypto from 'crypto'
 import { writeFileSync, mkdirSync, existsSync } from 'fs'
 import path from 'path'
@@ -18,7 +19,7 @@ export const uploadFiles = (
   files: Array<RequestImage | undefined>,
   directory: string,
   userFsKey: string,
-  res: any,
+  res: Response,
 ): Array<string | undefined> => {
   const uploadedFiles: Array<string | undefined> = []
 

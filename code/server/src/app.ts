@@ -7,9 +7,11 @@ import cors from 'cors'
 import morgan from 'morgan'
 import path from 'path'
 
-import errorHandler from './helpers/errorHandler'
-import router from './actions/router'
+import { API } from 'shared/constants'
+
+import apiRouter from './actions/apiRouter'
 import { Logger } from './helpers/logger'
+import { apiErrorHandler } from './helpers/errorHandler'
 import { CONFIG, LOGS } from './constants'
 
 // Initialize the server
@@ -73,10 +75,10 @@ app.use((req: any, res, next) => {
   next()
 })
 
-// Setup routing
-app.use(router())
+// Setup API routing
+app.use(`/${API.API_PREFIX}`, apiRouter())
 
-// Add silent error handler
-app.use(errorHandler)
+// Add error handler
+app.use(apiErrorHandler)
 
 export default app

@@ -1,15 +1,13 @@
 import express from 'express'
-import dotenv from 'dotenv'
 
 import { API } from 'shared/constants'
 import { getProfileData, getActivityForUser, getDialogSettings } from 'serverSrc/database'
 import { CONFIG } from 'serverSrc/constants'
-
-dotenv.config()
+import { catchErrors } from 'serverSrc/helpers/errorHandler'
 
 export default () => {
   const router = express.Router()
-  router.get('/:action', async (req: any, res) => {
+  router.get('/:action', catchErrors(async (req: any, res) => {
     const { params: { action } } = req
     switch (action) {
       case API.LOAD_STATE: {
@@ -34,7 +32,7 @@ export default () => {
         res.status(404).send('Not Found')
     }
     return true
-  })
+  }))
 
   return router
 }

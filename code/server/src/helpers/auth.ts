@@ -1,8 +1,10 @@
+import { Response } from 'express'
+
 // This way we either log in new user or log out logged user.
 // FE shouldn't let logged user access the /login url until explicit logout action, thus the condition should never be met
 export const setSession = (
   req: any,
-  res: any,
+  res: Response,
   userId: number,
   userNickname: string,
   fsKey: string,

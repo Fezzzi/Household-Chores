@@ -1,3 +1,5 @@
+import { PoolClient } from 'pg'
+
 import { database } from './database'
 import { tHouseMemCols, tHouseMemName } from './tables'
 import {
@@ -22,13 +24,13 @@ type HouseholdsMembersMap = Record<
   HouseholdsMembersDbType[typeof tHouseMemCols.household_id],
   HouseholdsMembersMapApiType[]
 >
-export const getHouseholdsMembersMap = async (householdIds: number[]) => {
+export const getHouseholdsMembersMap = async (householdIds: number[], client: PoolClient | null = null) => {
   const members = await database.query<HouseholdsMembersDbType>(`
     SELECT ${tHouseMemCols.household_id}, ${tHouseMemCols.role}, ${tHouseMemCols.user_id},
       ${tHouseMemCols.nickname}, ${tHouseMemCols.photo}
     FROM ${tHouseMemName}
     WHERE ${tHouseMemCols.household_id} IN (${householdIds.join(', ')})
-  `)
+  `, [], client)
 
   return members
     .map(mapToHouseholdsMembersApiType)

@@ -69,12 +69,13 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     updateInput(key, true, newValue, null, [])
   }, [newInvitations, removedInvitations, removedMembers, changedRoles, updateInput])
 
-  const userState = useSelector(({ app }) => app.user)
+  const userState = useSelector(({ app: { user } }) => user)
   const currentUser = useMemo(() => {
-    const { id, photo, nickname } = userState
-    const member = members.find(member => member.userId === id)
+    const { userId, photo, nickname } = userState
+    const member = members.find(member => member.userId === userId)
+
     return {
-      id,
+      userId,
       photo: member.photo ?? photo,
       nickname: member.nickname ?? nickname,
       role: member.role,
@@ -118,7 +119,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
           return {
             fromPhoto: currentUser.photo,
             fromNickname: currentUser.nickname,
-            fromId: currentUser.id,
+            fromId: currentUser.userId,
             toPhoto: connectedUser.photo,
             toNickname: connectedUser.nickname,
             toId: userId,
@@ -176,7 +177,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     const admins = members
       .filter(member => member.role === HOUSEHOLD_ROLE_TYPE.ADMIN)
       .map(member => member.userId)
-    return admins.length > 1 || admins.indexOf(currentUser.id) === -1
+    return admins.length > 1 || admins.indexOf(currentUser.userId) === -1
   }, [members, currentUser])
 
   const memberAdmins = useMemo(() =>

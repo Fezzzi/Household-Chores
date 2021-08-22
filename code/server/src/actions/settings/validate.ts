@@ -1,3 +1,5 @@
+import { Response } from 'express'
+
 import {
   HOUSEHOLD_ROLE_TYPE, INPUT_TYPE, INVITATION_MESSAGE_LENGTH, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE,
 } from 'shared/constants'
@@ -7,7 +9,7 @@ import { getApprovedConnections, getUser, getUserRole, isCorrectPassword } from 
 import { GeneralEditInputs, HouseholdEditInputs } from './types'
 import { validateField } from '../validate'
 
-export const validateProfileData = async (inputs: GeneralEditInputs, req: any, res: any): Promise<boolean> => {
+export const validateProfileData = async (inputs: GeneralEditInputs, req: any, res: Response): Promise<boolean> => {
   const { nickname, email, oldPassword, newPassword, photo, visibility } = inputs
 
   const update = nickname !== undefined
@@ -53,7 +55,7 @@ export const validateEditHouseholdData = async (
   members: Array<{ userId: number; role: string }> | null,
   userId: number,
   req: any,
-  res: any
+  res: Response
 ): Promise<boolean> => {
   const {
     householdId,

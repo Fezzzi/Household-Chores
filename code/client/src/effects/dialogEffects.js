@@ -1,5 +1,5 @@
 import { API } from 'shared/constants'
-import { clientApi } from 'clientSrc/client-api'
+import { apiClient } from 'clientSrc/apiClient'
 
 export const disableDialog = dialog =>
-  clientApi.put(`${API.DIALOGS_PREFIX}/${API.DIALOGS_DISABLE}`, { key: dialog })
+  apiClient.put(`${API.DIALOGS_PREFIX}/${API.DIALOGS_DISABLE}`, { key: dialog })

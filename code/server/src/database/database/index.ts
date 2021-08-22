@@ -18,11 +18,17 @@ export const database = {
    *
    * @param {string} sql - Optionally parametrized SQL command
    * @param {any[]} [params=[]] - Parameters for SQL command
+   * @param {PoolClient} [client=null] - Client to be used in the query, will acquire a new one if missing
    * @param {boolean} [logSQL=true] - Determines whether will the SQL command be logged into appropriate log file
    */
-  queryRaw: async (sql: string, params: any[] = [], logSQL = true): Promise<QueryResult> => {
+  _queryRaw: async (
+    sql: string,
+    params: any[] = [],
+    client: PoolClient | null = null,
+    logSQL = true
+  ): Promise<QueryResult> => {
     try {
-      const result = await Pool.get().query(sql, params)
+      const result = (client ?? await Pool.get()).query(sql, params)
       Logger(LOGS.DB_LOG, `${toLine(`${logSQL ? `${sql} [${params}]` : '-'}; OK`)}`)
       return result
     } catch (err) {
@@ -37,10 +43,16 @@ export const database = {
    *
    * @param {string} sql - Optionally parametrized SQL command
    * @param {any[]} [params=[]] - Parameters for SQL command
+   * @param {PoolClient} [client=null] - Client to be used in the query, will acquire a new one if missing
    * @param {boolean} [logSQL=true] - Determines whether will the SQL command be logged into appropriate log file
    */
-  query: async<T> (sql: string, params: any[] = [], logSQL = true): Promise<T[]> => {
-    const result = await database.queryRaw(sql, params, logSQL)
+  query: async<T> (
+    sql: string,
+    params: any[] = [],
+    client: PoolClient | null = null,
+    logSQL = true
+  ): Promise<T[]> => {
+    const result = await database._queryRaw(sql, params, client, logSQL)
 
     return result.rows
   },
@@ -49,10 +61,16 @@ export const database = {
    *
    * @param {string} sql - Optionally parametrized SQL command
    * @param {any[]} [params=[]] - Parameters for SQL command
+   * @param {PoolClient} [client=null] - Client to be used in the query, will acquire a new one if missing
    * @param {boolean} [logSQL=true] - Determines whether will the SQL command be logged into appropriate log file
    */
-  queryBool: async (sql: string, params: any[] = [], logSQL = true): Promise<boolean> => {
-    const result = await database.queryRaw(sql, params, logSQL)
+  queryBool: async (
+    sql: string,
+    params: any[] = [],
+    client: PoolClient | null = null,
+    logSQL = true
+  ): Promise<boolean> => {
+    const result = await database._queryRaw(sql, params, client, logSQL)
 
     return result.rowCount > 0
   },
@@ -62,7 +80,7 @@ export const database = {
    * @param {<T>(client: PoolClient) => Promise<T>} func
    */
   withTransaction: async<T> (func: (client: PoolClient) => Promise<T>): Promise<T> => {
-    let client
+    let client: PoolClient
 
     try {
       client = await Pool.get().connect()
@@ -76,14 +94,16 @@ export const database = {
       await client.query('BEGIN')
       const result = await func(client)
       await client.query('COMMIT')
-      client.release()
+
       Logger(LOGS.DB_LOG, '...transaction finished.')
       return result
     } catch (err) {
       await client.query('ROLLBACK')
-      client.release(true)
+
       Logger(LOGS.DB_LOG, '...transaction failed, rolling back!')
       throw err
+    } finally {
+      client.release()
     }
   },
 }

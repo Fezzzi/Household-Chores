@@ -9,6 +9,6 @@ export const tHouseholdsCols = {
 export type THouseholdsType = {
   [tHouseholdsCols.household_id]: number
   [tHouseholdsCols.name]: string
-  [tHouseholdsCols.photo]: string | null
+  [tHouseholdsCols.photo]: string
   [tHouseholdsCols.date_created]: Date
 }

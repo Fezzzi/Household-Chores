@@ -4,10 +4,11 @@ import { API, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 import { updateDialogSettings } from 'serverSrc/database'
 import { mapFromUserDialogsUnforcedApiType } from 'serverSrc/database/mappers'
+import { catchErrors } from 'serverSrc/helpers/errorHandler'
 
 export default () => {
   const router = express.Router()
-  router.put('/:action', async (req: any, res) => {
+  router.put('/:action', catchErrors(async (req: any, res) => {
     const { params: { action }, body } = req
     const userId = req.session!.userId
 
@@ -29,7 +30,7 @@ export default () => {
     }
 
     res.status(404).send('Not Found')
-  })
+  }))
 
   return router
 }

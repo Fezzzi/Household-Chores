@@ -1,10 +1,12 @@
+import { Response } from 'express'
+
 import { RequestImage } from 'serverSrc/actions/types'
 import { isInputValid } from 'shared/helpers/validation'
 import { NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 
 export const validateField = (
-  res: any,
+  res: Response,
   field: string | number | RequestImage | undefined,
   type: string,
   constraints?: any
