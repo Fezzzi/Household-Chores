@@ -10,7 +10,7 @@ import {
   updateDialogSettings,
   addActivityForUsers,
   getHouseholdMembers,
-  getHouseholdInfo,
+  getHouseholdInfo, getHouseholdMemberInfo,
 } from 'serverSrc/database'
 import {
   mapFromEditHouseholdMemberApiType,
@@ -111,7 +111,7 @@ export const handleHouseholdEdit = async (
     removedInvitations,
   } = householdInputs
 
-  const { userId, userNickname, fsKey } = req.session
+  const { userId, fsKey } = req.session
   if (!householdId) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return true
@@ -148,7 +148,7 @@ export const handleHouseholdEdit = async (
   res.status(204).send()
 
   if (members?.length) {
-    handleHouseholdEditActivity(householdId, userId, userNickname, members, removedMembers, newInvitations)
+    handleHouseholdEditActivity(householdId, userId, members, removedMembers, newInvitations)
   }
   return true
 }
@@ -156,12 +156,11 @@ export const handleHouseholdEdit = async (
 const handleHouseholdEditActivity = async (
   householdId: number,
   userId: number,
-  userNickname: string,
-  members: Array<{ userId: number; role: string; nickname: string | null }>,
+  members: Array<{ userId: number; role: string; nickname: string }>,
   removedMemberIds: number[],
   newInvitations: HouseholdNewInvitation[],
 ) => {
-  const { name, photo } = await getHouseholdInfo(householdId) ?? { name: null, photo: null }
+  const { name: householdName, photo: householdPhoto } = await getHouseholdInfo(householdId) ?? { name: null, photo: null }
   const removedMemberNicknames = members
     .filter(({ userId }) => removedMemberIds?.includes(userId))
     .map(({ nickname }) => nickname)
@@ -170,36 +169,36 @@ const handleHouseholdEditActivity = async (
     .map(({ userId }) => userId)
     .filter(memberId => !removedMemberIds?.includes(memberId) && memberId !== userId)
 
-  if (remainingMembers?.length) {
+  const isActivityToLog = removedMemberIds.length || removedMemberNicknames.length || newInvitations.length
+  if (remainingMembers.length && isActivityToLog) {
+    const { photo: userPhoto, nickname: userNickname } = await getHouseholdMemberInfo(householdId, userId)
+
     logActivity(
       NOTIFICATIONS.HOUSEHOLD_EXPELLING,
       removedMemberIds,
-      `${ACTIVITY.HOUSEHOLD_REMOVE_YOU}$[${userNickname}, ${name}]$`,
-      [userNickname, name],
-      [photo],
+      ACTIVITY.HOUSEHOLD_EXPELLING,
+      [userNickname, householdName],
+      [householdPhoto, userPhoto],
       `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
     )
 
     removedMemberNicknames.forEach(memberNickname => {
       addActivityForUsers(
         remainingMembers,
-        `${ACTIVITY.HOUSEHOLD_REMOVE}$[${memberNickname}, ${name}, ${userNickname}]$`,
-        [memberNickname ?? '', name, userNickname],
-        [photo],
+        ACTIVITY.HOUSEHOLD_REMOVAL,
+        [memberNickname, householdName, userNickname],
+        [householdPhoto, userPhoto],
         `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
       )
     })
-  }
 
-  const sentInvitations = newInvitations?.map(({ userId }) => userId)
-
-  if (sentInvitations?.length) {
+    const sentInvitationIds = newInvitations?.map(({ userId }) => userId) ?? []
     logActivity(
       NOTIFICATIONS.HOUSEHOLD_INVITATION,
-      sentInvitations,
-      `${ACTIVITY.HOUSEHOLD_INVITATION}$[${name}, ${userNickname}]$`,
-      [name, userNickname],
-      [photo],
+      sentInvitationIds,
+      ACTIVITY.HOUSEHOLD_INVITATION,
+      [householdName, userNickname],
+      [householdPhoto, userPhoto],
       `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=${HOUSEHOLD_TABS.INVITATIONS}`
     )
   }

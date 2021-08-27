@@ -1,7 +1,7 @@
 import { PoolClient } from 'pg'
 
 import { database } from './database'
-import { tHouseMemCols, tHouseMemName } from './tables'
+import { tHouseMemCols, tHouseMemName, THouseMemType } from './tables'
 import {
   HouseholdMemberDbType,
   HouseholdsMembersDbType,
@@ -10,9 +10,22 @@ import {
   mapToHouseholdsMembersApiType,
 } from './mappers'
 
+export const getHouseholdMemberInfo = async (householdId: number, userId: number) => {
+  const member = await database.query<
+    Pick<THouseMemType, typeof tHouseMemCols.photo | typeof tHouseMemCols.nickname>
+  >(`
+    SELECT ${tHouseMemCols.nickname}, ${tHouseMemCols.photo}
+    FROM ${tHouseMemName}
+    WHERE ${tHouseMemCols.household_id}=${householdId} AND ${tHouseMemCols.user_id}=${userId}
+    LIMIT 1
+  `)
+
+  return member[0] ?? null
+}
+
 export const getHouseholdMembers = async (householdId: number) => {
   const members = await database.query<HouseholdMemberDbType>(`
-    SELECT ${tHouseMemCols.user_id}, ${tHouseMemCols.role}, ${tHouseMemCols.nickname}
+    SELECT ${tHouseMemCols.user_id}, ${tHouseMemCols.role}, ${tHouseMemCols.nickname}, ${tHouseMemCols.photo}
     FROM ${tHouseMemName}
     WHERE ${tHouseMemCols.household_id}=$1
   `, [householdId])

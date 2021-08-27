@@ -41,7 +41,7 @@ export default () => {
           logActivity(
             NOTIFICATIONS.CONNECTION_APPROVAL,
             [Number(targetId)],
-            `${ACTIVITY.CONNECTION_APPROVAL}$[${nickname}]$`,
+            ACTIVITY.CONNECTION_APPROVAL,
             [nickname],
             [photo!],
             `${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.CONNECTIONS}?tab=${CONNECTION_TABS.MY_CONNECTIONS}`

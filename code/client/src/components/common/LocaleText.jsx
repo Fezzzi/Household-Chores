@@ -6,31 +6,39 @@ import { useHistory } from 'react-router-dom'
 import { interpolate } from 'shared/helpers/text'
 import { linkify } from 'clientSrc/helpers/linkifyText'
 
-const LocaleText = ({ message, modifierFunc, transformations, clickHandler }) => {
+const LocaleText = ({ message, messageTexts, modifierFunc, transformations, highlightInterpolated, clickHandler }) => {
   const history = useHistory()
   const applicationTexts = useSelector(({ locale: { applicationTexts } }) => applicationTexts)
 
-  const text = transformations
-    ? linkify(interpolate(applicationTexts, message), history)
-    : applicationTexts[message]
+  const htmlText = modifierFunc(transformations
+    ? linkify(interpolate(applicationTexts, message, messageTexts, highlightInterpolated), history)
+    : applicationTexts[message])
 
-  return (
-    <span onClick={clickHandler}>
-      {modifierFunc(text) ?? message}
-    </span>
-  )
+  if (htmlText === undefined) {
+    return (
+      <span onClick={clickHandler}>
+        {message}
+      </span>
+    )
+  }
+
+  return <span onClick={clickHandler} dangerouslySetInnerHTML={{ __html: htmlText }} />
 }
 
 LocaleText.defaultProps = {
+  messageTexts: [],
   modifierFunc: message => message,
   clickHandler: () => {},
   transformations: true,
+  highlightInterpolated: false,
 }
 
 LocaleText.propTypes = {
   message: PropTypes.string.isRequired,
+  messageTexts: PropTypes.arrayOf(PropTypes.string),
   modifierFunc: PropTypes.func,
   transformations: PropTypes.bool,
+  highlightInterpolated: PropTypes.bool,
   clickHandler: PropTypes.func,
 }
 

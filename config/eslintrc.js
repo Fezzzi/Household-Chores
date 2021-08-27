@@ -72,6 +72,7 @@ module.exports = {
     'indent': [2, 2, { 'SwitchCase': 1, 'ignoredNodes': ['TemplateLiteral *'] }],
     'max-len': [2, { code: 160, tabWidth: 2 }],
     'quote-props': [2, 'as-needed', { unnecessary: false }],
+    'comma-style': [2, 'last', { exceptions: { 'ArrowFunctionExpression': false } }],
     'comma-dangle': [2, {
       arrays: 'always-multiline',
       objects: 'always-multiline',

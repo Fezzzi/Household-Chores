@@ -5,6 +5,8 @@ import { COLORS } from 'clientSrc/constants'
 export const TableBox = styled.div`
   margin: 0 50px;
   min-width: 550px;
+  opacity: ${props => props.disabled ? 0.4 : 1};
+  pointer-events: ${props => props.disabled ? 'none' : 'auto'};
 `
 
 export const TableHeaderBox = styled.div`

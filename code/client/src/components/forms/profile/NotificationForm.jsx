@@ -49,8 +49,16 @@ const NotificationForm = ({ data, onSubmit }) => {
     return filtered
   }, [general])
 
-  const getNotificationsBlock = (group, groupHeadline) => (
-    <TableBox>
+  const disableOthers = useMemo(() =>
+    Object.entries(filteredGeneral).map(([key, value]) =>
+      inputs[key] !== undefined
+        ? !inputs[key]
+        : !value
+    ).some(Boolean)
+  , [inputs, filteredGeneral])
+
+  const getNotificationsBlock = (group, groupHeadline, disabled = false) => (
+    <TableBox disabled={disabled}>
       {groupHeadline && (
         <TableHeaderBox>
           <TableHeaderCell>
@@ -91,8 +99,8 @@ const NotificationForm = ({ data, onSubmit }) => {
       </SectionHeadline>
 
       {getNotificationsBlock(filteredGeneral)}
-      {getNotificationsBlock(connection, FORM.CONNECTIONS)}
-      {getNotificationsBlock(household, FORM.HOUSEHOLDS)}
+      {getNotificationsBlock(connection, FORM.CONNECTIONS, disableOthers)}
+      {getNotificationsBlock(household, FORM.HOUSEHOLDS, disableOthers)}
     </>
   )
 }

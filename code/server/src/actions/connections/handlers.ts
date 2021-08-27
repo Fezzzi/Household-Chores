@@ -24,7 +24,7 @@ export const handleConnectionRequest = async (
       logActivity(
         NOTIFICATIONS.CONNECTION_REQUEST,
         [Number(targetId)],
-        `${ACTIVITY.CONNECTION_REQUEST}$[${nickname}]$`,
+        ACTIVITY.CONNECTION_REQUEST,
         [nickname],
         [photo!],
         `${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.CONNECTIONS}?tab=${CONNECTION_TABS.PENDING}`

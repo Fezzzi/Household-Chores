@@ -68,17 +68,17 @@ export default () => {
 
   router.delete('/:action', catchErrors(async (req: any, res) => {
     const { params: { action }, query } = req
-    const { userId, userNickname } = req.session!
+    const { userId } = req.session!
 
     switch (action) {
       case API.HOUSEHOLD_DELETE: {
         const { householdId }: DeleteHouseholdRequest = query as any
-        await handleDeleteHousehold(userId, userNickname, householdId, res)
+        await handleDeleteHousehold(userId, householdId, res)
         return
       }
       case API.HOUSEHOLD_LEAVE: {
         const { householdId }: DeleteHouseholdRequest = query as any
-        await handleLeaveHousehold(userId, userNickname, householdId, res)
+        await handleLeaveHousehold(userId, householdId, res)
         return
       }
       case API.INVITATION_IGNORE: {

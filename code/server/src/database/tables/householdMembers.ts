@@ -16,7 +16,7 @@ export type THouseMemType = {
   [tHouseMemCols.user_id]: number
   [tHouseMemCols.from_id]: number
   [tHouseMemCols.role]: typeof HOUSEHOLD_ROLE_TYPE.MEMBER | typeof HOUSEHOLD_ROLE_TYPE.MANAGER | typeof HOUSEHOLD_ROLE_TYPE.ADMIN
-  [tHouseMemCols.nickname]: string | null
-  [tHouseMemCols.photo]: string | null
+  [tHouseMemCols.nickname]: string
+  [tHouseMemCols.photo]: string
   [tHouseMemCols.date_joined]: Date
 }

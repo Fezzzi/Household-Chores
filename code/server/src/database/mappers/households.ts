@@ -40,8 +40,9 @@ export type HouseholdEditUnforcedApiType = {
 export const mapFromEditHouseholdApiType = (household: HouseholdEditUnforcedApiType): HouseholdEditUnforcedDbType =>
   deApifyObject(household)
 
-export type HouseholdMemberDbType =
-  Pick<THouseMemType, typeof tHouseMemCols.user_id | typeof tHouseMemCols.role | typeof tHouseMemCols.nickname>
+export type HouseholdMemberDbType = Pick<THouseMemType,
+  typeof tHouseMemCols.user_id | typeof tHouseMemCols.role | typeof tHouseMemCols.nickname | typeof tHouseMemCols.photo
+>
 
 export type HouseholdMemberApiType = SnakeCaseObjectToCamelCase<HouseholdMemberDbType>
 

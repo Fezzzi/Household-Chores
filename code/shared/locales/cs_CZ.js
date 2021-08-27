@@ -13,8 +13,8 @@ export default {
   [ACTIVITY.HOUSEHOLD_INVITATION]: 'Nová pozvánka do domácnosti $1$ od uživatele $2$.',
   [ACTIVITY.HOUSEHOLD_JOIN]: 'Uživatel $1$ se přidal do domácnosti $2$.',
   [ACTIVITY.HOUSEHOLD_LEAVE]: 'Uživatel $1$ opustil domácnost $2$.',
-  [ACTIVITY.HOUSEHOLD_REMOVE]: 'Uživatel $1$ byl odstraněn z domácnosti $2$ uživatelem $3$.',
-  [ACTIVITY.HOUSEHOLD_REMOVE_YOU]: 'Uživatel $1$ vás odstranil z domácnosti $2$.',
+  [ACTIVITY.HOUSEHOLD_REMOVAL]: 'Uživatel $1$ byl odstraněn z domácnosti $2$ uživatelem $3$.',
+  [ACTIVITY.HOUSEHOLD_EXPELLING]: 'Uživatel $1$ vás odstranil z domácnosti $2$.',
   [ACTIVITY.HOUSEHOLD_DELETE]: 'Uživatel $1$ smazal domácnost $2$.',
 
   [AUTH.BACK_TO_LOGIN]: 'Zpět na přihlášení',
