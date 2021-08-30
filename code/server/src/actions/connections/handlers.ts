@@ -2,9 +2,9 @@ import { Response } from 'express'
 
 import { CONNECTION_TABS, NOTIFICATION_TYPE, SETTING_CATEGORIES, API } from 'shared/constants'
 import { ACTIVITY, ERROR, SUCCESS } from 'shared/constants/localeMessages'
-import { NOTIFICATIONS } from 'serverSrc/constants'
-import { createConnectionRequest, getBlockedConnectionIds, getConnections, getUserInfo } from 'serverSrc/database'
+import { NOTIFICATION_KEYS } from 'serverSrc/constants'
 import { logActivity } from 'serverSrc/helpers/activity'
+import { createConnectionRequest, getBlockedConnectionIds, getConnections, getUserInfo } from 'serverSrc/database'
 
 export const handleConnectionRequest = async (
   req: any,
@@ -22,7 +22,8 @@ export const handleConnectionRequest = async (
       const { nickname, photo } = await getUserInfo(req.session!.userId)
 
       logActivity(
-        NOTIFICATIONS.CONNECTION_REQUEST,
+        NOTIFICATION_KEYS.CONNECTION_REQUEST,
+        req.session.locale,
         [Number(targetId)],
         ACTIVITY.CONNECTION_REQUEST,
         [nickname],

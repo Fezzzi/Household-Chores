@@ -10,7 +10,7 @@ const storageLocale = localStorage.getItem(LOCALE_KEY)
 const initialState = {
   locale: storageLocale || DEFAULT_LOCALE,
   availableLocales: AVAILABLE_LOCALES,
-  applicationTexts: applicationTexts[storageLocale || DEFAULT_LOCALE],
+  applicationTexts: applicationTexts[storageLocale ?? DEFAULT_LOCALE],
 }
 
 const localeChanged = (state, { payload: locale }) => ({

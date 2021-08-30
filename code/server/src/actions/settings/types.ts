@@ -20,10 +20,10 @@ export interface HouseholdEditInputs {
   userNickname?: string
   userPhoto?: RequestRawImage
   userRole?: typeof HOUSEHOLD_ROLE_TYPE.MEMBER | typeof HOUSEHOLD_ROLE_TYPE.MANAGER | typeof HOUSEHOLD_ROLE_TYPE.ADMIN
-  newInvitations: HouseholdNewInvitation[]
-  changedRoles: HouseholdChangedRole[]
-  removedMembers: number[]
-  removedInvitations: number[]
+  newInvitations?: HouseholdNewInvitation[]
+  changedRoles?: HouseholdChangedRole[]
+  removedMembers?: number[]
+  removedInvitations?: number[]
 }
 
 export interface GeneralEditInputs {

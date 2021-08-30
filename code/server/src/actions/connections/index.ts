@@ -2,7 +2,8 @@ import express from 'express'
 
 import { API, CONNECTION_STATE_TYPE, CONNECTION_TABS, SETTING_CATEGORIES } from 'shared/constants'
 import { ACTIVITY } from 'shared/constants/localeMessages'
-import { NOTIFICATIONS } from 'serverSrc/constants'
+import { NOTIFICATION_KEYS } from 'serverSrc/constants'
+import { catchErrors } from 'serverSrc/helpers/errorHandler'
 import { logActivity } from 'serverSrc/helpers/activity'
 import {
   approveConnection,
@@ -11,7 +12,6 @@ import {
   queryUsers,
   removeConnection,
 } from 'serverSrc/database'
-import { catchErrors } from 'serverSrc/helpers/errorHandler'
 
 import { handleConnectionAction, handleConnectionRequest } from './handlers'
 
@@ -39,7 +39,8 @@ export default () => {
           const { nickname, photo } = await getUserInfo(req.session!.userId)
 
           logActivity(
-            NOTIFICATIONS.CONNECTION_APPROVAL,
+            NOTIFICATION_KEYS.CONNECTION_APPROVAL,
+            req.session.locale,
             [Number(targetId)],
             ACTIVITY.CONNECTION_APPROVAL,
             [nickname],

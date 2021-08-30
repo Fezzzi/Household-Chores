@@ -9,7 +9,7 @@ import { getApprovedConnections, getUser, getUserRole, isCorrectPassword } from 
 import { GeneralEditInputs, HouseholdEditInputs } from './types'
 import { validateField } from '../validate'
 
-export const validateProfileData = async (inputs: GeneralEditInputs, req: any, res: Response): Promise<boolean> => {
+export const validateProfileData = async (userId: number, inputs: GeneralEditInputs, res: Response): Promise<boolean> => {
   const { nickname, email, oldPassword, newPassword, photo, visibility } = inputs
 
   const update = nickname !== undefined
@@ -42,7 +42,7 @@ export const validateProfileData = async (inputs: GeneralEditInputs, req: any, r
     return false
   }
 
-  if (oldPassword && !await isCorrectPassword(oldPassword, req.session.userId)) {
+  if (oldPassword && !await isCorrectPassword(oldPassword, userId)) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INCORRECT_PASS] })
     return false
   }
@@ -54,7 +54,6 @@ export const validateEditHouseholdData = async (
   inputs: HouseholdEditInputs,
   members: Array<{ userId: number; role: string }> | null,
   userId: number,
-  req: any,
   res: Response
 ): Promise<boolean> => {
   const {
@@ -111,7 +110,7 @@ export const validateEditHouseholdData = async (
     return false
   }
 
-  if (newInvitations?.length > 0) {
+  if (newInvitations?.length) {
     const connections = await getApprovedConnections(userId)
     const connectionIds = connections.map(({ userId }) => userId)
     const valid = newInvitations.every(({ userId }) => connectionIds.indexOf(userId) !== -1)
@@ -126,7 +125,7 @@ export const validateEditHouseholdData = async (
     }
   }
 
-  if (userRole || changedRoles?.length > 0 || removedMembers?.length > 0) {
+  if (userRole || changedRoles?.length || removedMembers?.length) {
     const admins = members?.filter(({ userId, role }) =>
       !removedMembers?.includes(userId)
       && role === HOUSEHOLD_ROLE_TYPE.ADMIN

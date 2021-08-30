@@ -1,8 +1,12 @@
 import { Response } from 'express'
 
+import { API, SETTING_CATEGORIES, HOUSEHOLD_TABS, NOTIFICATION_TYPE } from 'shared/constants'
+import { ACTIVITY, ERROR } from 'shared/constants/localeMessages'
+import { NOTIFICATION_KEYS } from 'serverSrc/constants'
 import { HOUSEHOLD_DIR, PROFILE_DIR, uploadFiles } from 'serverSrc/helpers/files'
 import { getTabData, getTabList } from 'serverSrc/helpers/settings'
 import { logActivity } from 'serverSrc/helpers/activity'
+import { encryptPass } from 'serverSrc/helpers/passwords'
 import {
   updateUserData,
   updateNotificationSettings,
@@ -10,7 +14,8 @@ import {
   updateDialogSettings,
   addActivityForUsers,
   getHouseholdMembers,
-  getHouseholdInfo, getHouseholdMemberInfo,
+  getHouseholdInfo,
+  getHouseholdMemberInfo,
 } from 'serverSrc/database'
 import {
   mapFromEditHouseholdMemberApiType,
@@ -21,16 +26,11 @@ import {
   UserDialogsUnforcedApiType,
   NotifySettingsUnforcedApiType,
 } from 'serverSrc/database/mappers'
-import { NOTIFICATIONS } from 'serverSrc/constants'
-import { SETTING_CATEGORIES, HOUSEHOLD_TABS, NOTIFICATION_TYPE } from 'shared/constants'
-import { ACTIVITY, ERROR } from 'shared/constants/localeMessages'
-import { SETTINGS_PREFIX } from 'shared/constants/api'
-import { encryptPass } from 'serverSrc/helpers/passwords'
 
 import { GeneralEditInputs, HouseholdEditInputs, HouseholdNewInvitation } from './types'
 import { validateEditHouseholdData, validateProfileData } from './validate'
 
-export const handleSettingsDataFetch = async (category: string, tab: string, req: any, res: Response): Promise<void> => {
+export const handleSettingsDataFetch = async (category: string, tab: string, req: any, res: Response) => {
   const data = await getTabData(category, tab, req)
   if (!data) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
@@ -46,11 +46,7 @@ export const handleSettingsDataFetch = async (category: string, tab: string, req
   })
 }
 
-const handleUpdate = async (
-  res: Response,
-  updated: Promise<boolean>,
-  confirmResponse = false
-): Promise<boolean> => {
+const handleUpdate = async (res: Response, updated: Promise<boolean>, confirmResponse = false) => {
   if (!await updated) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
     return true
@@ -61,46 +57,48 @@ const handleUpdate = async (
   return false
 }
 
-export const handleNotificationsEdit = async (inputs: NotifySettingsUnforcedApiType, req: any, res: Response): Promise<boolean> => {
+export const handleNotificationsEdit = async (userId: number, inputs: NotifySettingsUnforcedApiType, res: Response) => {
   const inputCols = mapFromNotifySettingsUnforcedApiType(inputs)
   if (Object.keys(inputCols).length === 0) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return false
   }
 
-  return handleUpdate(res, updateNotificationSettings(inputCols, req.session.userId), true)
+  return handleUpdate(res, updateNotificationSettings(inputCols, userId), true)
 }
 
-export const handleDialogsEdit = async (inputs: UserDialogsUnforcedApiType, req: any, res: Response): Promise<boolean> => {
+export const handleDialogsEdit = async (userId: number, inputs: UserDialogsUnforcedApiType, res: Response) => {
   const inputCols = mapFromUserDialogsUnforcedApiType(inputs)
   if (Object.keys(inputCols).length === 0) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return false
   }
 
-  return handleUpdate(res, updateDialogSettings(inputCols, req.session.userId), true)
+  return handleUpdate(res, updateDialogSettings(inputCols, userId), true)
 }
 
-export const handleGeneralEdit = async (inputs: GeneralEditInputs, req: any, res: Response): Promise<boolean> => {
-  const valid = await validateProfileData(inputs, req, res)
+export const handleGeneralEdit = async (userId: number, fsKey: string, inputs: GeneralEditInputs, res: Response) => {
+  const valid = await validateProfileData(userId, inputs, res)
   if (!valid) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return true
   }
 
-  const [newPhoto] = uploadFiles([inputs.photo], PROFILE_DIR, req.session.fsKey, res)
+  const [newPhoto] = uploadFiles([inputs.photo], PROFILE_DIR, fsKey, res)
 
   const newPassword = inputs.newPassword && await encryptPass(inputs.newPassword)
 
   const mappedUserData = mapFromUserEditApiType(inputs, newPhoto, newPassword)
-  return handleUpdate(res, updateUserData(mappedUserData, req.session.userId))
+  return handleUpdate(res, updateUserData(mappedUserData, userId))
 }
 
 export const handleHouseholdEdit = async (
+  userId: number,
+  fsKey: string,
+  locale: string,
   householdInputs: HouseholdEditInputs,
-  req: any,
   res: Response
-): Promise<boolean> => {
+) => {
   const {
     householdId,
     photo,
@@ -111,13 +109,12 @@ export const handleHouseholdEdit = async (
     removedInvitations,
   } = householdInputs
 
-  const { userId, fsKey } = req.session
   if (!householdId) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_DATA] })
     return true
   }
   const members = await getHouseholdMembers(householdId)
-  const valid = await validateEditHouseholdData(householdInputs, members, userId, req, res)
+  const valid = await validateEditHouseholdData(householdInputs, members, userId, res)
   if (!valid) {
     return true
   }
@@ -137,69 +134,84 @@ export const handleHouseholdEdit = async (
 
   await editHousehold(
     householdId,
+    userId,
     mappedMemberData,
     mappedHouseholdData,
     newInvitations,
     changedRoles,
     removedMembers,
-    removedInvitations,
-    userId
+    removedInvitations
   )
-  res.status(204).send()
 
   if (members?.length) {
-    handleHouseholdEditActivity(householdId, userId, members, removedMembers, newInvitations)
+    handleHouseholdEditActivity(householdId, userId, locale, members, removedMembers, newInvitations)
   }
+  res.status(204).send()
   return true
 }
 
 const handleHouseholdEditActivity = async (
   householdId: number,
   userId: number,
+  locale: string,
   members: Array<{ userId: number; role: string; nickname: string }>,
-  removedMemberIds: number[],
-  newInvitations: HouseholdNewInvitation[],
+  removedMemberIds: number[] = [],
+  newInvitations: HouseholdNewInvitation[] = [],
 ) => {
   const { name: householdName, photo: householdPhoto } = await getHouseholdInfo(householdId) ?? { name: null, photo: null }
   const removedMemberNicknames = members
-    .filter(({ userId }) => removedMemberIds?.includes(userId))
+    .filter(({ userId }) => removedMemberIds.includes(userId))
     .map(({ nickname }) => nickname)
 
-  const remainingMembers = members
+  const remainingOtherMemberIds = members
     .map(({ userId }) => userId)
-    .filter(memberId => !removedMemberIds?.includes(memberId) && memberId !== userId)
+    .filter(memberId => !removedMemberIds.includes(memberId) && memberId !== userId)
 
   const isActivityToLog = removedMemberIds.length || removedMemberNicknames.length || newInvitations.length
-  if (remainingMembers.length && isActivityToLog) {
+  if (isActivityToLog) {
     const { photo: userPhoto, nickname: userNickname } = await getHouseholdMemberInfo(householdId, userId)
 
-    logActivity(
-      NOTIFICATIONS.HOUSEHOLD_EXPELLING,
-      removedMemberIds,
-      ACTIVITY.HOUSEHOLD_EXPELLING,
-      [userNickname, householdName],
-      [householdPhoto, userPhoto],
-      `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
-    )
+    if (removedMemberNicknames.length === 1) {
+      logActivity(
+        NOTIFICATION_KEYS.HOUSEHOLD_REMOVAL,
+        locale,
+        remainingOtherMemberIds,
+        ACTIVITY.HOUSEHOLD_REMOVAL,
+        [removedMemberNicknames[0], userNickname, householdName],
+        [householdPhoto, userPhoto],
+        `${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
+      )
+    } else if (remainingOtherMemberIds.length > 1) {
+      logActivity(
+        NOTIFICATION_KEYS.HOUSEHOLD_REMOVAL,
+        locale,
+        remainingOtherMemberIds,
+        ACTIVITY.HOUSEHOLD_REMOVAL_MULTIPLE,
+        [removedMemberNicknames[0], String(removedMemberNicknames.length - 1), userNickname, householdName],
+        [householdPhoto, userPhoto],
+        `${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
+      )
+    }
 
+    // We don't send email to expelled members, just pop an activity message
     removedMemberNicknames.forEach(memberNickname => {
       addActivityForUsers(
-        remainingMembers,
-        ACTIVITY.HOUSEHOLD_REMOVAL,
+        removedMemberIds,
+        ACTIVITY.HOUSEHOLD_EXPELLING,
         [memberNickname, householdName, userNickname],
         [householdPhoto, userPhoto],
-        `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
       )
     })
 
-    const sentInvitationIds = newInvitations?.map(({ userId }) => userId) ?? []
+    const sentInvitationIds = newInvitations.map(({ userId }) => userId)
     logActivity(
-      NOTIFICATIONS.HOUSEHOLD_INVITATION,
+      NOTIFICATION_KEYS.HOUSEHOLD_INVITATION,
+      locale,
       sentInvitationIds,
       ACTIVITY.HOUSEHOLD_INVITATION,
       [householdName, userNickname],
       [householdPhoto, userPhoto],
-      `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=${HOUSEHOLD_TABS.INVITATIONS}`
+      `${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=${HOUSEHOLD_TABS.INVITATIONS}`
     )
   }
 }

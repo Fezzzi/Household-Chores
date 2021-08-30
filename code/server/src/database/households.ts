@@ -95,13 +95,13 @@ export const createHousehold = (
 
 export const editHousehold = (
   householdId: number,
+  currentId: number,
   memberData: HouseholdEditMemberUnforcedDbType,
   householdData: HouseholdEditUnforcedDbType,
-  newInvitations: HouseholdNewInvitation[],
-  changedRoles: HouseholdChangedRole[],
-  removedMembers: number[],
-  removedInvitations: number[],
-  currentId: number
+  newInvitations?: HouseholdNewInvitation[],
+  changedRoles?: HouseholdChangedRole[],
+  removedMembers?: number[],
+  removedInvitations?: number[]
 ) =>
   database.withTransaction(async client => {
     if (removedInvitations?.length) {

@@ -14,7 +14,7 @@ export const wrapHTML = (html: string) => `
   <div style="color: #262626; font-family: Carter One, Arial, serif; font-size: 18px;">
     <div style="width: 100%; text-align: center; padding: 15px 0 35px;">
       <a style="color: inherit; text-decoration: none;" href="${BACKLINK_URL}">
-        <img style="width: 80px; height: 80px;" src="${BACKLINK_URL}/static/icon-150.png" alt="header image" />
+        <img style="width: 80px; height: 80px;" src="${BACKLINK_URL}/static/icon-150.png" alt="" />
         <h1 style="padding: 0; margin: 0; font-size: 72px; font-weight: 800;">HouseHold</h1>
       </a>
     </div>

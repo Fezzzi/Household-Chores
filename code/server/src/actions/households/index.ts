@@ -42,11 +42,11 @@ export default () => {
 
   router.post('/:action', catchErrors(async (req: any, res) => {
     const { params: { action }, body } = req
-    const { userId, fsKey } = req.session!
+    const { userId, fsKey, locale } = req.session!
 
     if (action === API.HOUSEHOLD_CREATE) {
       const { inputs, invitations }: CreateHouseholdRequest = body as any
-      await handleCreateHousehold(inputs, invitations, userId, fsKey, res)
+      await handleCreateHousehold(inputs, invitations, userId, fsKey, locale, res)
       return
     }
 
@@ -55,11 +55,11 @@ export default () => {
 
   router.put('/:action', catchErrors(async (req: any, res) => {
     const { params: { action }, body } = req
-    const { userId, userNickname, fsKey } = req.session!
+    const { userId, userNickname, fsKey, locale } = req.session!
 
     if (action === API.INVITATION_APPROVE) {
       const invitationBody: ApproveInvitationRequest = body as any
-      await handleApproveHouseholdInvitation(invitationBody, userId, userNickname, fsKey, res)
+      await handleApproveHouseholdInvitation(invitationBody, userId, userNickname, fsKey, locale, res)
       return
     }
 
@@ -68,17 +68,17 @@ export default () => {
 
   router.delete('/:action', catchErrors(async (req: any, res) => {
     const { params: { action }, query } = req
-    const { userId } = req.session!
+    const { userId, locale } = req.session!
 
     switch (action) {
       case API.HOUSEHOLD_DELETE: {
         const { householdId }: DeleteHouseholdRequest = query as any
-        await handleDeleteHousehold(userId, householdId, res)
+        await handleDeleteHousehold(userId, householdId, locale, res)
         return
       }
       case API.HOUSEHOLD_LEAVE: {
         const { householdId }: DeleteHouseholdRequest = query as any
-        await handleLeaveHousehold(userId, householdId, res)
+        await handleLeaveHousehold(userId, householdId, locale, res)
         return
       }
       case API.INVITATION_IGNORE: {

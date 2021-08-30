@@ -72,21 +72,23 @@ const editSettings = (category: string, tab: string, inputs: SettingsUpdateReque
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [INFO.NOTHING_TO_UPDATE] })
     return true
   }
+  const { userId, fsKey, locale } = req.session
 
+  // todo: Add typeguards instead of casting
   switch (category) {
     case SETTING_CATEGORIES.PROFILE:
       switch (tab) {
         case PROFILE_TABS.GENERAL:
-          return handleGeneralEdit(inputs as GeneralEditInputs, req, res)
+          return handleGeneralEdit(userId, fsKey, inputs as GeneralEditInputs, res)
         case PROFILE_TABS.NOTIFICATIONS:
-          return handleNotificationsEdit(inputs as NotifySettingsApiType, req, res)
+          return handleNotificationsEdit(userId, inputs as NotifySettingsApiType, res)
         case PROFILE_TABS.DIALOGS:
-          return handleDialogsEdit(inputs as UserDialogsUnforcedApiType, req, res)
+          return handleDialogsEdit(userId, inputs as UserDialogsUnforcedApiType, res)
       }
       break
     case SETTING_CATEGORIES.HOUSEHOLDS:
       if (tab === HOUSEHOLD_TABS._HOUSEHOLD) {
-        return handleHouseholdEdit(inputs as HouseholdEditInputs, req, res)
+        return handleHouseholdEdit(userId, fsKey, locale, inputs as HouseholdEditInputs, res)
       }
       break
   }

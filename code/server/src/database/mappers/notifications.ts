@@ -1,6 +1,6 @@
 import { apifyObject, deApifyObject, SnakeCaseObjectToCamelCase } from 'serverSrc/helpers/api'
 
-import { tNotifySettingsCols, TNotifySettingsType } from '../tables'
+import { tNotifySettingsCols, TNotifySettingsType, tUsersCols, TUsersType } from '../tables'
 
 export type NotifySettingsDbType = Omit<TNotifySettingsType, typeof tNotifySettingsCols.user_id>
 export type NotifySettingsUnforcedDbType = { [key in keyof NotifySettingsDbType]?: NotifySettingsDbType[key] }
@@ -14,5 +14,9 @@ export const mapToNotifySettingsApiType = (settings: NotifySettingsDbType): Noti
 export const mapFromNotifySettingsUnforcedApiType = (settings: NotifySettingsUnforcedApiType): NotifySettingsUnforcedDbType =>
   deApifyObject(settings)
 
-export const mapToNotifyDataApiType = (data: TNotifySettingsType): SnakeCaseObjectToCamelCase<TNotifySettingsType> =>
+export type NotifyDataDbType = TNotifySettingsType & {
+  [tUsersCols.email]: TUsersType[typeof tUsersCols.email]
+}
+
+export const mapToNotifyDataApiType = (data: NotifyDataDbType): SnakeCaseObjectToCamelCase<NotifyDataDbType> =>
   apifyObject(data)

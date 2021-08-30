@@ -1,8 +1,9 @@
 import { database } from './database'
-import { tNotifySettingsName, tNotifySettingsCols, TNotifySettingsType } from './tables'
+import { tNotifySettingsName, tNotifySettingsCols, tUsersName, tUsersCols } from './tables'
 import {
   mapToNotifyDataApiType,
   mapToNotifySettingsApiType,
+  NotifyDataDbType,
   NotifySettingsDbType,
   NotifySettingsUnforcedDbType,
 } from './mappers'
@@ -21,10 +22,16 @@ export const getNotificationSettings = async (userId: number) => {
 }
 
 export const getNotificationDataForUsers = async (userIds: number[]) => {
-  const results = await database.query<TNotifySettingsType>(`
+  const results = await database.query<NotifyDataDbType>(`
     SELECT *
-    FROM ${tNotifySettingsName}
-    WHERE ${tNotifySettingsCols.user_id} IN (${userIds.join(',')})
+    FROM ${tNotifySettingsName} AS settings
+    LEFT JOIN (
+      SELECT ${tUsersCols.email}, ${tUsersCols.user_id}
+      FROM ${tUsersName}
+      WHERE ${tUsersCols.user_id} IN (${userIds.join(',')})
+    ) AS users ON settings.${tNotifySettingsCols.user_id}=users.${tUsersCols.user_id}
+    WHERE settings.${tNotifySettingsCols.user_id} IN (${userIds.join(',')})
+    LIMIT 1
   `)
 
   return results.map(mapToNotifyDataApiType)

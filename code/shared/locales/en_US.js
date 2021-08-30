@@ -14,8 +14,9 @@ export default {
   [ACTIVITY.HOUSEHOLD_JOIN]: 'User $1$ has joined household $2$.',
   [ACTIVITY.HOUSEHOLD_LEAVE]: 'User $1$ has left household $2$.',
   [ACTIVITY.HOUSEHOLD_REMOVAL]: 'User $1$ was removed from household $2$ by user $3$.',
+  [ACTIVITY.HOUSEHOLD_REMOVAL_MULTIPLE]: 'User $1$ and $2$ more were removed from household $3$ by user $4$.',
   [ACTIVITY.HOUSEHOLD_EXPELLING]: 'User $1$ removed you from household $2$.',
-  [ACTIVITY.HOUSEHOLD_DELETE]: 'User $1$ has removed household $2$.',
+  [ACTIVITY.HOUSEHOLD_DELETE]: 'User $1$ has deleted household $2$.',
 
   [AUTH.BACK_TO_LOGIN]: 'Back to Login',
   [AUTH.CREATE_ACCOUNT]: 'Create New Account',

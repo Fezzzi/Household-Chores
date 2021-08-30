@@ -2,16 +2,16 @@ import { Response } from 'express'
 
 import { NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR, SUCCESS } from 'shared/constants/localeMessages'
-import { MAILS } from 'serverSrc/constants'
+import { EMAIL_TEMPLATE } from 'serverSrc/constants'
 import { sendEmails } from 'serverSrc/helpers/mailer'
-import { getUser, isCorrectPassword, signUpUser, updateLoginTime } from 'serverSrc/database'
 import { setSession } from 'serverSrc/helpers/auth'
 import { getProvidersUserId, getUserByProviderId, logInAssignProviderIds } from 'serverSrc/actions/auth/providers'
+import { getUser, isCorrectPassword, signUpUser, updateLoginTime } from 'serverSrc/database'
 
 export const handleResetPass = async ({ email }: any, locale: string, req: any, res: Response) => {
-  const emailSent = await sendEmails(MAILS.RESET_PASSWORD, locale, {
+  const emailSent = await sendEmails([email], EMAIL_TEMPLATE.RESET_PASSWORD, {
     resetLink: ' >>resetLink<< ',
-  }, [email])
+  }, locale)
 
   if (emailSent) {
     res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.RESET_LINK] })

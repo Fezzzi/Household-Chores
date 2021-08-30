@@ -1,5 +1,15 @@
 import { Response } from 'express'
 
+import {
+  NOTIFICATION_TYPE,
+  INPUT_TYPE,
+  API,
+  SETTING_CATEGORIES,
+  HOUSEHOLD_TABS,
+  HOUSEHOLD_ROLE_TYPE,
+} from 'shared/constants'
+import { ACTIVITY, ERROR } from 'shared/constants/localeMessages'
+import { NOTIFICATION_KEYS } from 'serverSrc/constants'
 import { HOUSEHOLD_DIR, isLocalImage, uploadFiles } from 'serverSrc/helpers/files'
 import { logActivity } from 'serverSrc/helpers/activity'
 import {
@@ -11,17 +21,6 @@ import {
   getHouseholdMembers,
   leaveHousehold,
 } from 'serverSrc/database'
-import { NOTIFICATIONS } from 'serverSrc/constants'
-import {
-  NOTIFICATION_TYPE,
-  INPUT_TYPE,
-  API,
-  SETTING_CATEGORIES,
-  HOUSEHOLD_TABS,
-  HOUSEHOLD_ROLE_TYPE,
-} from 'shared/constants'
-import { ACTIVITY, ERROR } from 'shared/constants/localeMessages'
-import { SETTINGS_PREFIX } from 'shared/constants/api'
 
 import { ApproveInvitationRequest, CreateHouseholdInputs, CreateHouseholdInvitation } from './types'
 import { validateCreateData } from './validate'
@@ -32,6 +31,7 @@ export const handleCreateHousehold = async (
   invitations: CreateHouseholdInvitation[],
   userId: number,
   fsKey: string,
+  locale: string,
   res: Response,
 ): Promise<boolean> => {
   const valid = await validateCreateData(inputs, invitations, userId, res)
@@ -56,12 +56,13 @@ export const handleCreateHousehold = async (
   const success = invitations.length === 0 || await addHouseholdInvitations(householdId, invitations, userId)
   if (success) {
     logActivity(
-      NOTIFICATIONS.HOUSEHOLD_INVITATION,
+      NOTIFICATION_KEYS.HOUSEHOLD_INVITATION,
+      locale,
       invitations.map(user => user.toId),
       ACTIVITY.HOUSEHOLD_INVITATION,
       [inputs.name, inputs.userNickname],
       [photo!, userPhoto!],
-      `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${HOUSEHOLD_TABS.INVITATIONS}`
+      `${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${HOUSEHOLD_TABS.INVITATIONS}`
     )
     res.status(200).send({
       url: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`,
@@ -73,7 +74,7 @@ export const handleCreateHousehold = async (
   return true
 }
 
-export const handleDeleteHousehold = async (userId: number, householdId: number, res: Response) => {
+export const handleDeleteHousehold = async (userId: number, householdId: number, locale: string, res: Response) => {
   const members = await getHouseholdMembers(householdId)
   const user = members?.find(({ userId: memberId }) => userId === memberId)
   const isAdmin = user?.role === HOUSEHOLD_ROLE_TYPE.ADMIN
@@ -91,7 +92,8 @@ export const handleDeleteHousehold = async (userId: number, householdId: number,
         .filter(memberId => memberId !== userId)
 
       logActivity(
-        NOTIFICATIONS.HOUSEHOLD_DELETING,
+        NOTIFICATION_KEYS.HOUSEHOLD_DELETING,
+        locale,
         notifiedMembers,
         ACTIVITY.HOUSEHOLD_DELETE,
         [user!.nickname, name],
@@ -111,6 +113,7 @@ export const handleApproveHouseholdInvitation = async (
   userId: number,
   userNickname: string,
   fsKey: string,
+  locale: string,
   res: Response,
 ) => {
   const { fromId, householdId, userNickname: nickname, userPhoto: photo } = invitationBody
@@ -135,12 +138,13 @@ export const handleApproveHouseholdInvitation = async (
     const notifiedMembers = members?.map(({ userId }) => userId).filter(memberId => memberId !== userId)
     if (notifiedMembers?.length) {
       logActivity(
-        NOTIFICATIONS.HOUSEHOLD_JOINING,
+        NOTIFICATION_KEYS.HOUSEHOLD_JOINING,
+        locale,
         notifiedMembers,
         ACTIVITY.HOUSEHOLD_JOIN,
         [userNickname, name],
         [photo, userPhoto!],
-        `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
+        `${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
       )
     }
     res.status(200).send({
@@ -152,7 +156,7 @@ export const handleApproveHouseholdInvitation = async (
   return true
 }
 
-export const handleLeaveHousehold = async (userId: number, householdId: number, res: Response) => {
+export const handleLeaveHousehold = async (userId: number, householdId: number, locale: string, res: Response) => {
   const members = await getHouseholdMembers(householdId)
   const admins = members
     ?.filter(({ role }) => role === HOUSEHOLD_ROLE_TYPE.ADMIN)
@@ -175,12 +179,13 @@ export const handleLeaveHousehold = async (userId: number, householdId: number, 
       .filter(memberId => memberId !== userId)
 
     logActivity(
-      NOTIFICATIONS.HOUSEHOLD_LEAVING,
+      NOTIFICATION_KEYS.HOUSEHOLD_LEAVING,
+      locale,
       notifiedMembers,
       ACTIVITY.HOUSEHOLD_LEAVE,
       [userNickname, name],
       [photo, userPhoto],
-      `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
+      `${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
     )
     res.status(204).send()
     return true

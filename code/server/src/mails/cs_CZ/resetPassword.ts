@@ -1,6 +1,4 @@
-export interface ResetPassDataShape {
-  resetLink: string
-}
+import { ResetPassDataShape } from '../dataShapes'
 
 export const getSubject = () => 'Žádost o obnovu vašeho hesla v Household Application'
 
@@ -13,7 +11,7 @@ export const getText = (data: ResetPassDataShape) => `
 `
 
 export const getHTML = (data: ResetPassDataShape) => `
-  <div>
+  <div style="text-align: center">
     <p>Obdrželi jsme žádost o obnovu hesla k vašemu HouseHold účtu.</p>
     <p>Pro obnovu hesla následujte odkaz níže. Pokud jste o obnovu nežádali, ignorujte tento email.</p>
     <p>${data.resetLink}</p>

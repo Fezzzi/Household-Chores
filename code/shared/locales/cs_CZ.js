@@ -14,6 +14,7 @@ export default {
   [ACTIVITY.HOUSEHOLD_JOIN]: 'Uživatel $1$ se přidal do domácnosti $2$.',
   [ACTIVITY.HOUSEHOLD_LEAVE]: 'Uživatel $1$ opustil domácnost $2$.',
   [ACTIVITY.HOUSEHOLD_REMOVAL]: 'Uživatel $1$ byl odstraněn z domácnosti $2$ uživatelem $3$.',
+  [ACTIVITY.HOUSEHOLD_REMOVAL_MULTIPLE]: 'Uživatel $1$ a $2$ další byli odstraněni z domácnosti $3$ uživatelem $4$.',
   [ACTIVITY.HOUSEHOLD_EXPELLING]: 'Uživatel $1$ vás odstranil z domácnosti $2$.',
   [ACTIVITY.HOUSEHOLD_DELETE]: 'Uživatel $1$ smazal domácnost $2$.',
 
