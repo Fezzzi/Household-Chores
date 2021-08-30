@@ -1,115 +1,87 @@
 import express from 'express'
 
+import { API, CONNECTION_STATE_TYPE, CONNECTION_TABS, SETTING_CATEGORIES } from 'shared/constants'
+import { ACTIVITY } from 'shared/constants/localeMessages'
+import { NOTIFICATION_KEYS } from 'serverSrc/constants'
+import { catchErrors } from 'serverSrc/helpers/errorHandler'
+import { logActivity } from 'serverSrc/helpers/activity'
 import {
-  queryUsers, approveConnection, createConnectionRequest, blockConnection,
-  removeConnection, findBlockedConnections, findConnections, addActivityForUsers,
-} from 'serverSrc/database/models'
-import { API, CONNECTION_STATE_TYPE, CONNECTION_TABS, NOTIFICATION_TYPE, SETTING_CATEGORIES } from 'shared/constants'
-import { ACTIVITY, ERROR, SUCCESS } from 'shared/constants/localeMessages'
-import { SETTINGS_PREFIX } from 'shared/constants/api'
+  approveConnection,
+  blockConnection,
+  getUserInfo,
+  queryUsers,
+  removeConnection,
+} from 'serverSrc/database'
 
-const performConnectionAction = async (
-  req: any,
-  res: any,
-  userId: number,
-  action: (currentUser: number, targetUser: number) => Promise<boolean>
-) => {
-  const success = await action(req.session.user, userId)
-  if (success) {
-    const data = await findConnections(req.session.user)
-    if (data) {
-      res.status(200).send(data)
-      return true
-    }
-  }
-  res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
-  return true
-}
-
-const handleConnectionRequest = async (
-  req: any,
-  res: any,
-  { userId, message }: { userId: number; message: string | null },
-) => {
-  const currentUser = req.session.user
-  const isRequestValid = !(await findBlockedConnections(userId)).find(blockedUser => blockedUser === currentUser)
-  if (isRequestValid) {
-    const success = await createConnectionRequest(currentUser, userId, message ?? null)
-    if (success) {
-      addActivityForUsers(
-        [Number(userId)],
-        `${ACTIVITY.CONNECTION_REQUEST}$[${req.session!.userNickname}]$`,
-        `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.CONNECTIONS}?tab=${CONNECTION_TABS.PENDING}`
-      )
-      res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.CONNECTION_REQUEST_SENT] })
-    } else {
-      res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_REQUEST_ERROR] })
-    }
-  } else {
-    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_REQUEST] })
-  }
-  return true
-}
+import { handleConnectionAction, handleConnectionRequest } from './handlers'
 
 export default () => {
   const router = express.Router()
-  router.post('/:action', (req, res) => {
-    const { params: { action }, body } = req
+  router.post('/:action', catchErrors(async (req, res) => {
+    const { params: { action }, body: { targetId, message } } = req
 
     if (action === API.CONNECTION_REQUEST) {
-      return handleConnectionRequest(req, res, body)
+      await handleConnectionRequest(req, res, targetId, message)
+      return
     }
 
     res.status(404).send('Not Found')
-    return false
-  })
+  }))
 
-  router.put('/:action', (req, res) => {
-    const { params: { action }, body: { userId } } = req
+  router.put('/:action', catchErrors(async (req: any, res) => {
+    const { params: { action }, body: { targetId } } = req
 
     switch (action) {
-      case API.CONNECTION_APPROVE:
-        if (performConnectionAction(req, res, Number(userId), approveConnection)) {
-          addActivityForUsers(
-            [Number(userId)],
-            `${ACTIVITY.CONNECTION_APPROVAL}$[${req.session!.userNickname}]$`,
-            `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.CONNECTIONS}?tab=${CONNECTION_TABS.MY_CONNECTIONS}`
+      case API.CONNECTION_APPROVE: {
+        const success = await handleConnectionAction(req, res, Number(targetId), approveConnection)
+
+        if (success) {
+          const { nickname, photo } = await getUserInfo(req.session!.userId)
+
+          logActivity(
+            NOTIFICATION_KEYS.CONNECTION_APPROVAL,
+            req.session.locale,
+            [Number(targetId)],
+            ACTIVITY.CONNECTION_APPROVAL,
+            [nickname],
+            [photo!],
+            `${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.CONNECTIONS}?tab=${CONNECTION_TABS.MY_CONNECTIONS}`
           )
-          return true
         }
-        return false
+        return
+      }
       case API.CONNECTION_BLOCK:
-        return performConnectionAction(req, res, Number(userId), blockConnection)
+        await handleConnectionAction(req, res, Number(targetId), blockConnection)
+        return
       default:
         res.status(404).send('Not Found')
-        return false
     }
-  })
+  }))
 
-  router.delete('/:action', (req, res) => {
-    const { params: { action }, query: { userId } } = req
+  router.delete('/:action', catchErrors(async (req, res) => {
+    const { params: { action }, query: { targetId } } = req
     switch (action) {
       case API.CONNECTION_IGNORE:
       case API.CONNECTION_REMOVE:
       case API.CONNECTION_UNBLOCK:
-        return performConnectionAction(req, res, Number(userId), removeConnection)
+        await handleConnectionAction(req, res, Number(targetId), removeConnection)
+        return
       default:
         res.status(404).send('Not Found')
-        return false
     }
-  })
+  }))
 
-  router.get('/:action', async (req, res) => {
+  router.get('/:action', catchErrors(async (req: any, res) => {
     const { params: { action }, query: { query } } = req
 
     if (action === API.CONNECTION_FIND) {
-      const foundUsers = await queryUsers(query as string, req.session!.user)
+      const foundUsers = await queryUsers(query as string, req.session!.userId)
       res.status(200).send({ [CONNECTION_STATE_TYPE.FOUND]: foundUsers })
       return
     }
 
     res.status(404).send('Not Found')
-  })
+  }))
 
   return router
 }

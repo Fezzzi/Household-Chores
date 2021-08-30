@@ -1,51 +1,65 @@
-import nodemailer, { SentMessageInfo } from 'nodemailer'
-import dotenv from 'dotenv'
+import sgMail from '@sendgrid/mail'
+
+import { AVAILABLE_LOCALES, DEFAULT_LOCALE } from 'shared/constants'
+import { Email, EmailTemplateDataShapeType, mails } from 'serverSrc/mails'
+import { wrapSubject, wrapText, wrapHTML } from 'serverSrc/mails/template'
 
 import { Logger } from './logger'
-import { LOGS } from '../constants'
+import { LOGS, CONFIG, EMAIL_TEMPLATE } from '../constants'
 
-dotenv.config()
+if (CONFIG.SENDGRID_API_KEY && CONFIG.SENDGRID_EMAIL) {
+  sgMail.setApiKey(CONFIG.SENDGRID_API_KEY)
+}
 
-const getTemplate = (templateName: string, data: any): { subject: string; html: string} => {
-  const templateModule = require(`serverSrc/mails/${templateName}.ts`)
+const getTemplate = <T extends EMAIL_TEMPLATE> (
+  templateName: T,
+  data: EmailTemplateDataShapeType[T],
+  locale: string,
+) => {
+  const localeCode = (locale && AVAILABLE_LOCALES.includes(locale as string) && locale as string) || DEFAULT_LOCALE
+  const template = mails[localeCode] ?? mails[DEFAULT_LOCALE]
+  const { getSubject, getText, getHTML } = template[templateName] as Email<EmailTemplateDataShapeType[T]>
+
   return {
-    subject: templateModule.getSubject(data),
-    html: templateModule.getHTML(data),
+    subject: wrapSubject(getSubject(data)),
+    text: wrapText(getText(data)),
+    html: wrapHTML(getHTML(data)),
   }
 }
 
-export const sendEmails = async (templateName: string, data: any, recipients: [string]): Promise<boolean> => {
-  const testAccount = await nodemailer.createTestAccount()
+export const sendEmails = async<T extends EMAIL_TEMPLATE> (
+  recipients: string[],
+  templateName: T,
+  data: EmailTemplateDataShapeType[T],
+  locale: string
+): Promise<boolean> => {
+  if (!CONFIG.SENDGRID_API_KEY || !CONFIG.SENDGRID_EMAIL) {
+    console.warn('Emails are disabled, to enable them set up SENDGRID_API_KEY and SENDGRID_EMAIL environmental variables.')
+    console.warn(`Attempted to send ${templateName} to ${recipients.join(',')}.`)
+    return true
+  }
 
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: testAccount.user, // generated ethereal user
-      pass: testAccount.pass, // generated ethereal password
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-  })
+  const { subject, text, html } = getTemplate(templateName, data, locale)
 
-  // todo: Add locale translations to data
-  const { subject, html } = getTemplate(templateName, data)
+  const results = await Promise.all(recipients.map(recipient => new Promise(resolve => {
+    const msg = {
+      to: recipient,
+      from: CONFIG.SENDGRID_EMAIL!,
+      subject,
+      text,
+      html,
+    }
 
-  const info: SentMessageInfo = await transporter.sendMail({
-    from: 'Household App',
-    to: process.env.TEST === 'true'
-      ? process.env.TEST_EMAIL
-      : recipients.join(','),
-    subject,
-    html,
-  }, err => err && Logger(LOGS.MAIL_LOG, `Sending ${templateName} emails to ${recipients.join(',')} failed - ${err.message}`))
+    sgMail.send(msg)
+      .then(() => {
+        Logger(LOGS.MAIL_LOG, `Sending of ${templateName} email to ${recipients.join(',')} was successful`)
+        resolve(true)
+      })
+      .catch(err => {
+        Logger(LOGS.MAIL_LOG, `Sending of ${templateName} email to ${recipients.join(',')} failed - ${err.message}`)
+        resolve(false)
+      })
+  })))
 
-  Logger(
-    LOGS.MAIL_LOG,
-    `Sent ${info.accepted.length} of ${info.accepted.length + info.rejected.length} ${templateName} emails, `
-    + `approved: [${info.accepted.join(',')}] failed: [${info.rejected.join(',')}]`
-  )
-  return info.accepted.length > 0
+  return results.some(Boolean)
 }

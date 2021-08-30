@@ -28,7 +28,7 @@ const HouseholdCreateForm = ({ connections }) => {
 
   const { inputs, errors, isFormSending } = state
 
-  const userState = useSelector(({ app }) => app.user)
+  const userState = useSelector(({ app: { user } }) => user)
   const currentUser = useMemo(() => ({
     ...userState,
     role: HOUSEHOLD_ROLE_TYPE.ADMIN,
@@ -41,7 +41,7 @@ const HouseholdCreateForm = ({ connections }) => {
       toNickname,
       fromPhoto: currentUser.photo,
       fromNickname: currentUser.nickname,
-      fromId: currentUser.id,
+      fromId: currentUser.userId,
       message,
       dateCreated: '(PENDING)',
     })),

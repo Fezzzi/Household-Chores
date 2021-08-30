@@ -1,11 +1,26 @@
-import { HOUSEHOLD_DIR, isLocalImage, uploadFiles } from 'serverSrc/helpers/files'
+import { Response } from 'express'
+
 import {
-  addActivityForUsers, addHouseholdInvitations, approveInvitation, createHousehold,
-  deleteHousehold, getHouseholdMembers, getHouseholdName, leaveHousehold,
-} from 'serverSrc/database/models'
-import { NOTIFICATION_TYPE, INPUT_TYPE, API, SETTING_CATEGORIES, HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
+  NOTIFICATION_TYPE,
+  INPUT_TYPE,
+  API,
+  SETTING_CATEGORIES,
+  HOUSEHOLD_TABS,
+  HOUSEHOLD_ROLE_TYPE,
+} from 'shared/constants'
 import { ACTIVITY, ERROR } from 'shared/constants/localeMessages'
-import { SETTINGS_PREFIX } from 'shared/constants/api'
+import { NOTIFICATION_KEYS } from 'serverSrc/constants'
+import { HOUSEHOLD_DIR, isLocalImage, uploadFiles } from 'serverSrc/helpers/files'
+import { logActivity } from 'serverSrc/helpers/activity'
+import {
+  addHouseholdInvitations,
+  approveInvitation,
+  createHousehold,
+  deleteHousehold,
+  getHouseholdInfo,
+  getHouseholdMembers,
+  leaveHousehold,
+} from 'serverSrc/database'
 
 import { ApproveInvitationRequest, CreateHouseholdInputs, CreateHouseholdInvitation } from './types'
 import { validateCreateData } from './validate'
@@ -16,28 +31,23 @@ export const handleCreateHousehold = async (
   invitations: CreateHouseholdInvitation[],
   userId: number,
   fsKey: string,
-  res: any,
+  locale: string,
+  res: Response,
 ): Promise<boolean> => {
   const valid = await validateCreateData(inputs, invitations, userId, res)
   if (!valid) {
     return true
   }
 
-  const [photo, userPhoto] = uploadFiles([
-    inputs.photo,
-    inputs.userPhoto,
-  ], HOUSEHOLD_DIR, fsKey)
+  const [photo, userPhoto] = uploadFiles([inputs.photo, inputs.userPhoto], HOUSEHOLD_DIR, fsKey, res)
 
-  if (photo === null || userPhoto === null) {
-    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
-    return true
-  }
-
-  const householdId = await createHousehold({
-    ...inputs,
-    photo,
-    userPhoto,
-  }, userId)
+  const householdId = await createHousehold(
+    inputs.name,
+    photo!,
+    inputs.userNickname,
+    userPhoto!,
+    userId
+  )
 
   if (householdId === null) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
@@ -45,10 +55,14 @@ export const handleCreateHousehold = async (
   }
   const success = invitations.length === 0 || await addHouseholdInvitations(householdId, invitations, userId)
   if (success) {
-    addActivityForUsers(
+    logActivity(
+      NOTIFICATION_KEYS.HOUSEHOLD_INVITATION,
+      locale,
       invitations.map(user => user.toId),
-      `${ACTIVITY.HOUSEHOLD_INVITATION}$[${inputs.name}, ${inputs.userNickname}]$`,
-      `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
+      ACTIVITY.HOUSEHOLD_INVITATION,
+      [inputs.name, inputs.userNickname],
+      [photo!, userPhoto!],
+      `${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${HOUSEHOLD_TABS.INVITATIONS}`
     )
     res.status(200).send({
       url: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`,
@@ -60,20 +74,16 @@ export const handleCreateHousehold = async (
   return true
 }
 
-export const handleDeleteHousehold = async (
-  userId: number,
-  userNickname: string,
-  householdId: number,
-  res: any,
-): Promise<boolean> => {
+export const handleDeleteHousehold = async (userId: number, householdId: number, locale: string, res: Response) => {
   const members = await getHouseholdMembers(householdId)
-  const isAdmin = members?.find(({ userId: memberId }) => userId === memberId)?.role === HOUSEHOLD_ROLE_TYPE.ADMIN
+  const user = members?.find(({ userId: memberId }) => userId === memberId)
+  const isAdmin = user?.role === HOUSEHOLD_ROLE_TYPE.ADMIN
 
   if (!isAdmin) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.BAD_PERMISSIONS] })
     return false
   } else {
-    const householdName = await getHouseholdName(householdId)
+    const { name, photo } = await getHouseholdInfo(householdId) ?? { name: null, photo: null }
     const success = await deleteHousehold(householdId)
 
     if (success) {
@@ -81,9 +91,13 @@ export const handleDeleteHousehold = async (
         .map(({ userId }) => userId)
         .filter(memberId => memberId !== userId)
 
-      addActivityForUsers(
+      logActivity(
+        NOTIFICATION_KEYS.HOUSEHOLD_DELETING,
+        locale,
         notifiedMembers,
-        `${ACTIVITY.HOUSEHOLD_DELETE}$[${userNickname}, ${householdName}]$`
+        ACTIVITY.HOUSEHOLD_DELETE,
+        [user!.nickname, name],
+        [photo, user!.photo]
       )
       res.status(204).send()
     } else {
@@ -99,8 +113,9 @@ export const handleApproveHouseholdInvitation = async (
   userId: number,
   userNickname: string,
   fsKey: string,
-  res: any,
-): Promise<boolean> => {
+  locale: string,
+  res: Response,
+) => {
   const { fromId, householdId, userNickname: nickname, userPhoto: photo } = invitationBody
 
   if (!fromId || !householdId || !nickname || !photo) {
@@ -114,22 +129,22 @@ export const handleApproveHouseholdInvitation = async (
     return false
   }
 
-  const userPhoto = uploadFiles([photo], HOUSEHOLD_DIR, fsKey)[0]
-  if (userPhoto === null) {
-    res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
-    return true
-  }
+  const [userPhoto] = uploadFiles([photo], HOUSEHOLD_DIR, fsKey, res)
+  const success = await approveInvitation(userId, fromId, householdId, nickname, userPhoto!)
 
-  const success = await approveInvitation(userId, fromId, householdId, nickname, userPhoto)
   if (success) {
-    const householdName = await getHouseholdName(householdId)
+    const { name, photo } = await getHouseholdInfo(householdId)
     const members = await getHouseholdMembers(householdId)
     const notifiedMembers = members?.map(({ userId }) => userId).filter(memberId => memberId !== userId)
     if (notifiedMembers?.length) {
-      addActivityForUsers(
+      logActivity(
+        NOTIFICATION_KEYS.HOUSEHOLD_JOINING,
+        locale,
         notifiedMembers,
-        `${ACTIVITY.HOUSEHOLD_JOIN}$[${userNickname}, ${householdName}]$`,
-        `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
+        ACTIVITY.HOUSEHOLD_JOIN,
+        [userNickname, name],
+        [photo, userPhoto!],
+        `${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
       )
     }
     res.status(200).send({
@@ -141,12 +156,7 @@ export const handleApproveHouseholdInvitation = async (
   return true
 }
 
-export const handleLeaveHousehold = async (
-  userId: number,
-  userNickname: string,
-  householdId: number,
-  res: any,
-): Promise<boolean> => {
+export const handleLeaveHousehold = async (userId: number, householdId: number, locale: string, res: Response) => {
   const members = await getHouseholdMembers(householdId)
   const admins = members
     ?.filter(({ role }) => role === HOUSEHOLD_ROLE_TYPE.ADMIN)
@@ -157,17 +167,25 @@ export const handleLeaveHousehold = async (
     return false
   }
 
-  const success = await leaveHousehold(userId, householdId)
+  const user = members.find(({ userId: id }) => id === userId)
+  const success = user && await leaveHousehold(userId, householdId)
+
   if (success) {
-    const householdName = await getHouseholdName(householdId)
+    const { nickname: userNickname, photo: userPhoto } = user!
+    const { name, photo } = await getHouseholdInfo(householdId)
+
     const notifiedMembers = members!
       .map(({ userId }) => userId)
       .filter(memberId => memberId !== userId)
 
-    addActivityForUsers(
+    logActivity(
+      NOTIFICATION_KEYS.HOUSEHOLD_LEAVING,
+      locale,
       notifiedMembers,
-      `${ACTIVITY.HOUSEHOLD_LEAVE}$[${userNickname}, ${householdName}]$`,
-      `${SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
+      ACTIVITY.HOUSEHOLD_LEAVE,
+      [userNickname, name],
+      [photo, userPhoto],
+      `${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`
     )
     res.status(204).send()
     return true

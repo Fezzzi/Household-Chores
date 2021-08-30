@@ -1,12 +1,25 @@
 import React from 'react'
 
 import {
-  ConnectionRequestsForm, ConnectionSearchForm, HouseholdCreateForm, HouseholdModificationForm, DialogsForm,
-  HouseholdInvitationListForm, ProfileForm, NotificationForm, ConnectionsListForm, ConnectionBlocksForm,
+  ConnectionRequestsForm,
+  ConnectionSearchForm,
+  HouseholdCreateForm,
+  HouseholdModificationForm,
+  DialogsForm,
+  HouseholdInvitationListForm,
+  ProfileForm,
+  NotificationForm,
+  ConnectionsListForm,
+  ConnectionBlocksForm,
 } from 'clientSrc/components/forms'
 import { AboutPage, ContributePage, SupportPage } from 'clientSrc/components/settings/more'
 import {
-  SETTING_CATEGORIES, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, CONNECTION_STATE_TYPE, MORE_TABS,
+  SETTING_CATEGORIES,
+  CONNECTION_TABS,
+  PROFILE_TABS,
+  HOUSEHOLD_TABS,
+  CONNECTION_STATE_TYPE,
+  MORE_TABS,
 } from 'shared/constants'
 
 export const settingsRenderers = {

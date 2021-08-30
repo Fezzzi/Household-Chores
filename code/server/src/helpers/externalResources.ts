@@ -1,14 +1,9 @@
-// @ts-ignore
 import GitHub from 'github-api'
+
+import { CONFIG } from 'serverSrc/constants'
 
 const GITHUB_REPO = 'Household-Chores'
 const GITHUB_REPO_OWNER = 'Fezzzi'
-
-interface GithubCollaborator {
-  login: string
-  avatar_url: string
-  html_url: string
-}
 
 interface Contributor {
   name: string
@@ -20,15 +15,19 @@ interface Contributor {
  * Returns list of contributors from github
  */
 export const findContributors = async (): Promise<Contributor[]> => {
+  if (!CONFIG.GITHUB_USERNAME || !CONFIG.GITHUB_TOKEN) {
+    return []
+  }
+
   const github = new GitHub({
-    username: process.env.GITHUB_USERNAME,
-    token: process.env.GITHUB_TOKEN,
+    username: CONFIG.GITHUB_USERNAME,
+    token: CONFIG.GITHUB_TOKEN,
   })
 
   const repo = github.getRepo(GITHUB_REPO_OWNER, GITHUB_REPO)
 
-  const collaborators: { data: GithubCollaborator[] } = await repo.getCollaborators()
-  return collaborators.data.map(({ login, avatar_url, html_url }) => ({
+  const { data } = await repo.getCollaborators()
+  return data.map(({ login, avatar_url, html_url }) => ({
     name: login,
     photo: avatar_url,
     link: html_url,

@@ -18,16 +18,16 @@ import { MessageTooltip } from '../../portals'
 const ConnectionRequestsForm = ({ data }) => {
   const dispatch = useDispatch()
 
-  const blockHandler = useCallback(userId =>
-    dispatch(ConnectionActions.connectionAction({ effect: connectionBlock, userId })),
+  const blockHandler = useCallback(targetId =>
+    dispatch(ConnectionActions.connectionAction({ effect: connectionBlock, data: targetId })),
   [dispatch])
 
-  const approveHandler = useCallback(userId =>
-    dispatch(ConnectionActions.connectionAction({ effect: connectionApprove, userId })),
+  const approveHandler = useCallback(targetId =>
+    dispatch(ConnectionActions.connectionAction({ effect: connectionApprove, data: { targetId } })),
   [dispatch])
 
-  const ignoreHandler = useCallback(userId =>
-    dispatch(ConnectionActions.connectionAction({ effect: connectionIgnore, userId })),
+  const ignoreHandler = useCallback(targetId =>
+    dispatch(ConnectionActions.connectionAction({ effect: connectionIgnore, data: targetId })),
   [dispatch])
 
   return (
@@ -47,9 +47,10 @@ const ConnectionRequestsForm = ({ data }) => {
               message,
               mutualConnections,
               dateCreated,
+              ...rest
             }) => ({
               photo: <TableBigPhoto src={photo} />,
-              mutualConnections: <>({mutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
+              mutualConnections: <>({mutualConnections ?? 0} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
               message: message && (
                 <AppendMessageAnchor>
                   <MessageTooltip
@@ -66,6 +67,7 @@ const ConnectionRequestsForm = ({ data }) => {
               approveBtn: getButtonForUser(FORM.APPROVE, userId, approveHandler),
               ignoreBtn: getButtonForUser(FORM.IGNORE, userId, ignoreHandler),
               blockBtn: getButtonForUser(FORM.BLOCK, userId, blockHandler),
+              ...rest,
             }))}
             keys={[
               { name: 'photo' },

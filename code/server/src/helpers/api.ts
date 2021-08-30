@@ -1,45 +1,59 @@
-/**
- * Helper function that maps db query output fields to match the specified API from openAPI docs.
- * Converts from snake_case to camelCase and flips fields to '<entity>Id' template.
- */
-export const apify = async <T>(queryResult: Promise<Array<Record<string, T>>>): Promise<Array<Record<string, T>>> => {
-  const queriedData = await queryResult
+type SnakeToCamelCase<S extends string> = S extends `${infer T}_${infer U}`
+  ? `${T}${Capitalize<SnakeToCamelCase<U>>}`
+  : S
 
-  return queriedData.map(data => Object.fromEntries(
-    Object.entries(data).map(([key, value]) => [apifyKey(key), value])
-  ))
-}
+type FirstCapitalLetter<S extends string> = S extends `${infer T}${infer U}`
+  ? (<G>() => G extends T ? 1 : 2) extends (<G>() => G extends Capitalize<T> ? 1 : 2)
+    ? T
+    : FirstCapitalLetter<U>
+  : never
+
+type CamelToSnakeCase<S extends string, D extends string = FirstCapitalLetter<S>> =
+  S extends `${infer T}${D}${infer R}`
+    ? `${T}_${Lowercase<D>}${CamelToSnakeCase<R>}`
+    : S
+
+export type SnakeCaseObjectToCamelCase<T extends Record<string, any>> =
+  { [k in Extract<keyof T, string> as SnakeToCamelCase<k>]: T[k] }
+
+export type CamelCaseObjectToSnakeCase<T extends Record<string, any>> =
+  { [k in Extract<keyof T, string> as CamelToSnakeCase<k>]: T[k] }
 
 /**
- * Converts single key from snake_case to camelCase and flips fields to '<entity>Id' template.
- * @param key
+ * Helper function that maps a single db object's output fields to match the specified API from openAPI docs by converting
+ * all snake_case fields in the db response to camelCase.
  */
-export const apifyKey = (key: string): string => {
+export const apifyObject = <T extends Record<string, any>>(queriedDataObject: T) =>
+  Object.fromEntries(
+    Object.entries(queriedDataObject).map(([key, value]) => [apifyKey(key), value])
+  ) as SnakeCaseObjectToCamelCase<T>
+
+/**
+ * Converts a single key from snake_case to camelCase.
+ *
+ * @param {string} key
+ */
+export const apifyKey = (key: string): SnakeToCamelCase<typeof key> => {
   const keyParts = key.split('_')
-  if (keyParts[0] === 'id') {
-    keyParts.push(keyParts.splice(0, 1)[0])
-  }
 
   return [keyParts[0], ...keyParts.splice(1).map(keyPart => keyPart[0].toUpperCase() + keyPart.slice(1))].join('')
 }
 
 /**
- * Helper function that de-maps fields matching the specified API from openAPI docs to db field names.
- * Converts from camelCase to snake_case and flips fields from '<entity>Id' template to 'id_<entity>'.
+ * Helper function that de-maps fields matching the specified API from openAPI docs to db field names by converting
+ * all camelCase fields to snake_case.
  */
-export const deApify = <T>(data: Record<string, T>): Record<string, T> => Object.fromEntries(
-  Object.entries(data).map(([key, value]) => [deApifyKey(key), value])
-)
+export const deApifyObject = <T extends Record<string, any>>(queriedDataObject: T) =>
+  Object.fromEntries(
+    Object.entries(queriedDataObject).map(([key, value]) => [deApifyKey(key), value])
+  ) as CamelCaseObjectToSnakeCase<T>
 
 /**
- * Converts single key from camelCase to snake_case and flips fields from '<entity>Id' template to 'id_<entity>'.
- * @param key
+ * Converts a single key from camelCase to snake_case.
+ *
+ * @param {string} key
  */
-export const deApifyKey = (key: string): string => {
-  const keyParts = key.split(/(?=[A-Z])/)
-  if (keyParts[keyParts.length - 1] === 'Id') {
-    keyParts.unshift(keyParts.pop()!)
-  }
-
-  return keyParts.map(keyPart => keyPart.toLowerCase()).join('_')
-}
+export const deApifyKey = (key: string): CamelToSnakeCase<typeof key> => key
+  .split(/(?=[A-Z])/)
+  .map(keyPart => keyPart.toLowerCase())
+  .join('_')

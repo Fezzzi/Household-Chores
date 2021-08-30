@@ -1,5 +1,5 @@
 import { API } from 'shared/constants'
-import { clientApi } from 'clientSrc/client-api'
+import { apiClient } from 'clientSrc/apiClient'
 
 export const loadHouseholds = () =>
-  clientApi.get(`${API.HOUSEHOLDS_PREFIX}/${API.HOUSEHOLDS_LOAD}`)
+  apiClient.get(`${API.HOUSEHOLDS_PREFIX}/${API.HOUSEHOLDS_LOAD}`)

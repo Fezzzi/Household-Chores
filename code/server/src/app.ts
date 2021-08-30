@@ -2,19 +2,17 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
-import createStore from 'express-mysql-session'
+import createSession from 'express-pg-session'
 import cors from 'cors'
 import morgan from 'morgan'
 import path from 'path'
-import dotenv from 'dotenv'
 
-import errorHandler from './helpers/errorHandler'
-import router from './actions/router'
+import { API } from 'shared/constants'
+
+import apiRouter from './actions/apiRouter'
 import { Logger } from './helpers/logger'
-import { LOGS } from './constants'
-import { pool } from './database/connection'
-
-dotenv.config()
+import { apiErrorHandler } from './helpers/errorHandler'
+import { CONFIG, LOGS } from './constants'
 
 // Initialize the server
 const app = express()
@@ -27,14 +25,14 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '3mb' }))
 app.use(cookieParser())
 
 // Initialize session store and session middleware
-// @ts-ignore: Property 'default' is missing in type (some bug in types config of express-mysql-session)
-const MySQLStore = createStore(session)
-const sessionStore = new MySQLStore({}, pool)
+const PGStore = createSession(session)
+const sessionStore = new PGStore({ conString: CONFIG.DATABASE_URL })
 const YEAR_MILLISECONDS = 31540000000
+
 app.use(session({
   store: sessionStore,
   name: 'user_sid',
-  secret: process.env.SESSION_SECRET ?? 'test',
+  secret: CONFIG.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -56,32 +54,31 @@ app.use(morgan(':remote-addr - :remote-user ":method :url" :status :response-tim
 
 // Setup CORS policy
 app.use(cors(
-  process.env.DEBUG === 'true'
+  CONFIG.DEBUG
     ? {
-      origin: `http://localhost:${process.env.PORT === '8080' ? 8081 : 8080}`,
+      origin: `http://localhost:${CONFIG.API_PORT === 8080 ? 8081 : 8080}`,
       credentials: true,
       optionsSuccessStatus: 200,
     }
     : {}
 ))
-app.options('*', cors())
 
 // Serve static assets
-app.use(express.static(path.resolve('./dist')))
-app.use(express.static(path.resolve('./uploads')))
+app.use('/static', express.static(path.resolve('./code/server/dist')))
+app.use('/uploads', express.static(path.resolve('./uploads')))
 
 // Checks if user's cookie is still saved in the browser without associated user, then clears the cookie
-app.use((req, res, next) => {
-  if (req.cookies.user_sid && (req.session && !req.session.user)) {
+app.use((req: any, res, next) => {
+  if (req.cookies.user_sid && (req.session && !req.session.userId)) {
     res.clearCookie('user_sid')
   }
   next()
 })
 
-// Setup routing
-app.use(router())
+// Setup API routing
+app.use(`/${API.API_PREFIX}`, apiRouter())
 
-// Add silent error handler
-app.use(errorHandler)
+// Add error handler
+app.use(apiErrorHandler)
 
 export default app

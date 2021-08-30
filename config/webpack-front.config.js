@@ -93,7 +93,7 @@ module.exports = {
       },
     }),
     new webpack.DefinePlugin({
-      'process.env.PORT': process.env.PORT || 9000,
+      'process.env.API_PORT': process.env.API_PORT ?? 9000,
       'process.env.GCID': (process.env.GCID && JSON.stringify(process.env.GCID)) || 'test1234',
     }),
   ],

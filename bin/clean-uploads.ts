@@ -1,15 +1,12 @@
 import path from 'path'
 import { readdirSync, unlink } from 'fs'
-import dotenv from 'dotenv'
 import rimraf from 'rimraf'
 
 import { database } from 'serverSrc/database'
+import { CONFIG } from 'serverSrc/constants'
 import {
-  tUsersName, tUsersCols, tHouseMemName, tHouseMemCols, tHouseholdsName, tHouseholdsCols,
-} from 'serverSrc/database/models/tables'
-
-dotenv.config()
-const UPLOAD_DIR = process.env.UPLOAD_PATH ?? 'uploads'
+  tUsersName, tUsersCols, tHouseMemName, tHouseMemCols, tHouseholdsName, tHouseholdsCols, TUsersType,
+} from 'serverSrc/database/tables'
 
 const getFiles = (dir: string): string[] => {
   const dirents = readdirSync(dir, { withFileTypes: true })
@@ -26,24 +23,27 @@ const cleanDirectory = (dirPath: string, files: string[]) =>
     // eslint-disable-next-line no-console
     .forEach(unusedFile => unlink(unusedFile, () => console.log(`unlinked ${unusedFile}`)))
 
+type UserPhotoType = Pick<TUsersType, typeof tUsersCols.photo>
+
 const cleanUploads = async () => {
-  const userResults = await database.query(`
+  const userResults = await database.query<UserPhotoType>(`
     SELECT ${tUsersCols.photo} FROM ${tUsersName} WHERE ${tUsersCols.photo} IS NOT NULL
-  `, [], false)
+  `, [], null, false)
 
-  const membershipResults = await database.query(`
+  const membershipResults = await database.query<UserPhotoType>(`
     SELECT ${tHouseMemCols.photo} FROM ${tHouseMemName} WHERE ${tHouseMemCols.photo} IS NOT NULL
-  `, [], false)
+  `, [], null, false)
 
-  const householdResults = await database.query(`
+  const householdResults = await database.query<UserPhotoType>(`
     SELECT ${tHouseholdsCols.photo} FROM ${tHouseholdsName} WHERE ${tHouseholdsCols.photo} IS NOT NULL
-  `, [], false)
+  `, [], null, false)
 
   const photosByKeys: Record<string, string[]> = [...userResults, ...membershipResults, ...householdResults]
-    .reduce((acc, result) => {
-      const parts = result.photo.split('/')
+    .filter(result => result[tUsersCols.photo])
+    .reduce((acc: Record<string, string[]>, result) => {
+      const parts = result[tUsersCols.photo]!.split('/')
       const fsKey = parts[2]
-      const file = path.join(path.resolve('./'), UPLOAD_DIR, fsKey, parts[3], parts[4])
+      const file = path.join(path.resolve('./'), CONFIG.UPLOADS_PATH, fsKey, parts[3], parts[4])
       if (acc[fsKey]) {
         acc[fsKey].push(file)
       } else {
@@ -52,7 +52,7 @@ const cleanUploads = async () => {
       return acc
     }, {})
 
-  const uploadsDir = path.join(path.resolve('./'), UPLOAD_DIR)
+  const uploadsDir = path.join(path.resolve('./'), CONFIG.UPLOADS_PATH)
   const directories = readdirSync(uploadsDir, { withFileTypes: true })
   directories.forEach(directory => {
     if (directory.isDirectory()) {

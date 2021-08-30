@@ -8,7 +8,7 @@ export const useTableLogic = (rows, sortConfig, filterKey, defaultSorter = 1) =>
 
   const processedRows = useMemo(() => {
     const newRows = filterKey && query !== ''
-      ? rows.filter(row => new RegExp(query, 'i').test(row[filterKey]))
+      ? rows.filter(row => new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(row[filterKey]))
       : [...rows]
 
     if (sortConfig.length) {

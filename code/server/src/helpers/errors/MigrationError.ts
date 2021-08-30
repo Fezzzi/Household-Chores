@@ -1,7 +1,7 @@
 import ErrorWithLogging from './ErrorWithLogging'
 import { ErrorLogger } from '../logger'
 
-export default class TestError extends ErrorWithLogging {
+export default class MigrationError extends ErrorWithLogging {
   constructor(message: string) {
     super(message)
     this.name = 'MigrationError'

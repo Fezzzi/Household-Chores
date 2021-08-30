@@ -1,5 +1,5 @@
 import { API } from 'shared/constants'
-import { clientApi } from 'clientSrc/client-api'
+import { apiClient } from 'clientSrc/apiClient'
 
 export const loadState = () =>
-  clientApi.get(`${API.LOAD_PREFIX}/${API.LOAD_STATE}`)
+  apiClient.get(`${API.LOAD_PREFIX}/${API.LOAD_STATE}`)

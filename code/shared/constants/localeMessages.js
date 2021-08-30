@@ -8,8 +8,9 @@ export const ACTIVITY = {
   HOUSEHOLD_INVITATION: 'activity.householdInvitation',
   HOUSEHOLD_JOIN: 'activity.householdJoin',
   HOUSEHOLD_LEAVE: 'activity.householdLeave',
-  HOUSEHOLD_REMOVE: 'activity.householdRemove',
-  HOUSEHOLD_REMOVE_YOU: 'activity.householdRemoveYou',
+  HOUSEHOLD_REMOVAL: 'activity.householdRemoval',
+  HOUSEHOLD_REMOVAL_MULTIPLE: 'activity.householdRemovalMultiple',
+  HOUSEHOLD_EXPELLING: 'activity.householdExpelling',
   HOUSEHOLD_DELETE: 'activity.householdDelete',
 }
 
@@ -132,7 +133,6 @@ export const FORM = {
   SET_ALIAS: 'form.setAlias',
 
   EMAIL_NOTIFICATIONS: 'form.emailNotifications',
-  BROWSER_NOTIFICATIONS: 'form.browserNotifications',
   MOBILE_NOTIFICATIONS: 'form.mobileNotifications',
   CONNECTION_APPROVAL: 'form.connectionApproval',
   CONNECTION_REQUEST: 'form.connectionRequest',
@@ -213,5 +213,6 @@ export const SUCCESS = {
   RESET_LINK: 'success.resetLink',
   SETTINGS_UPDATED: 'success.settingsUpdated',
   ACCOUNT_CREATED: 'success.accountCreated',
+  ACCOUNT_PAIRED: 'success.accountPaired',
   CONNECTION_REQUEST_SENT: 'success.connectionRequestSent',
 }

@@ -1,3 +1,5 @@
+export const API_PREFIX = 'api'
+
 export const LOAD_PREFIX = 'load'
 export const LOAD_STATE = 'state'
 
@@ -21,6 +23,8 @@ export const CONNECTION_BLOCK = 'block'
 export const CONNECTION_UNBLOCK = 'unblock'
 
 export const SETTINGS_PREFIX = 'settings'
+export const UPDATE_PROFILE = 'profile'
+export const UPDATE_LOCALE = 'locale'
 
 export const HOUSEHOLDS_PREFIX = 'households'
 export const HOUSEHOLD_CREATE = 'create'

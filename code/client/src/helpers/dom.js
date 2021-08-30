@@ -2,14 +2,28 @@ import { useState, useMemo, useEffect } from 'react'
 
 import { DEVICES, MOBILE_WIDTH, TABLET_WIDTH } from 'clientSrc/constants'
 
-export const useScrollOffset = (scrollRoot = 'pageWrapper') => {
-  const element = useMemo(() => document.getElementById(scrollRoot), [])
-  const style = useMemo(() => getComputedStyle(element), [element])
+export const useScrollOffset = (scrollRootId = 'scrollRoot') => {
+  const element = useMemo(() => document.getElementById(scrollRootId), [])
+  const [paddingTop, paddingLeft] = useMemo(() => {
+    if (!element) {
+      return [0, 0]
+    }
+    const style = getComputedStyle(element)
+    return [Number.parseFloat(style['padding-top']), Number.parseFloat(style['padding-left'])]
+  }, [element])
+
   const [scrolls, setScrolls] = useState(() => {
+    if (!element) {
+      return {
+        scrollTop: 0,
+        scrollLeft: 0,
+      }
+    }
+
     const { scrollTop, scrollLeft } = element
     return {
-      scrollTop: scrollTop - element.offsetTop - Number.parseFloat(style['padding-top']),
-      scrollLeft: scrollLeft - element.offsetLeft - Number.parseFloat(style['padding-left']),
+      scrollTop: scrollTop - element.offsetTop - paddingTop,
+      scrollLeft: scrollLeft - element.offsetLeft - paddingLeft,
     }
   })
 
@@ -17,14 +31,18 @@ export const useScrollOffset = (scrollRoot = 'pageWrapper') => {
     const handleScroll = () => {
       const { scrollTop, scrollLeft } = element
       setScrolls({
-        scrollTop: scrollTop - element.offsetTop - Number.parseFloat(style['padding-top']),
-        scrollLeft: scrollLeft - element.offsetLeft - Number.parseFloat(style['padding-left']),
+        scrollTop: scrollTop - element.offsetTop - paddingTop,
+        scrollLeft: scrollLeft - element.offsetLeft - paddingLeft,
       })
+    }
+
+    if (!element) {
+      return () => {}
     }
 
     element.addEventListener('scroll', handleScroll)
     return () => element.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [element, paddingTop, paddingLeft])
 
   return scrolls
 }

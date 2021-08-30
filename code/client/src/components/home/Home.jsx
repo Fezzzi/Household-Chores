@@ -8,6 +8,7 @@ import { HOME } from 'shared/constants/localeMessages'
 import HouseholdSwitch from './HouseholdSwitch'
 import HouseholdMemberList from './HouseholdMemberList'
 import HouseholdBody from './HouseholdBody'
+import { ActivityFeed } from './ActivityFeed'
 import { LocaleText } from '../common'
 
 const Home = () => {
@@ -18,18 +19,30 @@ const Home = () => {
 
   const { selectedHousehold, households } = useSelector(({ home }) => home)
   const currentHouseholdIndex = useMemo(() => {
-    if (selectedHousehold == null) {
-      return households[0]?.householdId ?? null
+    if (households.length) {
+      if (selectedHousehold == null) {
+        dispatch(HomeActions.changeSelectedHousehold(households[0].householdId))
+        return households[0].householdId
+      }
+
+      const householdIndex = households.findIndex(household => household.householdId === Number(selectedHousehold))
+      if (householdIndex === -1) {
+        dispatch(HomeActions.changeSelectedHousehold(households[0].householdId))
+        return households[0].householdId
+      }
+
+      return householdIndex
     }
 
-    const householdIndex = households.findIndex(household => household.householdId === Number(selectedHousehold))
-    return householdIndex >= 0
-      ? householdIndex
-      : null
-  }, [selectedHousehold, households])
+    if (selectedHousehold !== null) {
+      dispatch(HomeActions.changeSelectedHousehold(null))
+    }
+    return null
+  }, [selectedHousehold, households, dispatch])
 
   return (
     <HomeWrapper>
+      <ActivityFeed />
       {currentHouseholdIndex !== null
         ? (
           <>

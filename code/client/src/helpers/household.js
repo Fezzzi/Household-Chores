@@ -34,7 +34,7 @@ export const useMemberListProps = (
     const allowCancellation = checkCancellability(memberId) && handleCancellation
     const currentMemberRole = changedRole ?? memberRole
 
-    if (currentUser.id !== memberId) {
+    if (currentUser.userId !== memberId) {
       const allRoles = Object.values(HOUSEHOLD_ROLE_TYPE)
       const userRoleIndex = allRoles.indexOf(currentUser.role)
       const memberRoleIndex = allRoles.indexOf(memberRole)
@@ -97,7 +97,7 @@ export const useMemberListProps = (
     { key: 'roleString', icon: <Grade /> },
     { key: 'dateJoined', icon: <CalendarToday /> },
   ]
-  const filterKey = 'nickname'
+  const filterKey = 'name'
 
   return {
     rows,

@@ -1,6 +1,7 @@
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 const NodemonPlugin = require('nodemon-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 const svgToMiniDataURI = require('mini-svg-data-uri')
 
 const webpackAliases = require('./webpack-aliases.config')
@@ -59,6 +60,14 @@ module.exports = {
   plugins: [
     new NodemonPlugin({
       script: path.resolve(__dirname, '../code/server/dist/bundle.js'),
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: '../../static/icons/icon-150.png' },
+      ],
+      options: {
+        concurrency: 100,
+      },
     }),
   ],
 }

@@ -1,4 +1,7 @@
 import LOGS from './logs'
-import MAILS from './mails'
+import * as CONFIG from './config'
 
-export { LOGS, MAILS }
+export * from './emailTemplate'
+export * from './notificationKeys'
+
+export { LOGS, CONFIG }

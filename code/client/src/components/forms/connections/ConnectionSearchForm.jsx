@@ -24,8 +24,8 @@ const ConnectionSearchForm = ({ data }) => {
     dispatch(ConnectionActions.searchConnectionAction(query)),
   [dispatch])
 
-  const connectHandler = useCallback((userId, message) =>
-    dispatch(ConnectionActions.connectionRequest({ userId, message })),
+  const connectHandler = useCallback((targetId, message) =>
+    dispatch(ConnectionActions.connectionRequest({ targetId, message })),
   [dispatch])
 
   const handleClick = userId => () => dispatch(ModalActions.openModal({

@@ -142,6 +142,7 @@ HouseholdFormHeader.propTypes = {
   name: PropTypes.string.isRequired,
   photo: PropTypes.string.isRequired,
   currentUser: PropTypes.shape({
+    userId: PropTypes.number,
     photo: PropTypes.string,
     nickname: PropTypes.string,
     role: PropTypes.string,

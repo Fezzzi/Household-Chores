@@ -823,7 +823,7 @@
                   "inputs": {
                     "anyOf": [
                       { "$ref": "#/components/schemas/ProfileEditForm" },
-                      { "$ref": "#/components/schemas/NotificationsEditForm" },
+                      { "$ref": "#/components/schemas/Notifications" },
                       { "$ref": "#/components/schemas/DialogsEditForm" },
                       { "$ref": "#/components/schemas/HouseholdEditForm" }
                     ]
@@ -1164,13 +1164,6 @@
             "enum": ["ALL", "FRIENDS_OF_FRIENDS"]
           }
         }
-      },
-      "NotificationsEditForm": {
-        "anyOf": [
-          { "$ref": "#/components/schemas/GeneralNotifications" },
-          { "$ref": "#/components/schemas/ConnectionNotifications" },
-          { "$ref": "#/components/schemas/HouseholdNotifications" }
-        ]
       },
       "DialogsEditForm": {
         "type": "object",
@@ -1556,7 +1549,7 @@
           "data": {
             "oneOf": [
               { "$ref": "#/components/schemas/ProfileData" },
-              { "$ref": "#/components/schemas/NotificationData" },
+              { "$ref": "#/components/schemas/Notifications" },
               { "$ref": "#/components/schemas/HouseholdsData" },
               { "$ref": "#/components/schemas/Connections" },
               { "$ref": "#/components/schemas/MoreData" },
@@ -1603,6 +1596,9 @@
           "visibility": {
             "type": "string",
             "enum": ["ALL", "FRIENDS_OF_FRIENDS"]
+          },
+          "locale": {
+            "type": "string"
           }
         }
       },
@@ -1635,40 +1631,20 @@
           }
         }
       },
-      "GeneralNotifications": {
+      "Notifications": {
         "properties": {
           "emailNotifications": { "type": "boolean" },
           "browserNotifications": { "type": "boolean" },
-          "mobileNotifications": { "type": "boolean" }
-        }
-      },
-      "ConnectionNotifications": {
-        "properties": {
+          "mobileNotifications": { "type": "boolean" },
+
           "connectionApproval": { "type": "boolean" },
-          "connectionRequest": { "type": "boolean" }
-        }
-      },
-      "HouseholdNotifications": {
-        "properties": {
+          "connectionRequest": { "type": "boolean" },
+
           "householdDeleting": { "type": "boolean" },
           "householdExpelling": { "type": "boolean" },
           "householdInvitation": { "type": "boolean" },
           "householdJoining": { "type": "boolean" },
           "householdLeaving": { "type": "boolean" }
-        }
-      },
-      "NotificationData": {
-        "required": ["general", "connections", "households"],
-        "properties": {
-          "general": {
-            "$ref": "#/components/schemas/GeneralNotifications"
-          },
-          "connections": {
-            "$ref": "#/components/schemas/ConnectionNotifications"
-          },
-          "households": {
-            "$ref": "#/components/schemas/HouseholdNotifications"
-          }
         }
       },
       "HouseholdsData": {

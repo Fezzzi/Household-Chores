@@ -1,13 +1,15 @@
+import { Response } from 'express'
+
 import {
   HOUSEHOLD_ROLE_TYPE, INPUT_TYPE, INVITATION_MESSAGE_LENGTH, NOTIFICATION_TYPE, USER_VISIBILITY_TYPE,
 } from 'shared/constants'
 import { ERROR, INFO } from 'shared/constants/localeMessages'
-import { findApprovedConnections, findUser, getUserRole, isCorrectPassword } from 'serverSrc/database/models'
+import { getApprovedConnections, getUser, getUserRole, isCorrectPassword } from 'serverSrc/database'
 
 import { GeneralEditInputs, HouseholdEditInputs } from './types'
 import { validateField } from '../validate'
 
-export const validateProfileData = async (inputs: GeneralEditInputs, req: any, res: any): Promise<boolean> => {
+export const validateProfileData = async (userId: number, inputs: GeneralEditInputs, res: Response): Promise<boolean> => {
   const { nickname, email, oldPassword, newPassword, photo, visibility } = inputs
 
   const update = nickname !== undefined
@@ -35,12 +37,12 @@ export const validateProfileData = async (inputs: GeneralEditInputs, req: any, r
     return false
   }
 
-  if (email !== undefined && await findUser(email) !== null) {
+  if (email !== undefined && await getUser(email) !== null) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.EMAIL_USED] })
     return false
   }
 
-  if (oldPassword && !await isCorrectPassword(oldPassword, req.session.user)) {
+  if (oldPassword && !await isCorrectPassword(oldPassword, userId)) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INCORRECT_PASS] })
     return false
   }
@@ -52,8 +54,7 @@ export const validateEditHouseholdData = async (
   inputs: HouseholdEditInputs,
   members: Array<{ userId: number; role: string }> | null,
   userId: number,
-  req: any,
-  res: any
+  res: Response
 ): Promise<boolean> => {
   const {
     householdId,
@@ -109,8 +110,8 @@ export const validateEditHouseholdData = async (
     return false
   }
 
-  if (newInvitations?.length > 0) {
-    const connections = await findApprovedConnections(userId)
+  if (newInvitations?.length) {
+    const connections = await getApprovedConnections(userId)
     const connectionIds = connections.map(({ userId }) => userId)
     const valid = newInvitations.every(({ userId }) => connectionIds.indexOf(userId) !== -1)
     if (!valid) {
@@ -124,7 +125,7 @@ export const validateEditHouseholdData = async (
     }
   }
 
-  if (userRole || changedRoles?.length > 0 || removedMembers?.length > 0) {
+  if (userRole || changedRoles?.length || removedMembers?.length) {
     const admins = members?.filter(({ userId, role }) =>
       !removedMembers?.includes(userId)
       && role === HOUSEHOLD_ROLE_TYPE.ADMIN

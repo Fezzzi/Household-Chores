@@ -17,8 +17,8 @@ import { LocaleText, Table } from '../../common'
 const ConnectionBlocksForm = ({ data }) => {
   const dispatch = useDispatch()
 
-  const unblockHandler = useCallback(userId =>
-    dispatch(ConnectionActions.connectionAction({ effect: connectionUnblock, userId })),
+  const unblockHandler = useCallback(targetId =>
+    dispatch(ConnectionActions.connectionAction({ effect: connectionUnblock, data: targetId })),
   [dispatch])
 
   return (
@@ -30,48 +30,51 @@ const ConnectionBlocksForm = ({ data }) => {
         />
       </SectionHeadline>
       {data?.length
-        ? <Table
-          rows={data.map(({
-            userId,
-            photo,
-            message,
-            mutualConnections,
-            dateCreated,
-          }) => ({
-            photo: <TableBigPhoto src={photo} />,
-            mutualConnections: <>({mutualConnections} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
-            message: message && (
-              <AppendMessageAnchor>
-                <InfoTooltip
-                  icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
-                  text={message}
-                  customHeight={24}
-                  customOffsetY={-5}
-                />
-              </AppendMessageAnchor>
-            ),
-            dateCreated: getTimeString(dateCreated),
-            unblockBtn: getButtonForUser(FORM.UNBLOCK, userId, unblockHandler),
-          }))}
-          keys={[
-            { name: 'photo' },
-            { name: 'nickname', bold: true },
-            { name: 'mutualConnections', fading: true, growing: true },
-            { name: 'message' },
-            { name: 'dateCreated', fading: true },
-            { name: 'unblockBtn' },
-          ]}
-          sortConfig={[
-            { key: 'nickname', icon: <SortByAlpha /> },
-            { key: 'dateCreated', icon: <CalendarToday /> },
-            { key: 'mutualConnections', icon: <Group /> },
-          ]}
-          defaultSorter={-2}
-          filterKey="nickname"
-          bigCells
-          freeHeight
-        />
-        : (
+        ? (
+          <Table
+            rows={data.map(({
+              userId,
+              photo,
+              message,
+              mutualConnections,
+              dateCreated,
+              ...user
+            }) => ({
+              ...user,
+              photo: <TableBigPhoto src={photo} />,
+              mutualConnections: <>({mutualConnections ?? 0} <LocaleText message={FORM.MUTUAL_FRIENDS} />)</>,
+              message: message && (
+                <AppendMessageAnchor>
+                  <InfoTooltip
+                    icon={<AppendMessageIcon><Message /></AppendMessageIcon>}
+                    text={message}
+                    customHeight={24}
+                    customOffsetY={-5}
+                  />
+                </AppendMessageAnchor>
+              ),
+              dateCreated: getTimeString(dateCreated),
+              unblockBtn: getButtonForUser(FORM.UNBLOCK, userId, unblockHandler),
+            }))}
+            keys={[
+              { name: 'photo' },
+              { name: 'nickname', bold: true },
+              { name: 'mutualConnections', fading: true, growing: true },
+              { name: 'message' },
+              { name: 'dateCreated', fading: true },
+              { name: 'unblockBtn' },
+            ]}
+            sortConfig={[
+              { key: 'nickname', icon: <SortByAlpha /> },
+              { key: 'dateCreated', icon: <CalendarToday /> },
+              { key: 'mutualConnections', icon: <Group /> },
+            ]}
+            defaultSorter={-2}
+            filterKey="nickname"
+            bigCells
+            freeHeight
+          />
+        ) : (
           <FormBody>
             <LocaleText message={FORM.NO_BLOCKED_CONNECTIONS} />
           </FormBody>

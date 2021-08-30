@@ -1,32 +1,37 @@
+import { Response } from 'express'
 import crypto from 'crypto'
 import { writeFileSync, mkdirSync, existsSync } from 'fs'
 import path from 'path'
-import dotenv from 'dotenv'
 
 import { RequestImage } from 'serverSrc/actions/types'
-
-dotenv.config()
+import { CONFIG } from 'serverSrc/constants'
+import { NOTIFICATION_TYPE } from 'shared/constants'
+import { ERROR } from 'shared/constants/localeMessages'
+import FileUploadingError from 'serverSrc/helpers/errors/FileUploadingError'
 
 export const PROFILE_DIR = 'profile'
 export const HOUSEHOLD_DIR = 'household'
-const UPLOAD_DIR = process.env.UPLOAD_PATH ?? 'uploads'
 
+/**
+ * Helper function that takes uploaded RequestImage and stores it under user's file system key directory on disk.
+ */
 export const uploadFiles = (
-  files: RequestImage[],
+  files: Array<RequestImage | undefined>,
   directory: string,
-  userFsKey: string
-): Array<string | null> => {
-  const uploadedFiles: Array<string | null> = []
+  userFsKey: string,
+  res: Response,
+): Array<string | undefined> => {
+  const uploadedFiles: Array<string | undefined> = []
 
   files.forEach(file => {
-    if (isImageUrl(file)) {
+    if (file === undefined || isImageUrl(file)) {
       uploadedFiles.push(file)
       return
     }
 
     const fileHash = file.data.split(';base64,').pop()
 
-    const filePath = path.join(path.resolve('./'), UPLOAD_DIR, userFsKey, directory)
+    const filePath = path.join(path.resolve('./'), CONFIG.UPLOADS_PATH, userFsKey, directory)
     mkdirSync(filePath, { recursive: true })
 
     const fileExtension = file.type.substring(file.type.indexOf('/') + 1)
@@ -38,10 +43,11 @@ export const uploadFiles = (
     }
 
     if (attempts === 0) {
-      uploadedFiles.push(null)
+      res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.UPLOADING_ERROR] })
+      throw new FileUploadingError(`Uploading file ${fileName} failed`)
     } else {
       writeFileSync(path.join(filePath, fileName), fileHash, { encoding: 'base64' })
-      uploadedFiles.push(`/${UPLOAD_DIR}/${userFsKey}/${directory}/${fileName}`)
+      uploadedFiles.push(`/${CONFIG.UPLOADS_PATH}/${userFsKey}/${directory}/${fileName}`)
     }
   })
   return uploadedFiles
@@ -52,7 +58,7 @@ export const isImageUrl = (image: RequestImage): image is string =>
 
 export const isLocalImage = (image: RequestImage, userFsKey: string): boolean =>
   isImageUrl(image)
-  && image.startsWith(`/${UPLOAD_DIR}/${userFsKey}/`)
+  && image.startsWith(`/${CONFIG.UPLOADS_PATH}/${userFsKey}/`)
   && image.length < 140
 
 export const isExternalImage = (image: RequestImage): boolean =>

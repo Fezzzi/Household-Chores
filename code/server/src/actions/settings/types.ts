@@ -1,3 +1,6 @@
+import { HOUSEHOLD_ROLE_TYPE, USER_VISIBILITY_TYPE } from 'shared/constants'
+import { NotifySettingsUnforcedApiType, UserDialogsUnforcedApiType } from 'serverSrc/database/mappers'
+
 import { RequestImage, RequestRawImage } from '../types'
 
 export interface HouseholdNewInvitation {
@@ -12,15 +15,15 @@ export interface HouseholdChangedRole {
 
 export interface HouseholdEditInputs {
   householdId: number
-  name: string
-  photo: RequestRawImage
-  userNickname: string
-  userPhoto: RequestRawImage
-  userRole: string
-  newInvitations: HouseholdNewInvitation[]
-  changedRoles: HouseholdChangedRole[]
-  removedMembers: number[]
-  removedInvitations: number[]
+  name?: string
+  photo?: RequestRawImage
+  userNickname?: string
+  userPhoto?: RequestRawImage
+  userRole?: typeof HOUSEHOLD_ROLE_TYPE.MEMBER | typeof HOUSEHOLD_ROLE_TYPE.MANAGER | typeof HOUSEHOLD_ROLE_TYPE.ADMIN
+  newInvitations?: HouseholdNewInvitation[]
+  changedRoles?: HouseholdChangedRole[]
+  removedMembers?: number[]
+  removedInvitations?: number[]
 }
 
 export interface GeneralEditInputs {
@@ -29,9 +32,8 @@ export interface GeneralEditInputs {
   oldPassword?: string
   newPassword?: string
   photo?: RequestImage
-  visibility?: string
+  visibility?: typeof USER_VISIBILITY_TYPE.FOF | typeof USER_VISIBILITY_TYPE.ALL
 }
 
-export type DialogEditInputs = Record<string, boolean>
-export type NotificationEditInputs = Record<string, boolean>
-export type SettingsUpdateRequestInputs = HouseholdEditInputs | GeneralEditInputs | DialogEditInputs | NotificationEditInputs
+export type SettingsUpdateRequestInputs = HouseholdEditInputs | GeneralEditInputs
+  | UserDialogsUnforcedApiType | NotifySettingsUnforcedApiType
