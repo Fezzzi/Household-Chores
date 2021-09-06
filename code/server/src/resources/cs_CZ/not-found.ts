@@ -1,4 +1,3 @@
-// @ts-ignore
 import errorIcon from '~/static/resources/icons/error-icon.svg'
 
 export default {

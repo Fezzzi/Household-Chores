@@ -1,6 +1,5 @@
 node_modules
-migrations
-dist
+build
+build-api
 docs
-code/server/src/resources
 config/migration-template.ts

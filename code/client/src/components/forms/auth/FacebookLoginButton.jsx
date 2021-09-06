@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { PropTypes } from 'prop-types'
 
 import { AUTH } from 'shared/constants/localeMessages'
+import { CONFIG } from 'clientSrc/constants'
 import { AuthActions } from 'clientSrc/actions'
 import { FacebookIconSpan, FormButtonContentWrapper } from 'clientSrc/styles/blocks/form'
 
@@ -15,7 +16,7 @@ const FacebookLoginButton = ({ onError }) => {
   const logInFacebook = useCallback(data => dispatch(AuthActions.logInFacebook(data)), [dispatch])
 
   return (
-    <FacebookProvider appId="694001678055824" language={locale}>
+    <FacebookProvider appId={CONFIG.FB_APP_ID} language={locale}>
       <Login
         scope="email"
         onResponse={data => logInFacebook(data)}

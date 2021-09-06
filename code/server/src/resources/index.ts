@@ -21,5 +21,5 @@ export const resources: Record<string, Record<string, Resource>> = {
   [LOCALE_CODES.EN]: {
     [API.RESOURCE_NOT_FOUND]: notFoundEn,
     [API.RESOURCE_TAC]: tacEn,
-  }
+  },
 }

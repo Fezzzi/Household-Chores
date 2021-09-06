@@ -8,6 +8,28 @@ const linksToUrls = {
   [LINKS.NEW_HOUSEHOLD]: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=${HOUSEHOLD_TABS.NEW_HOUSEHOLD}`,
 }
 
+const convertBoldToReact = text => {
+  const [firstPart, ...rest] = text.split('<b>')
+  const otherParts = rest.map(part => {
+    const [boldPart, nextPart] = part.split('<\b>')
+    const [followingText] = nextPart.split('<b>')
+
+    return (
+      <>
+        <b>{boldPart}</b>
+        {followingText}
+      </>
+    )
+  })
+
+  return (
+    <>
+      {firstPart}
+      {otherParts}
+    </>
+  )
+}
+
 export const linkify = (text, history) => {
   const linkMatches = text?.match(/@\[[a-zA-Z0-9_-]*][^@]*@/g)
   if (!linkMatches) {
@@ -36,10 +58,10 @@ export const linkify = (text, history) => {
     <>
       {newText.split('@[]@').map((textPart, index) => (
         <Fragment key={`textpart-${index}`}>
-          {textPart}
+          {convertBoldToReact(textPart)}
           {potentialLinks[index] && (
             <MessageLink onClick={() => history.push(potentialLinks[index].link)}>
-              {potentialLinks[index].text}
+              {convertBoldToReact(potentialLinks[index].text)}
             </MessageLink>
           )}
         </Fragment>

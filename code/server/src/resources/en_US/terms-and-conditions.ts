@@ -1,5 +1,4 @@
-// @ts-ignore
-import banner from '~/static/resources/banners/test.jpg';
+import banner from '~/static/resources/banners/test.jpg'
 
 export default {
   headline: 'Terms & Conditions',
@@ -85,4 +84,4 @@ export default {
 <p>As long as the website and the information and services on the website are provided free of charge, we will not be liable for any loss or damage of any nature.</p>
 </div>
   `,
-};
+}

@@ -29,8 +29,8 @@ const stateLoaded = (state, { payload: { debug, isUserLogged, user, activityFeed
   debug,
   loaded: true,
   isUserLogged,
-  user,
-  activityFeed,
+  user: user ?? {},
+  activityFeed: activityFeed ?? [],
 })
 
 const rootReducer = createReducer(initialState, {

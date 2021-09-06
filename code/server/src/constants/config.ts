@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-export const API_PORT = process.env.API_PORT ? Number(process.env.API_PORT) : 9000
+export const API_PORT = process.env.API_PORT ? Number(process.env.API_PORT) : 8080
 export const DEBUG = Boolean(process.env.DEBUG)
 export const LOGS_PATH = process.env.LOGS_PATH ?? 'logs'
 export const UPLOADS_PATH = process.env.UPLOADS_PATH ?? 'uploads'
@@ -10,7 +10,7 @@ export const UPLOADS_PATH = process.env.UPLOADS_PATH ?? 'uploads'
 export const DATABASE_URL = process.env.DATABASE_URL ?? ''
 export const SESSION_SECRET = process.env.SESSION_SECRET ?? 'test'
 
-export const GOOGLE_CLIENT_ID = process.env.GCID ?? ''
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID ?? ''
 export const FACEBOOK_SECRET = process.env.FB_SECRET ?? ''
 
 export const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY ?? null

@@ -102,7 +102,7 @@ module.exports = {
         group: 'internal',
         position: 'before',
       }],
-      'newlines-between': 'always',
+      'newlines-between': 'always-and-inside-groups',
     }],
     'import/default': 2,
     'import/no-cycle': 2,
@@ -166,6 +166,11 @@ module.exports = {
     }, {
       files: ['*.js', '*.jsx'],
       parser: 'babel-eslint',
+    }, {
+      files: ['./code/server/src/resources/**/*.ts'],
+      rules: {
+        'max-len': 0,
+      },
     },
   ],
 }

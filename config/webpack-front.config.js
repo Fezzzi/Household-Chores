@@ -15,7 +15,7 @@ module.exports = {
   output: {
     filename: 'main.[contenthash].js',
     chunkFilename: '[name].[contenthash].js',
-    path: path.resolve(__dirname, '../dist'),
+    path: path.resolve(__dirname, '../build'),
     publicPath: '/',
   },
   optimization: {
@@ -93,8 +93,9 @@ module.exports = {
       },
     }),
     new webpack.DefinePlugin({
-      'process.env.API_PORT': process.env.API_PORT ?? 9000,
-      'process.env.GCID': (process.env.GCID && JSON.stringify(process.env.GCID)) || 'test1234',
+      'process.env.API_PORT': process.env.API_PORT,
+      'process.env.GOOGLE_CLIENT_ID': process.env.GOOGLE_CLIENT_ID ? JSON.stringify(process.env.GOOGLE_CLIENT_ID) : null,
+      'process.env.FB_APP_ID': process.env.FB_APP_ID ? JSON.stringify(process.env.FB_APP_ID) : null,
     }),
   ],
 }

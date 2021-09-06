@@ -16,7 +16,7 @@ module.exports = {
   ...webpackAliases,
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, '../code/server/dist'),
+    path: path.resolve(__dirname, '../build-api'),
   },
   entry: {
     app: ['babel-polyfill', 'serverSrc/index.ts'],
@@ -59,7 +59,7 @@ module.exports = {
   },
   plugins: [
     new NodemonPlugin({
-      script: path.resolve(__dirname, '../code/server/dist/bundle.js'),
+      script: path.resolve(__dirname, '../build-api/bundle.js'),
     }),
     new CopyPlugin({
       patterns: [

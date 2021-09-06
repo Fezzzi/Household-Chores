@@ -8,7 +8,7 @@ import {
   tHouseMemCols,
   tHouseMemName,
   tUsersCols,
-  tUsersName
+  tUsersName,
 } from 'serverSrc/database/tables'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
 

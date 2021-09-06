@@ -1,9 +1,10 @@
 import axios from 'axios'
 
 import { API } from 'shared/constants'
+import { CONFIG } from 'clientSrc/constants'
 
-const port = (process.env && process.env.API_PORT) ? `:${process.env.API_PORT}` : ''
-const host = !process.env.MOCHA_TEST && `${window.location.protocol}//${window.location.hostname}${port}`
+const port = CONFIG.API_PORT ? `:${CONFIG.API_PORT}` : ''
+const host = !CONFIG.MOCHA_TEST && `${window.location.protocol}//${window.location.hostname}${port}`
 
 export const config = {
   baseURL: `${host}/${API.API_PREFIX}`,

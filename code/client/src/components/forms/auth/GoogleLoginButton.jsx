@@ -15,7 +15,7 @@ const GoogleLoginButton = ({ onError }) => {
 
   return (
     <GoogleLogin
-      clientId={process.env.GCID}
+      clientId={process.env.GOOGLE_CLIENT_ID}
       render={({ onClick, disabled }) => (
         <PrimaryButton
           onClick={onClick}

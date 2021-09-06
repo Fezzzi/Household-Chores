@@ -16,4 +16,5 @@ node_modules/
 .env.test
 
 # Output
-dist
+build
+build-api

@@ -9,20 +9,21 @@ import { linkify } from 'clientSrc/helpers/linkifyText'
 const LocaleText = ({ message, messageTexts, modifierFunc, transformations, highlightInterpolated, clickHandler }) => {
   const history = useHistory()
   const applicationTexts = useSelector(({ locale: { applicationTexts } }) => applicationTexts)
+  let text
 
-  const htmlText = modifierFunc(transformations
-    ? linkify(interpolate(applicationTexts, message, messageTexts, highlightInterpolated), history)
-    : applicationTexts[message])
-
-  if (htmlText === undefined) {
-    return (
-      <span onClick={clickHandler}>
-        {message}
-      </span>
-    )
+  if (transformations) {
+    const interpolatedText = interpolate(applicationTexts, message, messageTexts, highlightInterpolated)
+    const linkifiedText = linkify(interpolatedText, history)
+    text = modifierFunc(linkifiedText)
+  } else {
+    text = modifierFunc(applicationTexts[message])
   }
 
-  return <span onClick={clickHandler} dangerouslySetInnerHTML={{ __html: htmlText }} />
+  return (
+    <span onClick={clickHandler}>
+      {text ?? message}
+    </span>
+  )
 }
 
 LocaleText.defaultProps = {

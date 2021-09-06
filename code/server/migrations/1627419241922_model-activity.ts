@@ -6,7 +6,7 @@ import {
   tNotifySettingsCols,
   tNotifySettingsName,
   tUsersCols,
-  tUsersName
+  tUsersName,
 } from 'serverSrc/database/tables'
 
 exports.up = (pgm: MigrationBuilder) => {

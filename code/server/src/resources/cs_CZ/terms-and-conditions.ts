@@ -1,4 +1,3 @@
-// @ts-ignore
 import banner from '~/static/resources/banners/test.jpg'
 
 export default {
