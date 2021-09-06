@@ -1,1 +1,1 @@
-web: ./config/heroku/start-api.sh
+web: bash ./config/heroku/start-api.sh

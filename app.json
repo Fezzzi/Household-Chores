@@ -21,8 +21,7 @@
     "heroku-postgresql:standard-0"
   ],
   "scripts": {
-    "start": "./config/heroku/start-api.sh",
-    "build": "./config/heroku/build.sh"
+    "heroku-postbuild": "npm run migrate --no-reject-unauthorized up"
   },
   "environments": {
     "review": {
