@@ -3,12 +3,12 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export const API_PORT = process.env.API_PORT ? Number(process.env.API_PORT) : 8080
-export const DEBUG = Boolean(process.env.DEBUG)
+export const DEBUG = process.env.DEBUG === 'true'
+
 export const LOGS_PATH = process.env.LOGS_PATH ?? 'logs'
 export const UPLOADS_PATH = process.env.UPLOADS_PATH ?? 'uploads'
 
-const defaultSsl = process.env.HEROKU_APP_NAME != null ? 'true' : 'false'
-export const DATABASE_SSL = (process.env.DATABASE_SSL ?? defaultSsl) === 'true'
+export const DATABASE_SSL = process.env.DATABASE_SSL === 'true'
 export const DATABASE_URL = process.env.DATABASE_URL ?? ''
 export const SESSION_SECRET = process.env.SESSION_SECRET ?? 'test'
 
