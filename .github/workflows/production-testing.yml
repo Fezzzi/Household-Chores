@@ -1,10 +1,8 @@
-name: Testing Pipeline
+name: Production Testing Pipeline
 
 on:
   push:
-    branches: [ development, master ]
-  pull_request:
-    branches: [ development, master ]
+    branches: [ master ]
 
 jobs:
   build:
