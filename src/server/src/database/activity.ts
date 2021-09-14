@@ -23,7 +23,7 @@ export const markActivityForUser = (activityIds: number[]) =>
 
 // There is no real need to escape message and link as they are constructed on BE but one can never be careful too much
 export const addActivityForUsers = (
-  userIds: Array<number>,
+  userIds: number[],
   message: string,
   messageTexts: string[],
   messagePhotos: string[],

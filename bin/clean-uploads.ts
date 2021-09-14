@@ -19,7 +19,7 @@ const getFiles = (dir: string): string[] => {
 
 const cleanDirectory = (dirPath: string, files: string[]) =>
   getFiles(dirPath)
-    .filter(storedFile => files.indexOf(storedFile) === -1)
+    .filter(storedFile => !files.includes(storedFile))
     // eslint-disable-next-line no-console
     .forEach(unusedFile => unlink(unusedFile, () => console.log(`unlinked ${unusedFile}`)))
 

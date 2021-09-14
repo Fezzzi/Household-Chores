@@ -37,7 +37,7 @@ export const getApprovedConnections = async (userId: number) => {
 }
 
 // todo: Replace with { [key in ...]: ConnectionApiType[] } once all is in typeScript
-type GroupedConnectionsType = {
+interface GroupedConnectionsType {
   [CONNECTION_STATE_TYPE.APPROVED]: ConnectionApiType[]
   [CONNECTION_STATE_TYPE.BLOCKED]: ConnectionApiType[]
   [CONNECTION_STATE_TYPE.WAITING]: ConnectionApiType[]
@@ -70,7 +70,7 @@ export const getConnections = (userId: number): Promise<GroupedConnectionsType> 
 
     return [...approvedFromConnections, ...otherConnections]
       .map(mapToConnectionApiType)
-      .reduce((acc, connection) => {
+      .reduce<GroupedConnectionsType>((acc, connection) => {
         if (acc[connection[tConnectionsCols.state]]) {
           acc[connection[tConnectionsCols.state]].push(connection)
         } else {
@@ -78,7 +78,11 @@ export const getConnections = (userId: number): Promise<GroupedConnectionsType> 
         }
 
         return acc
-      }, {} as GroupedConnectionsType)
+      }, {
+        [CONNECTION_STATE_TYPE.APPROVED]: [],
+        [CONNECTION_STATE_TYPE.BLOCKED]: [],
+        [CONNECTION_STATE_TYPE.WAITING]: [],
+      })
   })
 
 export const approveConnection = (currentId: number, userId: number) =>

@@ -99,12 +99,12 @@ export const validateEditHouseholdData = async (
   }
 
   const currentUserRoleIndex = currentUserRole && allRoles.indexOf(currentUserRole)
-  if ((photo && currentUserRole !== HOUSEHOLD_ROLE_TYPE.ADMIN)
-    || (name && currentUserRole !== HOUSEHOLD_ROLE_TYPE.ADMIN)
-    || (removedMembers && currentUserRole !== HOUSEHOLD_ROLE_TYPE.ADMIN)
-    || (removedInvitations && currentUserRole === HOUSEHOLD_ROLE_TYPE.MEMBER)
-    || (newInvitations && currentUserRole === HOUSEHOLD_ROLE_TYPE.MEMBER)
-    || (changedRoles && changedRoles.find(({ role }) => allRoles.indexOf(role) < currentUserRoleIndex))
+  if (Boolean(photo && currentUserRole !== HOUSEHOLD_ROLE_TYPE.ADMIN)
+    || Boolean(name && currentUserRole !== HOUSEHOLD_ROLE_TYPE.ADMIN)
+    || Boolean(removedMembers && currentUserRole !== HOUSEHOLD_ROLE_TYPE.ADMIN)
+    || Boolean(removedInvitations && currentUserRole === HOUSEHOLD_ROLE_TYPE.MEMBER)
+    || Boolean(newInvitations && currentUserRole === HOUSEHOLD_ROLE_TYPE.MEMBER)
+    || Boolean(changedRoles?.find(({ role }) => allRoles.indexOf(role) < currentUserRoleIndex))
   ) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.BAD_PERMISSIONS] })
     return false
@@ -113,7 +113,7 @@ export const validateEditHouseholdData = async (
   if (newInvitations?.length) {
     const connections = await getApprovedConnections(userId)
     const connectionIds = connections.map(({ userId }) => userId)
-    const valid = newInvitations.every(({ userId }) => connectionIds.indexOf(userId) !== -1)
+    const valid = newInvitations.every(({ userId }) => connectionIds.includes(userId))
     if (!valid) {
       res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
       return false
@@ -125,7 +125,7 @@ export const validateEditHouseholdData = async (
     }
   }
 
-  if (userRole || changedRoles?.length || removedMembers?.length) {
+  if (!!userRole || !!changedRoles?.length || !!removedMembers?.length) {
     const admins = members?.filter(({ userId, role }) =>
       !removedMembers?.includes(userId)
       && role === HOUSEHOLD_ROLE_TYPE.ADMIN

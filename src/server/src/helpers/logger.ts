@@ -1,4 +1,4 @@
-import { appendFile, existsSync, writeFileSync, mkdirSync } from 'fs'
+import { appendFile, existsSync, mkdirSync } from 'fs'
 import { sep as dirSeparator, join } from 'path'
 
 import { CONFIG, LOGS } from 'serverSrc/constants'
@@ -6,7 +6,7 @@ import { formatDate } from 'shared/helpers/date'
 
 const formatMessage = (message: string): string => `[${formatDate()}] ${message}`
 
-function ensurePathExists(filename: string) {
+function ensurePathExists (filename: string) {
   const filePathParts = filename.split(dirSeparator)
 
   if (filePathParts.length > 1) {

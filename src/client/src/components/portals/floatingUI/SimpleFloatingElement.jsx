@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, createElement } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
@@ -31,7 +31,7 @@ const SimpleFloatingElement = ({ message, sending, enabled, background, backgrou
         ? icon
           ? (
             <>
-              {icon && <FloatingElementIcon>{icon}</FloatingElementIcon>}
+              {icon && <FloatingElementIcon>{createElement(icon)}</FloatingElementIcon>}
               <FloatingElementText>
                 <LocaleText message={message} />
               </FloatingElementText>
@@ -41,7 +41,7 @@ const SimpleFloatingElement = ({ message, sending, enabled, background, backgrou
               <LocaleText message={message} />
             </FloatingElementText>
           )
-        : <FloatingElementIcon>{icon}</FloatingElementIcon>}
+        : <FloatingElementIcon>{createElement(icon)}</FloatingElementIcon>}
     </SimpleFloatingElementWrapper>
   ), floatingUIRoot)
 }
@@ -60,7 +60,7 @@ SimpleFloatingElement.propTypes = {
   backgroundHovered: PropTypes.string,
   enabled: PropTypes.bool,
   sending: PropTypes.bool,
-  icon: PropTypes.element,
+  icon: PropTypes.elementType,
   onClick: PropTypes.func,
 }
 

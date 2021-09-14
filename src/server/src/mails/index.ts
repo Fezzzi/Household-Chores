@@ -7,12 +7,12 @@ import * as activityEn from './en_US/activity'
 import * as resetPassCs from './cs_CZ/resetPassword'
 import * as activityCs from './cs_CZ/activity'
 
-export type EmailTemplateDataShapeType = {
+export interface EmailTemplateDataShapeType {
   [EMAIL_TEMPLATE.RESET_PASSWORD]: ResetPassDataShape
   [EMAIL_TEMPLATE.ACTIVITY]: ActivityDataShape
 }
 
-export type Email<T> = {
+export interface Email<T> {
   getSubject: (data?: T) => string
   getText: (data: T) => string
   getHTML: (data: T) => string

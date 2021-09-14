@@ -45,7 +45,7 @@ export default () => {
     const { userId, fsKey, locale } = req.session!
 
     if (action === API.HOUSEHOLD_CREATE) {
-      const { inputs, invitations }: CreateHouseholdRequest = body as any
+      const { inputs, invitations }: CreateHouseholdRequest = body
       await handleCreateHousehold(inputs, invitations, userId, fsKey, locale, res)
       return
     }
@@ -58,7 +58,7 @@ export default () => {
     const { userId, userNickname, fsKey, locale } = req.session!
 
     if (action === API.INVITATION_APPROVE) {
-      const invitationBody: ApproveInvitationRequest = body as any
+      const invitationBody: ApproveInvitationRequest = body
       await handleApproveHouseholdInvitation(invitationBody, userId, userNickname, fsKey, locale, res)
       return
     }
@@ -72,17 +72,17 @@ export default () => {
 
     switch (action) {
       case API.HOUSEHOLD_DELETE: {
-        const { householdId }: DeleteHouseholdRequest = query as any
+        const { householdId }: DeleteHouseholdRequest = query
         await handleDeleteHousehold(userId, householdId, locale, res)
         return
       }
       case API.HOUSEHOLD_LEAVE: {
-        const { householdId }: DeleteHouseholdRequest = query as any
+        const { householdId }: DeleteHouseholdRequest = query
         await handleLeaveHousehold(userId, householdId, locale, res)
         return
       }
       case API.INVITATION_IGNORE: {
-        const { fromId, householdId }: IgnoreInvitationRequest = query as any
+        const { fromId, householdId }: IgnoreInvitationRequest = query
         const success = await deleteInvitation(userId, fromId, householdId)
 
         if (success) {

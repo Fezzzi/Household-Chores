@@ -5,7 +5,7 @@ export type ApprovedConnectionDbType =
   Pick<TUsersType, typeof tUsersCols.user_id | typeof tUsersCols.nickname | typeof tUsersCols.photo>
   & Pick<TConnectionsType, typeof tConnectionsCols.date_created>
 
-export type ApprovedConnectionApiType = {
+export interface ApprovedConnectionApiType {
   userId: ApprovedConnectionDbType[typeof tUsersCols.user_id]
   nickname: ApprovedConnectionDbType[typeof tUsersCols.nickname]
   photo: ApprovedConnectionDbType[typeof tUsersCols.photo]
@@ -23,7 +23,7 @@ export type ConnectionDbType = Pick<FMutualConnectionsType, typeof fMutualConnec
   & Pick<TUsersType, typeof tUsersCols.user_id | typeof tUsersCols.nickname | typeof tUsersCols.photo>
   & Pick<TConnectionsType, typeof tConnectionsCols.message | typeof tConnectionsCols.state | typeof tConnectionsCols.date_created>
 
-export type ConnectionApiType = {
+export interface ConnectionApiType {
   mutualConnections: ConnectionDbType[typeof fMutualConnectionsOut.mutual_connections]
   userId: ConnectionDbType[typeof tUsersCols.user_id]
   nickname: ConnectionDbType[typeof tUsersCols.nickname]

@@ -47,7 +47,7 @@ export const getHouseholdsMembersMap = async (householdIds: number[], client: Po
 
   return members
     .map(mapToHouseholdsMembersApiType)
-    .reduce((acc, member) => {
+    .reduce<HouseholdsMembersMap>((acc, member) => {
       const { householdId, ...rest } = member
 
       if (!acc[householdId]) {
@@ -55,5 +55,5 @@ export const getHouseholdsMembersMap = async (householdIds: number[], client: Po
       }
       acc[householdId].push(rest)
       return acc
-    }, {} as HouseholdsMembersMap)
+    }, {})
 }

@@ -3,7 +3,7 @@ import { put, takeEvery, delay } from 'redux-saga/effects'
 import { ThemeActions } from 'clientSrc/actions'
 import { THEME_TYPE, THEME_KEY } from 'clientSrc/constants'
 
-function* handleThemeChange({ payload: theme }) {
+function* handleThemeChange ({ payload: theme }) {
   try {
     const newTheme = theme === THEME_TYPE.LIGHT_THEME
       ? THEME_TYPE.DARK_THEME
@@ -18,6 +18,6 @@ function* handleThemeChange({ payload: theme }) {
   }
 }
 
-export function* themeSaga() {
+export function* themeSaga () {
   yield takeEvery(ThemeActions.triggerThemeChange.toString(), handleThemeChange)
 }

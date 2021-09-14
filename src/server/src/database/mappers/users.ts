@@ -4,7 +4,7 @@ import { apifyObject, SnakeCaseObjectToCamelCase } from 'serverSrc/helpers/api'
 import { tConnectionsCols, TConnectionsType, tUsersCols, TUsersType } from '../tables'
 import { fMutualConnectionsOut, FMutualConnectionsType } from '../functions'
 
-export type UserEditDbType = {
+export interface UserEditDbType {
   [tUsersCols.nickname]?: GeneralEditInputs['nickname']
   [tUsersCols.email]?: GeneralEditInputs['email']
   [tUsersCols.password]?: string

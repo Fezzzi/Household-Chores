@@ -3,3 +3,4 @@ build
 build-api
 docs
 config/migration-template.ts
+config/mocha-env-config.js

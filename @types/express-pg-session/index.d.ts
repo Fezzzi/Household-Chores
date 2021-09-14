@@ -5,9 +5,7 @@ declare module 'express-pg-session' {
     conString?: string
   }
 
-  export interface PGSessionIface {
-    new(options?: PGSessionOptions): PGSession
-  }
+  export type PGSessionIface = new(options?: PGSessionOptions) => PGSession
 
   export class PGSession extends Store {
     constructor (options?: PGSessionOptions)

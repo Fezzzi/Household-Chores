@@ -87,7 +87,7 @@ export const handleDeleteHousehold = async (userId: number, householdId: number,
     const success = await deleteHousehold(householdId)
 
     if (success) {
-      const notifiedMembers = members!
+      const notifiedMembers = members
         .map(({ userId }) => userId)
         .filter(memberId => memberId !== userId)
 
@@ -96,8 +96,8 @@ export const handleDeleteHousehold = async (userId: number, householdId: number,
         locale,
         notifiedMembers,
         ACTIVITY.HOUSEHOLD_DELETE,
-        [user!.nickname, name],
-        [photo, user!.photo]
+        [user.nickname, name],
+        [photo, user.photo]
       )
       res.status(204).send()
     } else {
@@ -162,7 +162,7 @@ export const handleLeaveHousehold = async (userId: number, householdId: number, 
     ?.filter(({ role }) => role === HOUSEHOLD_ROLE_TYPE.ADMIN)
     ?.map(({ userId }) => userId)
 
-  if (!admins || (admins.length === 1 && admins.indexOf(userId) !== -1)) {
+  if (!admins || (admins.length === 1 && admins.includes(userId))) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ADMIN_REQUIRED] })
     return false
   }
@@ -171,10 +171,10 @@ export const handleLeaveHousehold = async (userId: number, householdId: number, 
   const success = user && await leaveHousehold(userId, householdId)
 
   if (success) {
-    const { nickname: userNickname, photo: userPhoto } = user!
+    const { nickname: userNickname, photo: userPhoto } = user
     const { name, photo } = await getHouseholdInfo(householdId)
 
-    const notifiedMembers = members!
+    const notifiedMembers = members
       .map(({ userId }) => userId)
       .filter(memberId => memberId !== userId)
 

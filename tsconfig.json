@@ -36,6 +36,7 @@
   "include": [
     "src/shared",
     "src/client",
+    "src/tests",
     "config",
     "bin"
   ]

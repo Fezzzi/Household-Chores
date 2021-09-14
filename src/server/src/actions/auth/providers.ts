@@ -53,7 +53,7 @@ interface ProviderIds {
 
 export const getProvidersUserId = async (googleToken: string, facebook: FacebookObject): Promise<ProviderIds> => ({
   googleId: (googleToken && await getGoogleUserId(googleToken)) ?? null,
-  facebookId: (facebook && facebook.signedRequest && getFacebookUserId(facebook)) ?? null,
+  facebookId: (facebook?.signedRequest && getFacebookUserId(facebook)) ?? null,
 })
 
 export const getUserByProviderId = async (
@@ -68,7 +68,7 @@ export const getUserByProviderId = async (
     return getGoogleUser(googleId!)
   }
 
-  if (facebook && facebook.signedRequest) {
+  if (facebook?.signedRequest) {
     return getFacebookUser(facebookId!)
   }
 

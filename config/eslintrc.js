@@ -100,6 +100,7 @@ module.exports = {
         '@typescript-eslint/indent': 0,
         '@typescript-eslint/ban-ts-ignore': 0,
         '@typescript-eslint/no-var-requires': 0,
+        '@typescript-eslint/naming-convention': 0,
         '@typescript-eslint/no-use-before-define': 0,
         '@typescript-eslint/strict-boolean-expressions': 0,
         '@typescript-eslint/explicit-function-return-type': 0,

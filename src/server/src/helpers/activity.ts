@@ -13,7 +13,7 @@ import { EMAIL_TEMPLATE } from 'serverSrc/constants'
 export const logActivity = async (
   notification: keyof NotifySettingsApiType,
   locale: string,
-  userIds: Array<number>,
+  userIds: number[],
   message: string,
   messageTexts: string[],
   messagePhotos: string[],

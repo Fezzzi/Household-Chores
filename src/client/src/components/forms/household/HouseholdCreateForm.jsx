@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import newHouseholdIcon from 'assets/logos/logo-150.png'
 
 import { SectionHeadline } from 'clientSrc/styles/blocks/settings'
-import { useInvitationListProps } from 'clientSrc/helpers/household'
+import { getInvitationListProps } from 'clientSrc/helpers/household'
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { HouseholdActions } from 'clientSrc/actions'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
@@ -34,7 +34,7 @@ const HouseholdCreateForm = ({ connections }) => {
     role: HOUSEHOLD_ROLE_TYPE.ADMIN,
   }), [userState])
 
-  const invitationTableProps = useMemo(() => useInvitationListProps(
+  const invitationTableProps = useMemo(() => getInvitationListProps(
     invitations.map(({ toId, toPhoto, toNickname, message }) => ({
       toId,
       toPhoto,
@@ -48,7 +48,7 @@ const HouseholdCreateForm = ({ connections }) => {
     toId => setInvitations(prevState => prevState.filter(invitation => invitation.toId !== toId))
   ), [connections, invitations])
 
-  const loadImageUrlWithCallback = (image, type, callback) => {
+  const loadImageUrlWithCallback = (image, type, callbackFunc) => {
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
     const img = new Image()
@@ -57,7 +57,8 @@ const HouseholdCreateForm = ({ connections }) => {
       canvas.width = img.width
       ctx.drawImage(img, 0, 0)
       const dataUrl = canvas.toDataURL(type)
-      callback({
+
+      callbackFunc({
         type,
         size: dataUrl.length,
         name: image,

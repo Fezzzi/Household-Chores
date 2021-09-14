@@ -8,23 +8,23 @@ import {
 import { HouseholdActions } from 'clientSrc/actions'
 import { API, HOUSEHOLD_TABS, SETTING_CATEGORIES } from 'shared/constants'
 
-function* approveInvitationSaga({ payload }) {
+function* approveInvitationSaga ({ payload }) {
   yield call(generalSaga, invitationApprove, payload, function* ({ url }) {
     yield put(push(url))
   })
 }
 
-function* ignoreInvitationSaga({ payload }) {
+function* ignoreInvitationSaga ({ payload }) {
   yield call(generalSaga, invitationIgnore, payload)
 }
 
-function* createHouseholdSaga({ payload }) {
+function* createHouseholdSaga ({ payload }) {
   yield call(generalSaga, createHousehold, payload, function* ({ url }) {
     yield put(push(url))
   })
 }
 
-function* leaveHouseholdSaga({ payload }) {
+function* leaveHouseholdSaga ({ payload }) {
   yield call(generalSaga, leaveHousehold, payload, function* (success) {
     if (success) {
       yield put(push(`/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=${HOUSEHOLD_TABS.INVITATIONS}`))
@@ -32,7 +32,7 @@ function* leaveHouseholdSaga({ payload }) {
   })
 }
 
-function* deleteHouseholdSaga({ payload }) {
+function* deleteHouseholdSaga ({ payload }) {
   yield call(generalSaga, deleteHousehold, payload, function* (success) {
     if (success) {
       yield put(push(`/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=${HOUSEHOLD_TABS.INVITATIONS}`))
@@ -40,7 +40,7 @@ function* deleteHouseholdSaga({ payload }) {
   })
 }
 
-export function* householdSaga() {
+export function* householdSaga () {
   yield takeEvery(HouseholdActions.approveInvitation.toString(), approveInvitationSaga)
   yield takeEvery(HouseholdActions.ignoreInvitation.toString(), ignoreInvitationSaga)
   yield takeEvery(HouseholdActions.createHousehold.toString(), createHouseholdSaga)

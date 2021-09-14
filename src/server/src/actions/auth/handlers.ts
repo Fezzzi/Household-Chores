@@ -78,7 +78,7 @@ export const handleSignUp = async (inputs: any, req: any, res: Response): Promis
   const user = await getUser(email)
   // Then we try logging up with email + provider ids / matching password
   if (user !== null) {
-    if (googleId || facebookId) {
+    if (googleId ?? facebookId) {
       // In case user with such email exists but does not yet have assigned any provider id, we assign them and perform log in
       const loggedIn = await logInAssignProviderIds(req, res, user.userId, user.nickname, user.fsKey, user.locale, googleId, facebookId)
 

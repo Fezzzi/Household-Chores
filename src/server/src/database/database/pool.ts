@@ -13,10 +13,15 @@ const dbConfig = {
   },
 }
 
-export class Pool {
-  private static _pool: pg.Pool | null = null
+interface PoolProps {
+  _pool: pg.Pool | null
+  get: () => pg.Pool
+  reset: () => Promise<void>
+}
 
-  static get(): pg.Pool {
+export const Pool: PoolProps = {
+  _pool: null,
+  get () {
     if (this._pool === null) {
       this._pool = new pg.Pool(dbConfig)
 
@@ -28,12 +33,11 @@ export class Pool {
     }
 
     return this._pool
-  }
-
-  static async reset() {
+  },
+  async reset () {
     if (!this._pool === null) {
       await this._pool!.end()
       this._pool = new pg.Pool(dbConfig)
     }
-  }
+  },
 }

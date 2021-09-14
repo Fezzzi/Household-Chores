@@ -12,7 +12,7 @@ import { loadState } from 'clientSrc/effects/rootEffects'
 import { RootActions, DialogActions } from 'clientSrc/actions'
 import { generalSaga } from 'clientSrc/helpers/sagas'
 
-export default function* rootSaga() {
+export default function* rootSaga () {
   yield all([
     fork(themeSaga),
     fork(localeSaga),

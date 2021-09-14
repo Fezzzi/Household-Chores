@@ -9,7 +9,7 @@ import ErrorWithLogging from 'serverSrc/helpers/errors/ErrorWithLogging'
  * Handler to catch `async` operation errors and pass them to the next middleware in the pipeline.
  */
 export const catchErrors = (
-  action: (reg: any, res: Response, next: NextFunction) => Promise<void | boolean>
+  action: (reg: any, res: Response, next: NextFunction) => Promise<any>
 ) => (req: any, res: Response, next: NextFunction) => action(req, res, next).catch(err => apiErrorHandler(err, req, res))
 
 /**

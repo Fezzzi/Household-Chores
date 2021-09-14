@@ -6,7 +6,7 @@ import { SaveIcon } from 'clientSrc/styles/icons'
 import { SectionHeadline } from 'clientSrc/styles/blocks/settings'
 import { HouseholdActions } from 'clientSrc/actions'
 import { useFormState, useUpdateHandler } from 'clientSrc/helpers/form'
-import { useMemberListProps, useInvitationListProps } from 'clientSrc/helpers/household'
+import { useMemberListProps, getInvitationListProps } from 'clientSrc/helpers/household'
 import { SUBMIT_TIMEOUT } from 'clientSrc/constants'
 import { HOUSEHOLD } from 'shared/constants/localeMessages'
 import { HOUSEHOLD_ROLE_TYPE } from 'shared/constants'
@@ -55,7 +55,8 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     removedMembers,
     changedRoles,
   } = inputs
-  const updateInput = useMemo(() => useUpdateHandler(setFormState), [setFormState])
+
+  const updateHandler = useUpdateHandler(setFormState)
 
   const updateArrayValue = useCallback((key, value, add = true) => {
     const newValue = (
@@ -66,8 +67,9 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
     if (add) {
       newValue.push(value)
     }
-    updateInput(key, true, newValue, null, [])
-  }, [newInvitations, removedInvitations, removedMembers, changedRoles, updateInput])
+
+    updateHandler(key, true, newValue, null, [])
+  }, [newInvitations, removedInvitations, removedMembers, changedRoles, updateHandler])
 
   const userState = useSelector(({ app: { user } }) => user)
   const currentUser = useMemo(() => {
@@ -112,7 +114,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
   )
 
   const invitationTableProps = useMemo(() =>
-    useInvitationListProps([
+    getInvitationListProps([
       ...(newInvitations
         ? newInvitations.map(({ userId, message }) => {
           const connectedUser = connections.find(connection => connection.userId === userId)

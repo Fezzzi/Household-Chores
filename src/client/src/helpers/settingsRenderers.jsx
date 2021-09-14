@@ -25,7 +25,7 @@ import {
 export const settingsRenderers = {
   [SETTING_CATEGORIES.PROFILE]: {
     [PROFILE_TABS.GENERAL]: (data, handleSubmit) => <ProfileForm data={data} onSubmit={handleSubmit} />,
-    [PROFILE_TABS.NOTIFICATIONS]: (data, handleSubmit) => <NotificationForm data={data} onSubmit={handleSubmit} />,
+    [PROFILE_TABS.NOTIFICATIONS]: (data, handleSubmit) => data ? <NotificationForm data={data} onSubmit={handleSubmit} /> : null,
     [PROFILE_TABS.DIALOGS]: (data, handleSubmit) => <DialogsForm data={data} onSubmit={handleSubmit} />,
   },
   [SETTING_CATEGORIES.CONNECTIONS]: {

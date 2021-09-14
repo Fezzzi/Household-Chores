@@ -39,7 +39,7 @@ export default () => {
   router.put(`/${API.UPDATE_LOCALE}`, catchErrors(async (req: any, res) => {
     const { locale } = req.body as { locale: string }
 
-    if (locale && AVAILABLE_LOCALES.includes(locale as string) && req.session?.userId) {
+    if (locale && AVAILABLE_LOCALES.includes(locale) && req.session?.userId) {
       await updateUserLocale(req.session.userId, locale)
       res.status(204).send()
     } else {

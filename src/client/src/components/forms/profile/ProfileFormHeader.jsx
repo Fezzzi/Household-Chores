@@ -39,6 +39,8 @@ const ProfileFormHeader = ({ photo, nickname, email, inputs, errors, setFormStat
     })
   }, [setPasswordEditing, setFormState])
 
+  const updateHandler = useUpdateHandler(setFormState)
+
   return (
     <FormHeader>
       <ProfilePasswordBlock>
@@ -59,14 +61,14 @@ const ProfileFormHeader = ({ photo, nickname, email, inputs, errors, setFormStat
                   type={INPUT_TYPE.PASSWORD}
                   value={FORM.OLD_PASSWORD}
                   inputError={errors.oldPassword}
-                  onUpdate={useUpdateHandler(setFormState)}
+                  onUpdate={updateHandler}
                 />
                 <Input
                   name="newPassword"
                   type={INPUT_TYPE.PASSWORD}
                   value={FORM.NEW_PASSWORD}
                   inputError={errors.newPassword}
-                  onUpdate={useUpdateHandler(setFormState)}
+                  onUpdate={updateHandler}
                 />
               </ProfilePasswordInputs>
             ) : (

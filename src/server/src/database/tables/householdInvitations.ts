@@ -7,7 +7,7 @@ export const tHouseInvCols = {
   date_created: 'date_created',
 } as const
 
-export type THouseInvType = {
+export interface THouseInvType {
   [tHouseInvCols.household_id]: number
   [tHouseInvCols.from_id]: number
   [tHouseInvCols.to_id]: number

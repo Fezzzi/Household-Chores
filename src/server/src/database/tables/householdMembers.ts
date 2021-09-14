@@ -11,7 +11,7 @@ export const tHouseMemCols = {
   date_joined: 'date_joined',
 } as const
 
-export type THouseMemType = {
+export interface THouseMemType {
   [tHouseMemCols.household_id]: number
   [tHouseMemCols.user_id]: number
   [tHouseMemCols.from_id]: number

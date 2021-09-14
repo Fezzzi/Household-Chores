@@ -16,7 +16,7 @@ const getTemplate = <T extends EMAIL_TEMPLATE> (
   data: EmailTemplateDataShapeType[T],
   locale: string,
 ) => {
-  const localeCode = (locale && AVAILABLE_LOCALES.includes(locale as string) && locale as string) || DEFAULT_LOCALE
+  const localeCode = (locale && AVAILABLE_LOCALES.includes(locale) && locale) || DEFAULT_LOCALE
   const template = mails[localeCode] ?? mails[DEFAULT_LOCALE]
   const { getSubject, getText, getHTML } = template[templateName] as Email<EmailTemplateDataShapeType[T]>
 

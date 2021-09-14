@@ -109,7 +109,7 @@ export const useMemberListProps = (
   }
 }
 
-export const useInvitationListProps = (invitations, handleDeletion, handleCancellation) => {
+export const getInvitationListProps = (invitations, handleDeletion, handleCancellation) => {
   const rows = invitations.map(({
     fromPhoto,
     toPhoto,

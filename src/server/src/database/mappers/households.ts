@@ -16,7 +16,7 @@ export type HouseholdEditMemberDbType =
   Pick<THouseMemType, typeof tHouseMemCols.nickname | typeof tHouseMemCols.photo | typeof tHouseMemCols.role>
 export type HouseholdEditMemberUnforcedDbType = { [key in keyof HouseholdEditMemberDbType]?: HouseholdEditMemberDbType[key] }
 
-export type HouseholdEditMemberUnforcedApiType = {
+export interface HouseholdEditMemberUnforcedApiType {
   userNickname?: HouseholdEditInputs['userNickname']
   userPhoto?: string
   userRole?: HouseholdEditInputs['userRole']
@@ -32,7 +32,7 @@ export const mapFromEditHouseholdMemberApiType = (apiMembers: HouseholdEditMembe
 export type HouseholdEditDbType = Pick<THouseholdsType, typeof tHouseholdsCols.name | typeof tHouseholdsCols.photo>
 export type HouseholdEditUnforcedDbType = { [key in keyof HouseholdEditDbType]?: HouseholdEditDbType[key] }
 
-export type HouseholdEditUnforcedApiType = {
+export interface HouseholdEditUnforcedApiType {
   name?: HouseholdEditInputs['name']
   photo?: string
 }

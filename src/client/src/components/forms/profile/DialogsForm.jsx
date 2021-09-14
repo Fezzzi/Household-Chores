@@ -34,6 +34,8 @@ const DialogsForm = ({ onSubmit }) => {
     dispatch(ModalActions.openModal({ type: MODAL_TYPE.TUTORIAL })),
   [dispatch])
 
+  const updateHandler = useUpdateHandler(setFormState)
+
   return (
     <>
       {Object.keys(inputs).length > 0 && (
@@ -41,7 +43,7 @@ const DialogsForm = ({ onSubmit }) => {
           message={submitMessage}
           sending={isFormSending}
           enabled={isFormValid}
-          icon={<SaveIcon />}
+          icon={SaveIcon}
           onClick={handleSubmit}
         />
       )}
@@ -75,7 +77,7 @@ const DialogsForm = ({ onSubmit }) => {
               label={`form.${name}`}
               value={value}
               hasDefaultValue
-              onUpdate={useUpdateHandler(setFormState)}
+              onUpdate={updateHandler}
             />
           ))}
         </NotificationGroupBox>

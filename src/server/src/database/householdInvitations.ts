@@ -90,7 +90,7 @@ export const getHouseholdsInvitationsMap = async (householdIds: number[], client
 
   return invitations
     .map(mapToHouseholdsInvitationsApiType)
-    .reduce((acc, invitation) => {
+    .reduce<HouseholdsInvitationsMap>((acc, invitation) => {
       const { householdId, ...rest } = invitation
 
       if (!acc[householdId]) {
@@ -98,6 +98,6 @@ export const getHouseholdsInvitationsMap = async (householdIds: number[], client
       }
       acc[householdId].push(rest)
       return acc
-    }, {} as HouseholdsInvitationsMap)
+    }, {})
 }
 

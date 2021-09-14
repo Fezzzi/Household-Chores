@@ -4,10 +4,10 @@ import { DialogActions } from 'clientSrc/actions'
 import { generalSaga } from 'clientSrc/helpers/sagas'
 import { disableDialog } from 'clientSrc/effects/dialogEffects'
 
-function* disableDialogSaga({ payload }) {
+function* disableDialogSaga ({ payload }) {
   yield call(generalSaga, disableDialog, payload)
 }
 
-export function* dialogsSaga() {
+export function* dialogsSaga () {
   yield takeEvery(DialogActions.disableDialog.toString(), disableDialogSaga)
 }

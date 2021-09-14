@@ -14,10 +14,6 @@ import { SimpleFloatingElement } from '../../portals'
 const NOTIFICATION_GROUPS = ['connection', 'household']
 
 const NotificationForm = ({ data, onSubmit }) => {
-  if (!data) {
-    return null
-  }
-
   const { general, connection, household } = Object.entries(data).reduce((acc, [key, value]) => {
     for (const group of NOTIFICATION_GROUPS) {
       if (key.match(new RegExp(`^${group}[A-Z]`))) {
@@ -57,6 +53,8 @@ const NotificationForm = ({ data, onSubmit }) => {
     ).some(Boolean)
   , [inputs, filteredGeneral])
 
+  const updateHandler = useUpdateHandler(setFormState)
+
   const getNotificationsBlock = (group, groupHeadline, disabled = false) => (
     <TableBox disabled={disabled}>
       {groupHeadline && (
@@ -75,7 +73,7 @@ const NotificationForm = ({ data, onSubmit }) => {
             label={`form.${name}`}
             value={Boolean(value)}
             hasDefaultValue
-            onUpdate={useUpdateHandler(setFormState)}
+            onUpdate={updateHandler}
           />
         ))}
       </NotificationGroupBox>

@@ -32,7 +32,7 @@ export const validateCreateData = async (
   if (invitations.length > 0) {
     const connections = await getApprovedConnections(userId)
     const connectionIds = connections.map(({ userId }) => userId)
-    const validRequest = invitations.every(({ toId }) => connectionIds.indexOf(toId) !== -1)
+    const validRequest = invitations.every(({ toId }) => connectionIds.includes(toId))
     const validMessages = invitations.every(({ message }) => !message
       || validateField(res, message, INPUT_TYPE.TEXT_AREA, { max: INVITATION_MESSAGE_LENGTH }))
 
