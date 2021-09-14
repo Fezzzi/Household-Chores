@@ -18,11 +18,9 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    # Eslint
-    - run: npm run lint
+        cache: 'yarn'
+    - run: yarn install
+    # Eslint + Mocha
+    - run: yarn test
     # Build
-    - run: npm run build
-    # Mocha
-    - run: npm run test
+    - run: yarn build

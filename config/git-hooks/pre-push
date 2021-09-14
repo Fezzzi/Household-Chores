@@ -4,4 +4,4 @@
 set -e
 
 # Lint it!
-npm run lint
+yarn lint

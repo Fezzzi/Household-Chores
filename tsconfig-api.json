@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      "esnext"
+    ],
+    "outDir": "build-api",
+    "noEmit": false,
+    "module": "commonjs",
+    "importHelpers": true,
+    "rootDir": "src",
+    "plugins": [
+      {
+        "transform": "@zerollup/ts-transform-paths"
+      }
+    ]
+  },
+  "include": [
+    "src/shared",
+    "src/server"
+  ]
+}

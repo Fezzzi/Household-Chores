@@ -3,4 +3,4 @@
 set -eu
 
 echo "Start API"
-API_PORT=8080 node build-api/bundle.js
+API_PORT=$PORT node build-api/server/src/index.js

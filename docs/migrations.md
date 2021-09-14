@@ -1,10 +1,10 @@
 # Migrations
 Migrating is controlled with two scripts:
- - `npm run migrate up` that runs all not yet executed migrations
- - `npm run migrate down` that rollbacks the last 1 executed migration.
+ - `yarn migrate up` that runs all not yet executed migrations
+ - `yarn migrate down` that rollbacks the last 1 executed migration.
 
 ## New Migration
- 1. First, run `npm run migrate create <migration name>`.
+ 1. First, run `yarn migrate create <migration name>`.
  1. `node-pg-migrate` will produce migration file prefixed with current timestamp according to
  `config/migration-template.ts` template.
  1. Queries under the `up` property are executed when migrating **up**, queries under the 
