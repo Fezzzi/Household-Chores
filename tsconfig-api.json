@@ -8,12 +8,7 @@
     "noEmit": false,
     "module": "commonjs",
     "importHelpers": true,
-    "rootDir": "src",
-    "plugins": [
-      {
-        "transform": "@zerollup/ts-transform-paths"
-      }
-    ]
+    "rootDir": "src"
   },
   "include": [
     "src/shared",

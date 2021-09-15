@@ -5,18 +5,17 @@
       "clientSrc/*": [ "src/client/src/*" ],
       "serverSrc/*": [ "src/server/src/*" ],
       "shared/*": [ "src/shared/*" ],
-      "shared/constants": [ "src/shared/constants" ],
       "assets/*": [ "src/assets/*" ]
     },
     "target": "es5",
-    "typeRoots": [
-      "node_modules/@types",
-      "@types"
-    ],
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
+    ],
+    "typeRoots": [
+      "node_modules/@types",
+      "@types"
     ],
     "allowJs": true,
     "skipLibCheck": true,
