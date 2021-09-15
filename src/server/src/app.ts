@@ -63,6 +63,7 @@ app.use(cors(
 ))
 
 // Serve static assets
+app.use('/', express.static(path.resolve('./build')))
 app.use('/static', express.static(path.resolve('./static')))
 app.use('/uploads', express.static(path.resolve('./uploads')))
 
