@@ -68,6 +68,7 @@
     "style-loader": "^3.2.1",
     "styled-components": "^5.3.0",
     "ts-loader": "^9.2.5",
+    "ts-node-dev": "^1.1.8",
     "tscpaths": "^0.0.9",
     "url-loader": "^4.1.1",
     "webpack": "^5.52.1",
@@ -99,7 +100,7 @@
   },
   "scripts": {
     "start": "concurrently --kill-others-on-fail -n api,web \"yarn:start-api\" \"yarn:start-web\"",
-    "start-api": "ts-node -r tsconfig-paths/register --project ./tsconfig-api.json ./src/server/src/index.ts",
+    "start-api": "ts-node-dev -r tsconfig-paths/register --project ./tsconfig-api.json ./src/server/src/index.ts",
     "start-web": "webpack-dev-server --config ./config/webpack.config.ts --open --mode development",
     "build": "yarn build-web && yarn build-api",
     "build-api": "rimraf ./build-api && tsc --project ./tsconfig-api.json && tscpaths -p ./tsconfig-api.json -s ./src -o ./build-api",

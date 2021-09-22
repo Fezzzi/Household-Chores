@@ -19,10 +19,7 @@ export default () => {
         return
       }
 
-      const handled = await handleSignUp(inputs, req, res)
-      if (!handled) {
-        res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
-      }
+      await handleSignUp(inputs, req, res)
       return
     }
 

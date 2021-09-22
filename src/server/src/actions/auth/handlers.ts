@@ -55,12 +55,12 @@ export const handleSignUp = async (inputs: any, req: any, res: Response): Promis
     googleId = providerIds.googleId
     facebookId = providerIds.facebookId
 
-    if (googleId === null && googleToken !== null) {
+    if (googleId === null && googleToken != null) {
       res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_GOOGLE_DATA] })
       return false
     }
 
-    if (facebookId === null && facebook !== null) {
+    if (facebookId === null && facebook != null) {
       res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.INVALID_FACEBOOK_DATA] })
       return false
     }
