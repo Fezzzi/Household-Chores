@@ -1,5 +1,4 @@
 import express, { NextFunction, Response } from 'express'
-import path from 'path'
 
 import { API } from 'shared/constants'
 
@@ -22,14 +21,6 @@ const sessionChecker = (req: any, res: Response, next: NextFunction) => {
 
 export default () => {
   const router = express.Router()
-
-  router.all(/.*/, (req, res, next) => {
-    if (req.xhr) {
-      next()
-    } else {
-      res.status(200).sendFile(path.resolve('./build/index.html'))
-    }
-  })
 
   router.use(`/${API.LOAD_PREFIX}`, LoadRouter())
   router.use(`/${API.AUTH_PREFIX}`, AuthRouter())

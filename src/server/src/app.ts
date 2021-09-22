@@ -76,6 +76,14 @@ app.use((req: any, res, next) => {
   next()
 })
 
+app.all(/.*/, (req, res, next) => {
+  if (req.xhr) {
+    next()
+  } else {
+    res.status(200).sendFile(path.resolve('./build/index.html'))
+  }
+})
+
 // Setup API routing
 app.use(`/${API.API_PREFIX}`, apiRouter())
 
