@@ -12,6 +12,7 @@ import { API } from 'shared/constants'
 import apiRouter from './actions/apiRouter'
 import { Logger } from './helpers/logger'
 import { CONFIG, LOGS } from './constants'
+import { Pool } from './database/database/pool'
 
 // Initialize the server
 const app = express()
@@ -25,7 +26,7 @@ app.use(cookieParser())
 
 // Initialize session store and session middleware
 const PGStore = createSession(session)
-const sessionStore = new PGStore({ conString: CONFIG.DATABASE_URL })
+const sessionStore = new PGStore({ pool: Pool.get() })
 const YEAR_MILLISECONDS = 31540000000
 
 app.use(session({

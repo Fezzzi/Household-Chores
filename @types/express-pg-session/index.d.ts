@@ -1,8 +1,10 @@
 declare module 'express-pg-session' {
   import { session, Store } from 'express-session'
+  import { Pool } from 'pg'
 
   export interface PGSessionOptions {
     conString?: string
+    pool?: Pool
   }
 
   export type PGSessionIface = new(options?: PGSessionOptions) => PGSession
