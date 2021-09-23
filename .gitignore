@@ -5,7 +5,7 @@
 *_log.txt
 
 # Dependency directories
-node_modules/
+node_modules
 
 # Cache
 *.tsbuildinfo
@@ -16,4 +16,5 @@ node_modules/
 .env.test
 
 # Output
-dist
+build
+build-api

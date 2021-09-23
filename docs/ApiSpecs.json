@@ -823,7 +823,7 @@
                   "inputs": {
                     "anyOf": [
                       { "$ref": "#/components/schemas/ProfileEditForm" },
-                      { "$ref": "#/components/schemas/NotificationsEditForm" },
+                      { "$ref": "#/components/schemas/Notifications" },
                       { "$ref": "#/components/schemas/DialogsEditForm" },
                       { "$ref": "#/components/schemas/HouseholdEditForm" }
                     ]
@@ -1165,13 +1165,6 @@
           }
         }
       },
-      "NotificationsEditForm": {
-        "anyOf": [
-          { "$ref": "#/components/schemas/GeneralNotifications" },
-          { "$ref": "#/components/schemas/ConnectionNotifications" },
-          { "$ref": "#/components/schemas/HouseholdNotifications" }
-        ]
-      },
       "DialogsEditForm": {
         "type": "object",
         "properties": {
@@ -1184,9 +1177,9 @@
         }
       },
       "HouseholdEditForm": {
-        "required": ["id"],
+        "required": ["householdId"],
         "properties": {
-          "id": {
+          "householdId": {
             "type": "number",
             "format": "uuid"
           },
@@ -1427,9 +1420,9 @@
         }
       },
       "NewInvitation": {
-        "required": ["userId"],
+        "required": ["toId"],
         "properties": {
-          "userId": {
+          "toId": {
             "type": "string",
             "format": "uuid"
           },
@@ -1525,14 +1518,15 @@
       },
       "SettingsCategories": {
         "type": "string",
-        "enum": ["profile", "connections", "households"]
+        "enum": ["profile", "connections", "households", "more"]
       },
       "SettingsTabs": {
         "type": "string",
         "enum": [
           "dialogs", "general", "notifications",
           "myConnections", "findConnection", "pending", "blocked",
-          "newHousehold", "invitations", "household"
+          "newHousehold", "invitations", "household",
+          "about", "support", "contribute"
         ]
       },
       "SettingsData": {
@@ -1555,9 +1549,10 @@
           "data": {
             "oneOf": [
               { "$ref": "#/components/schemas/ProfileData" },
-              { "$ref": "#/components/schemas/NotificationData" },
+              { "$ref": "#/components/schemas/Notifications" },
               { "$ref": "#/components/schemas/HouseholdsData" },
               { "$ref": "#/components/schemas/Connections" },
+              { "$ref": "#/components/schemas/MoreData" },
               {}
             ]
           },
@@ -1601,43 +1596,55 @@
           "visibility": {
             "type": "string",
             "enum": ["ALL", "FRIENDS_OF_FRIENDS"]
+          },
+          "locale": {
+            "type": "string"
           }
         }
       },
-      "GeneralNotifications": {
+      "MoreData": {
+        "required": ["supporters", "contributors"],
+        "properties": {
+          "supporters": {
+            "type": "array",
+            "items": {}
+          },
+          "contributors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "photo", "link"],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "photo": {
+                  "type": "string",
+                  "format": "link"
+                },
+                "link": {
+                  "type": "string",
+                  "format": "link"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Notifications": {
         "properties": {
           "emailNotifications": { "type": "boolean" },
           "browserNotifications": { "type": "boolean" },
-          "mobileNotifications": { "type": "boolean" }
-        }
-      },
-      "ConnectionNotifications": {
-        "properties": {
+          "mobileNotifications": { "type": "boolean" },
+
           "connectionApproval": { "type": "boolean" },
-          "connectionRequest": { "type": "boolean" }
-        }
-      },
-      "HouseholdNotifications": {
-        "properties": {
+          "connectionRequest": { "type": "boolean" },
+
           "householdDeleting": { "type": "boolean" },
           "householdExpelling": { "type": "boolean" },
           "householdInvitation": { "type": "boolean" },
           "householdJoining": { "type": "boolean" },
           "householdLeaving": { "type": "boolean" }
-        }
-      },
-      "NotificationData": {
-        "required": ["general", "connections", "households"],
-        "properties": {
-          "general": {
-            "$ref": "#/components/schemas/GeneralNotifications"
-          },
-          "connections": {
-            "$ref": "#/components/schemas/ConnectionNotifications"
-          },
-          "households": {
-            "$ref": "#/components/schemas/HouseholdNotifications"
-          }
         }
       },
       "HouseholdsData": {

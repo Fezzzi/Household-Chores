@@ -1,0 +1,30 @@
+{
+  "name": "Household Application",
+  "description": "Application for shared household management.",
+  "keywords": [
+    "management",
+    "household",
+    "typescript",
+    "react"
+  ],
+  "website": "https://github.com/Fezzzi/Household-Chores",
+  "repository": "https://github.com/Fezzzi/Household-Chores",
+  "logo": "https://github.com/Fezzzi/Household-Chores/blob/development/static/icons/icon-150.png",
+  "success_url": "/",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "stack": "heroku-20",
+  "addons": [
+    "heroku-postgresql:standard-0"
+  ],
+  "environments": {
+    "review": {
+      "addons": [
+        "heroku-postgresql:hobby-dev"
+      ]
+    }
+  }
+}
