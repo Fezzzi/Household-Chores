@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "web/*": [ "src/web/*" ],
-      "serverSrc/*": [ "src/server/src/*" ],
+      "api/*": [ "src/api/*" ],
       "shared/*": [ "src/shared/*" ],
       "assets/*": [ "src/assets/*" ]
     },

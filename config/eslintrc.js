@@ -118,7 +118,7 @@ module.exports = {
         '@typescript-eslint/prefer-nullish-coalescing': 2,
       },
     }, {
-      files: ['./src/server/src/resources/**/*.ts'],
+      files: ['./src/api/resources/**/*.ts'],
       rules: {
         'max-len': 0,
       },

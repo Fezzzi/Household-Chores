@@ -5,7 +5,7 @@ module.exports = {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
     alias: {
       'web': path.resolve(__dirname, '../src/web'),
-      'serverSrc': path.resolve(__dirname, '../src/server/src'),
+      'api': path.resolve(__dirname, '../src/api'),
       'shared': path.resolve(__dirname, '../src/shared'),
       'assets': path.resolve(__dirname, '../src/assets'),
     },

@@ -12,6 +12,6 @@
   },
   "include": [
     "src/shared",
-    "src/server"
+    "src/api"
   ]
 }

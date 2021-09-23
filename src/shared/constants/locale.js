@@ -1,4 +1,4 @@
-// These must match directory names of code/server/resources
+// These must match directory names of src/api/resources
 export const LOCALE_CODES = ({
   CS: 'cs_CZ',
   EN: 'en_US',

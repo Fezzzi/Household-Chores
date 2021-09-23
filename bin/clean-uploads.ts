@@ -2,11 +2,11 @@ import path from 'path'
 import { readdirSync, unlink } from 'fs'
 import rimraf from 'rimraf'
 
-import { database } from 'serverSrc/database'
-import { CONFIG } from 'serverSrc/constants'
+import { database } from 'api/database'
+import { CONFIG } from 'api/constants'
 import {
   tUsersName, tUsersCols, tHouseMemName, tHouseMemCols, tHouseholdsName, tHouseholdsCols, TUsersType,
-} from 'serverSrc/database/tables'
+} from 'api/database/tables'
 
 const getFiles = (dir: string): string[] => {
   const dirents = readdirSync(dir, { withFileTypes: true })
