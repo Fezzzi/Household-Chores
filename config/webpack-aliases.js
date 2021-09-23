@@ -4,7 +4,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
     alias: {
-      'clientSrc': path.resolve(__dirname, '../src/client/src'),
+      'web': path.resolve(__dirname, '../src/web'),
       'serverSrc': path.resolve(__dirname, '../src/server/src'),
       'shared': path.resolve(__dirname, '../src/shared'),
       'assets': path.resolve(__dirname, '../src/assets'),

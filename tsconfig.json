@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "clientSrc/*": [ "src/client/src/*" ],
+      "web/*": [ "src/web/*" ],
       "serverSrc/*": [ "src/server/src/*" ],
       "shared/*": [ "src/shared/*" ],
       "assets/*": [ "src/assets/*" ]

@@ -12,7 +12,7 @@ module.exports = {
   // Enable sourcemaps for debugging webpack's output.
   devtool: process.env.DEBUG === 'true' ? 'source-map' : undefined,
 
-  context: path.resolve(__dirname, '../src/client'),
+  context: path.resolve(__dirname, '../src/web'),
   ...webpackAliases,
   output: {
     filename: 'main.[contenthash].js',
@@ -34,7 +34,7 @@ module.exports = {
       },
     },
   },
-  entry: 'clientSrc/index.jsx',
+  entry: 'web/index.jsx',
   devServer: {
     historyApiFallback: true,
     port: process.env.DEV_PORT ?? 8081,
