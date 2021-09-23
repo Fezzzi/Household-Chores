@@ -1,33 +1,21 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "./code/server/lib",
     "paths": {
-      "clientSrc/*": [ "code/client/src/*" ],
-      "serverSrc/*": [ "code/server/src/*" ],
-      "shared/*": [ "code/shared/*" ],
-      "~/*": ["./*"]
+      "web/*": [ "src/web/*" ],
+      "api/*": [ "src/api/*" ],
+      "shared/*": [ "src/shared/*" ],
+      "assets/*": [ "src/assets/*" ]
     },
-    "jsx": "react",
     "target": "es5",
-    "module": "commonjs",
-    "sourceMap": true,
-    "experimentalDecorators": true,
-    "types": [
-      "node",
-      "mocha"
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
     "typeRoots": [
       "node_modules/@types",
       "@types"
-    ],
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "lib": [
-      "es6",
-      "dom",
-      "dom.iterable",
-      "esnext"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -35,18 +23,20 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
+    "module": "commonjs",
     "moduleResolution": "node",
-    "isolatedModules": true
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "downlevelIteration": true,
+    "noEmit": false,
+    "jsx": "react-jsx",
+    "noFallthroughCasesInSwitch": true
   },
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
   "include": [
-    "code",
-    "bin",
+    "src/shared",
+    "src/client",
+    "src/tests",
     "config",
-    "@types"
+    "bin"
   ]
 }

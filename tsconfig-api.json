@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      "esnext"
+    ],
+    "outDir": "build-api",
+    "noEmit": false,
+    "module": "commonjs",
+    "importHelpers": true,
+    "rootDir": "src"
+  },
+  "include": [
+    "src/shared",
+    "src/api"
+  ]
+}

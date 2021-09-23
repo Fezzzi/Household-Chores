@@ -2,11 +2,11 @@ import path from 'path'
 import { readdirSync, unlink } from 'fs'
 import rimraf from 'rimraf'
 
-import { database } from 'serverSrc/database'
-import { CONFIG } from 'serverSrc/constants'
+import { database } from 'api/database'
+import { CONFIG } from 'api/constants'
 import {
   tUsersName, tUsersCols, tHouseMemName, tHouseMemCols, tHouseholdsName, tHouseholdsCols, TUsersType,
-} from 'serverSrc/database/tables'
+} from 'api/database/tables'
 
 const getFiles = (dir: string): string[] => {
   const dirents = readdirSync(dir, { withFileTypes: true })
@@ -19,7 +19,7 @@ const getFiles = (dir: string): string[] => {
 
 const cleanDirectory = (dirPath: string, files: string[]) =>
   getFiles(dirPath)
-    .filter(storedFile => files.indexOf(storedFile) === -1)
+    .filter(storedFile => !files.includes(storedFile))
     // eslint-disable-next-line no-console
     .forEach(unusedFile => unlink(unusedFile, () => console.log(`unlinked ${unusedFile}`)))
 
