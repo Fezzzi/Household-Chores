@@ -31,6 +31,7 @@ export {
   PersonAdd as PersonAddIcon,
   PersonAddDisabled as PersonAddDisabledIcon,
   PersonAddOutlined as PersonAddOutlinedIcon,
+  PowerSettingsNew as LogOutIcon,
   Publish as UploadIcon,
   Save as SaveIcon,
   Search as SearchIcon,

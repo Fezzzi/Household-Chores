@@ -15,6 +15,7 @@ import Router from './components/Router'
 import PageTheme from './components/PageTheme'
 import Footer from './components/Footer'
 import Modal from './components/Modal'
+import Navbar from './components/Navbar'
 
 export default () => {
   const sagaMiddleware = createSagaMiddleware()
@@ -36,6 +37,7 @@ export default () => {
             <PortalAnchor id={PORTAL_TYPE.TOOLTIPS} />
             <Modal />
             <PageContent>
+              <Navbar />
               <Notifications />
               <Router />
             </PageContent>

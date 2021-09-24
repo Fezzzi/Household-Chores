@@ -8,7 +8,6 @@ import { EmptyContentMessage, HomeWrapper } from '../../styles/blocks/home'
 import HouseholdSwitch from './HouseholdSwitch'
 import HouseholdMemberList from './HouseholdMemberList'
 import HouseholdBody from './HouseholdBody'
-import { ActivityFeed } from './ActivityFeed'
 import { LocaleText } from '../common'
 
 const Home = () => {
@@ -43,7 +42,6 @@ const Home = () => {
 
   return (
     <HomeWrapper>
-      <ActivityFeed />
       {currentHouseholdIndex !== null
         ? (
           <>
