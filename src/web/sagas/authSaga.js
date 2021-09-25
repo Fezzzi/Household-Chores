@@ -3,8 +3,8 @@ import { takeEvery, call, put, select } from 'redux-saga/effects'
 import { NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 
-import { AuthActions, NotificationActions, SettingsActions } from '../actions'
-import { signUp, logIn, resetPass, deleteAccount } from '../effects/authEffects'
+import { AuthActions, RootActions, NotificationActions, SettingsActions } from '../actions'
+import { signUp, signOut, logIn, resetPass, deleteAccount } from '../effects/authEffects'
 import { generalSaga } from '../helpers/sagas'
 
 function* resetPassSaga ({ payload }) {
@@ -17,7 +17,14 @@ function* resetPassSaga ({ payload }) {
 function* signUpSaga ({ payload }) {
   yield call(generalSaga, signUp, payload, function* (data) {
     yield put(NotificationActions.addNotifications(data))
-    yield put(AuthActions.logInSuccess())
+    yield put(RootActions.stateLoad())
+  })
+}
+
+function* signOutSaga ({ payload }) {
+  yield call(generalSaga, signOut, payload, function* (data) {
+    yield put(NotificationActions.addNotifications(data))
+    yield put(AuthActions.signOutSuccess())
   })
 }
 
@@ -69,6 +76,7 @@ function* deleteAccountSaga () {
 export function* authSaga () {
   yield takeEvery(AuthActions.signUp.toString(), signUpSaga)
   yield takeEvery(AuthActions.logIn.toString(), logInSaga)
+  yield takeEvery(AuthActions.signOut.toString(), signOutSaga)
   yield takeEvery(AuthActions.logInFacebook.toString(), logInFacebookSaga)
   yield takeEvery(AuthActions.logInGoogle.toString(), logInGoogleSaga)
   yield takeEvery(AuthActions.resetPass.toString(), resetPassSaga)

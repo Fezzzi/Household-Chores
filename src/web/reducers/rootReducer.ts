@@ -32,6 +32,13 @@ const logInUser = (state: AppState) => ({
   isUserLogged: true,
 })
 
+const signOutUser = (state: AppState) => ({
+  ...state,
+  isUserLogged: false,
+  user: {},
+  activityFeed: [],
+})
+
 const stateLoaded = (state: AppState, { payload: { debug, isUserLogged, user, activityFeed } }: any) => ({
   ...state,
   debug,
@@ -42,8 +49,9 @@ const stateLoaded = (state: AppState, { payload: { debug, isUserLogged, user, ac
 })
 
 const appReducer = createReducer(initialState, {
-  [RootActions.stateLoaded.toString()]: stateLoaded,
+  [RootActions.stateLoadSuccess.toString()]: stateLoaded,
   [AuthActions.logInSuccess.toString()]: logInUser,
+  [AuthActions.signOutSuccess.toString()]: signOutUser,
 })
 
 export interface RootState {

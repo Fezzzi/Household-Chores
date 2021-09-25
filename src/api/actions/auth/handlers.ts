@@ -87,7 +87,7 @@ export const handleSignUp = async (inputs: any, req: any, res: Response): Promis
         return false
       }
 
-      res.status(204).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.ACCOUNT_CREATED] })
+      res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.ACCOUNT_CREATED] })
       return true
     }
     // In case there are no providers' data available but the user exists, we continue as with standrd log in attempt

@@ -53,7 +53,7 @@ export default () => {
       }
       case API.AUTH_SIGN_OUT:
         unsetSession(req, res)
-        res.status(204).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.SIGNED_OUT] })
+        res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.SIGNED_OUT] })
         return
       default:
         res.status(404).send('Not Found')

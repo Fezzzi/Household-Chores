@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
 import LogoSvg from 'assets/icons/logo.svg'
@@ -6,6 +7,7 @@ import LogoSvg from 'assets/icons/logo.svg'
 import { API, PROFILE_TABS, SETTING_CATEGORIES } from 'shared/constants'
 import { AUTH } from 'shared/constants/localeMessages'
 import { COLORS } from 'web/constants'
+import { AuthActions } from 'web/actions'
 import { BellIcon, LogOutIcon } from 'web/styles/icons'
 import { LogoIcon } from 'web/styles/blocks/page'
 import { clickableStyle, SvgIcon } from 'web/styles/blocks/common'
@@ -20,8 +22,13 @@ export const Navbar = () => {
   , [applicationTexts])
 
   const isUserLogged = useSelector(({ app: { isUserLogged } }) => isUserLogged)
-  const userPhoto = useSelector(({ app: { user: { photo } } }) => photo)
+  const userPhoto = useSelector(({ app }) => app.user.photo)
   const hasActivity = useSelector(({ app: { activityFeed } }) => activityFeed.length > 0)
+
+  const dispatch = useDispatch()
+  const handleSignOutClick = useCallback(() => {
+    dispatch(AuthActions.signOut())
+  }, [dispatch])
 
   return isUserLogged
     ? (
@@ -32,13 +39,16 @@ export const Navbar = () => {
         <NavbarName>
           <Link route="/">HOUSEHOLD APP</Link>
         </NavbarName>
+
         <NavbarBellIcon highlighted={hasActivity} title={activityLabel}>
           <BellIcon />
         </NavbarBellIcon>
         <Link route={`${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.PROFILE}?tab=${PROFILE_TABS.GENERAL}`}>
           <NavbarUserImage src={userPhoto} alt="user" />
         </Link>
-        <NavbarIcon title={signoutLabel} highlightHover><LogOutIcon /></NavbarIcon>
+        <NavbarIcon title={signoutLabel} highlightHover onClick={handleSignOutClick}>
+          <LogOutIcon />
+        </NavbarIcon>
       </NavbarWrapper>
     ) : null
 }
