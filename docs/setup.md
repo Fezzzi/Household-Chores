@@ -9,7 +9,7 @@
  - **Node:** 14+
 
 ## How to set up and run
-1. Run `yarn install` and `yarn configure` from the project root
+1. Run `yarn install` from the project root
 1. Install [PostgreSQL](https://www.postgresqltutorial.com/postgresql-getting-started/) if needed
     - start the postgres service
     - create `household` database

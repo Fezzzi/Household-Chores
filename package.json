@@ -112,8 +112,7 @@
     "mocha": "mocha -r ts-node/register -r tsconfig-paths/register -r ./config/mocha-env-config.js \"src/tests/**/*.spec.ts\"",
     "migrate": "ts-node -r tsconfig-paths/register ./node_modules/node-pg-migrate/bin/node-pg-migrate -m ./src/api/migrations --template-file-name ./config/migration-template.ts",
     "clean-uploads": "ts-node -r tsconfig-paths/register ./bin/clean-uploads.ts",
-    "clean-activity-table": "ts-node -r tsconfig-paths/register ./bin/clean-activity-table.ts",
-    "configure": "cp ./config/git-hooks/pre-push .git/hooks/pre-push"
+    "clean-activity-table": "ts-node -r tsconfig-paths/register ./bin/clean-activity-table.ts"
   },
   "browserslist": {
     "production": [
