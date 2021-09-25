@@ -11,7 +11,7 @@ export const setSession = (
   locale: string,
 ) => {
   if (req.session.userId && req.session.userId !== userId && req.cookies.user_sid) {
-    res.clearCookie('user_sid')
+    unsetSession(req, res)
     return
   }
 
@@ -19,4 +19,12 @@ export const setSession = (
   req.session.userNickname = userNickname
   req.session.fsKey = fsKey
   req.session.locale = locale
+}
+
+export const unsetSession = (req: any, res: Response) => {
+  req.session.userId = null
+  req.session.userNickname = null
+  req.session.fsKey = null
+  req.session.locale = null
+  res.clearCookie('user_sid')
 }

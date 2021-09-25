@@ -8,7 +8,7 @@ export const getActivityForUser = async (userId: number) => {
     FROM ${tActivityName}
     WHERE ${tActivityCols.user_id}=${userId}
     ORDER BY ${tActivityCols.date_seen} IS NULL DESC, ${tActivityCols.date_created} DESC
-    LIMIT 25
+    LIMIT 10
   `)
 
   return result.map(mapToUserActivityApiType)

@@ -34,7 +34,7 @@ module.exports = {
       },
     },
   },
-  entry: 'web/index.jsx',
+  entry: 'web/index.tsx',
   devServer: {
     historyApiFallback: true,
     port: process.env.DEV_PORT ?? 8081,

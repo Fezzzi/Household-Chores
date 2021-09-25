@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { COLORS } from '../../constants'
+import { COLORS } from 'web/constants'
 
 export const ThemeWrapper = styled.div`
   height: 100%;
@@ -45,10 +45,13 @@ export const PageWrapper = styled.section`
 `
 
 export const PageContent = styled.main`
-  order: 4;
-
   display: flex;
   flex-grow: 1;
+  ${props => props.withNavbar && `
+    padding-top: 60px;
+    min-height: calc(100vh - 98px);
+    max-height: calc(100vh - 98px);
+  `}
 `
 
 export const PortalAnchor = styled.div`
@@ -58,7 +61,6 @@ export const PortalAnchor = styled.div`
 `
 
 export const PageFooter = styled.footer`
-  order: 5;
   padding: 0 20px;
   background-color: ${COLORS.THEME_BACK};
 `
@@ -76,4 +78,24 @@ export const FooterWrapper = styled.div`
 
 export const CopyrightRow = styled.span`
   color: ${COLORS.GREY_PRIMARY};
+`
+
+export const LogoIcon = styled.div`
+  & svg {
+    height: 100%;
+    width: 100%;
+
+    & #logo-body ellipse,
+    & #logo-body line,
+    & #logo-body path,
+    & #logo-body rect {
+      stroke: ${COLORS.FONT};
+    }
+
+    & #logo-roof line,
+    & #logo-roof path,
+    & #logo-roof rect {
+      stroke: ${COLORS.RED_SECONDARY};
+    }
+  }
 `

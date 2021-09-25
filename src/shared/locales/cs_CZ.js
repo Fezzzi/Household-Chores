@@ -30,6 +30,7 @@ export default {
   [AUTH.LOG_IN_GOOGLE]: 'Přihlásit se účtem Google',
   [AUTH.SEND_RESET_LINK]: 'Odeslat link',
   [AUTH.SIGN_UP]: 'Zaregistrovat se',
+  [AUTH.SIGN_OUT]: 'Odhlásit se',
   [AUTH.TERMS_AGREEMENT]: 'Registrací potvrzujete naše ',
 
   [COMMON.AND_X_MORE]: 'A další\n@',
@@ -207,4 +208,5 @@ export default {
   [SUCCESS.ACCOUNT_CREATED]: 'Váš účet byl úspěšně vytvořen.',
   [SUCCESS.ACCOUNT_PAIRED]: 'Váš účet byl propojen s již existujícím.',
   [SUCCESS.CONNECTION_REQUEST_SENT]: 'Žádost o spojení byla odeslána.',
+  [SUCCESS.SIGNED_OUT]: 'Odhlášení proběhlo úspěšně',
 }

@@ -1,81 +1,87 @@
 import styled from 'styled-components'
 
-import LogoImage from 'assets/logos/logo-150.png'
+import { COLORS } from 'web/constants'
 
-import { COLORS } from 'client/constants'
+import { LogoIcon } from './page'
 
 export const NavbarWrapper = styled.div`
-  width: 100%;
-  height: 70px;
-  color: ${COLORS.RED_PRIMARY};
-  background-color: ${COLORS.FONT};
+  top: 0;
+  width: calc(100% - 80px);
+  height: 60px;
+  padding: 0 40px;
+  color: ${COLORS.FONT};
+  background-color: ${COLORS.THEME_FRONT};
+  z-index: 10;
   display: flex;
   flex-flow: row;
+  align-items: center;
   position: fixed;
-  box-shadow: ${COLORS.FONT} 5px;
+  box-shadow: 0 4px 10px -10px ${COLORS.FONT};
 `
-export const NavbarWrapperScroll = styled.div`
-  width: 100%;
-  height: 40px;
-  position: fixed;
-  top: 0;
-  color: ${COLORS.RED_PRIMARY};
-  background-color: ${COLORS.FONT};
-`
-export const NavbarIcon = styled.div`
+
+export const NavbarLogo = styled(LogoIcon)`
   width: 50px;
   height: 50px;
-  background-size: contain;
-  background-image: url(${LogoImage});
-  background-repeat: no-repeat;
-  margin-top: 10px;
-  margin-left: 15px;
-  padding-left: 10px;
 
   :hover {
-    cursor: pointer;}
+    cursor: pointer;
+  }
 `
+
 export const NavbarName = styled.div`
-  height: 70px;
-  width: 100%;
   font-weight: bold;
   font-size: 25px;
-  margin-left: 10px;
-  padding-top: 25px;
+  margin: 0 auto 0 8px;
 
   :hover {
     cursor: pointer;
   }
 `
+
 export const NavbarUserImage = styled.img`
-  width: 55px;
-  height: 55px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  margin-top: 7px;
-  margin-right: 10px;
-  border: 1px white solid;
-  padding-right: 10px;
+  margin: 0 20px;
 
   :hover {
     cursor: pointer;
   }
 `
-export const NavbarLogOut = styled.div`
-  width: 30px;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  margin-right: 15px;
+
+export const NavbarIcon = styled.div`
+  width: 24px;
+  height: 24px;
+  position: relative;
 
   & svg {
     width: 100%;
     height: 100%;
-    display: flex;
-    align-self: center;
+    opacity: 0.7;
   }
 
   :hover {
     cursor: pointer;
-    color: ${COLORS.LIGHT_PRIMARY};
+    ${props => props.highlightHover && `color: ${COLORS.RED_SECONDARY};`}
+
+    & svg {
+      opacity: 1;
+    }
+  }
+`
+
+export const NavbarBellIcon = styled(NavbarIcon)`
+  :after {
+    ${props => props.highlighted && `
+      position: absolute;
+      top: -5px;
+      right: 2px;
+      width: 4px;
+      height: 4px;
+      color: ${COLORS.RED_SECONDARY};
+      content: '*';
+      font-weight: 900;
+      font-size: 22px;
+    `}
   }
 `

@@ -2,7 +2,7 @@ import express, { NextFunction, Response } from 'express'
 
 import { API } from 'shared/constants'
 
-import LoadRouter from './load'
+import GeneralRouter from './general'
 import AuthRouter from './auth'
 import ResourceRouter from './resources'
 import SettingsRouter from './settings'
@@ -22,7 +22,7 @@ const sessionChecker = (req: any, res: Response, next: NextFunction) => {
 export default () => {
   const router = express.Router()
 
-  router.use(`/${API.LOAD_PREFIX}`, LoadRouter())
+  router.use(`/${API.GENERAL_PREFIX}`, GeneralRouter())
   router.use(`/${API.AUTH_PREFIX}`, AuthRouter())
   router.use(`/${API.RESOURCES_PREFIX}`, ResourceRouter())
   router.use(`/${API.SETTINGS_PREFIX}`, sessionChecker, SettingsRouter())

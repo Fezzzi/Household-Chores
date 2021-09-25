@@ -5,7 +5,6 @@ import { FormHeaderLeftPanel, FormHeaderRightPanel } from './form'
 
 export const SettingsWrapper = styled.div`
   width: 100%;
-  height: calc(100vh - 70px);
   overflow: hidden;
   display: flex;
   padding: 15px 0 15px 20px;

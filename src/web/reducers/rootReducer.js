@@ -32,7 +32,7 @@ const stateLoaded = (state, { payload: { debug, isUserLogged, user, activityFeed
   activityFeed: activityFeed ?? [],
 })
 
-const rootReducer = createReducer(initialState, {
+const appReducer = createReducer(initialState, {
   [RootActions.stateLoaded.toString()]: stateLoaded,
   [AuthActions.logInSuccess.toString()]: logInUser,
 }
@@ -40,7 +40,7 @@ const rootReducer = createReducer(initialState, {
 
 export default history => combineReducers({
   router: connectRouter(history),
-  app: rootReducer,
+  app: appReducer,
   notifications: notificationsReducer,
   theme: themeReducer,
   locale: localeReducer,

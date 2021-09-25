@@ -27,6 +27,7 @@ export const AUTH = {
   LOG_IN_GOOGLE: 'auth.logInGoogle',
   SEND_RESET_LINK: 'auth.sendResetLink',
   SIGN_UP: 'auth.signUp',
+  SIGN_OUT: 'auth.signOut',
   TERMS_AGREEMENT: 'auth.termsAgreement',
 }
 
@@ -216,4 +217,5 @@ export const SUCCESS = {
   ACCOUNT_CREATED: 'success.accountCreated',
   ACCOUNT_PAIRED: 'success.accountPaired',
   CONNECTION_REQUEST_SENT: 'success.connectionRequestSent',
+  SIGNED_OUT: 'success.loggedOut',
 }

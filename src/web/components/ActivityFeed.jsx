@@ -2,8 +2,6 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-import { getTimeString } from '../../helpers/connections'
-import { LocaleText } from '../common'
 import {
   ActivityFeedBox,
   FeedMessageBox,
@@ -11,7 +9,10 @@ import {
   FeedMessagePictureMain,
   FeedMessagePictureSecondary,
   FeedMessageTime,
-} from '../../styles/blocks/feed'
+} from 'web/styles/blocks/feed'
+
+import { LocaleText } from './common'
+import { getTimeString } from '../helpers/connections'
 
 export const ActivityFeed = () => {
   const activityFeed = useSelector(({ app: { activityFeed } }) => activityFeed)

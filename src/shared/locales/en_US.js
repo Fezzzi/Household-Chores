@@ -30,6 +30,7 @@ export default {
   [AUTH.LOG_IN_GOOGLE]: 'Log in with Google',
   [AUTH.SEND_RESET_LINK]: 'Send Reset Link',
   [AUTH.SIGN_UP]: 'Sign Up',
+  [AUTH.SIGN_OUT]: 'Sign Out',
   [AUTH.TERMS_AGREEMENT]: 'By signing up, You agree to our ',
 
   [COMMON.AND_X_MORE]: 'and @\nmore',
@@ -207,4 +208,5 @@ export default {
   [SUCCESS.ACCOUNT_CREATED]: 'Your account has been successfully created.',
   [SUCCESS.ACCOUNT_PAIRED]: 'Your account has been paired with an existing one.',
   [SUCCESS.CONNECTION_REQUEST_SENT]: 'Connection request sent successfully.',
+  [SUCCESS.SIGNED_OUT]: 'You have been signed out successfully.',
 }

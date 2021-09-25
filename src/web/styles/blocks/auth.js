@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 
+import { LogoIcon } from './page'
 import { COLORS } from '../../constants'
 
 export const AuthContent = styled.div`
@@ -25,33 +26,11 @@ export const LogoBlock = styled.div`
   font-family: Carter One;
 `
 
-export const LogoTopBlock = styled.div`
+export const LogoTopBlock = styled(LogoIcon)`
   height: 80px;
   width: 100%;
   position: relative;
   top: 3px;
-  
-  & svg {
-    height: 100%;
-    width: 100%;
-    
-    & #logo-body ellipse,
-    & #logo-body line,
-    & #logo-body path,
-    & #logo-body rect {
-      stroke: ${COLORS.FONT};
-    }
-    
-    & #logo-roof line,
-    & #logo-roof path,
-    & #logo-roof rect {
-      stroke: ${props => props.stroke ?? '#EB4132'};
-    }
-  }
-  
-  & line {
-    stroke: ${props => props.stroke};
-  }
 `
 
 export const InputsBlock = styled.div`

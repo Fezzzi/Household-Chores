@@ -2,7 +2,7 @@ import React from 'react'
 import { PropTypes } from 'prop-types'
 import { useSelector } from 'react-redux'
 
-import { ThemeWrapper } from '../styles/blocks'
+import { ThemeWrapper } from '../styles/blocks/page'
 
 const PageTheme = ({ children }) => {
   const { theme, changing } = useSelector(({ theme }) => theme)
