@@ -3,15 +3,19 @@ import { createReducer } from '@reduxjs/toolkit'
 import applicationTexts from 'shared/locales'
 import { AVAILABLE_LOCALES, DEFAULT_LOCALE } from 'shared/constants'
 
-import { LOCALE_KEY } from '../constants'
+import { STORAGE_KEY } from '../constants'
 import { LocaleActions } from '../actions'
 
-const storageLocale = localStorage.getItem(LOCALE_KEY)
+const storageLocale = localStorage.getItem(STORAGE_KEY.LOCALE)
+const defaultLocale = AVAILABLE_LOCALES.includes(storageLocale)
+  ? storageLocale
+  : DEFAULT_LOCALE
+
+localStorage.setItem(STORAGE_KEY.LOCALE, defaultLocale)
 
 const initialState = {
-  locale: storageLocale || DEFAULT_LOCALE,
-  availableLocales: AVAILABLE_LOCALES,
-  applicationTexts: applicationTexts[storageLocale ?? DEFAULT_LOCALE],
+  locale: defaultLocale,
+  applicationTexts: applicationTexts[defaultLocale],
 }
 
 const localeChanged = (state, { payload: locale }) => ({

@@ -20,10 +20,10 @@ const ThemeSwitch = () => {
   return (
     <IconButtonWrapper>
       <IconButton onClick={() => switchTheme(theme)}>
-        <Zoom in={theme === THEME_TYPE.DARK_THEME} timeout={300} style={reverseColorStyle}>
+        <Zoom in={theme === THEME_TYPE.DARK} timeout={300} style={reverseColorStyle}>
           <SunIcon />
         </Zoom>
-        <Zoom in={theme !== THEME_TYPE.DARK_THEME} timeout={300}>
+        <Zoom in={theme !== THEME_TYPE.DARK} timeout={300}>
           <SunIcon />
         </Zoom>
       </IconButton>

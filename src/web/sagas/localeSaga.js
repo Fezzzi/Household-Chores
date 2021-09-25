@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 
+import { STORAGE_KEY } from '../constants'
 import { LocaleActions } from '../actions'
-import { LOCALE_KEY } from '../constants'
 import { generalSaga } from '../helpers/sagas'
 import { updateLocale } from '../effects/settingsEffects'
 
@@ -13,7 +13,7 @@ function* handleTriggerLocaleChange ({ payload: newLocale }) {
 
 function* handleUpdateLocale ({ payload: newLocale }) {
   yield put(LocaleActions.localeChanged(newLocale))
-  localStorage.setItem(LOCALE_KEY, newLocale)
+  localStorage.setItem(STORAGE_KEY.LOCALE, newLocale)
 }
 
 export function* localeSaga () {

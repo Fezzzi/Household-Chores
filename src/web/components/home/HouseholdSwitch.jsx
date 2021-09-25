@@ -15,9 +15,10 @@ import { HomeActions } from '../../actions'
 const HouseholdSwitch = ({ householdData, nextData, prevData }) => {
   const dispatch = useDispatch()
   const history = useHistory()
+
   const handleHouseholdSelection = useCallback(householdId =>
-    dispatch(HomeActions.changeSelectedHousehold(householdId)), [dispatch]
-  )
+    dispatch(HomeActions.changeSelectedHousehold(householdId))
+  , [dispatch])
 
   const showArrows = householdData.householdId !== nextData.householdId
 
