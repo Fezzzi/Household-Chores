@@ -7,8 +7,9 @@ import {
   NOTIFICATION_TYPE,
   PROFILE_TABS,
   HOUSEHOLD_TABS,
-  AVAILABLE_LOCALES,
   API,
+  isAvailableLocale,
+  isSettingCategory,
 } from 'shared/constants'
 import { updateUserLocale } from 'api/database'
 import { NotifySettingsApiType, UserDialogsUnforcedApiType } from 'api/database/mappers'
@@ -28,7 +29,7 @@ export default () => {
   router.get(/.*/, catchErrors(async (req, res) => {
     const { query: { category, tab } } = req as { query: { category: string; tab: string }}
 
-    if (Object.values(SETTING_CATEGORIES).find(cat => cat === category) !== null) {
+    if (isSettingCategory(category)) {
       await handleSettingsDataFetch(category, tab, req, res)
       return
     }
@@ -39,7 +40,7 @@ export default () => {
   router.put(`/${API.UPDATE_LOCALE}`, catchErrors(async (req: any, res) => {
     const { locale } = req.body as { locale: string }
 
-    if (locale && AVAILABLE_LOCALES.includes(locale) && req.session?.userId) {
+    if (isAvailableLocale(locale) && req.session?.userId) {
       await updateUserLocale(req.session.userId, locale)
       res.status(204).send()
     } else {
@@ -51,7 +52,7 @@ export default () => {
     const { category, tab, inputs } = req.body
 
     if (inputs && Object.values(inputs).length > 0) {
-      if (category && tab && SETTING_TAB_ROWS[category] !== undefined) {
+      if (category && tab && category in SETTING_TAB_ROWS) {
         const handled = await editSettings(category, tab, inputs, req, res)
         if (!handled) {
           await handleSettingsDataFetch(category, tab, req, res)

@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 
-import { LogoIcon } from './page'
 import { COLORS } from '../../constants'
+import { clickableStyle } from './common'
+import { LogoIcon } from './page'
 
 export const AuthContent = styled.div`
   color: ${COLORS.FONT};
@@ -48,9 +49,9 @@ export const LinkRow = styled.a`
   margin-top: 12px;
   text-align: center;
   text-decoration: none;
-  cursor: pointer;
   display: block;
 
+  ${clickableStyle}
   &:active {
     opacity: .7;
   }
@@ -75,8 +76,8 @@ export const BottomMessageBlock = styled.p`
 export const BottomMessageLink = styled.a`
   color: ${COLORS.BLUE_PRIMARY};
   text-decoration: none;
-  cursor: pointer;
 
+  ${clickableStyle}
   &:active {
     opacity: .7;
   }
@@ -94,8 +95,6 @@ export const MessageBlockLink = styled.span`
   color: ${COLORS.GREY_PRIMARY};
   font-weight: 600;
   text-decoration: none;
-  
-  :hover {
-    cursor: pointer;
-  }
+
+  ${clickableStyle}
 `

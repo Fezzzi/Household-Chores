@@ -1,6 +1,6 @@
 import sgMail from '@sendgrid/mail'
 
-import { AVAILABLE_LOCALES, DEFAULT_LOCALE } from 'shared/constants'
+import { DEFAULT_LOCALE, isAvailableLocale, LOCALE_CODE } from 'shared/constants'
 import { Email, EmailTemplateDataShapeType, mails } from 'api/mails'
 import { wrapSubject, wrapText, wrapHTML } from 'api/mails/template'
 
@@ -14,9 +14,11 @@ if (CONFIG.SENDGRID_API_KEY && CONFIG.SENDGRID_EMAIL) {
 const getTemplate = <T extends EMAIL_TEMPLATE> (
   templateName: T,
   data: EmailTemplateDataShapeType[T],
-  locale: string,
+  locale: LOCALE_CODE,
 ) => {
-  const localeCode = (locale && AVAILABLE_LOCALES.includes(locale) && locale) || DEFAULT_LOCALE
+  const localeCode = isAvailableLocale(locale)
+    ? locale
+    : DEFAULT_LOCALE
   const template = mails[localeCode] ?? mails[DEFAULT_LOCALE]
   const { getSubject, getText, getHTML } = template[templateName] as Email<EmailTemplateDataShapeType[T]>
 
@@ -31,7 +33,7 @@ export const sendEmails = async<T extends EMAIL_TEMPLATE> (
   recipients: string[],
   templateName: T,
   data: EmailTemplateDataShapeType[T],
-  locale: string
+  locale: LOCALE_CODE
 ): Promise<boolean> => {
   if (!CONFIG.SENDGRID_API_KEY || !CONFIG.SENDGRID_EMAIL) {
     console.warn('Emails are disabled, to enable them set up SENDGRID_API_KEY and SENDGRID_EMAIL environmental variables.')

@@ -110,6 +110,7 @@ const PhotoInput = ({
             name={name}
             type="file"
             ref={reference}
+            title={''}
             onChange={e => handleInputChange(e)}
             onFocus={() => setInputActive(true)}
             onBlur={() => setInputActive(false)}

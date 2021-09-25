@@ -44,16 +44,6 @@ export const PageWrapper = styled.section`
   }
 `
 
-export const PageContent = styled.main`
-  display: flex;
-  flex-grow: 1;
-  ${props => props.withNavbar && `
-    padding-top: 60px;
-    min-height: calc(100vh - 98px);
-    max-height: calc(100vh - 98px);
-  `}
-`
-
 export const PortalAnchor = styled.div`
   height: 0;
   width: 100%;

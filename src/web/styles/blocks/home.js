@@ -1,7 +1,7 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { COLORS } from '../../constants'
-import { FormHeaderLeftPanel, FormHeaderRightPanel } from './form'
+import { clickableStyle } from './common'
 
 export const HomeWrapper = styled.div`
   width: 100%;
@@ -13,81 +13,11 @@ export const EmptyContentMessage = styled.h3`
   text-align: center;
 `
 
-export const HouseholdSwitchPhotoBox = styled.div`
-  position: relative;
-`
-
-export const HouseholdSwitchSettingsLink = styled.div`
-  position: absolute;
-  z-index: 5;
-  top: -5px;
-  right: -5px;
-  width: 25px;
-  height: 25px;
-  opacity: 0.5;
-  
-  > svg {
-    width: 100%;
-    height: 100%;
-  }
-  
-  :hover {
-    opacity: 1;
-    cursor: pointer;
-  }
-`
-
-const arrow = css`
-  top: inherit;
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-  width: 84px;
-  height: 60px;
-  opacity: 0.1;
-  user-select: none;
-  transition: opacity 0.5s ease 0s;
-  
-  :hover {
-    opacity: 1;
-    cursor: pointer;
-    
-    > img {
-      width: 50px;
-      height: 50px;
-      margin: 5px;
-    }
-  }
-  
-  > svg {
-    width: 20px;
-    height: 30px;
-  }
-`
-
-export const ToggleLeftArrow = styled(FormHeaderLeftPanel)`
-  ${arrow}
-  justify-content: flex-start;
-`
-
-export const ToggleRightArrow = styled(FormHeaderRightPanel)`
-  ${arrow}
-  justify-content: flex-end;
-`
-
-export const ArrowHouseholdPreview = styled.img`
-  width: 40px;
-  height: 40px;
-  margin: 10px;
-  border-radius: 50%;
-  transition: width 0.4s ease 0s, height 0.4s ease 0s, margin 0.4s ease 0s;
-`
-
 export const MessageLink = styled.span`
   color: ${COLORS.BLUE_PRIMARY};
   text-decoration: none;
-  cursor: pointer;
 
+  ${clickableStyle}
   &:active {
     opacity: .7;
   }
@@ -141,7 +71,7 @@ export const HouseholdMemberRole = styled.div`
   top: -10px;
   right: -1px;
   background-color: ${props => props.background};
-  color: ${props => props.color};
+  color: ${props => props.textColor};
   border-radius: 5px 0 0 0;
   opacity: 0;
   user-select: none;
@@ -173,7 +103,7 @@ export const HouseholdMemberName = styled.span`
 
 export const ExpandMemberListButton = styled.div`
   position: absolute;
-  bottom: 0px;
+  bottom: 0;
   width: 30px;
   height: 30px;
   display: flex;
@@ -189,12 +119,8 @@ export const ExpandMemberListButton = styled.div`
     width: 75%;
     height: 75%;
   }
-  
-  :hover {
-    cursor: pointer;
-    opacity: 1;
-  }
-  
+
+  ${clickableStyle}
   :active, :focus {
     outline: none;
   }

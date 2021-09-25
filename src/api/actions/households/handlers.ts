@@ -7,6 +7,7 @@ import {
   SETTING_CATEGORIES,
   HOUSEHOLD_TABS,
   HOUSEHOLD_ROLE_TYPE,
+  LOCALE_CODE,
 } from 'shared/constants'
 import { ACTIVITY, ERROR } from 'shared/constants/localeMessages'
 import { NOTIFICATION_KEYS } from 'api/constants'
@@ -31,7 +32,7 @@ export const handleCreateHousehold = async (
   invitations: CreateHouseholdInvitation[],
   userId: number,
   fsKey: string,
-  locale: string,
+  locale: LOCALE_CODE,
   res: Response,
 ): Promise<boolean> => {
   const valid = await validateCreateData(inputs, invitations, userId, res)
@@ -74,7 +75,7 @@ export const handleCreateHousehold = async (
   return true
 }
 
-export const handleDeleteHousehold = async (userId: number, householdId: number, locale: string, res: Response) => {
+export const handleDeleteHousehold = async (userId: number, householdId: number, locale: LOCALE_CODE, res: Response) => {
   const members = await getHouseholdMembers(householdId)
   const user = members?.find(({ userId: memberId }) => userId === memberId)
   const isAdmin = user?.role === HOUSEHOLD_ROLE_TYPE.ADMIN
@@ -113,7 +114,7 @@ export const handleApproveHouseholdInvitation = async (
   userId: number,
   userNickname: string,
   fsKey: string,
-  locale: string,
+  locale: LOCALE_CODE,
   res: Response,
 ) => {
   const { fromId, householdId, userNickname: nickname, userPhoto: photo } = invitationBody
@@ -156,7 +157,7 @@ export const handleApproveHouseholdInvitation = async (
   return true
 }
 
-export const handleLeaveHousehold = async (userId: number, householdId: number, locale: string, res: Response) => {
+export const handleLeaveHousehold = async (userId: number, householdId: number, locale: LOCALE_CODE, res: Response) => {
   const members = await getHouseholdMembers(householdId)
   const admins = members
     ?.filter(({ role }) => role === HOUSEHOLD_ROLE_TYPE.ADMIN)

@@ -1,32 +1,38 @@
 import { createReducer } from '@reduxjs/toolkit'
 
+import { THEME_TYPE, DEFAULT_THEME, STORAGE_KEY, isAvailableTheme } from 'web/constants'
+
 import { ThemeActions } from '../actions'
-import { DEFAULT_THEME, STORAGE_KEY, AVAILABLE_THEMES } from '../constants'
 
 const storageTheme = localStorage.getItem(STORAGE_KEY.THEME)
-const defaultTheme = AVAILABLE_THEMES.includes(storageTheme)
+const defaultTheme = storageTheme && isAvailableTheme(storageTheme)
   ? storageTheme
   : DEFAULT_THEME
 
 localStorage.setItem(STORAGE_KEY.THEME, defaultTheme)
 
-const initialState = {
+export interface ThemeState {
+  theme: THEME_TYPE
+  changing: boolean
+}
+
+const initialState: ThemeState = {
   theme: defaultTheme,
   changing: false,
 }
 
-const changeTheme = (state, { payload: theme }) => ({
+const changeTheme = (state: ThemeState, { payload: theme }: { payload: THEME_TYPE }) => ({
   ...state,
   theme,
   changing: true,
 })
 
-const stopTransition = state => ({
+const stopTransition = (state: ThemeState) => ({
   ...state,
   changing: false,
 })
 
-export default createReducer(initialState, {
+export const themeReducer = createReducer(initialState, {
   [ThemeActions.changeTheme.toString()]: changeTheme,
   [ThemeActions.stopThemeTransition.toString()]: stopTransition,
 })

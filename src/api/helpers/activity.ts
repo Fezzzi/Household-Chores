@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE } from 'shared/constants'
+import { DEFAULT_LOCALE, LOCALE_CODE } from 'shared/constants'
 import applicationTexts from 'shared/locales'
 import { interpolate } from 'shared/helpers/text'
 import { addActivityForUsers, getNotificationDataForUsers } from 'api/database'
@@ -12,7 +12,7 @@ import { EMAIL_TEMPLATE } from 'api/constants'
  */
 export const logActivity = async (
   notification: keyof NotifySettingsApiType,
-  locale: string,
+  locale: LOCALE_CODE,
   userIds: number[],
   message: string,
   messageTexts: string[],

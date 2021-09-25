@@ -8,7 +8,7 @@ import { createBrowserHistory } from 'history'
 
 import { PageWrapper, PortalAnchor } from './styles/blocks/page'
 import { PORTAL_TYPE } from './constants'
-import createRootReducer from './reducers/rootReducer'
+import { createRootReducer } from './reducers/rootReducer'
 import rootSaga from './sagas/rootSaga'
 import PageTheme from './components/PageTheme'
 import { Content } from './components/Content'

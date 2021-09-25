@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import {
   ACTIVITY, AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, MORE, SETTINGS, SUCCESS,
 } from '../constants/localeMessages'
@@ -7,7 +6,7 @@ import {
   CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, MORE_TABS,
 } from '../constants'
 
-export default {
+const textsCZ = {
   [ACTIVITY.CONNECTION_REQUEST]: 'Nová žádost o spojení od uživatele $1$.',
   [ACTIVITY.CONNECTION_APPROVAL]: 'Uživatel $1$ přijal vaši žádost o spojení.',
   [ACTIVITY.HOUSEHOLD_INVITATION]: 'Nová pozvánka do domácnosti $1$ od uživatele $2$.',
@@ -55,7 +54,7 @@ export default {
   [COMMON.SHOW]: 'Zobrazit',
   [COMMON.TERMS_AND_CONDITIONS]: 'podmínky použití',
   [COMMON.TIME_PREFIX]: 'před',
-  [COMMON.TIME_SUFFIX]: '',
+  [COMMON.TIME_SUFFIX]: 'a',
   [COMMON.PHOTO_SIZE]: 'velikost obrázku',
 
   [ERROR.ERROR]: 'Error',
@@ -209,4 +208,6 @@ export default {
   [SUCCESS.ACCOUNT_PAIRED]: 'Váš účet byl propojen s již existujícím.',
   [SUCCESS.CONNECTION_REQUEST_SENT]: 'Žádost o spojení byla odeslána.',
   [SUCCESS.SIGNED_OUT]: 'Odhlášení proběhlo úspěšně',
-}
+} as const
+
+export default textsCZ

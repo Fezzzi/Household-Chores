@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants'
+import { clickableStyle } from './common'
 
 export const TooltipWrapper = styled.div`
   position: relative;
@@ -13,8 +14,8 @@ export const TooltipWrapper = styled.div`
 export const OptionsTooltipIcon = styled.span`
   opacity: ${props => props.active ? 0.9 : 0.6};
   
+  ${clickableStyle}
   :hover {
-    cursor: pointer;
     opacity: 0.9;
   }
   
@@ -76,10 +77,9 @@ export const TooltipRow = styled.div`
 
   ${props => props.clickable
     ? `
+      ${clickableStyle}
       :hover {
-        cursor: pointer;
         font-weight: 400;
-        opacity: 1;
         background-color: ${COLORS.THEME_BACK};
       }
     ` : 'filter: grayscale(100%);'
@@ -104,8 +104,8 @@ export const TooltipRow = styled.div`
 `
 
 export const SimpleFloatingElementWrapper = styled.div`
-  top: 10px;
-  right: 20px;
+  top: 72px;
+  right: 12px;
   height: 36px;
   background-color: ${props => props.background};
   color: ${COLORS.LIGHT_PRIMARY};
@@ -116,18 +116,7 @@ export const SimpleFloatingElementWrapper = styled.div`
   z-index: 25;
   opacity: ${props => props.enabled ? 1 : 0.8};
   
-  :focus {
-    outline: none;
-  }
-  
-  ${props => props.enabled && `:hover {
-    background-color: ${props.backgroundHovered};
-    cursor: pointer;
-  }`}
-  
-  :active, :focus {
-    opacity: 0.8;
-  }
+  ${props => props.enabled && clickableStyle}
 `
 
 export const FloatingElementIcon = styled.span`
@@ -176,9 +165,6 @@ export const InputHintIcon = styled.div`
     width: 100%;
     height: 100%;
   }
-  
-  :hover {
-    cursor: pointer;
-    opacity: 1;
-  }
+
+  ${clickableStyle}
 `

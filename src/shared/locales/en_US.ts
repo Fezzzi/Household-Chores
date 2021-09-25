@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import {
   ACTIVITY, AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, SETTINGS, SUCCESS, MORE,
 } from '../constants/localeMessages'
@@ -7,7 +6,7 @@ import {
   CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, MORE_TABS,
 } from '../constants'
 
-export default {
+const textsUS = {
   [ACTIVITY.CONNECTION_REQUEST]: 'New connection request from user $1$.',
   [ACTIVITY.CONNECTION_APPROVAL]: 'User $1$ has approved your connection request.',
   [ACTIVITY.HOUSEHOLD_INVITATION]: 'New invitation to household $1$ from user $2$.',
@@ -209,4 +208,6 @@ export default {
   [SUCCESS.ACCOUNT_PAIRED]: 'Your account has been paired with an existing one.',
   [SUCCESS.CONNECTION_REQUEST_SENT]: 'Connection request sent successfully.',
   [SUCCESS.SIGNED_OUT]: 'You have been signed out successfully.',
-}
+} as const
+
+export default textsUS

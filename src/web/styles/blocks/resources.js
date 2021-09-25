@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { clickableStyle } from './common'
+
 export const ResourceWrapper = styled.div`
   width: 100%;
 `
@@ -52,12 +54,8 @@ export const TopButton = styled.div`
   width: 25px;
   height: 25px;
   opacity: .7;
-  
-  &:hover {
-    cursor: pointer;
-    opacity: .9;
-  }
-  
+
+  ${clickableStyle}
   &:active {
     opacity: 1;
   }

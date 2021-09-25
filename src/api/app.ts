@@ -7,7 +7,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 import path from 'path'
 
-import { API } from 'shared/constants'
+import { API } from '../shared/constants'
 
 import apiRouter from './actions/apiRouter'
 import { Logger } from './helpers/logger'

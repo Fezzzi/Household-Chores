@@ -1,6 +1,7 @@
 import {
-  USER_VISIBILITY_TYPE, SETTING_COLUMNS, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, SETTING_CATEGORIES, MORE_TABS,
-} from 'shared/constants'
+  SETTING_COLUMNS, CONNECTION_TABS, PROFILE_TABS, HOUSEHOLD_TABS, SETTING_CATEGORIES, MORE_TABS,
+} from './settings'
+import { USER_VISIBILITY_TYPE } from './userVisibilityType'
 
 export const ACTIVITY = {
   CONNECTION_REQUEST: 'activity.connectionRequest',
@@ -12,7 +13,7 @@ export const ACTIVITY = {
   HOUSEHOLD_REMOVAL_MULTIPLE: 'activity.householdRemovalMultiple',
   HOUSEHOLD_EXPELLING: 'activity.householdExpelling',
   HOUSEHOLD_DELETE: 'activity.householdDelete',
-}
+} as const
 
 export const AUTH = {
   BACK_TO_LOGIN: 'auth.backToLogin',
@@ -29,7 +30,7 @@ export const AUTH = {
   SIGN_UP: 'auth.signUp',
   SIGN_OUT: 'auth.signOut',
   TERMS_AGREEMENT: 'auth.termsAgreement',
-}
+} as const
 
 export const COMMON = {
   AND_X_MORE: 'common.andXMore',
@@ -56,7 +57,7 @@ export const COMMON = {
   TIME_PREFIX: 'common.timePrefix',
   TIME_SUFFIX: 'common.timeSuffix',
   PHOTO_SIZE: 'common.photoSize',
-}
+} as const
 
 export const ERROR = {
   ERROR: 'error.error',
@@ -83,11 +84,11 @@ export const ERROR = {
   SMTH_BROKE_LOGIN: 'error.smthBrokeLogIn',
   VALUE_TOO_SHORT: 'error.valueTooShort',
   VALUE_TOO_LONG: 'error.valueTooLong',
-}
+} as const
 
 export const INFO = {
   NOTHING_TO_UPDATE: 'info.nothingToUpdate',
-}
+} as const
 
 export const FORM = {
   DELETE_ACCOUNT: 'form.deleteAccount',
@@ -148,15 +149,15 @@ export const FORM = {
   [USER_VISIBILITY_TYPE.ALL]: 'form.userVisibilityALL',
 
   HOUSEHOLD_USER_DELETING_DIALOG: 'form.householdMemberDeleting',
-}
+} as const
 
 export const HINT = {
   VISIBILITY: 'hint.visibility',
-}
+} as const
 
 export const HOME = {
   NO_HOUSEHOLD: 'home.noHousehold',
-}
+} as const
 
 export const MORE = {
   ABOUT_THE_APPLICATION: 'more.aboutTheApplication',
@@ -165,7 +166,7 @@ export const MORE = {
   SUPPORTERS: 'more.supporters',
   FEZZI: 'more.fezzi',
   ABOUT_TEXT: 'more.aboutText',
-}
+} as const
 
 export const HOUSEHOLD = {
   LEAVE: 'household.leave',
@@ -185,7 +186,7 @@ export const HOUSEHOLD = {
   SINCE: 'household.since',
   MODULES: 'household.modules',
   ADD_MODULES: 'household.addModule',
-}
+} as const
 
 export const SETTINGS = {
   [`${SETTING_COLUMNS.CATEGORY}_${SETTING_CATEGORIES.PROFILE}`]: 'settings.categoryProfile',
@@ -218,4 +219,4 @@ export const SUCCESS = {
   ACCOUNT_PAIRED: 'success.accountPaired',
   CONNECTION_REQUEST_SENT: 'success.connectionRequestSent',
   SIGNED_OUT: 'success.loggedOut',
-}
+} as const

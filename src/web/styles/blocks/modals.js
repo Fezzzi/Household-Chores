@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants'
+import { clickableStyle } from './common'
 
 export const ModalOverlay = styled.div`
   position: absolute;
@@ -32,15 +33,12 @@ export const ModalCloseButton = styled.div`
   left: -15px;
   opacity: .8;
   
-  :hover {
-    cursor: pointer;
-    opacity: 1;
-  }
-  
   > svg {
     height: 100%;
     width: 100%;
   }
+
+  ${clickableStyle}
 `
 
 export const ModalButtonsBlock = styled.div`

@@ -15,7 +15,7 @@ describe('Settings > integrity', () => {
           assert.fail(`missing tab configuration for category ${category} in SettingTypes!`)
         }
 
-        if (tabs.find(tab => !settingsRenderers[category][tab])) {
+        if ((tabs as any[]).find((tab: string) => !(settingsRenderers as any)[category][tab])) {
           assert.fail(`missing form renderer for SettingTypes TAB of category ${category}!`)
         }
       })

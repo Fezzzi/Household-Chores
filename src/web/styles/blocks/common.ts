@@ -1,8 +1,22 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { COLORS } from '../../constants'
 
-export const MiniInputWrapper = styled.div`
+export const clickableStyle = css`
+  :hover {
+    cursor: pointer;
+    opacity: 1;
+  }
+`
+
+export const SvgIcon = styled.div`
+  & svg {
+    width: 100%;
+    height: 100%;
+  }
+`
+
+export const MiniInputWrapper = styled.div<{ active: boolean }>`
   background: ${COLORS.THEME_BACK};
   align-items: center;
   border: 1px solid ${props => props.active ? COLORS.BORDER_ACTIVE : COLORS.BORDER};
@@ -16,20 +30,16 @@ export const MiniInputWrapper = styled.div`
   flex-direction: row;
   height: 29px;
   
-  &input {
+  & input {
     font-size: .9em;
   }
 `
 
-export const EditableFieldWrapper = styled.div`
+export const EditableFieldWrapper = styled.div<{ editing: boolean }>`
   position: relative;
   max-width: 100%;
   
-  ${props => !props.editing && `
-    :hover {
-      cursor: pointer;
-    }
-  `}
+  ${props => !props.editing && clickableStyle}
 `
 
 export const EditableLabelBox = styled.div`
@@ -45,26 +55,18 @@ export const EditableLabelBox = styled.div`
   }
 `
 
-export const EditableLabel = styled.div`
+export const EditableLabel = styled.div<{ clickable: boolean }>`
   ${props => props.clickable
-    ? `
-      :hover {
-        cursor: pointer;
-      }
-    ` : 'filter: grayscale(100%);'}
+  ? clickableStyle
+  : 'filter: grayscale(100%);'}
 `
 
-export const EditableFieldIcon = styled.div`
+export const EditableFieldIcon = styled(SvgIcon)<{ iconRight?: number; centered: boolean }>`
   position: absolute;
   top: -10px;
   right: ${props => props.iconRight ?? -22}px;
   width: 15px;
   height: ${props => props.centered ? '100%' : '15px'};
   color: ${COLORS.FONT};
-  opacity: .4; 
-  
-  svg {
-    width: 100%;
-    height: 100%;
-  }
+  opacity: .4;
 `

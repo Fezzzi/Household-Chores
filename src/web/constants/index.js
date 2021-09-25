@@ -1,6 +1,6 @@
 export * from './themeType'
 export * from './storage'
-export * from './design.ts'
+export * from './design'
 export * as AUTH_TABS from './authTabs'
 export * as MODAL_TYPE from './modalType'
 export * as PORTAL_TYPE from './portalType'

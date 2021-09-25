@@ -59,10 +59,11 @@ module.exports = {
     'generator-star-spacing': [2, 'after'],
     'no-multiple-empty-lines': [2, { max: 1, maxEOF: 1, maxBOF: 0 }],
 
-    'import/first': 1,
-    'import/named': 1,
-    'import/extensions': [1, { js: 'never', ts: 'never', jsx: 'never', tsx: 'never' }],
+    'import/named': 0,
     'import/no-anonymous-default-export': 0,
+
+    'import/first': 1,
+    'import/extensions': [1, { js: 'never', ts: 'never', jsx: 'never', tsx: 'never' }],
 
     'import/order': [2, {
       groups: [
@@ -118,7 +119,7 @@ module.exports = {
         '@typescript-eslint/prefer-nullish-coalescing': 2,
       },
     }, {
-      files: ['./src/api/resources/**/*.ts'],
+      files: ['./src/api/resources/**/*.ts', './src/shared/locales/**/*.ts'],
       rules: {
         'max-len': 0,
       },

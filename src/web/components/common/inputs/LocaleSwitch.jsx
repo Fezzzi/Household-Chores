@@ -12,7 +12,7 @@ import {
 const LocaleSwitch = () => {
   const [state, setState] = useState({ expanded: false, inputActive: false })
 
-  const locale = useSelector(({ locale: { locale } }) => locale)
+  const currentLocale = useSelector(({ locale: { locale } }) => locale)
   const dispatch = useDispatch()
   const switchLocale = useCallback(locale =>
     dispatch(LocaleActions.triggerLocaleChange(locale)),
@@ -45,9 +45,9 @@ const LocaleSwitch = () => {
         })}
       >
         <LocaleSelector hidden={!expanded}>
-          {renderLocaleSelection(AVAILABLE_LOCALES.filter(l => l !== locale), switchLocale)}
+          {renderLocaleSelection(AVAILABLE_LOCALES.filter(locale => locale !== currentLocale), switchLocale)}
         </LocaleSelector>
-        {FLAGS[locale]()}
+        {FLAGS[currentLocale]()}
       </IconButton>
     </IconButtonWrapper>
   )
