@@ -10,6 +10,8 @@ export const clickableStyle = css`
 `
 
 export const SvgIcon = styled.div`
+  position: relative;
+
   & svg {
     width: 100%;
     height: 100%;

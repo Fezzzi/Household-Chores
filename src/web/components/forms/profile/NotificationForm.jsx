@@ -9,7 +9,7 @@ import { TableBox, TableHeaderBox, TableHeaderCell } from 'web/styles/blocks/tab
 import { useFormState, useUpdateHandler } from 'web/helpers/form'
 
 import { LocaleText, Input } from '../../common'
-import { SimpleFloatingElement } from '../../portals'
+import { FloatingIcon } from '../../portals'
 
 const NOTIFICATION_GROUPS = ['connection', 'household']
 
@@ -83,7 +83,7 @@ const NotificationForm = ({ data, onSubmit }) => {
   return (
     <>
       {Object.keys(inputs).length > 0 && (
-        <SimpleFloatingElement
+        <FloatingIcon
           message={submitMessage}
           sending={isFormSending}
           enabled={isFormValid}

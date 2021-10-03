@@ -4,9 +4,10 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { API, SETTING_CATEGORIES } from 'shared/constants'
+import { COLORS } from 'web/constants'
 import { HomeActions } from 'web/actions'
 import { clickableStyle, SvgIcon } from 'web/styles/blocks/common'
-import { SettingsIcon } from 'web/styles/icons'
+import { FullArrowLeftIcon, FullArrowRightIcon, SettingsIcon } from 'web/styles/icons'
 import { FormHeader, FormHeaderPhoto, FormHeaderTitle } from 'web/styles/blocks/form'
 
 import { Link } from '../common'
@@ -26,10 +27,7 @@ const HouseholdSwitch = ({ householdData, nextData, prevData }) => {
     <FormHeader>
       {showArrows && (
         <ToggleLeftArrow onClick={() => handleHouseholdSelection(prevData.householdId)}>
-
-          <svg viewBox="0 0 5 10">
-            <path d="M5 0l-5 5 5 5V7z" />
-          </svg>
+          <FullArrowLeftIcon />
           <ArrowHouseholdPreview src={prevData.photo} alt="prev household" />
         </ToggleLeftArrow>
       )}
@@ -49,9 +47,7 @@ const HouseholdSwitch = ({ householdData, nextData, prevData }) => {
       {showArrows && (
         <ToggleRightArrow onClick={() => handleHouseholdSelection(nextData.householdId)}>
           <ArrowHouseholdPreview src={nextData.photo} alt="next household" />
-          <svg viewBox="5 0 5 10">
-            <path d="M5 10l5 -5 -5 -5v10z" />
-          </svg>
+          <FullArrowRightIcon />
         </ToggleRightArrow>
       )}
     </FormHeader>
@@ -101,6 +97,7 @@ const HomeSwitchArrow = styled.div`
   opacity: 0.1;
   user-select: none;
   transition: opacity 0.5s ease 0s;
+  color: ${COLORS.FONT};
 
   ${clickableStyle}
   :hover {    

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { Tooltip, TooltipWrapper } from 'web/styles/blocks/portals'
 
-import LocaleText from '../../common/LocaleText'
+import { LocaleText } from '../../common/LocaleText'
 
 const InfoTooltip = ({ icon, text, customHeight, customOffsetY }) => {
   const [hovered, setHovered] = useState(false)

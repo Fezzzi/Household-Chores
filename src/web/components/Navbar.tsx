@@ -1,11 +1,11 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useRef, useState, FocusEvent } from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
 import LogoSvg from 'assets/icons/logo.svg'
 
 import { API, PROFILE_TABS, SETTING_CATEGORIES } from 'shared/constants'
-import { AUTH } from 'shared/constants/localeMessages'
+import { AUTH, FORM } from 'shared/constants/localeMessages'
 import { COLORS } from 'web/constants'
 import { AuthActions } from 'web/actions'
 import { BellIcon, LogOutIcon } from 'web/styles/icons'
@@ -14,11 +14,12 @@ import { clickableStyle, SvgIcon } from 'web/styles/blocks/common'
 import { useSelector } from 'web/helpers/useTypedRedux'
 
 import { Link } from './common'
+import { FloatingActivityFeed } from './portals'
 
 export const Navbar = () => {
   const applicationTexts = useSelector(({ locale: { applicationTexts } }) => applicationTexts)
   const [signoutLabel, activityLabel] = useMemo(() =>
-    [applicationTexts[AUTH.SIGN_OUT], applicationTexts[AUTH.SIGN_OUT]]
+    [applicationTexts[AUTH.SIGN_OUT], applicationTexts[FORM.NOTIFICATIONS]] as [string, string]
   , [applicationTexts])
 
   const isUserLogged = useSelector(({ app: { isUserLogged } }) => isUserLogged)
@@ -30,6 +31,16 @@ export const Navbar = () => {
     dispatch(AuthActions.signOut())
   }, [dispatch])
 
+  const [notificationsExpanded, setNotificationsExpanded] = useState<boolean>(false)
+  const bellButtonRef = useRef<HTMLDivElement>(null)
+
+  const handlePanelBlur = useCallback((e: FocusEvent<HTMLElement>) => {
+    if (e.relatedTarget === bellButtonRef.current) {
+      return false
+    }
+    setNotificationsExpanded(false)
+  }, [setNotificationsExpanded, bellButtonRef.current])
+
   return isUserLogged
     ? (
       <NavbarWrapper>
@@ -40,15 +51,25 @@ export const Navbar = () => {
           <Link route="/">HOUSEHOLD APP</Link>
         </NavbarName>
 
-        <NavbarBellIcon highlighted={hasActivity} title={activityLabel}>
+        <NavbarBellIcon
+          highlighted={hasActivity}
+          title={activityLabel}
+          ref={bellButtonRef}
+          tabIndex={-1}
+          onClick={() => setNotificationsExpanded(prevState => !prevState)}
+        >
           <BellIcon />
         </NavbarBellIcon>
-        <Link route={`${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.PROFILE}?tab=${PROFILE_TABS.GENERAL}`}>
-          <NavbarUserImage src={userPhoto} alt="user" />
-        </Link>
+        <NavbarUserImage>
+          <Link route={`${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.PROFILE}?tab=${PROFILE_TABS.GENERAL}`}>
+            <img src={userPhoto} alt="user" />
+          </Link>
+        </NavbarUserImage>
         <NavbarIcon title={signoutLabel} highlightHover onClick={handleSignOutClick}>
           <LogOutIcon />
         </NavbarIcon>
+
+        {notificationsExpanded && <FloatingActivityFeed onBlur={handlePanelBlur} />}
       </NavbarWrapper>
     ) : null
 }
@@ -64,7 +85,7 @@ const NavbarWrapper = styled.div`
   flex-flow: row;
   align-items: center;
   position: fixed;
-  box-shadow: 0 4px 10px -10px ${COLORS.FONT};
+  border-bottom: 1px solid ${COLORS.BORDER};
 `
 
 const NavbarLogo = styled(LogoIcon)`
@@ -78,15 +99,21 @@ const NavbarName = styled.div`
   font-weight: bold;
   font-size: 25px;
   margin: 0 auto 0 8px;
+  user-select: none;
 
   ${clickableStyle}
 `
 
-const NavbarUserImage = styled.img`
+const NavbarUserImage = styled.div`
   width: 50px;
   height: 50px;
-  border-radius: 50%;
   margin: 0 20px;
+
+  & img {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+  }
 
   ${clickableStyle}
 `
@@ -94,7 +121,6 @@ const NavbarUserImage = styled.img`
 const NavbarIcon = styled(SvgIcon)<{ highlightHover?: boolean }>`
   width: 24px;
   height: 24px;
-  position: relative;
 
   & svg {
     opacity: 0.7;

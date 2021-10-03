@@ -2,10 +2,12 @@ import { History } from 'history'
 import { createReducer, combineReducers, Reducer, CombinedState } from '@reduxjs/toolkit'
 import { connectRouter, RouterState } from 'connected-react-router'
 
+import { Activity } from 'shared/apiTypes'
+
 import { RootActions, AuthActions } from '../actions'
 import { notificationsReducer, NotificationState } from './notificationsReducer'
 import { themeReducer, ThemeState } from './themeReducer'
-import localeReducer from './localeReducer'
+import { localeReducer, LocaleState } from './localeReducer'
 import settingsReducer from './settingsReducer'
 import modalReducer from './modalReducer'
 import dialogsReducer from './dialogsReducer'
@@ -16,7 +18,7 @@ export interface AppState {
   loaded: boolean
   isUserLogged: boolean
   user: any
-  activityFeed: any[]
+  activityFeed: Activity[]
 }
 
 const initialState: AppState = {
@@ -59,7 +61,7 @@ export interface RootState {
   app: AppState
   notifications: NotificationState
   theme: ThemeState
-  locale: any
+  locale: LocaleState
   settings: any
   modal: any
   dialogs: any

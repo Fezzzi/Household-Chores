@@ -1,5 +1,5 @@
 import {
-  ACTIVITY, AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, MORE, SETTINGS, SUCCESS,
+  ACTIVITY, AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, MORE, SETTINGS, SUCCESS, TIME,
 } from '../constants/localeMessages'
 import {
   LINKS, USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES,
@@ -32,7 +32,7 @@ const textsCZ = {
   [AUTH.SIGN_OUT]: 'Odhlásit se',
   [AUTH.TERMS_AGREEMENT]: 'Registrací potvrzujete naše ',
 
-  [COMMON.AND_X_MORE]: 'A další\n@',
+  [COMMON.AND_X_MORE]: 'A další\n$1$',
   [COMMON.ARE_YOU_SURE]: 'Opravdu provést?',
   [COMMON.CANT_UNDO]: 'Tuto akci nelze vzít zpět.',
   [COMMON.CANT_UNDO_SAVING]: 'Po uložení již nepůjde vzít tuto akci zpět.',
@@ -54,8 +54,27 @@ const textsCZ = {
   [COMMON.SHOW]: 'Zobrazit',
   [COMMON.TERMS_AND_CONDITIONS]: 'podmínky použití',
   [COMMON.TIME_PREFIX]: 'před',
-  [COMMON.TIME_SUFFIX]: 'a',
+  [COMMON.TIME_SUFFIX]: '',
   [COMMON.PHOTO_SIZE]: 'velikost obrázku',
+
+  [TIME.SECOND]: 'sekundou',
+  [TIME.SECONDS]: 'sekundami',
+  [TIME.MINUTE]: 'minutou',
+  [TIME.MINUTES]: 'minutami',
+  [TIME.HOUR]: 'hodinou',
+  [TIME.HOURS]: 'hodinami',
+  [TIME.DAY]: 'dnem',
+  [TIME.DAYS]: 'dny',
+  [TIME.WEEK]: 'týdnem',
+  [TIME.WEEKS]: 'týdny',
+  [TIME.YEAR]: 'rokem',
+  [TIME.YEARS]: 'roky',
+  [TIME.SECONDS_SHORT]: 's',
+  [TIME.MINUTES_SHORT]: 'min',
+  [TIME.HOURS_SHORT]: 'h',
+  [TIME.DAYS_SHORT]: 'd',
+  [TIME.WEEKS_SHORT]: 't',
+  [TIME.YEARS_SHORT]: 'r',
 
   [ERROR.ERROR]: 'Error',
   [ERROR.ADMIN_REQUIRED]: 'Každá domácnost musí mít alespoň jednoho správce.',

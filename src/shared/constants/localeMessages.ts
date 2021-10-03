@@ -59,6 +59,28 @@ export const COMMON = {
   PHOTO_SIZE: 'common.photoSize',
 } as const
 
+// Time in instrumental case (to be used like e.g. 5 minutes ago)
+export const TIME = {
+  SECOND: 'time.second',
+  SECONDS: 'time.seconds',
+  MINUTE: 'time.minute',
+  MINUTES: 'time.minutes',
+  HOUR: 'time.hour',
+  HOURS: 'time.hours',
+  DAY: 'time.day',
+  DAYS: 'time.days',
+  WEEK: 'time.week',
+  WEEKS: 'time.weeks',
+  YEAR: 'time.year',
+  YEARS: 'time.years',
+  SECONDS_SHORT: 'time.secondsShort',
+  MINUTES_SHORT: 'time.minutesShort',
+  HOURS_SHORT: 'time.hoursShort',
+  DAYS_SHORT: 'time.daysShort',
+  WEEKS_SHORT: 'time.weeksShort',
+  YEARS_SHORT: 'time.yearsShort',
+}
+
 export const ERROR = {
   ERROR: 'error.error',
   ADMIN_REQUIRED: 'error.adminRequired',

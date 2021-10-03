@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 interface LinkProps {
-  route: string
+  route: string | null
   children: ReactNode
 }
 
@@ -11,19 +11,26 @@ export const Link = ({ route, children }: LinkProps) => {
   const history = useHistory()
 
   const handleLinkClick = useCallback((e: MouseEvent) => {
-    e.preventDefault()
-    if (e.ctrlKey) {
-      window.open(route, '_blank')
-    } else {
-      history.push(route)
+    if (route !== null) {
+      e.preventDefault()
+      if (e.ctrlKey) {
+        window.open(route, '_blank')
+      } else {
+        history.push(route)
+      }
     }
   }, [history, route])
 
-  return (
-    <LinkWrapper href={route} onClick={handleLinkClick}>
-      {children}
-    </LinkWrapper>
-  )
+  return route
+    ? (
+      <LinkWrapper href={route} onClick={handleLinkClick}>
+        {children}
+      </LinkWrapper>
+    ) : (
+      <>
+        {children}
+      </>
+    )
 }
 
 const LinkWrapper = styled.a`

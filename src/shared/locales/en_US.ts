@@ -1,5 +1,5 @@
 import {
-  ACTIVITY, AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, SETTINGS, SUCCESS, MORE,
+  ACTIVITY, AUTH, COMMON, ERROR, FORM, HINT, HOME, HOUSEHOLD, INFO, SETTINGS, SUCCESS, MORE, TIME,
 } from '../constants/localeMessages'
 import {
   LINKS, USER_VISIBILITY_TYPE, SETTING_COLUMNS, SETTING_CATEGORIES,
@@ -32,7 +32,7 @@ const textsUS = {
   [AUTH.SIGN_OUT]: 'Sign Out',
   [AUTH.TERMS_AGREEMENT]: 'By signing up, You agree to our ',
 
-  [COMMON.AND_X_MORE]: 'and @\nmore',
+  [COMMON.AND_X_MORE]: 'and $1$\nmore',
   [COMMON.ARE_YOU_SURE]: 'Are you sure?',
   [COMMON.CANT_UNDO]: 'This action cannot be undone.',
   [COMMON.CANT_UNDO_SAVING]: 'You won\'t be able to undo this action after saving.',
@@ -56,6 +56,25 @@ const textsUS = {
   [COMMON.TIME_PREFIX]: '',
   [COMMON.TIME_SUFFIX]: 'ago',
   [COMMON.PHOTO_SIZE]: 'photo size',
+
+  [TIME.SECOND]: 'second',
+  [TIME.SECONDS]: 'seconds',
+  [TIME.MINUTE]: 'minute',
+  [TIME.MINUTES]: 'minutes',
+  [TIME.HOUR]: 'hour',
+  [TIME.HOURS]: 'hours',
+  [TIME.DAY]: 'day',
+  [TIME.DAYS]: 'days',
+  [TIME.WEEK]: 'week',
+  [TIME.WEEKS]: 'weeks',
+  [TIME.YEAR]: 'year',
+  [TIME.YEARS]: 'years',
+  [TIME.SECONDS_SHORT]: 's',
+  [TIME.MINUTES_SHORT]: 'min',
+  [TIME.HOURS_SHORT]: 'h',
+  [TIME.DAYS_SHORT]: 'd',
+  [TIME.WEEKS_SHORT]: 'w',
+  [TIME.YEARS_SHORT]: 'y',
 
   [ERROR.ERROR]: 'Error',
   [ERROR.ADMIN_REQUIRED]: 'Every household must have at least one admin.',

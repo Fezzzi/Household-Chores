@@ -8,7 +8,7 @@ import { useSelector } from 'web/helpers/useTypedRedux'
 
 import Notifications from './notifications'
 import Router from './Router'
-import Footer from './Footer'
+import { Footer } from './Footer'
 import Modal from './Modal'
 import { Navbar } from './Navbar'
 

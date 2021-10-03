@@ -10,9 +10,9 @@ import { FormBody, FormWrapper, SectionHeadline } from 'web/styles/blocks/settin
 import { TableBigPhoto } from 'web/styles/blocks/table'
 import { ConnectionActions } from 'web/actions'
 import { connectionApprove, connectionBlock, connectionIgnore } from 'web/effects/conectionEffects'
-import { getTimeString, getButtonForUser } from 'web/helpers/connections'
+import { getButtonForUser } from 'web/helpers/connections'
 
-import { LocaleText, Table } from '../../common'
+import { FormattedTime, LocaleText, Table } from '../../common'
 import { MessageTooltip } from '../../portals'
 
 const ConnectionRequestsForm = ({ data }) => {
@@ -33,10 +33,7 @@ const ConnectionRequestsForm = ({ data }) => {
   return (
     <FormWrapper>
       <SectionHeadline first>
-        <LocaleText
-          message={FORM.PENDING_CONNECTIONS}
-          modifierFunc={data?.length ? text => `${text} (${data.length})` : undefined}
-        />
+        <LocaleText message={FORM.PENDING_CONNECTIONS} /> {data?.length ? `(${data.length})` : ''}
       </SectionHeadline>
       {data?.length
         ? (
@@ -63,7 +60,7 @@ const ConnectionRequestsForm = ({ data }) => {
                   />
                 </AppendMessageAnchor>
               ),
-              dateCreated: getTimeString(dateCreated),
+              dateCreated: <FormattedTime time={dateCreated} />,
               approveBtn: getButtonForUser(FORM.APPROVE, userId, approveHandler),
               ignoreBtn: getButtonForUser(FORM.IGNORE, userId, ignoreHandler),
               blockBtn: getButtonForUser(FORM.BLOCK, userId, blockHandler),

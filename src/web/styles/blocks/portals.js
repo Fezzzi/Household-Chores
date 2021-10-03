@@ -103,45 +103,6 @@ export const TooltipRow = styled.div`
   }
 `
 
-export const SimpleFloatingElementWrapper = styled.div`
-  top: 72px;
-  right: 12px;
-  height: 36px;
-  background-color: ${props => props.background};
-  color: ${COLORS.LIGHT_PRIMARY};
-  position: absolute;
-  display: flex;
-  border-radius: 19px;
-  padding: 2px;
-  z-index: 25;
-  opacity: ${props => props.enabled ? 1 : 0.8};
-  
-  ${props => props.enabled && clickableStyle}
-`
-
-export const FloatingElementIcon = styled.span`
-  width: 28px;
-  height: 28px;
-  padding: 4px;
-  display: inline-flex;
-  position: relative;
-  
-  & svg {
-    height: 100%;
-    width: 100%;
-  }
-`
-
-export const FloatingElementText = styled.span`
-  display: inline-flex;
-  line-height: 34px;
-  font-size: 1.3em;
-  padding-right: 6px;
-  font-weight: 500;
-  user-select: none;
-  
-`
-
 export const InputHintAnchor = styled.div`
   position: relative;
   color: ${COLORS.FONT}

@@ -141,16 +141,9 @@ const EditPhotoModal = ({ data: { photoBase, photoObj, onClose } }) => {
           </ModalPhotoSliderWrapper>
         </ModalPhotoControls>
         <ModalNote>
-          <LocaleText
-            message={COMMON.PHOTO_SIZE}
-            modifierFunc={text => (
-              <>
-                {text}:&nbsp;
-                <PhotoSizeValue isOk={size <= MAX_IMAGE_SIZE}>~{(size / 1000).toFixed(2)} KB</PhotoSizeValue>&nbsp;
-                {size > MAX_IMAGE_SIZE && ' (max 2MB)'}
-              </>
-            )}
-          />
+          <LocaleText message={COMMON.PHOTO_SIZE} />:&nbsp;
+          <PhotoSizeValue isOk={size <= MAX_IMAGE_SIZE}>~{(size / 1000).toFixed(2)} KB</PhotoSizeValue>&nbsp;
+          {size > MAX_IMAGE_SIZE && ' (max 2MB)'}
         </ModalNote>
         <ModalButtonsBlock>
           <PrimaryButton onClick={savePhoto} disabled={size > MAX_IMAGE_SIZE}>

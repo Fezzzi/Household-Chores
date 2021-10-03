@@ -13,7 +13,7 @@ import {
 } from 'web/styles/blocks/form'
 import { ModalActions, NotificationActions } from 'web/actions'
 
-import LocaleText from '../LocaleText'
+import { LocaleText } from '../LocaleText'
 
 const PhotoInput = ({
   name, message, size, closable, reference, onUpdate, onFileRemove,

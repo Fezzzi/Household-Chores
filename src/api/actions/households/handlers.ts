@@ -63,7 +63,7 @@ export const handleCreateHousehold = async (
       ACTIVITY.HOUSEHOLD_INVITATION,
       [inputs.name, inputs.userNickname],
       [photo!, userPhoto!],
-      `${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${HOUSEHOLD_TABS.INVITATIONS}`
+      `${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=${HOUSEHOLD_TABS.INVITATIONS}`
     )
     res.status(200).send({
       url: `/${API.SETTINGS_PREFIX}/${SETTING_CATEGORIES.HOUSEHOLDS}?tab=household-${householdId}`,

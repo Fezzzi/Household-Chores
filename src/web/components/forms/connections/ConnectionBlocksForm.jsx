@@ -9,10 +9,10 @@ import { FormBody, FormWrapper, SectionHeadline } from 'web/styles/blocks/settin
 import { TableBigPhoto } from 'web/styles/blocks/table'
 import { ConnectionActions } from 'web/actions'
 import { connectionUnblock } from 'web/effects/conectionEffects'
-import { getButtonForUser, getTimeString } from 'web/helpers/connections'
+import { getButtonForUser } from 'web/helpers/connections'
 
 import { InfoTooltip } from '../../portals'
-import { LocaleText, Table } from '../../common'
+import { FormattedTime, LocaleText, Table } from '../../common'
 
 const ConnectionBlocksForm = ({ data }) => {
   const dispatch = useDispatch()
@@ -24,10 +24,7 @@ const ConnectionBlocksForm = ({ data }) => {
   return (
     <FormWrapper>
       <SectionHeadline first>
-        <LocaleText
-          message={FORM.BLOCKED_CONNECTIONS}
-          modifierFunc={data?.length ? text => `${text} (${data.length})` : undefined}
-        />
+        <LocaleText message={FORM.BLOCKED_CONNECTIONS} /> {data?.length ? `(${data.length})` : ''}
       </SectionHeadline>
       {data?.length
         ? (
@@ -53,7 +50,7 @@ const ConnectionBlocksForm = ({ data }) => {
                   />
                 </AppendMessageAnchor>
               ),
-              dateCreated: getTimeString(dateCreated),
+              dateCreated: <FormattedTime time={dateCreated} />,
               unblockBtn: getButtonForUser(FORM.UNBLOCK, userId, unblockHandler),
             }))}
             keys={[

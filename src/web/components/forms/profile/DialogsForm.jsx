@@ -12,7 +12,7 @@ import { TableBox, TableHeaderBox, TableHeaderCell } from 'web/styles/blocks/tab
 import { useFormState, useUpdateHandler } from 'web/helpers/form'
 
 import { LocaleText, Input, PrimaryButton } from '../../common'
-import { SimpleFloatingElement } from '../../portals'
+import { FloatingIcon } from '../../portals'
 
 const DialogsForm = ({ onSubmit }) => {
   const dialogSettings = useSelector(({ dialogs }) => dialogs)
@@ -39,7 +39,7 @@ const DialogsForm = ({ onSubmit }) => {
   return (
     <>
       {Object.keys(inputs).length > 0 && (
-        <SimpleFloatingElement
+        <FloatingIcon
           message={submitMessage}
           sending={isFormSending}
           enabled={isFormValid}

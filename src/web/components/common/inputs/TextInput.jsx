@@ -11,7 +11,7 @@ import {
 } from 'web/styles/blocks/form'
 
 import { InfoTooltip, InputHintTooltip } from '../../portals'
-import LocaleText from '../LocaleText'
+import { LocaleText } from '../LocaleText'
 
 const TextInput = ({
   name, value, hint, type, reference, hasDefaultValue,

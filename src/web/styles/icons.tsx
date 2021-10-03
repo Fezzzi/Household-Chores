@@ -1,13 +1,36 @@
+import React from 'react'
+
+// ----------------------------------
+// Custom icons
+// ----------------------------------
+
+// trinalge
+export const FullArrowLeftIcon = () => (
+  <svg viewBox="0 0 5 10" fill="currentColor">
+    <path d="M5 0l-5 5 5 5V7z" />
+  </svg>
+)
+
+// trinalge
+export const FullArrowRightIcon = () => (
+  <svg viewBox="5 0 5 10" fill="currentColor">
+    <path d="M5 10l5 -5 -5 -5v10z" />
+  </svg>
+)
+
+// ----------------------------------
+// Material-UI icon reexports
+// ----------------------------------
 export {
   Add as PlusIcon,
   AttachMoney as MoneyIcon,
   Announcement as DialogIcon,
-  ArrowBack as ArrowBackIcon,
+  ArrowBack as ArrowBackIcon, // arrow
   Brightness6 as SunIcon,
   CalendarToday as CalendarIcon,
   Cancel as CancelIcon,
   Check as CheckIcon,
-  ChevronRight as ChevronRightIcon,
+  ChevronRight as ChevronRightIcon, // v shaped
   Code as CodeIcon,
   Delete as DeleteIcon,
   DeleteForever as DeleteForeverIcon,

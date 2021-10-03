@@ -4,7 +4,7 @@ accepts these arguments:
   - `message` expects one of `shared/constants/localeMessages`
   - `modifierFunc` is callback function that can perform additional tranformation on localized strings
   - `transformations` is boolean indication whether to perform default transformations, which are:
-    - **linkification** - `web/helpers/textTransformations`'s `linkify` function
+    - **linkification** - `web/helpers/textTransformations`'s `transformToReact` function
     converts `@[<link>]<text>@` to clickable links. `<link>` should be constant from `web/constants/links`.
     - **interpolation** - `web/helpers/textTransformations`'s `interpolate` function
     converts `<message>$[<string>,...]$` to `<text>` by localizing `<message>` and replacing occurances of `$n$` in the localized

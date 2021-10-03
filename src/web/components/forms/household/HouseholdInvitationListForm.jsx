@@ -9,9 +9,8 @@ import { AppendMessageAnchor, AppendMessageIcon } from 'web/styles/blocks/users'
 import { FormBody, FormWrapper, SectionHeadline } from 'web/styles/blocks/settings'
 import { TableBigPhoto, TableRowIcon } from 'web/styles/blocks/table'
 import { HouseholdActions, ModalActions } from 'web/actions'
-import { getTimeString } from 'web/helpers/connections'
 
-import { LocaleText, PrimaryButton, Table } from '../../common'
+import { FormattedTime, LocaleText, PrimaryButton, Table } from '../../common'
 import { InfoTooltip } from '../../portals'
 
 const HouseholdInvitationListForm = ({ invitations }) => {
@@ -41,10 +40,7 @@ const HouseholdInvitationListForm = ({ invitations }) => {
   return (
     <FormWrapper>
       <SectionHeadline first>
-        <LocaleText
-          message={FORM.HOUSEHOLD_INVITATIONS}
-          modifierFunc={invitations?.length ? text => `${text} (${invitations.length})` : undefined}
-        />
+        <LocaleText message={FORM.HOUSEHOLD_INVITATIONS} /> {invitations?.length ? `(${invitations.length})` : ''}
       </SectionHeadline>
       {invitations?.length
         ? (
@@ -72,7 +68,7 @@ const HouseholdInvitationListForm = ({ invitations }) => {
                   />
                 </AppendMessageAnchor>
               ),
-              dateCreated: getTimeString(dateCreated),
+              dateCreated: <FormattedTime time={dateCreated} />,
               approveBtn: (
                 <PrimaryButton
                   onClick={() => approveHandler(householdId, fromId)}
