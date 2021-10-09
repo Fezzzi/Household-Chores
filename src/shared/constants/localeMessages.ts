@@ -179,6 +179,7 @@ export const HINT = {
 
 export const HOME = {
   NO_HOUSEHOLD: 'home.noHousehold',
+  NO_MORE_FEED: 'home.noMoreFeed',
 } as const
 
 export const MORE = {

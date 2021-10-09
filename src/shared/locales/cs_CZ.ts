@@ -162,6 +162,7 @@ const textsCZ = {
   [HINT.VISIBILITY]: 'Nastavuje kdo bude schopen Váš účet vyhledat a poslat žádost o spojení.',
 
   [HOME.NO_HOUSEHOLD]: `Vypadá to že zatím nejste členem žádné domácnosti. Začněte jejím @[${LINKS.NEW_HOUSEHOLD}]vytvořením@ nebo si @[${LINKS.FIND_CONNECTION}]najděte spojení@ a získejte pozvánku.`,
+  [HOME.NO_MORE_FEED]: 'a to je vše',
 
   [HOUSEHOLD.LEAVE]: 'Opustit domácnost',
   [HOUSEHOLD.LEAVING]: 'Opouštím',

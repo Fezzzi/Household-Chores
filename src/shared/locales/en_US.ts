@@ -162,6 +162,7 @@ const textsUS = {
   [HINT.VISIBILITY]: 'Controls who will be able to find Your account and send connection request.',
 
   [HOME.NO_HOUSEHOLD]: `Seems like you are not a member of any household yet. Start @[${LINKS.NEW_HOUSEHOLD}]by creating@ one or @[${LINKS.FIND_CONNECTION}]by making connections@ to get invited.`,
+  [HOME.NO_MORE_FEED]: 'and that\'s it',
 
   [HOUSEHOLD.LEAVE]: 'Leave household',
   [HOUSEHOLD.LEAVING]: 'Leaving',
