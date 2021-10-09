@@ -4,10 +4,10 @@ import styled from 'styled-components'
 
 import LogoSvg from 'assets/icons/logo.svg'
 
-import { API, PROFILE_TABS, SETTING_CATEGORIES } from 'shared/constants'
+import { API, DEFAULT_FEED_PAGE_SIZE, PROFILE_TABS, SETTING_CATEGORIES } from 'shared/constants'
 import { AUTH, FORM } from 'shared/constants/localeMessages'
 import { COLORS } from 'web/constants'
-import { AuthActions } from 'web/actions'
+import { AuthActions, LoadActions } from 'web/actions'
 import { BellIcon, LogOutIcon } from 'web/styles/icons'
 import { LogoIcon } from 'web/styles/blocks/page'
 import { clickableStyle, SvgIcon } from 'web/styles/blocks/common'
@@ -23,16 +23,37 @@ export const Navbar = () => {
   , [applicationTexts])
 
   const isUserLogged = useSelector(({ app: { isUserLogged } }) => isUserLogged)
-  const userPhoto = useSelector(({ app }) => app.user.photo)
-  const hasActivity = useSelector(({ app: { activityFeed } }) => activityFeed.length > 0)
+  const userPhoto = useSelector(({ app: { user } }) => user?.photo)
+  const hasUnseenActivity = useSelector(({ app: { activityFeed } }) =>
+    activityFeed.some(activity => activity.dateSeen == null)
+  )
 
   const dispatch = useDispatch()
   const handleSignOutClick = useCallback(() => {
     dispatch(AuthActions.signOut())
   }, [dispatch])
 
+  const [feedPage, setFeedPage] = useState<number>(1)
+
   const [notificationsExpanded, setNotificationsExpanded] = useState<boolean>(false)
   const bellButtonRef = useRef<HTMLDivElement>(null)
+  const handleBellClick = useCallback(() => {
+    if (!notificationsExpanded) {
+      dispatch(LoadActions.feedLoad({
+        page: 1,
+        pageSize: DEFAULT_FEED_PAGE_SIZE,
+        callbackFunc: data => {
+          if (data.length !== DEFAULT_FEED_PAGE_SIZE) {
+            setFeedPage(-1)
+          } else if (data.some(({ dateSeen }) => dateSeen === null)) {
+            setFeedPage(1)
+          }
+        },
+      }))
+    }
+
+    setNotificationsExpanded(prevState => !prevState)
+  }, [dispatch, feedPage, notificationsExpanded, setNotificationsExpanded])
 
   const handlePanelBlur = useCallback((e: FocusEvent<HTMLElement>) => {
     if (e.relatedTarget === bellButtonRef.current) {
@@ -41,7 +62,7 @@ export const Navbar = () => {
     setNotificationsExpanded(false)
   }, [setNotificationsExpanded, bellButtonRef.current])
 
-  return isUserLogged
+  return isUserLogged && userPhoto
     ? (
       <NavbarWrapper>
         <Link route="/">
@@ -52,11 +73,11 @@ export const Navbar = () => {
         </NavbarName>
 
         <NavbarBellIcon
-          highlighted={hasActivity}
+          highlighted={hasUnseenActivity}
           title={activityLabel}
           ref={bellButtonRef}
           tabIndex={-1}
-          onClick={() => setNotificationsExpanded(prevState => !prevState)}
+          onClick={handleBellClick}
         >
           <BellIcon />
         </NavbarBellIcon>
@@ -69,7 +90,13 @@ export const Navbar = () => {
           <LogOutIcon />
         </NavbarIcon>
 
-        {notificationsExpanded && <FloatingActivityFeed onBlur={handlePanelBlur} />}
+        {notificationsExpanded && (
+          <FloatingActivityFeed
+            feedPage={feedPage}
+            setFeedPage={setFeedPage}
+            onBlur={handlePanelBlur}
+          />
+        )}
       </NavbarWrapper>
     ) : null
 }

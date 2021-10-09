@@ -1,10 +1,10 @@
 import { History } from 'history'
-import { createReducer, combineReducers, Reducer, CombinedState } from '@reduxjs/toolkit'
+import { createReducer, combineReducers, Reducer, CombinedState, PayloadAction } from '@reduxjs/toolkit'
 import { connectRouter, RouterState } from 'connected-react-router'
 
-import { Activity } from 'shared/apiTypes'
+import { Activity, User } from 'shared/apiTypes'
 
-import { RootActions, AuthActions } from '../actions'
+import { LoadActions, AuthActions, StateLoadedPayload } from '../actions'
 import { notificationsReducer, NotificationState } from './notificationsReducer'
 import { themeReducer, ThemeState } from './themeReducer'
 import { localeReducer, LocaleState } from './localeReducer'
@@ -17,7 +17,7 @@ export interface AppState {
   debug: boolean
   loaded: boolean
   isUserLogged: boolean
-  user: any
+  user: User | null
   activityFeed: Activity[]
 }
 
@@ -25,7 +25,7 @@ const initialState: AppState = {
   debug: true,
   loaded: false,
   isUserLogged: false,
-  user: {},
+  user: null,
   activityFeed: [],
 }
 
@@ -37,11 +37,14 @@ const logInUser = (state: AppState) => ({
 const signOutUser = (state: AppState) => ({
   ...state,
   isUserLogged: false,
-  user: {},
+  user: null,
   activityFeed: [],
 })
 
-const stateLoaded = (state: AppState, { payload: { debug, isUserLogged, user, activityFeed } }: any) => ({
+const stateLoaded = (
+  state: AppState,
+  { payload: { debug, isUserLogged, user, activityFeed } }: PayloadAction<StateLoadedPayload>
+) => ({
   ...state,
   debug,
   loaded: true,
@@ -50,8 +53,23 @@ const stateLoaded = (state: AppState, { payload: { debug, isUserLogged, user, ac
   activityFeed: activityFeed ?? state.activityFeed,
 })
 
+const feedLoaded = (state: AppState, { payload }: PayloadAction<Activity[]>) => ({
+  ...state,
+  // We don't need to sort the array since set keeps insertion order
+  activityFeed: Array.from([...state.activityFeed, ...payload]
+    .reduce((acc, activity) => {
+      if (!acc.has(activity.id)) {
+        acc.set(activity.id, activity)
+      }
+      return acc
+    }, new Map<number, Activity>())
+    .values()
+  ).sort((a1, a2) => new Date(a2.dateCreated).getTime() - new Date(a1.dateCreated).getTime()),
+})
+
 const appReducer = createReducer(initialState, {
-  [RootActions.stateLoadSuccess.toString()]: stateLoaded,
+  [LoadActions.stateLoadSuccess.toString()]: stateLoaded,
+  [LoadActions.feedLoadSuccess.toString()]: feedLoaded,
   [AuthActions.logInSuccess.toString()]: logInUser,
   [AuthActions.signOutSuccess.toString()]: signOutUser,
 })

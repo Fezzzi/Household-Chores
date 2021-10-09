@@ -1,16 +1,21 @@
-import React, { FocusEvent, useRef, useCallback } from 'react'
+import React, { FocusEvent, useRef, useCallback, useState, SetStateAction, Dispatch } from 'react'
+import { useDispatch } from 'react-redux'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 
+import { DEFAULT_FEED_PAGE_SIZE } from 'shared/constants'
 import { COLORS, PORTAL_TYPE } from 'web/constants'
+import { LoadActions } from 'web/actions'
 
 import { ActivityFeed } from './ActivityFeed'
 
 interface FloatingActivityFeedProps {
+  feedPage: number
+  setFeedPage: Dispatch<SetStateAction<number>>
   onBlur: (e: FocusEvent<HTMLElement>) => void
 }
 
-export const FloatingActivityFeed = ({ onBlur }: FloatingActivityFeedProps) => {
+export const FloatingActivityFeed = ({ feedPage, setFeedPage, onBlur }: FloatingActivityFeedProps) => {
   const floatingUIRoot = document.getElementById(PORTAL_TYPE.FLOATING_UI)
   const panelRef = useRef<HTMLDivElement | null>()
   const handleBlur = useCallback((e: FocusEvent<HTMLElement>) => {
@@ -20,6 +25,27 @@ export const FloatingActivityFeed = ({ onBlur }: FloatingActivityFeedProps) => {
 
     onBlur(e)
   }, [onBlur, panelRef.current])
+
+  const [feedLoading, setFeedLoading] = useState<boolean>(false)
+  const dispatch = useDispatch()
+
+  const handleMoreFeedLoad = useCallback(async () => {
+    if (feedPage !== -1 && !feedLoading) {
+      setFeedLoading(true)
+      dispatch(LoadActions.feedLoad({
+        page: feedPage + 1,
+        pageSize: DEFAULT_FEED_PAGE_SIZE,
+        callbackFunc: data => {
+          setFeedLoading(false)
+          if (data.length === DEFAULT_FEED_PAGE_SIZE) {
+            setFeedPage(prevState => prevState + 1)
+          } else {
+            setFeedPage(-1)
+          }
+        },
+      }))
+    }
+  }, [feedPage, feedLoading, setFeedLoading, setFeedPage, dispatch])
 
   if (floatingUIRoot == null) {
     return null
@@ -33,6 +59,8 @@ export const FloatingActivityFeed = ({ onBlur }: FloatingActivityFeedProps) => {
       panelRef.current = el
     }} onBlur={handleBlur}>
       <ActivityFeed />
+      {/* {feedLoading && 'loading...'} */}
+      <span onClick={handleMoreFeedLoad}>loading...</span>
     </FloatingPanelWrapper>
   ), floatingUIRoot)
 }

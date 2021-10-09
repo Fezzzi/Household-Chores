@@ -1,25 +1,19 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import { applicationTexts, LocalizedApplicationTexts } from 'shared/locales'
-import { DEFAULT_LOCALE, isAvailableLocale, LOCALE_CODE } from 'shared/constants'
+import { LOCALE_CODE } from 'shared/constants'
 
-import { STORAGE_KEY } from '../constants'
 import { LocaleActions } from '../actions'
-
-const storageLocale = localStorage.getItem(STORAGE_KEY.LOCALE)
-const defaultLocale = storageLocale && isAvailableLocale(storageLocale)
-  ? storageLocale
-  : DEFAULT_LOCALE
-
-localStorage.setItem(STORAGE_KEY.LOCALE, defaultLocale)
+import { getDefaultLocale } from '../helpers/useCurrentLocale'
 
 export interface LocaleState {
-  locale: LOCALE_CODE
+  locale: LOCALE_CODE | null
   applicationTexts: LocalizedApplicationTexts
 }
 
+const defaultLocale = getDefaultLocale()
 const initialState: LocaleState = {
-  locale: defaultLocale,
+  locale: null,
   applicationTexts: applicationTexts[defaultLocale],
 }
 

@@ -1,8 +1,8 @@
 export const API_PREFIX = 'api'
 
-export const GENERAL_PREFIX = 'general'
-export const LOAD_STATE = 'load'
-export const MARK_ACTIVITY = 'activity'
+export const LOAD_PREFIX = 'load'
+export const LOAD_STATE = 'state'
+export const LOAD_FEED = 'feed'
 
 export const RESOURCES_PREFIX = 'resources'
 export const RESOURCE_TAC = 'terms-and-conditions'

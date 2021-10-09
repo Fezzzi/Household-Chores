@@ -18,7 +18,7 @@ const WEEK_SECONDS = 604800
 const YEAR_SECONDS = 31556952
 
 interface FormattedTimeProps {
-  time: Date
+  time: string | Date
   abbrevited?: boolean
 }
 

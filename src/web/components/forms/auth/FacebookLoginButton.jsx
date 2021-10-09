@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import FacebookProvider, { Login } from 'react-facebook-sdk'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { PropTypes } from 'prop-types'
 
 import FacebookIcon from 'assets/icons/facebook-white.svg'
@@ -9,11 +9,12 @@ import { AUTH } from 'shared/constants/localeMessages'
 import { CONFIG } from 'web/constants'
 import { AuthActions } from 'web/actions'
 import { FormButtonContentWrapper, IconSpan } from 'web/styles/blocks/form'
+import { useCurrentLocale } from 'web/helpers/useCurrentLocale'
 
 import { LocaleText, PrimaryButton } from '../../common'
 
 const FacebookLoginButton = ({ onError }) => {
-  const locale = useSelector(({ locale: { locale } }) => locale)
+  const locale = useCurrentLocale()
   const dispatch = useDispatch()
   const logInFacebook = useCallback(data => dispatch(AuthActions.logInFacebook(data)), [dispatch])
 

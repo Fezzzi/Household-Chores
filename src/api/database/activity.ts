@@ -1,14 +1,21 @@
+import { DEFAULT_FEED_PAGE_SIZE } from 'shared/constants'
+import { MAX_FEED_PAGE_SIZE } from 'api/constants'
+
 import { database } from './database'
 import { tActivityName, tActivityCols, TActivityType } from './tables'
 import { mapToUserActivityApiType } from './mappers'
 
-export const getActivityForUser = async (userId: number) => {
+export const getActivityForUser = async (userId: number, page: number, pageSize?: number) => {
+  const validPageSize = Math.max(1, Math.min(pageSize ?? DEFAULT_FEED_PAGE_SIZE, MAX_FEED_PAGE_SIZE))
+  const offset = (Math.max(page, 1) - 1) * validPageSize
+
   const result = await database.query<Omit<TActivityType, typeof tActivityCols.user_id>>(`
     SELECT ${Object.values(tActivityCols).filter(key => key !== tActivityCols.user_id).join(', ')}
     FROM ${tActivityName}
-    WHERE ${tActivityCols.user_id}=${userId}
-    ORDER BY ${tActivityCols.date_seen} IS NULL DESC, ${tActivityCols.date_created} DESC
-    LIMIT 10
+    WHERE ${tActivityCols.user_id}=${userId} AND ${tActivityCols.date_created} > NOW() - interval '2 months'
+    ORDER BY ${tActivityCols.date_created} DESC
+    LIMIT ${validPageSize}
+    OFFSET ${offset}
   `)
 
   return result.map(mapToUserActivityApiType)

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { PropTypes } from 'prop-types'
 
 import ErrorIcon from 'assets/icons/resource-error.svg'
 
 import { ERROR } from 'shared/constants/localeMessages'
+import { useCurrentLocale } from 'web/helpers/useCurrentLocale'
 
 import { ArrowBackIcon } from '../styles/icons'
 import {
@@ -17,7 +17,7 @@ import { LocaleText } from './common'
 const Resource = ({ match: { params: { resourceId } }, history }) => {
   const [data, setData] = useState({ headline: '', body: '' })
   const [error, setError] = useState(false)
-  const locale = useSelector(({ locale: { locale } }) => locale)
+  const locale = useCurrentLocale()
 
   const fetchData = (resourceId, locale) =>
     loadResource({

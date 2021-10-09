@@ -3,12 +3,17 @@ import { takeEvery, call, put, select } from 'redux-saga/effects'
 import { NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR } from 'shared/constants/localeMessages'
 
-import { AuthActions, RootActions, NotificationActions, SettingsActions } from '../actions'
+import { AuthActions, LoadActions, NotificationActions, SettingsActions } from '../actions'
 import { signUp, signOut, logIn, resetPass, deleteAccount } from '../effects/authEffects'
 import { generalSaga } from '../helpers/sagas'
+import { getDefaultLocale } from '../helpers/useCurrentLocale'
 
 function* resetPassSaga ({ payload }) {
-  const locale = yield select(({ locale }) => locale.locale)
+  const storeLocale = yield select(({ locale }) => locale.locale)
+  const locale = storeLocale !== null
+    ? storeLocale
+    : getDefaultLocale()
+
   yield call(generalSaga, resetPass, { ...payload, locale }, function* (data) {
     yield put(NotificationActions.addNotifications(data))
   })
@@ -17,7 +22,7 @@ function* resetPassSaga ({ payload }) {
 function* signUpSaga ({ payload }) {
   yield call(generalSaga, signUp, payload, function* (data) {
     yield put(NotificationActions.addNotifications(data))
-    yield put(RootActions.stateLoad())
+    yield put(LoadActions.stateLoad())
   })
 }
 
