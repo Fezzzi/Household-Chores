@@ -9,7 +9,7 @@ import {
 } from 'web/styles/blocks/form'
 
 import { InfoTooltip, InputHintTooltip } from '../../portals'
-import LocaleText from '../LocaleText'
+import { LocaleText } from '../LocaleText'
 
 const TextAreaInput = ({
   name, value, hint, minLength, maxLength, rows, cols, showRemaining, reference, hasDefaultValue, inputError, onUpdate,
@@ -39,12 +39,8 @@ const TextAreaInput = ({
           {hint && <InputHintTooltip text={hint} />}
 
           <TextAreaValue shrunken={inputTextLength !== 0}>
-            <LocaleText
-              message={value}
-              modifierFunc={value => showRemaining
-                ? `${value} (${maxLength - state.inputTextLength})`
-                : value}
-            />
+            <LocaleText message={value} />
+            {showRemaining && `(${maxLength - state.inputTextLength})`}
           </TextAreaValue>
           <TextAreaField
             name={name}

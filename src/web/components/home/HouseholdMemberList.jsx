@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { PlusIcon, MinusIcon } from '../../styles/icons'
+import { PlusIcon, MinusIcon } from 'web/styles/icons'
 import {
   ExpandableMemberList, ExpandableMemberListBox, ExpandMemberListButton, HouseholdMemberName,
   HouseholdMemberNode, HouseholdMemberPhoto, HouseholdMemberRole,
-} from '../../styles/blocks/home'
-import { getLabelColors } from '../../helpers/household'
+} from 'web/styles/blocks/home'
+import { getLabelColors } from 'web/helpers/household'
 
 const HouseholdMemberList = ({ members }) => {
   const [expanded, setExpanded] = useState(false)

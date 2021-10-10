@@ -1,4 +1,4 @@
-import { LOCALE_CODES } from 'shared/constants'
+import { LOCALE_CODE } from 'shared/constants'
 import { EMAIL_TEMPLATE } from 'api/constants'
 
 import { ResetPassDataShape, ActivityDataShape } from './dataShapes'
@@ -21,11 +21,11 @@ export interface Email<T> {
 export type EmailTemplatesType = { [key in keyof EmailTemplateDataShapeType]: Email<EmailTemplateDataShapeType[key]> }
 
 export const mails: Record<string, EmailTemplatesType> = {
-  [LOCALE_CODES.CS]: {
+  [LOCALE_CODE.CS]: {
     [EMAIL_TEMPLATE.RESET_PASSWORD]: resetPassCs,
     [EMAIL_TEMPLATE.ACTIVITY]: activityCs,
   },
-  [LOCALE_CODES.EN]: {
+  [LOCALE_CODE.EN]: {
     [EMAIL_TEMPLATE.RESET_PASSWORD]: resetPassEn,
     [EMAIL_TEMPLATE.ACTIVITY]: activityEn,
   },

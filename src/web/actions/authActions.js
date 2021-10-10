@@ -3,6 +3,9 @@ import { createAction } from '@reduxjs/toolkit'
 export const signUp = createAction('SIGN_UP')
 export const signUpSuccess = createAction('SIGN_UP_SUCCESS')
 
+export const signOut = createAction('SIGN_OUT')
+export const signOutSuccess = createAction('SIGN_OUT_SUCCESS')
+
 export const logIn = createAction('LOG_IN')
 export const logInGoogle = createAction('LOG_IN_GOOGLE')
 export const logInFacebook = createAction('LOG_IN_FACEBOOK')

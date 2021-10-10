@@ -1,6 +1,6 @@
 import { Response } from 'express'
 
-import { API, SETTING_CATEGORIES, HOUSEHOLD_TABS, NOTIFICATION_TYPE } from 'shared/constants'
+import { API, SETTING_CATEGORIES, HOUSEHOLD_TABS, NOTIFICATION_TYPE, LOCALE_CODE } from 'shared/constants'
 import { ACTIVITY, ERROR } from 'shared/constants/localeMessages'
 import { NOTIFICATION_KEYS } from 'api/constants'
 import { HOUSEHOLD_DIR, PROFILE_DIR, uploadFiles } from 'api/helpers/files'
@@ -30,7 +30,7 @@ import {
 import { GeneralEditInputs, HouseholdEditInputs, HouseholdNewInvitation } from './types'
 import { validateEditHouseholdData, validateProfileData } from './validate'
 
-export const handleSettingsDataFetch = async (category: string, tab: string, req: any, res: Response) => {
+export const handleSettingsDataFetch = async (category: SETTING_CATEGORIES, tab: string, req: any, res: Response) => {
   const data = await getTabData(category, tab, req)
   if (!data) {
     res.status(400).send({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.ACTION_ERROR] })
@@ -95,7 +95,7 @@ export const handleGeneralEdit = async (userId: number, fsKey: string, inputs: G
 export const handleHouseholdEdit = async (
   userId: number,
   fsKey: string,
-  locale: string,
+  locale: LOCALE_CODE,
   householdInputs: HouseholdEditInputs,
   res: Response
 ) => {
@@ -153,7 +153,7 @@ export const handleHouseholdEdit = async (
 const handleHouseholdEditActivity = async (
   householdId: number,
   userId: number,
-  locale: string,
+  locale: LOCALE_CODE,
   members: Array<{ userId: number; role: string; nickname: string }>,
   removedMemberIds: number[] = [],
   newInvitations: HouseholdNewInvitation[] = [],

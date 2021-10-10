@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { AVAILABLE_LOCALES, DEFAULT_LOCALE } from 'shared/constants'
+import { DEFAULT_LOCALE, isAvailableLocale } from 'shared/constants'
 import { resources } from 'api/resources'
 import { catchErrors } from 'api/helpers/errorHandler'
 
@@ -9,7 +9,9 @@ export default () => {
   router.get('/:resource', catchErrors(async (req: any, res) => {
     const { params: { resource }, query } = req
     const locale = req.session?.locale ?? query.locale
-    const localeCode = (locale && AVAILABLE_LOCALES.includes(locale as string) && locale as string) || DEFAULT_LOCALE
+    const localeCode = isAvailableLocale(locale)
+      ? locale
+      : DEFAULT_LOCALE
     const resourceData = resources[localeCode]?.[resource] ?? resources[DEFAULT_LOCALE]?.[resource]
 
     if (resourceData) {

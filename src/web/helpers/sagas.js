@@ -8,7 +8,7 @@ import { NotificationActions } from '../actions'
 /**
  * Tests response for ERRORS and dispatches them through Notification actions or calls callback if none present.
  */
-export function* handleResponse ({ data }, onSuccess) {
+export function* handleResponse ({ data }, onSuccess, onError) {
   if (!data[NOTIFICATION_TYPE.ERRORS] || !data[NOTIFICATION_TYPE.ERRORS].length) {
     if (onSuccess) {
       yield call(onSuccess, data)
@@ -17,6 +17,10 @@ export function* handleResponse ({ data }, onSuccess) {
     yield put(NotificationActions.addNotifications({
       [NOTIFICATION_TYPE.ERRORS]: data[NOTIFICATION_TYPE.ERRORS],
     }))
+
+    if (onError) {
+      onError()
+    }
   }
 }
 
@@ -25,15 +29,19 @@ export function* handleResponse ({ data }, onSuccess) {
  * API call exceptions and response exceptions are dispatched through Notification actions.
  * Calls callback function on response data of successful API call.
  */
-export function* generalSaga (effect, payload, callback) {
+export function* generalSaga (effect, payload, onSuccess, onError) {
   try {
     const response = yield call(effect, payload)
-    yield call(handleResponse, response, callback)
+    yield call(handleResponse, response, onSuccess, onError)
   } catch (error) {
     if (error.response?.data) {
       yield put(NotificationActions.addNotifications(error.response.data))
     } else {
       yield put(NotificationActions.addNotifications({ [NOTIFICATION_TYPE.ERRORS]: [ERROR.CONNECTION_ERROR] }))
+    }
+
+    if (onError != null) {
+      onError()
     }
   }
 }

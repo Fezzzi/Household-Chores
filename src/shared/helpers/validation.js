@@ -27,7 +27,7 @@ export const isInputValid = (type, value, constraints) => {
   switch (type) {
     case INPUT_TYPE.TEXT:
       return {
-        valid: value.length > 3 && value.length < 21,
+        valid: value.length > 0 && value.length < 21,
         message: (value.length <= 3 && ERROR.VALUE_TOO_SHORT) || (value.length >= 21 && ERROR.VALUE_TOO_LONG) || '',
       }
     case INPUT_TYPE.PASSWORD:

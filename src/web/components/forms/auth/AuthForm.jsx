@@ -63,6 +63,7 @@ const AuthForm = ({ history, location }) => {
     }
   }
 
+  // todo: Allow changing locale from auth screen
   return (
     <AuthContent>
       <LogoBlock>

@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants'
+import { clickableStyle } from './common'
 import { FormHeaderLeftPanel, FormHeaderRightPanel } from './form'
 
 export const HouseholdSubtitle = styled.div`
@@ -89,14 +90,14 @@ export const InvitationFormNode = styled.div`
   position: relative;
   display: inline-flex;
   flex-flow: column;
-  cursor: pointer;
   justify-content: center;
   align-items: center;
   width: 80px;
   height: 110px;
   padding: 5px 3px;
   user-select: none;
-  
+
+  ${clickableStyle}
   &:hover {
     background-color: ${COLORS.LIGHT_PRIMARY};
   }

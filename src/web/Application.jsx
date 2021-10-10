@@ -6,15 +6,12 @@ import { applyMiddleware, compose, createStore } from 'redux'
 import { ConnectedRouter } from 'connected-react-router'
 import { createBrowserHistory } from 'history'
 
-import { PageContent, PageWrapper, PortalAnchor } from './styles/blocks'
+import { PageWrapper, PortalAnchor } from './styles/blocks/page'
 import { PORTAL_TYPE } from './constants'
-import createRootReducer from './reducers/rootReducer'
+import { createRootReducer } from './reducers/rootReducer'
 import rootSaga from './sagas/rootSaga'
-import Notifications from './components/notifications'
-import Router from './components/Router'
-import PageTheme from './components/PageTheme'
-import Footer from './components/Footer'
-import Modal from './components/Modal'
+import { PageTheme } from './components/PageTheme'
+import { Content } from './components/Content'
 
 export default () => {
   const sagaMiddleware = createSagaMiddleware()
@@ -33,13 +30,7 @@ export default () => {
         <PortalAnchor id={PORTAL_TYPE.FLOATING_UI} />
         <PageWrapper id="pageWrapper">
           <ConnectedRouter history={history}>
-            <PortalAnchor id={PORTAL_TYPE.TOOLTIPS} />
-            <Modal />
-            <PageContent>
-              <Notifications />
-              <Router />
-            </PageContent>
-            <Footer />
+            <Content />
           </ConnectedRouter>
         </PageWrapper>
       </PageTheme>

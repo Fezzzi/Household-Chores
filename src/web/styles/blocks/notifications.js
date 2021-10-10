@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants'
+import { clickableStyle } from './common'
 
 export const NotificationsBlock = styled.div`
   position: fixed;
@@ -66,7 +67,6 @@ export const NotificationMessage = styled.p`
 `
 
 export const NotificationClose = styled.div`
-  cursor: pointer;
   opacity: 0.6;
   position: relative;
   display: flex;
@@ -76,6 +76,7 @@ export const NotificationClose = styled.div`
   fill: ${COLORS.BORDER};
   transition: opacity 0.1s ease 0s;
 
+  ${clickableStyle}
   &:hover {
     fill: ${COLORS.BORDER_ACTIVE};
   }

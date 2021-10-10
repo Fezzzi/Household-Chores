@@ -11,7 +11,7 @@ import { SettingsActions } from 'web/actions'
 import { useOpenConfirmationDialog } from 'web/helpers/confirmations'
 import { useFormState, useUpdateHandler } from 'web/helpers/form'
 
-import { SimpleFloatingElement } from '../../portals'
+import { FloatingIcon } from '../../portals'
 import ProfileFormHeader from './ProfileFormHeader'
 import { Input, LocaleText, PrimaryButton } from '../../common'
 
@@ -59,7 +59,7 @@ const ProfileForm = ({ data, onSubmit }) => {
   return (
     <FormWrapper>
       {Object.keys(inputs).length > 0 && (
-        <SimpleFloatingElement
+        <FloatingIcon
           message={submitMessage}
           sending={isFormSending}
           enabled={isFormValid}

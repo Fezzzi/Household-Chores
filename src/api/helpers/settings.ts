@@ -41,7 +41,7 @@ export const getTabData = async (category: string, tab: string, req: any) => {
 
 export const getTabList = (
   data: any,
-  category: string
+  category: SETTING_CATEGORIES
 ): { tabs: string[]; messages: Record<string, string>; types: Record<string, string> } => {
   switch (category) {
     case SETTING_CATEGORIES.HOUSEHOLDS: return {

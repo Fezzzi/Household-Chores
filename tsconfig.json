@@ -34,7 +34,7 @@
   },
   "include": [
     "src/shared",
-    "src/client",
+    "src/web",
     "src/tests",
     "config",
     "bin"

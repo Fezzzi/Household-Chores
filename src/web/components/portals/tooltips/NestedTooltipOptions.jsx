@@ -6,7 +6,7 @@ import { Tooltip, TooltipRow, TooltipAnchor } from 'web/styles/blocks/portals'
 import { useScrollOffset } from 'web/helpers/dom'
 import { PORTAL_TYPE } from 'web/constants'
 
-import LocaleText from '../../common/LocaleText'
+import { LocaleText } from '../../common/LocaleText'
 
 export const NestedTooltipOptions = ({ position, options, withArrow, onBlur }) => {
   const [state, setState] = useState({

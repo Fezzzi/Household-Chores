@@ -13,7 +13,7 @@ import {
 } from 'web/styles/blocks/form'
 import { ModalActions, NotificationActions } from 'web/actions'
 
-import LocaleText from '../LocaleText'
+import { LocaleText } from '../LocaleText'
 
 const PhotoInput = ({
   name, message, size, closable, reference, onUpdate, onFileRemove,
@@ -110,6 +110,7 @@ const PhotoInput = ({
             name={name}
             type="file"
             ref={reference}
+            title={''}
             onChange={e => handleInputChange(e)}
             onFocus={() => setInputActive(true)}
             onBlur={() => setInputActive(false)}

@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants'
+import { clickableStyle } from './common'
 import { FormHeaderLeftPanel, FormHeaderRightPanel } from './form'
 
 export const SettingsWrapper = styled.div`
   width: 100%;
-  height: calc(100vh - 70px);
   overflow: hidden;
   display: flex;
   padding: 15px 0 15px 20px;
@@ -54,8 +54,8 @@ export const SettingRow = styled.div`
   font-weight: ${props => props.selected ? 600 : 400};
   font-size: ${props => props.primary ? 1.17 : 1.10}em;
   line-height: ${props => props.primary ? 1.17 : 1.10}em;
-  cursor: pointer;
-  
+
+  ${clickableStyle}
   &:hover {
     opacity: 0.8;
     font-weight: 600;
@@ -88,9 +88,9 @@ export const IconButton = styled.button`
   background-color: ${COLORS.THEME_FRONT};
   border: 1px solid ${props => props.active ? COLORS.BORDER_ACTIVE : COLORS.BORDER};
   border-radius: 1px;
-  
+
+  ${clickableStyle}
   &:hover {
-    cursor: pointer;
     background-color: ${COLORS.THEME_BACK};
   }
   
@@ -117,9 +117,9 @@ export const LocaleSelector = styled.div`
   background-color: ${COLORS.THEME_FRONT};
   border: 1px solid ${COLORS.BORDER};
   border-radius: 1px;
-  
+
+  ${clickableStyle}
   :hover {
-    cursor: pointer;
     background-color: ${COLORS.THEME_BACK};
   }
 `
@@ -201,11 +201,8 @@ export const ProfilePasswordClose = styled.div`
   top: -10px;
   left: -15px;
   opacity: .8;
-  
-  :hover {
-    opacity: 1;
-    cursor: pointer;
-  }
+
+  ${clickableStyle}
 `
 
 export const ProfilePasswordIcon = styled.span`
@@ -292,11 +289,8 @@ export const ContributorsMore = styled.div`
   margin-left: 30px;
   opacity: 0.7;
   user-select: none;
-  
-  :hover {
-    cursor: pointer;
-    opacity: 1;
-  }
+
+  ${clickableStyle}
 `
 
 export const TeamList = styled.div`

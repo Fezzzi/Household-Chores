@@ -15,7 +15,7 @@ import { SUBMIT_TIMEOUT } from 'web/constants'
 import HouseholdFormHeader from './HouseholdFormHeader'
 import HouseholdInvitationForm from './HouseholdInvitationForm'
 import { LocaleText, Table } from '../../common'
-import { SimpleFloatingElement } from '../../portals'
+import { FloatingIcon } from '../../portals'
 
 const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
   const {
@@ -189,7 +189,7 @@ const HouseholdModificationForm = ({ household, connections, onSubmit }) => {
   return (
     <>
       {Object.keys(inputs).length > 0 && (
-        <SimpleFloatingElement
+        <FloatingIcon
           message={submitMessage}
           sending={isFormSending}
           enabled={isFormValid}

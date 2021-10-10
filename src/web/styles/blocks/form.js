@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants'
+import { clickableStyle } from './common'
 
 export const FormHeader = styled.div`
   display: flex;
@@ -193,11 +194,11 @@ export const ShowPassButton = styled.button`
   padding: 0;
   position: relative;
   font-weight: 600;
-  cursor: pointer;
   text-align: center;
   user-select: none;
   width: auto;
-  
+
+  ${clickableStyle}
   &:active {
     opacity: .7;
   };
@@ -234,10 +235,10 @@ export const BoolInputBox = styled.label`
   display: flex;
   color: ${COLORS.GREEN_PRIMARY};
   background-color: ${COLORS.THEME_BACK};
-  
+
+  ${clickableStyle}
   &:hover {
     color: ${COLORS.GREEN_SECONDARY};
-    cursor: pointer;
   }
 `
 
@@ -314,7 +315,6 @@ export const FileInputField = styled.input`
   background: ${COLORS.THEME_BACK};
   color: ${COLORS.FONT};
   overflow: hidden;
-  padding: 9px 0 7px 8px;
   text-overflow: ellipsis;
   flex: 1 0 auto;
   
@@ -327,10 +327,10 @@ export const FileInputField = styled.input`
   margin: 0;
   border: 0;
 
-  &:hover {
-    cursor: pointer;
+  ${clickableStyle}
+  :hover {
+    opacity: 0;
   }
-
   &:active, &:focus {
     outline: 0;
   }
@@ -386,10 +386,7 @@ export const SwitchInputValue = styled.span`
       opacity: 1;
     ` : `
       opacity: 0.5;
-      
-      :hover {
-        cursor: pointer;
-      }
+      ${clickableStyle}
     `
 }
   
@@ -413,7 +410,6 @@ export const FormButton = styled.button`
   color: ${props => props.color};
   position: relative;
   box-sizing: border-box;
-  cursor: pointer;
   display: block;
   font-weight: 600;
   padding: 5px 9px;
@@ -422,7 +418,7 @@ export const FormButton = styled.button`
   width: 100%;
   max-width: 400px;
   height: 32px;
-  
+
   ${props => props.disabled && `
     opacity: .4;
     pointer-events: none;
@@ -436,6 +432,7 @@ export const FormButton = styled.button`
     outline: 0;
   }
   
+  ${clickableStyle}
   &:hover {
     background-color: ${props => props.backgroundHover};
   }
@@ -531,11 +528,8 @@ export const RemoveFileButton = styled.div`
   z-index: 5;
   color: ${COLORS.FONT};
   opacity: .8;
-  
-  &:hover {
-    cursor: pointer;
-    opacity: 1;
-  }
+
+  ${clickableStyle}
 `
 
 export const PhotoPreviewBlock = styled.div`

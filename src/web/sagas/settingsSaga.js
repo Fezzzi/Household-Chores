@@ -1,6 +1,6 @@
 import { takeEvery, call, put } from 'redux-saga/effects'
 
-import { AVAILABLE_LOCALES, NOTIFICATION_TYPE } from 'shared/constants'
+import { isAvailableLocale, NOTIFICATION_TYPE } from 'shared/constants'
 import { INFO, SUCCESS } from 'shared/constants/localeMessages'
 
 import { generalSaga } from '../helpers/sagas'
@@ -10,7 +10,8 @@ import { SettingsActions, LocaleActions, NotificationActions } from '../actions'
 function* loadSettingsSaga ({ payload }) {
   yield call(generalSaga, loadSettings, payload, function* (data) {
     const { data: { locale } } = data
-    if (locale && AVAILABLE_LOCALES.includes(locale)) {
+
+    if (isAvailableLocale(locale)) {
       yield put(LocaleActions.updateLocale(locale))
     }
     yield put(SettingsActions.loadSettingsSuccess(data))

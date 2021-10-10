@@ -2,6 +2,7 @@ export const API_PREFIX = 'api'
 
 export const LOAD_PREFIX = 'load'
 export const LOAD_STATE = 'state'
+export const LOAD_FEED = 'feed'
 
 export const RESOURCES_PREFIX = 'resources'
 export const RESOURCE_TAC = 'terms-and-conditions'
@@ -11,6 +12,7 @@ export const AUTH_PREFIX = 'auth'
 export const AUTH_SIGN_UP = 'sign-up'
 export const AUTH_LOG_IN = 'log-in'
 export const AUTH_RESET = 'reset'
+export const AUTH_SIGN_OUT = 'sign-out'
 export const AUTH_DELETE = 'delete'
 
 export const CONNECTIONS_PREFIX = 'connections'

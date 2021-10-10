@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants'
+import { clickableStyle } from './common'
 
 export const TableBox = styled.div`
   margin: 0 50px;
@@ -54,11 +55,7 @@ export const TableRowIcon = styled.span`
   opacity: ${props => props.clickable ? 0.6 : 0.8};
   
   ${props => props.clickable && `
-    :hover {
-      cursor: pointer;
-      opacity: 1;
-    }
-    
+    ${clickableStyle}
     :focus, :active {
       opacity: 0.9;
     }
@@ -135,9 +132,6 @@ export const TableSorterIcon = styled.span`
     width: 100%;
     height: 100%;
   }
-  
-  :hover {
-    cursor: pointer;
-    opacity: 1;
-  }
+
+  ${clickableStyle}
 `

@@ -1,18 +1,19 @@
 import React, { useCallback, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
-import { LOCALE_LABELS } from 'shared/constants'
+import { AVAILABLE_LOCALES, LOCALE_LABELS } from 'shared/constants'
 import { FLAGS } from 'web/constants'
 import { LocaleActions } from 'web/actions'
 import {
   IconButtonWrapper, IconButton, LocaleIcon,
   LocaleLabel, LocaleSelector, LocaleLine,
 } from 'web/styles/blocks/settings'
+import { useCurrentLocale } from 'web/helpers/useCurrentLocale'
 
 const LocaleSwitch = () => {
   const [state, setState] = useState({ expanded: false, inputActive: false })
 
-  const { locale, availableLocales } = useSelector(({ locale }) => locale)
+  const currentLocale = useCurrentLocale()
   const dispatch = useDispatch()
   const switchLocale = useCallback(locale =>
     dispatch(LocaleActions.triggerLocaleChange(locale)),
@@ -45,9 +46,9 @@ const LocaleSwitch = () => {
         })}
       >
         <LocaleSelector hidden={!expanded}>
-          {renderLocaleSelection(availableLocales.filter(l => l !== locale), switchLocale)}
+          {renderLocaleSelection(AVAILABLE_LOCALES.filter(locale => locale !== currentLocale), switchLocale)}
         </LocaleSelector>
-        {FLAGS[locale]()}
+        {FLAGS[currentLocale]()}
       </IconButton>
     </IconButtonWrapper>
   )

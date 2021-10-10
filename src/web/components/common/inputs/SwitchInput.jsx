@@ -7,7 +7,7 @@ import {
   InputLabel, SwitchInputLabel, SwitchInputValue,
 } from 'web/styles/blocks/form'
 
-import LocaleText from '../LocaleText'
+import { LocaleText } from '../LocaleText'
 import { InputHintTooltip } from '../../portals'
 
 const SwitchInput = ({ name, label, values, value, hint, hasDefaultValue, onUpdate }) => {

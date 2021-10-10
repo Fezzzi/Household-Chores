@@ -6,7 +6,7 @@ import {
   InputRow, PaddedInputWrapper, BoolInputBox, BoolInputField, BoolInputMessage, BoolInputLabel,
 } from 'web/styles/blocks/form'
 
-import LocaleText from '../LocaleText'
+import { LocaleText } from '../LocaleText'
 import { InputHintTooltip } from '../../portals'
 
 const BoolInput = ({ name, label, value, hint, hasDefaultValue, alignLeft, isSmall, onUpdate }) => {

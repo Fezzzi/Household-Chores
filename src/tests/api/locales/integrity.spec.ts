@@ -1,6 +1,6 @@
 import { assert } from 'chai'
 
-import applicationTexts from 'shared/locales'
+import { applicationTexts } from 'shared/locales'
 import { DEFAULT_LOCALE, AVAILABLE_LOCALES } from 'shared/constants'
 import * as MESSAGES from 'shared/constants/localeMessages'
 

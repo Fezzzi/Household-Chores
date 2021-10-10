@@ -110,7 +110,7 @@ const HouseholdFormHeader = ({
       </FormHeaderTitle>
       {membersCount > 0 && (
         <HouseholdSubtitle>
-          <LocaleText message={HOUSEHOLD.MEMBERS} modifierFunc={text => `${membersCount} ${text}`} />
+          {membersCount}&nbsp;<LocaleText message={HOUSEHOLD.MEMBERS} />
         </HouseholdSubtitle>
       )}
 

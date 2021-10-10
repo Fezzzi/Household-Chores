@@ -13,7 +13,7 @@ import { RoleLabel, UserLabel } from '../styles/blocks/households'
 import { AppendMessageIcon } from '../styles/blocks/users'
 import { useOpenConfirmationDialog } from './confirmations'
 import { MessageTooltip, OptionsTooltip } from '../components/portals'
-import LocaleText from '../components/common/LocaleText'
+import { LocaleText } from '../components/common'
 
 export const useMemberListProps = (
   members,

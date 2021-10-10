@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { clickableStyle } from './common'
+
 export const UserList = styled.div`
   margin: 0 auto;
   width: 100%;
@@ -85,11 +87,8 @@ export const AppendMessageIcon = styled.div`
     width: 100%;
     height: 100%;
   }
-  
-  :hover {
-    cursor: pointer;
-    opacity: 1;
-  }
+
+  ${clickableStyle}
 `
 
 export const WrapperBox = styled.div`

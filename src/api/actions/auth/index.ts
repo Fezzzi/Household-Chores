@@ -1,8 +1,9 @@
 import express from 'express'
 
 import { NOTIFICATION_TYPE, API } from 'shared/constants'
-import { ERROR } from 'shared/constants/localeMessages'
+import { ERROR, SUCCESS } from 'shared/constants/localeMessages'
 import { catchErrors } from 'api/helpers/errorHandler'
+import { unsetSession } from 'api/helpers/auth'
 
 import { validateLoginData, validateResetData, validateSignupData } from './validate'
 import { handleLogIn, handleResetPass, handleSignUp } from './handlers'
@@ -50,6 +51,10 @@ export default () => {
         await handleResetPass(inputs, req.session?.locale ?? locale, req, res)
         return
       }
+      case API.AUTH_SIGN_OUT:
+        unsetSession(req, res)
+        res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.SIGNED_OUT] })
+        return
       default:
         res.status(404).send('Not Found')
     }

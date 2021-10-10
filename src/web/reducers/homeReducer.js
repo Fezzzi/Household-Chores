@@ -1,11 +1,12 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import { HomeActions } from '../actions'
-import { SELECTED_HOUSEHOLD_KEY } from '../constants'
+import { STORAGE_KEY } from '../constants'
 
 const initialState = {
-  selectedHousehold: localStorage.getItem(SELECTED_HOUSEHOLD_KEY),
-  households: [],
+  selectedHousehold: localStorage.getItem(STORAGE_KEY.SELECTED_HOUSEHOLD),
+  // null indicates the data has not been loaded yet
+  households: null,
 }
 
 const householdsLoaded = (state, { payload: households }) => ({

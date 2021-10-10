@@ -1,6 +1,6 @@
 import { assert } from 'chai'
 
-import applicationTexts from 'shared/locales'
+import { applicationTexts } from 'shared/locales'
 import { SETTINGS } from 'shared/constants/localeMessages'
 import { AVAILABLE_LOCALES, SETTING_CATEGORIES, SETTING_TAB_ROWS } from 'shared/constants'
 import { settingsRenderers } from 'web/helpers/settingsRenderers'
@@ -15,7 +15,7 @@ describe('Settings > integrity', () => {
           assert.fail(`missing tab configuration for category ${category} in SettingTypes!`)
         }
 
-        if (tabs.find(tab => !settingsRenderers[category][tab])) {
+        if ((tabs as any[]).find((tab: string) => !(settingsRenderers as any)[category][tab])) {
           assert.fail(`missing form renderer for SettingTypes TAB of category ${category}!`)
         }
       })

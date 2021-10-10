@@ -52,7 +52,7 @@ const AboutPage = ({ contributors, supporters }) => {
           <ContributorsMore onClick={() => setExpandedContributors(prevState => !prevState)}>
             {expandedContributors
               ? <LocaleText message={COMMON.HIDE} modifierFunc={text => text.toLowerCase()} />
-              : <LocaleText message={COMMON.AND_X_MORE} modifierFunc={text => text.replace('@', contributors.length - 8)} />}
+              : <LocaleText message={COMMON.AND_X_MORE} messageTexts={[contributors.length - 8]} />}
           </ContributorsMore>
         )}
       </ContributorsCentered>

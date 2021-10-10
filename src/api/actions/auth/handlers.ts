@@ -1,6 +1,6 @@
 import { Response } from 'express'
 
-import { NOTIFICATION_TYPE } from 'shared/constants'
+import { LOCALE_CODE, NOTIFICATION_TYPE } from 'shared/constants'
 import { ERROR, SUCCESS } from 'shared/constants/localeMessages'
 import { EMAIL_TEMPLATE } from 'api/constants'
 import { sendEmails } from 'api/helpers/mailer'
@@ -8,7 +8,7 @@ import { setSession } from 'api/helpers/auth'
 import { getProvidersUserId, getUserByProviderId, logInAssignProviderIds } from 'api/actions/auth/providers'
 import { getUser, isCorrectPassword, signUpUser, updateLoginTime } from 'api/database'
 
-export const handleResetPass = async ({ email }: any, locale: string, req: any, res: Response) => {
+export const handleResetPass = async ({ email }: any, locale: LOCALE_CODE, req: any, res: Response) => {
   const emailSent = await sendEmails([email], EMAIL_TEMPLATE.RESET_PASSWORD, {
     resetLink: ' >>resetLink<< ',
   }, locale)
@@ -87,7 +87,7 @@ export const handleSignUp = async (inputs: any, req: any, res: Response): Promis
         return false
       }
 
-      res.status(204).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.ACCOUNT_CREATED] })
+      res.status(200).send({ [NOTIFICATION_TYPE.SUCCESSES]: [SUCCESS.ACCOUNT_CREATED] })
       return true
     }
     // In case there are no providers' data available but the user exists, we continue as with standrd log in attempt

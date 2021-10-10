@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# Exit immediately in case of unsuccessful linting
-set -e
-
-# Lint it!
-yarn lint

@@ -1,5 +1,5 @@
-import { DEFAULT_LOCALE } from 'shared/constants'
-import applicationTexts from 'shared/locales'
+import { DEFAULT_LOCALE, LOCALE_CODE } from 'shared/constants'
+import { applicationTexts } from 'shared/locales'
 import { interpolate } from 'shared/helpers/text'
 import { addActivityForUsers, getNotificationDataForUsers } from 'api/database'
 import { NotifySettingsApiType } from 'api/database/mappers'
@@ -12,7 +12,7 @@ import { EMAIL_TEMPLATE } from 'api/constants'
  */
 export const logActivity = async (
   notification: keyof NotifySettingsApiType,
-  locale: string,
+  locale: LOCALE_CODE,
   userIds: number[],
   message: string,
   messageTexts: string[],
@@ -30,7 +30,7 @@ export const logActivity = async (
     const localizedMessage = interpolate(applicationTexts[locale ?? DEFAULT_LOCALE], message, messageTexts, true)
     const activityData = {
       photos: messagePhotos,
-      message: localizedMessage,
+      message: localizedMessage ?? '',
       link,
     }
 

@@ -10,7 +10,7 @@ import { settingsRenderers } from '../../helpers/settingsRenderers'
 import { CATEGORY_ICONS, PORTAL_TYPE, TAB_ICONS } from '../../constants'
 import { useSubmitHandler } from '../../helpers/form'
 import { SettingsActions } from '../../actions'
-import { PortalAnchor } from '../../styles/blocks'
+import { PortalAnchor } from '../../styles/blocks/page'
 import SettingsColumn from './SettingsColumn'
 
 const Settings = memo(({ history, location }) => {
