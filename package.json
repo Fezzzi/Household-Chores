@@ -87,7 +87,7 @@
     "cookie-parser": "latest",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-pg-session": "git+https://github.com/sanjaypojo/express-pg-session.git",
     "express-session": "^1.17.2",
     "github-api": "^3.4.0",
